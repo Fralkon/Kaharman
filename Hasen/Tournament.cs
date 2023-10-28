@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Hasen;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -12,9 +13,19 @@ namespace Kaharman
 {
     public partial class Tournament : Form
     {
-        public Tournament()
+        AccessSQL AccessSQL;
+        TournamentBlock TournamentBlock;
+        public Tournament(string[] participans, AccessSQL AccessSQL)
         {
             InitializeComponent();
+            this.AccessSQL = AccessSQL;
+            TournamentBlock = new TournamentBlock(new TournamentItem[] { new TournamentItem(participans[0]), new TournamentItem(participans[1]) });
+            panel1.Controls.Add(TournamentBlock);
+        }
+
+        private void textBox1_TextChanged(object sender, EventArgs e)
+        {
+
         }
     }
 }

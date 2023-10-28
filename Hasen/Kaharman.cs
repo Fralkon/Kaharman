@@ -6,11 +6,11 @@ using System.Xml.Linq;
 
 namespace Hasen
 {
-    public partial class Form1 : Form
+    public partial class Kaharman : Form
     {
         AccessSQL AccessSQL { get; set; }
         DataTableContextMenu ParticipantsTable = new DataTableContextMenu();
-        public Form1()
+        public Kaharman()
         {
             InitializeComponent();
             AccessSQL = new AccessSQL();
@@ -229,6 +229,37 @@ namespace Hasen
                     toolStrip.Checked = false;
                 else toolStrip.Checked = true;
             }
+        }
+        private void создатьToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (dataGridView1.SelectedRows.Count == 0)
+            {
+                MessageBox.Show("Выберите участников для создания турнира.");
+                return;
+            }
+            List<string> participants = new List<string>();
+            foreach (DataGridViewRow row in dataGridView1.SelectedRows)
+                participants.Add(row.Cells[1].Value.ToString());
+            Tournament tournament = new Tournament(participants.ToArray(), AccessSQL);
+            tournament.ShowDialog();
+        }
+        private void создатьТурнирToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if(dataGridView1.SelectedRows.Count == 0)
+            {
+                MessageBox.Show("Выберите участников для создания турнира.");
+                return;
+            }
+            List<string> participants = new List<string>();
+            foreach(DataGridViewRow row in dataGridView1.SelectedRows)
+                participants.Add(row.Cells[1].Value.ToString());
+            Tournament tournament = new Tournament(participants.ToArray(), AccessSQL);
+            tournament.ShowDialog();
+        }
+
+        private void dataGridView1_CellClick(object sender, DataGridViewCellEventArgs e)
+        {
+            contextMenuStrip1.Show();
         }
     }
 }
