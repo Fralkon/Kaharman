@@ -2,6 +2,7 @@ using Kaharman;
 using System.Data;
 using System.Data.OleDb;
 using System.Globalization;
+using System.Xml.Linq;
 
 namespace Hasen
 {
@@ -14,14 +15,28 @@ namespace Hasen
             InitializeComponent();
             AccessSQL = new AccessSQL();
             ParticipantsTable.AddColunm("ID", typeof(int));
-            ParticipantsTable.AddColunm("Фамилия и имя");
+
+            ContextMenuFilter contextMenuName = new ContextMenuFilter();
+            ((ToolStripMenuItem)contextMenuName.Items.Add("Пустые")).Checked = true;
+            ParticipantsTable.AddColunm("Фамилия и имя", contextMenuName);
+
             ParticipantsTable.AddColunm("Пол");
+
             ParticipantsTable.AddColunm("Дата рождения");
             ParticipantsTable.AddColunm("Возраст", typeof(int));
             ParticipantsTable.AddColunm("Вес", typeof(float));
-            ParticipantsTable.AddColunm("Квалификация");
-            ParticipantsTable.AddColunm("Город");
-            ParticipantsTable.AddColunm("Тренер");
+
+            ContextMenuFilter contextMenuQualiti = new ContextMenuFilter();
+            ((ToolStripMenuItem)contextMenuQualiti.Items.Add("Пустые")).Checked = true;
+            ParticipantsTable.AddColunm("Квалификация", contextMenuQualiti);
+
+            ContextMenuFilter contextMenuCity = new ContextMenuFilter();
+            ((ToolStripMenuItem)contextMenuCity.Items.Add("Пустые")).Checked = true;
+            ParticipantsTable.AddColunm("Город", contextMenuCity);
+
+            ContextMenuFilter contextMenuTrainer = new ContextMenuFilter();
+            ((ToolStripMenuItem)contextMenuTrainer.Items.Add("Пустые")).Checked = true;
+            ParticipantsTable.AddColunm("Тренер", contextMenuTrainer);
             ParticipantsTable.RowChanged += ParticipantsTable_RowChanged;
             dataGridView1.DataSource = ParticipantsTable.dataView;
         }

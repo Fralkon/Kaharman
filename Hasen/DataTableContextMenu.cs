@@ -2,12 +2,62 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
+using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace Kaharman
 {
+    internal class ContextMenuFilter : ContextMenuStrip 
+    { 
+        public virtual string? GetFilter()
+        {
+            string filter = $"[{Name}] NOT IN (";
+            bool bf = false;
+            foreach (ToolStripMenuItem item in Items)
+            {
+                if (item.Checked == false)
+                {
+                    bf = true;
+                    if (item.Text != "Пустые")
+                        filter += $"'{item.Text}',";
+                    else filter += "'',";
+                }
+            }
+            filter += ")";
+            if (bf)
+                return filter;
+            return null;
+        }
+    }
+    internal class ContextMenuFilterWeigth: ContextMenuFilter
+    {
+        public ContextMenuFilterWeigth(List<string> values) : base()
+        {
+            foreach (string value in values)
+                Items.Add(value);
+        }
+        public override string? GetFilter()
+        {
+            string filter = $"[{Name}] NOT IN (";
+            bool bf = false;
+            foreach (ToolStripMenuItem item in Items)
+            {
+                if (item.Checked == false)
+                {
+                    bf = true;
+                    if (item.Text != "Пустые")
+                        filter += $"'{item.Text}',";
+                    else filter += "'',";
+                }
+            }
+            filter += ")";
+            if (bf)
+                return filter;
+            return null;
+        }
+    }
     internal class DataTableContextMenu : DataTable
     {
         public DataView dataView { get; }
@@ -21,17 +71,45 @@ namespace Kaharman
         public void AddColunm(string name)
         {
             Columns.Add(name);
-            ContextMenuStrip contextMenuStrip = new ContextMenuStrip()
+            ContextMenuFilter contextMenu = new ContextMenuFilter()
+            {
+                Name = name,
+                AutoClose = false,
+                ShowCheckMargin = true
+            };
+            contextMenu.ItemClicked += ContextMenuStrip_ItemClicked;
+            listContextMenu.Add(contextMenu);
+        }
+        public void AddColunm(string name, ContextMenuFilter contextMenu)
+        {
+            Columns.Add(name);
+            contextMenu.Name = name;
+            contextMenu.AutoClose = false;
+            contextMenu.ShowCheckMargin = true;
+            contextMenu.ItemClicked += ContextMenuStrip_ItemClicked;
+            listContextMenu.Add(contextMenu);
+        }
+        public void AddColunm(string name, Type type)
+        {
+            Columns.Add(name, type);
+            ContextMenuFilter contextMenuStrip = new ContextMenuFilter()
             {
                 AutoClose = false,
                 Name = name,
                 ShowCheckMargin = true
             };
-            ((ToolStripMenuItem)contextMenuStrip.Items.Add("Пустые")).Checked = true;
             contextMenuStrip.ItemClicked += ContextMenuStrip_ItemClicked;
             listContextMenu.Add(contextMenuStrip);
         }
-
+        public void AddColunm(string name, Type type, ContextMenuFilter contextMenu)
+        {
+            Columns.Add(name, type);
+            contextMenu.Name = name;
+            contextMenu.AutoClose = false;
+            contextMenu.ShowCheckMargin = true;
+            contextMenu.ItemClicked += ContextMenuStrip_ItemClicked;
+            listContextMenu.Add(contextMenu);
+        }
         private void ContextMenuStrip_ItemClicked(object? sender, ToolStripItemClickedEventArgs e)
         {
             ContextMenuStrip? contextMenuStrip = sender as ContextMenuStrip;
@@ -49,38 +127,17 @@ namespace Kaharman
         }
         private void FilterContent() {
             List<string> filters = new List<string>();
-            foreach(ContextMenuStrip contextMenuStrip in listContextMenu)
+            foreach(ContextMenuFilter contextMenuStrip in listContextMenu)
             {
-                string filter = $"[{contextMenuStrip.Name}] NOT IN (";
-                bool bf = false;
-                foreach (ToolStripMenuItem item in contextMenuStrip.Items)
+                string? filter = contextMenuStrip.GetFilter();
+                if (filter != null)
                 {
-                    if (item.Checked == false)
-                    {
-                        bf = true;
-                        if (item.Text != "Пустые")
-                            filter += $"'{item.Text}',";
-                        else filter += "'',";
-                    }
-                }
-                filter += ")";
-                if(bf)
                     filters.Add(filter);
+                }
             }
             dataView.RowFilter = string.Join(" AND ", filters);
         }
-        public void AddColunm(string name, Type type)
-        {
-            Columns.Add(name, type);
-            ContextMenuStrip contextMenuStrip = new ContextMenuStrip()
-            {
-                AutoClose = false,
-                Name = name,
-                ShowCheckMargin = true
-            };
-            contextMenuStrip.ItemClicked += ContextMenuStrip_ItemClicked;
-            listContextMenu.Add(contextMenuStrip);
-        }
+      
         private void DataTableContextMenu_RowChanged(object sender, DataRowChangeEventArgs e)
         {
             if (e.Action == DataRowAction.Add)
