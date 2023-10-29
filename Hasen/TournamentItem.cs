@@ -41,8 +41,8 @@ namespace Kaharman
                 this.Name = name;
                 this.ReadOnly = true;
                 this.Size = new Size(150, 20);
-                this.TabIndex = 0;
                 this.Text = name;
+                this.TabStop = false;
             }            
         }
     }

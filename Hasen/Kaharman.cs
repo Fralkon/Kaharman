@@ -71,12 +71,12 @@ namespace Hasen
                     DataTable data = AccessSQL.GetDataTableSQL($"SELECT id FROM Participants WHERE name = '{row[1]}'");
                     if (data.Rows.Count == 0)
                     {
-                        AccessSQL.InsertSQL($"INSERT INTO Participants (name,gender,date_of_birth,age,weight,qualification,city,trainer) VALUES ('{row[1]}','{row[2]}','{row[3]}',{row[4]},{row[5]},'{row[6]}','{row[7]}','{row[8]}')");
+                        AccessSQL.InsertSQL($"INSERT INTO Participants (name,gender,date_of_birth,age,weight,qualification,city,trainer) VALUES ('{row[1]}','{row[2]}','{row[3]}',{row[4]},{(int)row[5]},'{row[6]}','{row[7]}','{row[8]}')");
                     }
                 }
                 catch (Exception ex)
                 {
-                    MessageBox.Show(ex.Message);
+                    //MessageBox.Show(ex.Message);
                 }
             }
         }
