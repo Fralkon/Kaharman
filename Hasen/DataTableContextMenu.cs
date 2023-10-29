@@ -38,27 +38,19 @@ namespace Kaharman
         {
             AddAutoItems = false;
             ToolStripTextBox textBox = new ToolStripTextBox();
+            textBox.TextChanged += TextBox_TextChanged;
             Items.Add(textBox);
         }
+
+        private void TextBox_TextChanged(object? sender, EventArgs e)
+        {
+            OnItemClicked(null);
+        }
+
         public override string? GetFilter()
         {
-            //List<string> filters = new List<string>();
-            //bool bf = false;
-            //foreach (ToolStripMenuItem item in Items)
-            //{
-            //    if (item.Checked == false)
-            //    {
-            //        bf = true;
-            //        string[] filter = item.Text.Split('-');
-            //        if (filter.Length != 2)
-            //            continue;
-            //        filters.Add($"{Name} > {filter[0]} AND {Name} < {filter[1]}");
-            //    }
-            //}
-            //if (bf)
-            //    return string.Join(" AND ", filters);
             if (((ToolStripTextBox)Items[0]).Text.Length != 0)
-                return $"{Name} LIKE '%{((ToolStripTextBox)Items[0]).Text}%'";
+                return $"[{Name}] LIKE '%{((ToolStripTextBox)Items[0]).Text}%'";
             return null;
         }
     }
@@ -145,6 +137,12 @@ namespace Kaharman
         }
         private void ContextMenuStrip_ItemClicked(object? sender, ToolStripItemClickedEventArgs e)
         {
+            ContextMenuFilterName? contextMenu = sender as ContextMenuFilterName;
+            if(contextMenu != null)
+            {
+                FilterContent();
+                return;
+            }
             ContextMenuStrip? contextMenuStrip = sender as ContextMenuStrip;
             if(contextMenuStrip != null)
             {
