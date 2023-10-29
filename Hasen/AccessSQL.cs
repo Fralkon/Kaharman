@@ -22,9 +22,17 @@ namespace Hasen
         OleDbConnection connection;
         public AccessSQL()
         {
-            ConntectionString = "Provider=Microsoft.ACE.OLEDB.12.0;Data Source=Database.accdb";
-            connection = new OleDbConnection(ConntectionString);
-            connection.Open();
+            try
+            {
+                ConntectionString = "Provider=Microsoft.ACE.OLEDB.12.0;Data Source=Database.accdb";
+                connection = new OleDbConnection(ConntectionString);
+                connection.Open();
+            }
+            catch(Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+                throw new MySQLExeption("Ошибка базы");
+            }
         }
         public DataTable GetDataTableSQL(string SQL)
         {
@@ -36,6 +44,16 @@ namespace Hasen
                 OleDbDataAdapter dataAdapter = new OleDbDataAdapter(sqlCom);
                 dataAdapter.Fill(dt);
                 return dt;
+            }
+        }
+        public void FillDataTableSQL(string SQL, DataTable dataTable)
+        {
+            lock (connection)
+            {
+                OleDbCommand sqlCom = new OleDbCommand(SQL, connection);
+                sqlCom.ExecuteNonQuery();
+                OleDbDataAdapter dataAdapter = new OleDbDataAdapter(sqlCom);
+                dataAdapter.Fill(dataTable);
             }
         }
         public void SendSQL(string SQL)

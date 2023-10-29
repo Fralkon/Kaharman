@@ -10,7 +10,8 @@ using System.Windows.Forms;
 namespace Kaharman
 {
     internal class ContextMenuFilter : ContextMenuStrip 
-    { 
+    {
+        public bool AddAutoItems = true;
         public virtual string? GetFilter()
         {
             string filter = $"[{Name}] NOT IN (";
@@ -31,30 +32,62 @@ namespace Kaharman
             return null;
         }
     }
+    internal class ContextMenuFilterName : ContextMenuFilter 
+    {
+        public ContextMenuFilterName() : base()
+        {
+            AddAutoItems = false;
+            ToolStripTextBox textBox = new ToolStripTextBox();
+            Items.Add(textBox);
+        }
+        public override string? GetFilter()
+        {
+            //List<string> filters = new List<string>();
+            //bool bf = false;
+            //foreach (ToolStripMenuItem item in Items)
+            //{
+            //    if (item.Checked == false)
+            //    {
+            //        bf = true;
+            //        string[] filter = item.Text.Split('-');
+            //        if (filter.Length != 2)
+            //            continue;
+            //        filters.Add($"{Name} > {filter[0]} AND {Name} < {filter[1]}");
+            //    }
+            //}
+            //if (bf)
+            //    return string.Join(" AND ", filters);
+            if (((ToolStripTextBox)Items[0]).Text.Length != 0)
+                return $"{Name} LIKE '%{((ToolStripTextBox)Items[0]).Text}%'";
+            return null;
+        }
+    }
+
     internal class ContextMenuFilterWeigth: ContextMenuFilter
     {
         public ContextMenuFilterWeigth(List<string> values) : base()
         {
+            AddAutoItems = false;
             foreach (string value in values)
-                Items.Add(value);
+                ((ToolStripMenuItem)Items.Add(value)).Checked = true;
         }
         public override string? GetFilter()
         {
-            string filter = $"[{Name}] NOT IN (";
+            List<string> filters = new List<string>();
             bool bf = false;
             foreach (ToolStripMenuItem item in Items)
             {
                 if (item.Checked == false)
                 {
                     bf = true;
-                    if (item.Text != "Пустые")
-                        filter += $"'{item.Text}',";
-                    else filter += "'',";
+                    string[] filter = item.Text.Split('-');
+                    if (filter.Length != 2)
+                        continue;
+                    filters.Add($"{Name} > {filter[0]} AND {Name} < {filter[1]}");
                 }
             }
-            filter += ")";
             if (bf)
-                return filter;
+                return string.Join(" AND ", filters);
             return null;
         }
     }
@@ -147,9 +180,12 @@ namespace Kaharman
                 {
                     for (int i = 0; i < cells.Length; i++)
                     {
-                        string? item = cells[i].ToString();
-                        if (item != null && item.Length != 0)
-                            AddItemContextMenu(listContextMenu[i], item);
+                        if (((ContextMenuFilter)listContextMenu[i]).AddAutoItems)
+                        {
+                            string? item = cells[i].ToString();
+                            if (item != null && item.Length != 0)
+                                AddItemContextMenu(listContextMenu[i], item);
+                        }
                     }
                 }
             }

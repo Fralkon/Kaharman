@@ -31,34 +31,19 @@ namespace Kaharman
 
     internal class TournamentItem: TextBox
     {
+        public Point TablePoint { get; set; } = new Point();
         public TournamentItem(string? name) : base()
         {
             if (name != null)
             {
                 this.AccessibleRole = AccessibleRole.None;
                 this.BorderStyle = BorderStyle.FixedSingle;
-                this.Name = "textBox1";
+                this.Name = name;
                 this.ReadOnly = true;
-                this.Size = new Size(260, 23);
+                this.Size = new Size(150, 20);
                 this.TabIndex = 0;
                 this.Text = name;
             }            
-        }
-    }
-    internal class TournamentBlock: Panel
-    {
-        TournamentItem[] Items;
-        public TournamentBlock(TournamentItem[] items) : base()
-        {
-            this.BorderStyle = BorderStyle.FixedSingle;
-            this.Location = new Point(10, 10);
-            this.Name = "panel1";
-            this.Size = new System.Drawing.Size(100, 100);
-            Items = items;
-            foreach (TournamentItem item in Items)
-                Controls.Add(item);
-            Items[0].Location = new Point(10, 10);
-            Items[1].Location = new Point(10, 40);
         }
     }
 }

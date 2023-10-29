@@ -34,6 +34,10 @@
             this.выходToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.турнирыToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.создатьToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripMenuItem2 = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripMenuItem3 = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripMenuItem4 = new System.Windows.Forms.ToolStripMenuItem();
+            this.показатьУчастниковToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.историяТурнировToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.участникиToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.добавитьToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -46,7 +50,6 @@
             this.настройкиToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.весовыеКатегорииToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.городаToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.клубыToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.dataGridView1 = new System.Windows.Forms.DataGridView();
             this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.создатьТурнирToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -80,13 +83,15 @@
             // выходToolStripMenuItem
             // 
             this.выходToolStripMenuItem.Name = "выходToolStripMenuItem";
-            this.выходToolStripMenuItem.Size = new System.Drawing.Size(109, 22);
+            this.выходToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.выходToolStripMenuItem.Text = "Выход";
+            this.выходToolStripMenuItem.Click += new System.EventHandler(this.выходToolStripMenuItem_Click);
             // 
             // турнирыToolStripMenuItem
             // 
             this.турнирыToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.создатьToolStripMenuItem,
+            this.показатьУчастниковToolStripMenuItem,
             this.историяТурнировToolStripMenuItem});
             this.турнирыToolStripMenuItem.Name = "турнирыToolStripMenuItem";
             this.турнирыToolStripMenuItem.Size = new System.Drawing.Size(59, 20);
@@ -94,15 +99,46 @@
             // 
             // создатьToolStripMenuItem
             // 
+            this.создатьToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.toolStripMenuItem2,
+            this.toolStripMenuItem3,
+            this.toolStripMenuItem4});
             this.создатьToolStripMenuItem.Name = "создатьToolStripMenuItem";
-            this.создатьToolStripMenuItem.Size = new System.Drawing.Size(176, 22);
+            this.создатьToolStripMenuItem.Size = new System.Drawing.Size(190, 22);
             this.создатьToolStripMenuItem.Text = "Создать";
-            this.создатьToolStripMenuItem.Click += new System.EventHandler(this.создатьToolStripMenuItem_Click);
+            // 
+            // toolStripMenuItem2
+            // 
+            this.toolStripMenuItem2.Name = "toolStripMenuItem2";
+            this.toolStripMenuItem2.Size = new System.Drawing.Size(86, 22);
+            this.toolStripMenuItem2.Text = "4";
+            this.toolStripMenuItem2.Click += new System.EventHandler(this.toolStripMenuItem2_Click);
+            // 
+            // toolStripMenuItem3
+            // 
+            this.toolStripMenuItem3.Name = "toolStripMenuItem3";
+            this.toolStripMenuItem3.Size = new System.Drawing.Size(86, 22);
+            this.toolStripMenuItem3.Text = "8";
+            this.toolStripMenuItem3.Click += new System.EventHandler(this.toolStripMenuItem3_Click);
+            // 
+            // toolStripMenuItem4
+            // 
+            this.toolStripMenuItem4.Name = "toolStripMenuItem4";
+            this.toolStripMenuItem4.Size = new System.Drawing.Size(86, 22);
+            this.toolStripMenuItem4.Text = "16";
+            this.toolStripMenuItem4.Click += new System.EventHandler(this.toolStripMenuItem4_Click);
+            // 
+            // показатьУчастниковToolStripMenuItem
+            // 
+            this.показатьУчастниковToolStripMenuItem.Name = "показатьУчастниковToolStripMenuItem";
+            this.показатьУчастниковToolStripMenuItem.Size = new System.Drawing.Size(190, 22);
+            this.показатьУчастниковToolStripMenuItem.Text = "Показать участников";
+            this.показатьУчастниковToolStripMenuItem.Click += new System.EventHandler(this.показатьУчастниковToolStripMenuItem_Click);
             // 
             // историяТурнировToolStripMenuItem
             // 
             this.историяТурнировToolStripMenuItem.Name = "историяТурнировToolStripMenuItem";
-            this.историяТурнировToolStripMenuItem.Size = new System.Drawing.Size(176, 22);
+            this.историяТурнировToolStripMenuItem.Size = new System.Drawing.Size(190, 22);
             this.историяТурнировToolStripMenuItem.Text = "История турниров";
             // 
             // участникиToolStripMenuItem
@@ -118,20 +154,21 @@
             // добавитьToolStripMenuItem
             // 
             this.добавитьToolStripMenuItem.Name = "добавитьToolStripMenuItem";
-            this.добавитьToolStripMenuItem.Size = new System.Drawing.Size(142, 22);
+            this.добавитьToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.добавитьToolStripMenuItem.Text = "Добавить";
             // 
             // найтиToolStripMenuItem
             // 
             this.найтиToolStripMenuItem.Name = "найтиToolStripMenuItem";
-            this.найтиToolStripMenuItem.Size = new System.Drawing.Size(142, 22);
+            this.найтиToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.найтиToolStripMenuItem.Text = "Найти";
             // 
             // базаДанныхToolStripMenuItem
             // 
             this.базаДанныхToolStripMenuItem.Name = "базаДанныхToolStripMenuItem";
-            this.базаДанныхToolStripMenuItem.Size = new System.Drawing.Size(142, 22);
+            this.базаДанныхToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.базаДанныхToolStripMenuItem.Text = "База данных";
+            this.базаДанныхToolStripMenuItem.Click += new System.EventHandler(this.базаДанныхToolStripMenuItem_Click);
             // 
             // тренераToolStripMenuItem
             // 
@@ -165,8 +202,7 @@
             // 
             this.настройкиToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.весовыеКатегорииToolStripMenuItem,
-            this.городаToolStripMenuItem,
-            this.клубыToolStripMenuItem});
+            this.городаToolStripMenuItem});
             this.настройкиToolStripMenuItem.Name = "настройкиToolStripMenuItem";
             this.настройкиToolStripMenuItem.Size = new System.Drawing.Size(79, 20);
             this.настройкиToolStripMenuItem.Text = "Настройки";
@@ -176,18 +212,13 @@
             this.весовыеКатегорииToolStripMenuItem.Name = "весовыеКатегорииToolStripMenuItem";
             this.весовыеКатегорииToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.весовыеКатегорииToolStripMenuItem.Text = "Весовые категории";
+            this.весовыеКатегорииToolStripMenuItem.Click += new System.EventHandler(this.весовыеКатегорииToolStripMenuItem_Click_1);
             // 
             // городаToolStripMenuItem
             // 
             this.городаToolStripMenuItem.Name = "городаToolStripMenuItem";
             this.городаToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.городаToolStripMenuItem.Text = "Города";
-            // 
-            // клубыToolStripMenuItem
-            // 
-            this.клубыToolStripMenuItem.Name = "клубыToolStripMenuItem";
-            this.клубыToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
-            this.клубыToolStripMenuItem.Text = "Клубы";
             // 
             // dataGridView1
             // 
@@ -227,9 +258,8 @@
             this.создатьТурнирToolStripMenuItem.Name = "создатьТурнирToolStripMenuItem";
             this.создатьТурнирToolStripMenuItem.Size = new System.Drawing.Size(159, 22);
             this.создатьТурнирToolStripMenuItem.Text = "Создать турнир";
-            this.создатьТурнирToolStripMenuItem.Click += new System.EventHandler(this.создатьТурнирToolStripMenuItem_Click);
             // 
-            // Form1
+            // Kaharman
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
@@ -237,7 +267,7 @@
             this.Controls.Add(this.dataGridView1);
             this.Controls.Add(this.menuStrip1);
             this.MainMenuStrip = this.menuStrip1;
-            this.Name = "Form1";
+            this.Name = "Kaharman";
             this.Text = "Form1";
             this.menuStrip1.ResumeLayout(false);
             this.menuStrip1.PerformLayout();
@@ -260,7 +290,6 @@
         private ToolStripMenuItem настройкиToolStripMenuItem;
         private ToolStripMenuItem весовыеКатегорииToolStripMenuItem;
         private ToolStripMenuItem городаToolStripMenuItem;
-        private ToolStripMenuItem клубыToolStripMenuItem;
         private ToolStripMenuItem выходToolStripMenuItem;
         private ToolStripMenuItem показатьToolStripMenuItem;
         private ToolStripMenuItem создатьToolStripMenuItem;
@@ -271,5 +300,9 @@
         private ToolStripMenuItem добавитьToolStripMenuItem1;
         private ContextMenuStrip contextMenuStrip1;
         private ToolStripMenuItem создатьТурнирToolStripMenuItem;
+        private ToolStripMenuItem toolStripMenuItem2;
+        private ToolStripMenuItem toolStripMenuItem3;
+        private ToolStripMenuItem toolStripMenuItem4;
+        private ToolStripMenuItem показатьУчастниковToolStripMenuItem;
     }
 }

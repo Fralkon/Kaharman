@@ -1,14 +1,4 @@
 ﻿using Hasen;
-using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
-using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 
 namespace Kaharman
 {
@@ -19,9 +9,6 @@ namespace Kaharman
         {
             this.AccessSQL = AccessSQL;
             InitializeComponent();
-            genderComboBox.Items.Add("муж");
-            genderComboBox.Items.Add("жен");
-            genderComboBox.Text = "муж";
             UpDateTable();
         }
         private void okButton_Click(object sender, EventArgs e)
@@ -30,7 +17,7 @@ namespace Kaharman
         }
         private void UpDateTable()
         {
-            dataGridView1.DataSource = AccessSQL.GetDataTableSQL($"SELECT * FROM Catigory WHERE gender = '{genderComboBox.Text}'");
+            dataGridView1.DataSource = AccessSQL.GetDataTableSQL($"SELECT * FROM Catigory");
         }
         private void genderComboBox_SelectedIndexChanged(object sender, EventArgs e)
         {
@@ -40,7 +27,7 @@ namespace Kaharman
         {
             if (minTextBox.Text.Length != 0 || maxTextBox.Text.Length != 0)
             {
-                AccessSQL.SendSQL($"INSERT INTO Catigory (cat, gender) VALUES ('{minTextBox.Text} - {maxTextBox.Text}','{genderComboBox.Text}')");
+                AccessSQL.SendSQL($"INSERT INTO Catigory (cat) VALUES ('{minTextBox.Text} - {maxTextBox.Text}')");
             }
             else
                 MessageBox.Show("Введите наименование.");

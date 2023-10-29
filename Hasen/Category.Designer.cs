@@ -28,136 +28,123 @@
         /// </summary>
         private void InitializeComponent()
         {
-            dataGridView1 = new DataGridView();
-            genderComboBox = new ComboBox();
-            okButton = new Button();
-            addButton = new Button();
-            editButton = new Button();
-            deleteButton = new Button();
-            minTextBox = new TextBox();
-            maxTextBox = new TextBox();
-            label1 = new Label();
-            ((System.ComponentModel.ISupportInitialize)dataGridView1).BeginInit();
-            SuspendLayout();
+            this.dataGridView1 = new System.Windows.Forms.DataGridView();
+            this.okButton = new System.Windows.Forms.Button();
+            this.addButton = new System.Windows.Forms.Button();
+            this.editButton = new System.Windows.Forms.Button();
+            this.deleteButton = new System.Windows.Forms.Button();
+            this.minTextBox = new System.Windows.Forms.TextBox();
+            this.maxTextBox = new System.Windows.Forms.TextBox();
+            this.label1 = new System.Windows.Forms.Label();
+            ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
+            this.SuspendLayout();
             // 
             // dataGridView1
             // 
-            dataGridView1.AllowUserToAddRows = false;
-            dataGridView1.AllowUserToDeleteRows = false;
-            dataGridView1.AllowUserToResizeColumns = false;
-            dataGridView1.AllowUserToResizeRows = false;
-            dataGridView1.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.DisplayedCells;
-            dataGridView1.BackgroundColor = SystemColors.Window;
-            dataGridView1.BorderStyle = BorderStyle.Fixed3D;
-            dataGridView1.CellBorderStyle = DataGridViewCellBorderStyle.SingleHorizontal;
-            dataGridView1.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            dataGridView1.Location = new Point(12, 42);
-            dataGridView1.Name = "dataGridView1";
-            dataGridView1.ReadOnly = true;
-            dataGridView1.RowHeadersVisible = false;
-            dataGridView1.RowTemplate.Height = 25;
-            dataGridView1.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-            dataGridView1.Size = new Size(229, 360);
-            dataGridView1.TabIndex = 13;
-            // 
-            // genderComboBox
-            // 
-            genderComboBox.DropDownStyle = ComboBoxStyle.DropDownList;
-            genderComboBox.FormattingEnabled = true;
-            genderComboBox.Location = new Point(12, 13);
-            genderComboBox.Name = "genderComboBox";
-            genderComboBox.Size = new Size(229, 23);
-            genderComboBox.TabIndex = 14;
-            genderComboBox.SelectedIndexChanged += genderComboBox_SelectedIndexChanged;
+            this.dataGridView1.AllowUserToAddRows = false;
+            this.dataGridView1.AllowUserToDeleteRows = false;
+            this.dataGridView1.AllowUserToResizeColumns = false;
+            this.dataGridView1.AllowUserToResizeRows = false;
+            this.dataGridView1.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.DisplayedCells;
+            this.dataGridView1.BackgroundColor = System.Drawing.SystemColors.Window;
+            this.dataGridView1.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+            this.dataGridView1.CellBorderStyle = System.Windows.Forms.DataGridViewCellBorderStyle.SingleHorizontal;
+            this.dataGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dataGridView1.Location = new System.Drawing.Point(12, 12);
+            this.dataGridView1.Name = "dataGridView1";
+            this.dataGridView1.ReadOnly = true;
+            this.dataGridView1.RowHeadersVisible = false;
+            this.dataGridView1.RowTemplate.Height = 25;
+            this.dataGridView1.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
+            this.dataGridView1.Size = new System.Drawing.Size(229, 360);
+            this.dataGridView1.TabIndex = 13;
             // 
             // okButton
             // 
-            okButton.Location = new Point(335, 379);
-            okButton.Name = "okButton";
-            okButton.Size = new Size(81, 23);
-            okButton.TabIndex = 15;
-            okButton.Text = "Ок";
-            okButton.UseVisualStyleBackColor = true;
-            okButton.Click += okButton_Click;
+            this.okButton.Location = new System.Drawing.Point(335, 349);
+            this.okButton.Name = "okButton";
+            this.okButton.Size = new System.Drawing.Size(81, 23);
+            this.okButton.TabIndex = 15;
+            this.okButton.Text = "Ок";
+            this.okButton.UseVisualStyleBackColor = true;
             // 
             // addButton
             // 
-            addButton.Location = new Point(258, 100);
-            addButton.Name = "addButton";
-            addButton.Size = new Size(158, 23);
-            addButton.TabIndex = 16;
-            addButton.Text = "Добавить";
-            addButton.UseVisualStyleBackColor = true;
-            addButton.Click += addButton_Click;
+            this.addButton.Location = new System.Drawing.Point(258, 70);
+            this.addButton.Name = "addButton";
+            this.addButton.Size = new System.Drawing.Size(158, 23);
+            this.addButton.TabIndex = 16;
+            this.addButton.Text = "Добавить";
+            this.addButton.UseVisualStyleBackColor = true;
+            this.addButton.Click += new System.EventHandler(this.addButton_Click);
             // 
             // editButton
             // 
-            editButton.Location = new Point(258, 129);
-            editButton.Name = "editButton";
-            editButton.Size = new Size(158, 23);
-            editButton.TabIndex = 17;
-            editButton.Text = "Изменить";
-            editButton.UseVisualStyleBackColor = true;
-            editButton.Click += editButton_Click;
+            this.editButton.Location = new System.Drawing.Point(258, 99);
+            this.editButton.Name = "editButton";
+            this.editButton.Size = new System.Drawing.Size(158, 23);
+            this.editButton.TabIndex = 17;
+            this.editButton.Text = "Изменить";
+            this.editButton.UseVisualStyleBackColor = true;
+            this.editButton.Click += new System.EventHandler(this.editButton_Click);
             // 
             // deleteButton
             // 
-            deleteButton.Location = new Point(258, 158);
-            deleteButton.Name = "deleteButton";
-            deleteButton.Size = new Size(158, 23);
-            deleteButton.TabIndex = 18;
-            deleteButton.Text = "Удалить";
-            deleteButton.UseVisualStyleBackColor = true;
-            deleteButton.Click += deleteButton_Click;
+            this.deleteButton.Location = new System.Drawing.Point(258, 128);
+            this.deleteButton.Name = "deleteButton";
+            this.deleteButton.Size = new System.Drawing.Size(158, 23);
+            this.deleteButton.TabIndex = 18;
+            this.deleteButton.Text = "Удалить";
+            this.deleteButton.UseVisualStyleBackColor = true;
+            this.deleteButton.Click += new System.EventHandler(this.deleteButton_Click);
             // 
             // minTextBox
             // 
-            minTextBox.Location = new Point(258, 71);
-            minTextBox.Name = "minTextBox";
-            minTextBox.Size = new Size(66, 23);
-            minTextBox.TabIndex = 19;
+            this.minTextBox.Location = new System.Drawing.Point(258, 41);
+            this.minTextBox.Name = "minTextBox";
+            this.minTextBox.Size = new System.Drawing.Size(66, 23);
+            this.minTextBox.TabIndex = 19;
             // 
             // maxTextBox
             // 
-            maxTextBox.Location = new Point(348, 71);
-            maxTextBox.Name = "maxTextBox";
-            maxTextBox.Size = new Size(68, 23);
-            maxTextBox.TabIndex = 20;
+            this.maxTextBox.Location = new System.Drawing.Point(348, 41);
+            this.maxTextBox.Name = "maxTextBox";
+            this.maxTextBox.Size = new System.Drawing.Size(68, 23);
+            this.maxTextBox.TabIndex = 20;
             // 
             // label1
             // 
-            label1.AutoSize = true;
-            label1.Location = new Point(330, 74);
-            label1.Name = "label1";
-            label1.Size = new Size(12, 15);
-            label1.TabIndex = 21;
-            label1.Text = "-";
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(330, 44);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(12, 15);
+            this.label1.TabIndex = 21;
+            this.label1.Text = "-";
             // 
             // Category
             // 
-            AutoScaleDimensions = new SizeF(7F, 15F);
-            AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(430, 412);
-            Controls.Add(label1);
-            Controls.Add(maxTextBox);
-            Controls.Add(minTextBox);
-            Controls.Add(deleteButton);
-            Controls.Add(editButton);
-            Controls.Add(addButton);
-            Controls.Add(okButton);
-            Controls.Add(genderComboBox);
-            Controls.Add(dataGridView1);
-            Name = "Category";
-            Text = "Весовые категории";
-            ((System.ComponentModel.ISupportInitialize)dataGridView1).EndInit();
-            ResumeLayout(false);
-            PerformLayout();
+            this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
+            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.ClientSize = new System.Drawing.Size(430, 383);
+            this.Controls.Add(this.label1);
+            this.Controls.Add(this.maxTextBox);
+            this.Controls.Add(this.minTextBox);
+            this.Controls.Add(this.deleteButton);
+            this.Controls.Add(this.editButton);
+            this.Controls.Add(this.addButton);
+            this.Controls.Add(this.okButton);
+            this.Controls.Add(this.dataGridView1);
+            this.Name = "Category";
+            this.Text = "Весовые категории";
+            ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();
+            this.ResumeLayout(false);
+            this.PerformLayout();
+
         }
 
         #endregion
 
         private DataGridView dataGridView1;
-        private ComboBox genderComboBox;
         private Button okButton;
         private Button addButton;
         private Button editButton;
