@@ -69,6 +69,7 @@ namespace Hasen
             lock (connection)
             {
                 OleDbCommand sqlCom = new OleDbCommand(SQL, connection);
+                
                 int ID = (int)sqlCom.ExecuteScalar();
                 return ID;
             }

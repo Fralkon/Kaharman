@@ -1,6 +1,6 @@
 ﻿namespace Kaharman
 {
-    partial class Category
+    partial class CategoryForm
     {
         /// <summary>
         /// Required designer variable.

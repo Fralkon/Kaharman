@@ -2,7 +2,6 @@ using Kaharman;
 using System.Data;
 using System.Data.OleDb;
 using System.Globalization;
-using System.Xml.Linq;
 
 namespace Hasen
 {
@@ -20,6 +19,7 @@ namespace Hasen
             InitializeDataParticipant(DataParticipantsTable);
             InitializeDataTournament(DataHistoryTournaments);
             dataGridView1.DataSource = ParticipantsTable.dataView;
+            dataGridView1.Columns[0].Visible = false;
         }
         private void InitializeDataParticipant(DataTableContextMenu dataTable)
         {
@@ -58,26 +58,19 @@ namespace Hasen
 
             ContextMenuFilterName contextMenuName = new ContextMenuFilterName();
             dataTable.AddColunm("Õ‡ËÏÂÌÓ‚‡ÌËÂ", contextMenuName);
-
-
         }
         private void ParticipantsTable_RowChanged(object sender, DataRowChangeEventArgs e)
         {
             if (e.Action == DataRowAction.Add)
             {
-                try
+                DataRow row = e.Row;
+                DataTable data = AccessSQL.GetDataTableSQL($"SELECT id FROM Participants WHERE name = '{row[1]}'");
+                if (data.Rows.Count == 0)
                 {
-                    DataRow row = e.Row;
-                    DataTable data = AccessSQL.GetDataTableSQL($"SELECT id FROM Participants WHERE name = '{row[1]}'");
-                    if (data.Rows.Count == 0)
-                    {
-                        AccessSQL.InsertSQL($"INSERT INTO Participants (name,gender,date_of_birth,age,weight,qualification,city,trainer) VALUES ('{row[1]}','{row[2]}','{row[3]}',{row[4]},{(int)row[5]},'{row[6]}','{row[7]}','{row[8]}')");
-                    }
+                    AccessSQL.SendSQL($"INSERT INTO Participants (name,gender,date_of_birth,age,weight,qualification,city,trainer) VALUES ('{row[1]}','{row[2]}','{row[3]}',{row[4]},{row[5]},'{row[6]}','{row[7]}','{row[8]}')");
+                    data = AccessSQL.GetDataTableSQL($"SELECT id FROM Participants WHERE name = '{row[1]}'");
                 }
-                catch (Exception ex)
-                {
-                    //MessageBox.Show(ex.Message);
-                }
+                row["ID"] = data.Rows[0]["id"];
             }
         }
         private void Form1_Load(object sender, EventArgs e)
@@ -100,7 +93,7 @@ namespace Hasen
         }
         private void ‚ÂÒÓ‚˚Â ‡ÚÂ„ÓËËToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            Category category = new Category(AccessSQL);
+            CategoryForm category = new CategoryForm(AccessSQL);
             category.ShowDialog();
         }
         private void dataGridView1_DragDrop(object sender, DragEventArgs e)
@@ -182,7 +175,6 @@ namespace Hasen
                                 if (cont)
                                     continue;
                                 DataRow newRow = ParticipantsTable.NewRow();
-                                newRow[0] = ParticipantsTable.Rows.Count + 1;
                                 newRow[1] = rowExcel[i][1].ToString();
                                 newRow[2] = rowExcel[i][2].ToString();
                                 if (DateTime.TryParse(rowExcel[i][3].ToString(), out DateTime time))
@@ -216,7 +208,7 @@ namespace Hasen
         {
             if (e.Button == MouseButtons.Right)
             {
-                ParticipantsTable.ShowContextMenu(e.ColumnIndex,MousePosition);
+                ParticipantsTable.ShowContextMenu(e.ColumnIndex, MousePosition);
             }
         }
         private void ToolStripMenuItem_Click(object? sender, EventArgs e)
@@ -250,7 +242,7 @@ namespace Hasen
         }
         private void ‚ÂÒÓ‚˚Â ‡ÚÂ„ÓËËToolStripMenuItem_Click_1(object sender, EventArgs e)
         {
-            Category category = new Category(AccessSQL);
+            CategoryForm category = new CategoryForm(AccessSQL);
             category.ShowDialog();
         }
 
@@ -292,6 +284,12 @@ namespace Hasen
         private void ÔÓÍ‡Á‡Ú¸”˜‡ÒÚÌËÍÓ‚ToolStripMenuItem_Click(object sender, EventArgs e)
         {
             dataGridView1.DataSource = ParticipantsTable.dataView;
+        }
+
+        private void ÒÓÁ‰‡Ú¸ToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            CreateTournament createTournament = new CreateTournament(Particpant.ToList(dataGridView1), AccessSQL);
+            createTournament.ShowDialog();
         }
     }
 }

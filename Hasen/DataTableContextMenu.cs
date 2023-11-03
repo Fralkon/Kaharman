@@ -32,14 +32,14 @@ namespace Kaharman
             return null;
         }
     }
-    internal class ContextMenuFilterName : ContextMenuFilter 
+    internal class ContextMenuFilterName : ContextMenuFilter
     {
+        ToolStripTextBox TextBox = new ToolStripTextBox();
         public ContextMenuFilterName() : base()
         {
             AddAutoItems = false;
-            ToolStripTextBox textBox = new ToolStripTextBox();
-            textBox.TextChanged += TextBox_TextChanged;
-            Items.Add(textBox);
+            TextBox.TextChanged += TextBox_TextChanged;
+            Items.Add(TextBox);
         }
 
         private void TextBox_TextChanged(object? sender, EventArgs e)
@@ -49,12 +49,11 @@ namespace Kaharman
 
         public override string? GetFilter()
         {
-            if (((ToolStripTextBox)Items[0]).Text.Length != 0)
-                return $"[{Name}] LIKE '%{((ToolStripTextBox)Items[0]).Text}%'";
+            if (TextBox.Text.Length != 0)
+                return $"[{Name}] LIKE '%{TextBox.Text}%'";
             return null;
         }
     }
-
     internal class ContextMenuFilterWeigth: ContextMenuFilter
     {
         public ContextMenuFilterWeigth(List<string> values) : base()
@@ -75,7 +74,7 @@ namespace Kaharman
                     string[] filter = item.Text.Split('-');
                     if (filter.Length != 2)
                         continue;
-                    filters.Add($"{Name} > {filter[0]} AND {Name} < {filter[1]}");
+                    filters.Add($"{Name} < {filter[0]} AND {Name} > {filter[1]}");
                 }
             }
             if (bf)

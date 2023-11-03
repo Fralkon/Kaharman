@@ -2,10 +2,10 @@
 
 namespace Kaharman
 {
-    public partial class Category : Form
+    public partial class CategoryForm : Form
     {
         AccessSQL AccessSQL;
-        public Category(AccessSQL AccessSQL)
+        public CategoryForm(AccessSQL AccessSQL)
         {
             this.AccessSQL = AccessSQL;
             InitializeComponent();
