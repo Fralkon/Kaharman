@@ -237,7 +237,7 @@ namespace Kaharman
                 foreach (GridItems gridItem in gridItems)
                 {
                     if (gridItem.ID == -1)
-                        gridItem.ItemText = new GridItemText(null, gridItem.Point, StatusGrid.none);
+                        gridItem.ItemText = new GridItemText(null, gridItem.Point);
                     else
                         gridItem.ItemText = new GridItemText(participants.Find(item => item.ID == gridItem.ID), gridItem.Point, (StatusGrid)gridItem.Status);
                 }

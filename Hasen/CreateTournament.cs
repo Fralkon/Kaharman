@@ -1,5 +1,6 @@
 ﻿using Hasen;
 using System.Data;
+using System.Text.Json;
 
 namespace Kaharman
 {
@@ -92,6 +93,40 @@ namespace Kaharman
             CreateTournamentGrid tournamentGrid = new CreateTournamentGrid(ID, name.Text, dateTimePicker1.Value, IDList, StatusFormTournamentGrid.Create, AccessSQL);
             tournamentGrid.ShowDialog();
             UpDataGrid();
+        }
+        private void dataGridView1_MouseDoubleClick(object sender, MouseEventArgs e)
+        {
+            Grid grid = new Grid();
+            if (dataGridView1.RowCount == 0)
+            {
+                MessageBox.Show("Выделите строку.");
+                return;
+            }
+            string IDGrid = dataGridView1.SelectedRows[0].Cells["ID"].ToString();
+
+            int type = grid.Type;
+            while (true)
+            {
+                List<GridItems> itemJsonGrid = new List<GridItems>();
+                for (int i = 0; i < type; i++)
+                    itemJsonGrid.Add(new GridItems(new Point(step, i), -1, (int)StatusGrid.none));
+                grid.Items.Add(itemJsonGrid);
+                step++;
+                if (type == 1)
+                    break;
+                type /= 2;
+            }
+
+            grid.FillItems(Participant.GetListToID(ListAllParticipants, GetListIntID()));
+
+            if (StatusForm == StatusFormTournamentGrid.Create)
+            {
+                Save(IdTournament, dateTimePicker1.Value, nameTextBox.Text, GetListStringID(), JsonSerializer.Serialize(grid));
+                IdGrid = AccessSQL.GetIDInsert().ToString();
+            }
+            else if (StatusForm == StatusFormTournamentGrid.Visit) { }
+            TournamentGrid tournament = new TournamentGrid(IdGrid, textBox2.Text, nameTextBox.Text, grid, AccessSQL);
+            tournament.ShowDialog();
         }
     }
 }

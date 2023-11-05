@@ -181,6 +181,7 @@
             this.dataGridView1.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             this.dataGridView1.Size = new System.Drawing.Size(722, 261);
             this.dataGridView1.TabIndex = 14;
+            this.dataGridView1.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.dataGridView1_MouseDoubleClick);
             // 
             // contextMenuStrip1
             // 
@@ -238,7 +239,7 @@
             // создатьToolStripMenuItem
             // 
             this.создатьToolStripMenuItem.Name = "создатьToolStripMenuItem";
-            this.создатьToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.создатьToolStripMenuItem.Size = new System.Drawing.Size(117, 22);
             this.создатьToolStripMenuItem.Text = "Создать";
             this.создатьToolStripMenuItem.Click += new System.EventHandler(this.создатьТурнирнуюТаблицуToolStripMenuItem_Click);
             // 
