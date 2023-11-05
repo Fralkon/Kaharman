@@ -2,11 +2,22 @@ using Kaharman;
 using System.Data;
 using System.Data.OleDb;
 using System.Globalization;
+using System.Net.Sockets;
+using System.Text.Json;
+using System.Windows.Forms;
+using System.Xml.Linq;
 
 namespace Hasen
 {
+    enum TableVisible
+    {
+        Participants,
+        DataParticipants,
+        HistoryTournaments
+    }
     public partial class Kaharman : Form
     {
+        TableVisible tableVisible;
         AccessSQL AccessSQL { get; set; }
         DataTableContextMenu ParticipantsTable = new DataTableContextMenu();
         DataTableContextMenu DataParticipantsTable = new DataTableContextMenu();
@@ -16,10 +27,55 @@ namespace Hasen
             InitializeComponent();
             AccessSQL = new AccessSQL();
             InitializeDataParticipant(ParticipantsTable);
+            ParticipantsTable.RowChanged += ParticipantsTable_RowChanged;
             InitializeDataParticipant(DataParticipantsTable);
             InitializeDataTournament(DataHistoryTournaments);
-            dataGridView1.DataSource = ParticipantsTable.dataView;
-            dataGridView1.Columns[0].Visible = false;
+            tableVisible = TableVisible.Participants;
+            UpDateTable();
+
+        }
+        private void UpDateTable()
+        {
+            показатьУчастниковToolStripMenuItem.Checked = false;
+            базаДанныхToolStripMenuItem.Checked = false;
+            историяТурнировToolStripMenuItem.Checked= false;
+            switch (tableVisible)
+            {
+                case TableVisible.DataParticipants:
+                    {
+                        базаДанныхToolStripMenuItem.Checked = true;
+                        AccessSQL.FillDataTableSQL("SELECT * FROM Participants", DataParticipantsTable);
+                        dataGridView1.DataSource = DataParticipantsTable.dataView;
+                        //dataGridView1.Columns[0].Visible = false;
+                        return;
+                    }
+                case TableVisible.HistoryTournaments:
+                    {
+                        историяТурнировToolStripMenuItem.Checked= true;
+                        DataHistoryTournaments.Rows.Clear();
+                        using (DataTable data = AccessSQL.GetDataTableSQL("SELECT * FROM Tournament"))
+                        {
+                            foreach(DataRow row in data.Rows) {
+                                DataRow newRow = DataHistoryTournaments.NewRow();
+                                for(int i = 0; i< 5;i++)
+                                {
+                                    newRow[i] = row[i];
+                                }
+                                DataHistoryTournaments.Rows.Add(newRow);
+                            }
+                        }
+                        dataGridView1.DataSource = DataHistoryTournaments.dataView;
+                        //dataGridView1.Columns[0].Visible = false;
+                        return;
+                    }
+                case TableVisible.Participants:
+                    {
+                        показатьУчастниковToolStripMenuItem.Checked = true;
+                        dataGridView1.DataSource = ParticipantsTable.dataView;
+                        //dataGridView1.Columns[0].Visible = false;
+                        return;
+                    }
+            }
         }
         private void InitializeDataParticipant(DataTableContextMenu dataTable)
         {
@@ -30,7 +86,7 @@ namespace Hasen
 
             dataTable.AddColunm("Пол");
 
-            dataTable.AddColunm("Дата рождения");
+            dataTable.AddColunm("Дата рождения", typeof(DateTime));
             dataTable.AddColunm("Возраст", typeof(int));
 
             DataTable dataWeigth = AccessSQL.GetDataTableSQL($"SELECT * FROM Catigory");
@@ -50,7 +106,6 @@ namespace Hasen
             ContextMenuFilter contextMenuTrainer = new ContextMenuFilter();
             ((ToolStripMenuItem)contextMenuTrainer.Items.Add("Пустые")).Checked = true;
             dataTable.AddColunm("Тренер", contextMenuTrainer);
-            dataTable.RowChanged += ParticipantsTable_RowChanged;
         }
         private void InitializeDataTournament(DataTableContextMenu dataTable)
         {
@@ -58,6 +113,12 @@ namespace Hasen
 
             ContextMenuFilterName contextMenuName = new ContextMenuFilterName();
             dataTable.AddColunm("Наименование", contextMenuName);
+
+            dataTable.AddColunm("Дата начала", typeof(DateTime));
+
+            dataTable.AddColunm("Дата завершения", typeof(DateTime));
+
+            dataTable.AddColunm("Примечание");
         }
         private void ParticipantsTable_RowChanged(object sender, DataRowChangeEventArgs e)
         {
@@ -67,10 +128,11 @@ namespace Hasen
                 DataTable data = AccessSQL.GetDataTableSQL($"SELECT id FROM Participants WHERE name = '{row[1]}'");
                 if (data.Rows.Count == 0)
                 {
-                    AccessSQL.SendSQL($"INSERT INTO Participants (name,gender,date_of_birth,age,weight,qualification,city,trainer) VALUES ('{row[1]}','{row[2]}','{row[3]}',{row[4]},{row[5]},'{row[6]}','{row[7]}','{row[8]}')");
-                    data = AccessSQL.GetDataTableSQL($"SELECT id FROM Participants WHERE name = '{row[1]}'");
+                    AccessSQL.SendSQL($"INSERT INTO Participants (name,gender,[date_of_birth],age,weight,qualification,city,trainer) VALUES ('{row[1]}','{row[2]}','{((DateTime)row["Дата рождения"]).ToString("dd.MM.yyyy")}',{row[4]},{row[5]},'{row[6]}','{row[7]}','{row[8]}')");
+                    row["ID"] = AccessSQL.GetIDInsert();
                 }
-                row["ID"] = data.Rows[0]["id"];
+                else
+                    row["ID"] = data.Rows[0]["id"];
             }
         }
         private void Form1_Load(object sender, EventArgs e)
@@ -178,7 +240,7 @@ namespace Hasen
                                 newRow[1] = rowExcel[i][1].ToString();
                                 newRow[2] = rowExcel[i][2].ToString();
                                 if (DateTime.TryParse(rowExcel[i][3].ToString(), out DateTime time))
-                                    newRow[3] = time.ToString("dd.MM.yyyy");
+                                    newRow[3] = time;
                                 if (int.TryParse(rowExcel[i][4].ToString(), out int year))
                                     newRow[4] = year;
                                 if (float.TryParse(rowExcel[i][5].ToString(), new NumberFormatInfo { NumberDecimalSeparator = "." }, out float wight))
@@ -245,50 +307,37 @@ namespace Hasen
             CategoryForm category = new CategoryForm(AccessSQL);
             category.ShowDialog();
         }
-
-        private void toolStripMenuItem2_Click(object sender, EventArgs e)
-        {
-            CreateTournament(4);
-        }
-
-        private void toolStripMenuItem3_Click(object sender, EventArgs e)
-        {
-            CreateTournament(8);
-        }
-
-        private void toolStripMenuItem4_Click(object sender, EventArgs e)
-        {
-            CreateTournament(16);
-        }
-        private void CreateTournament(int type)
-        {
-            if (dataGridView1.SelectedRows.Count == 0)
-            {
-                MessageBox.Show("Выберите участников для создания турнира.");
-                return;
-            }
-            List<string> participants = new List<string>();
-            foreach (DataGridViewRow row in dataGridView1.SelectedRows)
-                participants.Add(row.Cells[1].Value.ToString());
-            Tournament tournament = new Tournament(participants.ToArray(), type, AccessSQL);
-            tournament.ShowDialog();
-        }
-        private void базаДанныхToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            DataParticipantsTable.Clear();
-            DataTable dataTable = AccessSQL.GetDataTableSQL($"SELECT * FROM Participants");
-            foreach (DataRow row in dataTable.Rows)
-                DataParticipantsTable.Rows.Add(row.ItemArray);
-            dataGridView1.DataSource = DataParticipantsTable.dataView;
-        }
         private void показатьУчастниковToolStripMenuItem_Click(object sender, EventArgs e)
         {
             dataGridView1.DataSource = ParticipantsTable.dataView;
         }
-
         private void создатьToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            CreateTournament createTournament = new CreateTournament(Particpant.ToList(dataGridView1), AccessSQL);
+            CreateTournament createTournament = new CreateTournament(Participant.ToList(dataGridView1), AccessSQL);
+            createTournament.ShowDialog();
+        }
+        private void показатьУчастниковToolStripMenuItem_Click_1(object sender, EventArgs e)
+        {
+            tableVisible = TableVisible.Participants;
+            UpDateTable();
+        }
+        private void историяТурнировToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            tableVisible = TableVisible.HistoryTournaments;
+            UpDateTable();
+        }
+        private void базаДанныхToolStripMenuItem_Click_1(object sender, EventArgs e)
+        {
+            tableVisible = TableVisible.DataParticipants;
+            UpDateTable();
+        }
+        private void dataGridView1_MouseDoubleClick(object sender, MouseEventArgs e)
+        {
+            if(dataGridView1.SelectedRows.Count == 0) {
+                MessageBox.Show("Выберите строку");
+                return;
+            }
+            CreateTournament createTournament = new CreateTournament(dataGridView1.SelectedRows[0].Cells["ID"].Value.ToString(),AccessSQL);
             createTournament.ShowDialog();
         }
     }

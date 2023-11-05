@@ -53,7 +53,15 @@ namespace Hasen
                 OleDbCommand sqlCom = new OleDbCommand(SQL, connection);
                 sqlCom.ExecuteNonQuery();
                 OleDbDataAdapter dataAdapter = new OleDbDataAdapter(sqlCom);
-                dataAdapter.Fill(dataTable);
+                using (DataTable table = new DataTable())
+                {
+                    dataTable.Clear();
+                    dataAdapter.Fill(table);
+                    foreach (DataRow row in table.Rows)
+                    {
+                        dataTable.Rows.Add(row.ItemArray);
+                    }
+                }
             }
         }
         public void SendSQL(string SQL)
@@ -64,12 +72,11 @@ namespace Hasen
                 sqlCom.ExecuteNonQuery();
             }
         }
-        public int InsertSQL(string SQL)
+        public int GetIDInsert()
         {
             lock (connection)
             {
-                OleDbCommand sqlCom = new OleDbCommand(SQL, connection);
-                
+                OleDbCommand sqlCom = new OleDbCommand($"SELECT @@IDENTITY", connection);
                 int ID = (int)sqlCom.ExecuteScalar();
                 return ID;
             }

@@ -28,223 +28,226 @@
         /// </summary>
         private void InitializeComponent()
         {
-            button1 = new Button();
-            button2 = new Button();
-            dateTimePicker1 = new DateTimePicker();
-            menuStrip1 = new MenuStrip();
-            nameTextBox = new TextBox();
-            label1 = new Label();
-            label2 = new Label();
-            textBox2 = new TextBox();
-            label3 = new Label();
-            label4 = new Label();
-            genderComboBox = new ComboBox();
-            categoryComboBox = new ComboBox();
-            label5 = new Label();
-            label6 = new Label();
-            dataGridView1 = new DataGridView();
-            ageMinTextBox = new TextBox();
-            ageMaxTextBox = new TextBox();
-            label7 = new Label();
-            ((System.ComponentModel.ISupportInitialize)dataGridView1).BeginInit();
-            SuspendLayout();
+            this.button1 = new System.Windows.Forms.Button();
+            this.button2 = new System.Windows.Forms.Button();
+            this.dateTimePicker1 = new System.Windows.Forms.DateTimePicker();
+            this.menuStrip1 = new System.Windows.Forms.MenuStrip();
+            this.nameTextBox = new System.Windows.Forms.TextBox();
+            this.label1 = new System.Windows.Forms.Label();
+            this.label2 = new System.Windows.Forms.Label();
+            this.textBox2 = new System.Windows.Forms.TextBox();
+            this.label3 = new System.Windows.Forms.Label();
+            this.label4 = new System.Windows.Forms.Label();
+            this.genderComboBox = new System.Windows.Forms.ComboBox();
+            this.categoryComboBox = new System.Windows.Forms.ComboBox();
+            this.label5 = new System.Windows.Forms.Label();
+            this.label6 = new System.Windows.Forms.Label();
+            this.dataGridView1 = new System.Windows.Forms.DataGridView();
+            this.ageMinTextBox = new System.Windows.Forms.TextBox();
+            this.ageMaxTextBox = new System.Windows.Forms.TextBox();
+            this.label7 = new System.Windows.Forms.Label();
+            ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
+            this.SuspendLayout();
             // 
             // button1
             // 
-            button1.Location = new Point(643, 396);
-            button1.Name = "button1";
-            button1.Size = new Size(75, 23);
-            button1.TabIndex = 0;
-            button1.Text = "Создать";
-            button1.UseVisualStyleBackColor = true;
+            this.button1.Location = new System.Drawing.Point(643, 396);
+            this.button1.Name = "button1";
+            this.button1.Size = new System.Drawing.Size(75, 23);
+            this.button1.TabIndex = 0;
+            this.button1.Text = "Создать";
+            this.button1.UseVisualStyleBackColor = true;
+            this.button1.Click += new System.EventHandler(this.button1_Click);
             // 
             // button2
             // 
-            button2.Location = new Point(544, 396);
-            button2.Name = "button2";
-            button2.Size = new Size(75, 23);
-            button2.TabIndex = 1;
-            button2.Text = "Отмена";
-            button2.UseVisualStyleBackColor = true;
+            this.button2.Location = new System.Drawing.Point(544, 396);
+            this.button2.Name = "button2";
+            this.button2.Size = new System.Drawing.Size(75, 23);
+            this.button2.TabIndex = 1;
+            this.button2.Text = "Отмена";
+            this.button2.UseVisualStyleBackColor = true;
             // 
             // dateTimePicker1
             // 
-            dateTimePicker1.Location = new Point(130, 70);
-            dateTimePicker1.Name = "dateTimePicker1";
-            dateTimePicker1.Size = new Size(200, 23);
-            dateTimePicker1.TabIndex = 2;
+            this.dateTimePicker1.Location = new System.Drawing.Point(130, 70);
+            this.dateTimePicker1.Name = "dateTimePicker1";
+            this.dateTimePicker1.Size = new System.Drawing.Size(200, 23);
+            this.dateTimePicker1.TabIndex = 2;
             // 
             // menuStrip1
             // 
-            menuStrip1.Location = new Point(0, 0);
-            menuStrip1.Name = "menuStrip1";
-            menuStrip1.Size = new Size(753, 24);
-            menuStrip1.TabIndex = 3;
-            menuStrip1.Text = "menuStrip1";
+            this.menuStrip1.Location = new System.Drawing.Point(0, 0);
+            this.menuStrip1.Name = "menuStrip1";
+            this.menuStrip1.Size = new System.Drawing.Size(753, 24);
+            this.menuStrip1.TabIndex = 3;
+            this.menuStrip1.Text = "menuStrip1";
             // 
             // nameTextBox
             // 
-            nameTextBox.Location = new Point(130, 99);
-            nameTextBox.Name = "nameTextBox";
-            nameTextBox.Size = new Size(588, 23);
-            nameTextBox.TabIndex = 4;
+            this.nameTextBox.Location = new System.Drawing.Point(130, 99);
+            this.nameTextBox.Name = "nameTextBox";
+            this.nameTextBox.Size = new System.Drawing.Size(588, 23);
+            this.nameTextBox.TabIndex = 4;
             // 
             // label1
             // 
-            label1.AutoSize = true;
-            label1.Location = new Point(34, 102);
-            label1.Name = "label1";
-            label1.Size = new Size(90, 15);
-            label1.TabIndex = 5;
-            label1.Text = "Наименование";
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(34, 102);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(90, 15);
+            this.label1.TabIndex = 5;
+            this.label1.Text = "Наименование";
             // 
             // label2
             // 
-            label2.AutoSize = true;
-            label2.Location = new Point(34, 44);
-            label2.Name = "label2";
-            label2.Size = new Size(87, 15);
-            label2.TabIndex = 7;
-            label2.Text = "Соревнование";
+            this.label2.AutoSize = true;
+            this.label2.Location = new System.Drawing.Point(34, 44);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(87, 15);
+            this.label2.TabIndex = 7;
+            this.label2.Text = "Соревнование";
             // 
             // textBox2
             // 
-            textBox2.Location = new Point(130, 41);
-            textBox2.Name = "textBox2";
-            textBox2.Size = new Size(588, 23);
-            textBox2.TabIndex = 6;
+            this.textBox2.Enabled = false;
+            this.textBox2.Location = new System.Drawing.Point(130, 41);
+            this.textBox2.Name = "textBox2";
+            this.textBox2.Size = new System.Drawing.Size(588, 23);
+            this.textBox2.TabIndex = 6;
             // 
             // label3
             // 
-            label3.AutoSize = true;
-            label3.Location = new Point(34, 73);
-            label3.Name = "label3";
-            label3.Size = new Size(32, 15);
-            label3.TabIndex = 8;
-            label3.Text = "Дата";
+            this.label3.AutoSize = true;
+            this.label3.Location = new System.Drawing.Point(34, 73);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(32, 15);
+            this.label3.TabIndex = 8;
+            this.label3.Text = "Дата";
             // 
             // label4
             // 
-            label4.AutoSize = true;
-            label4.Location = new Point(34, 131);
-            label4.Name = "label4";
-            label4.Size = new Size(30, 15);
-            label4.TabIndex = 9;
-            label4.Text = "Пол";
+            this.label4.AutoSize = true;
+            this.label4.Location = new System.Drawing.Point(34, 131);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(30, 15);
+            this.label4.TabIndex = 9;
+            this.label4.Text = "Пол";
             // 
             // genderComboBox
             // 
-            genderComboBox.DropDownStyle = ComboBoxStyle.DropDownList;
-            genderComboBox.FormattingEnabled = true;
-            genderComboBox.Location = new Point(130, 128);
-            genderComboBox.Name = "genderComboBox";
-            genderComboBox.Size = new Size(90, 23);
-            genderComboBox.TabIndex = 10;
-            genderComboBox.SelectedIndexChanged += categoryComboBox_SelectedIndexChanged;
+            this.genderComboBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.genderComboBox.FormattingEnabled = true;
+            this.genderComboBox.Location = new System.Drawing.Point(130, 128);
+            this.genderComboBox.Name = "genderComboBox";
+            this.genderComboBox.Size = new System.Drawing.Size(90, 23);
+            this.genderComboBox.TabIndex = 10;
+            this.genderComboBox.SelectedIndexChanged += new System.EventHandler(this.categoryComboBox_SelectedIndexChanged);
             // 
             // categoryComboBox
             // 
-            categoryComboBox.DropDownStyle = ComboBoxStyle.DropDownList;
-            categoryComboBox.FormattingEnabled = true;
-            categoryComboBox.Location = new Point(371, 128);
-            categoryComboBox.Name = "categoryComboBox";
-            categoryComboBox.Size = new Size(119, 23);
-            categoryComboBox.TabIndex = 12;
-            categoryComboBox.SelectedIndexChanged += categoryComboBox_SelectedIndexChanged;
+            this.categoryComboBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.categoryComboBox.FormattingEnabled = true;
+            this.categoryComboBox.Location = new System.Drawing.Point(371, 128);
+            this.categoryComboBox.Name = "categoryComboBox";
+            this.categoryComboBox.Size = new System.Drawing.Size(119, 23);
+            this.categoryComboBox.TabIndex = 12;
+            this.categoryComboBox.SelectedIndexChanged += new System.EventHandler(this.categoryComboBox_SelectedIndexChanged);
             // 
             // label5
             // 
-            label5.AutoSize = true;
-            label5.Location = new Point(256, 131);
-            label5.Name = "label5";
-            label5.Size = new Size(109, 15);
-            label5.TabIndex = 11;
-            label5.Text = "Весовая категория";
+            this.label5.AutoSize = true;
+            this.label5.Location = new System.Drawing.Point(256, 131);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(109, 15);
+            this.label5.TabIndex = 11;
+            this.label5.Text = "Весовая категория";
             // 
             // label6
             // 
-            label6.AutoSize = true;
-            label6.Location = new Point(517, 131);
-            label6.Name = "label6";
-            label6.Size = new Size(50, 15);
-            label6.TabIndex = 13;
-            label6.Text = "Возраст";
+            this.label6.AutoSize = true;
+            this.label6.Location = new System.Drawing.Point(517, 131);
+            this.label6.Name = "label6";
+            this.label6.Size = new System.Drawing.Size(50, 15);
+            this.label6.TabIndex = 13;
+            this.label6.Text = "Возраст";
             // 
             // dataGridView1
             // 
-            dataGridView1.AllowDrop = true;
-            dataGridView1.AllowUserToAddRows = false;
-            dataGridView1.AllowUserToDeleteRows = false;
-            dataGridView1.AllowUserToResizeColumns = false;
-            dataGridView1.AllowUserToResizeRows = false;
-            dataGridView1.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
-            dataGridView1.BackgroundColor = SystemColors.Window;
-            dataGridView1.BorderStyle = BorderStyle.Fixed3D;
-            dataGridView1.CellBorderStyle = DataGridViewCellBorderStyle.SingleHorizontal;
-            dataGridView1.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            dataGridView1.Location = new Point(34, 158);
-            dataGridView1.Name = "dataGridView1";
-            dataGridView1.ReadOnly = true;
-            dataGridView1.RowHeadersVisible = false;
-            dataGridView1.RowTemplate.Height = 25;
-            dataGridView1.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-            dataGridView1.Size = new Size(684, 216);
-            dataGridView1.TabIndex = 15;
+            this.dataGridView1.AllowDrop = true;
+            this.dataGridView1.AllowUserToAddRows = false;
+            this.dataGridView1.AllowUserToDeleteRows = false;
+            this.dataGridView1.AllowUserToResizeColumns = false;
+            this.dataGridView1.AllowUserToResizeRows = false;
+            this.dataGridView1.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
+            this.dataGridView1.BackgroundColor = System.Drawing.SystemColors.Window;
+            this.dataGridView1.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+            this.dataGridView1.CellBorderStyle = System.Windows.Forms.DataGridViewCellBorderStyle.SingleHorizontal;
+            this.dataGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dataGridView1.Location = new System.Drawing.Point(34, 158);
+            this.dataGridView1.Name = "dataGridView1";
+            this.dataGridView1.ReadOnly = true;
+            this.dataGridView1.RowHeadersVisible = false;
+            this.dataGridView1.RowTemplate.Height = 25;
+            this.dataGridView1.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
+            this.dataGridView1.Size = new System.Drawing.Size(684, 216);
+            this.dataGridView1.TabIndex = 15;
             // 
             // ageMinTextBox
             // 
-            ageMinTextBox.Location = new Point(573, 128);
-            ageMinTextBox.Name = "ageMinTextBox";
-            ageMinTextBox.Size = new Size(61, 23);
-            ageMinTextBox.TabIndex = 16;
-            ageMinTextBox.TextChanged += categoryComboBox_SelectedIndexChanged;
+            this.ageMinTextBox.Location = new System.Drawing.Point(573, 128);
+            this.ageMinTextBox.Name = "ageMinTextBox";
+            this.ageMinTextBox.Size = new System.Drawing.Size(61, 23);
+            this.ageMinTextBox.TabIndex = 16;
+            this.ageMinTextBox.TextChanged += new System.EventHandler(this.categoryComboBox_SelectedIndexChanged);
             // 
             // ageMaxTextBox
             // 
-            ageMaxTextBox.Location = new Point(658, 128);
-            ageMaxTextBox.Name = "ageMaxTextBox";
-            ageMaxTextBox.Size = new Size(61, 23);
-            ageMaxTextBox.TabIndex = 17;
-            ageMaxTextBox.TextChanged += categoryComboBox_SelectedIndexChanged;
+            this.ageMaxTextBox.Location = new System.Drawing.Point(658, 128);
+            this.ageMaxTextBox.Name = "ageMaxTextBox";
+            this.ageMaxTextBox.Size = new System.Drawing.Size(61, 23);
+            this.ageMaxTextBox.TabIndex = 17;
+            this.ageMaxTextBox.TextChanged += new System.EventHandler(this.categoryComboBox_SelectedIndexChanged);
             // 
             // label7
             // 
-            label7.AutoSize = true;
-            label7.Location = new Point(640, 131);
-            label7.Name = "label7";
-            label7.Size = new Size(12, 15);
-            label7.TabIndex = 18;
-            label7.Text = "-";
+            this.label7.AutoSize = true;
+            this.label7.Location = new System.Drawing.Point(640, 131);
+            this.label7.Name = "label7";
+            this.label7.Size = new System.Drawing.Size(12, 15);
+            this.label7.TabIndex = 18;
+            this.label7.Text = "-";
             // 
             // CreateTournamentGrid
             // 
-            AutoScaleDimensions = new SizeF(7F, 15F);
-            AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(753, 442);
-            Controls.Add(label7);
-            Controls.Add(ageMaxTextBox);
-            Controls.Add(ageMinTextBox);
-            Controls.Add(dataGridView1);
-            Controls.Add(label6);
-            Controls.Add(categoryComboBox);
-            Controls.Add(label5);
-            Controls.Add(genderComboBox);
-            Controls.Add(label4);
-            Controls.Add(label3);
-            Controls.Add(label2);
-            Controls.Add(textBox2);
-            Controls.Add(label1);
-            Controls.Add(nameTextBox);
-            Controls.Add(dateTimePicker1);
-            Controls.Add(button2);
-            Controls.Add(button1);
-            Controls.Add(menuStrip1);
-            MainMenuStrip = menuStrip1;
-            Name = "CreateTournamentGrid";
-            Text = "CreateTournamentGrid";
-            ((System.ComponentModel.ISupportInitialize)dataGridView1).EndInit();
-            ResumeLayout(false);
-            PerformLayout();
+            this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
+            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.ClientSize = new System.Drawing.Size(753, 442);
+            this.Controls.Add(this.label7);
+            this.Controls.Add(this.ageMaxTextBox);
+            this.Controls.Add(this.ageMinTextBox);
+            this.Controls.Add(this.dataGridView1);
+            this.Controls.Add(this.label6);
+            this.Controls.Add(this.categoryComboBox);
+            this.Controls.Add(this.label5);
+            this.Controls.Add(this.genderComboBox);
+            this.Controls.Add(this.label4);
+            this.Controls.Add(this.label3);
+            this.Controls.Add(this.label2);
+            this.Controls.Add(this.textBox2);
+            this.Controls.Add(this.label1);
+            this.Controls.Add(this.nameTextBox);
+            this.Controls.Add(this.dateTimePicker1);
+            this.Controls.Add(this.button2);
+            this.Controls.Add(this.button1);
+            this.Controls.Add(this.menuStrip1);
+            this.MainMenuStrip = this.menuStrip1;
+            this.Name = "CreateTournamentGrid";
+            this.Text = "CreateTournamentGrid";
+            ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();
+            this.ResumeLayout(false);
+            this.PerformLayout();
+
         }
 
         #endregion

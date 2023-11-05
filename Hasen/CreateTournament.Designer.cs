@@ -28,252 +28,253 @@
         /// </summary>
         private void InitializeComponent()
         {
-            components = new System.ComponentModel.Container();
-            createButton = new Button();
-            cancelButton = new Button();
-            label1 = new Label();
-            label2 = new Label();
-            label3 = new Label();
-            label4 = new Label();
-            label5 = new Label();
-            secretLable = new Label();
-            name = new TextBox();
-            dateTimePicker1 = new DateTimePicker();
-            dateTimePicker2 = new DateTimePicker();
-            note = new TextBox();
-            mainJudge = new TextBox();
-            secret = new TextBox();
-            dataGridView1 = new DataGridView();
-            contextMenuStrip1 = new ContextMenuStrip(components);
-            создатьТурнирнуюТаблицуToolStripMenuItem = new ToolStripMenuItem();
-            изменитьToolStripMenuItem = new ToolStripMenuItem();
-            удалитьToolStripMenuItem = new ToolStripMenuItem();
-            menuStrip1 = new MenuStrip();
-            файлToolStripMenuItem = new ToolStripMenuItem();
-            турнирнаяТаблицаToolStripMenuItem = new ToolStripMenuItem();
-            ((System.ComponentModel.ISupportInitialize)dataGridView1).BeginInit();
-            contextMenuStrip1.SuspendLayout();
-            menuStrip1.SuspendLayout();
-            SuspendLayout();
-            // 
-            // createButton
-            // 
-            createButton.Location = new Point(682, 442);
-            createButton.Name = "createButton";
-            createButton.Size = new Size(75, 23);
-            createButton.TabIndex = 0;
-            createButton.Text = "Создать";
-            createButton.UseVisualStyleBackColor = true;
-            createButton.Click += createButton_Click;
+            this.components = new System.ComponentModel.Container();
+            this.cancelButton = new System.Windows.Forms.Button();
+            this.label1 = new System.Windows.Forms.Label();
+            this.label2 = new System.Windows.Forms.Label();
+            this.label3 = new System.Windows.Forms.Label();
+            this.label4 = new System.Windows.Forms.Label();
+            this.label5 = new System.Windows.Forms.Label();
+            this.secretLable = new System.Windows.Forms.Label();
+            this.name = new System.Windows.Forms.TextBox();
+            this.dateTimePicker1 = new System.Windows.Forms.DateTimePicker();
+            this.dateTimePicker2 = new System.Windows.Forms.DateTimePicker();
+            this.note = new System.Windows.Forms.TextBox();
+            this.mainJudge = new System.Windows.Forms.TextBox();
+            this.secret = new System.Windows.Forms.TextBox();
+            this.dataGridView1 = new System.Windows.Forms.DataGridView();
+            this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.создатьТурнирнуюТаблицуToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.изменитьToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.удалитьToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.menuStrip1 = new System.Windows.Forms.MenuStrip();
+            this.файлToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.турнирнаяТаблицаToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.создатьToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
+            this.contextMenuStrip1.SuspendLayout();
+            this.menuStrip1.SuspendLayout();
+            this.SuspendLayout();
             // 
             // cancelButton
             // 
-            cancelButton.Location = new Point(592, 442);
-            cancelButton.Name = "cancelButton";
-            cancelButton.Size = new Size(75, 23);
-            cancelButton.TabIndex = 1;
-            cancelButton.Text = "Отмена";
-            cancelButton.UseVisualStyleBackColor = true;
-            cancelButton.Click += cancelButton_Click;
+            this.cancelButton.Location = new System.Drawing.Point(682, 442);
+            this.cancelButton.Name = "cancelButton";
+            this.cancelButton.Size = new System.Drawing.Size(75, 23);
+            this.cancelButton.TabIndex = 1;
+            this.cancelButton.Text = "Отмена";
+            this.cancelButton.UseVisualStyleBackColor = true;
             // 
             // label1
             // 
-            label1.AutoSize = true;
-            label1.Location = new Point(35, 47);
-            label1.Name = "label1";
-            label1.Size = new Size(90, 15);
-            label1.TabIndex = 2;
-            label1.Text = "Наименование";
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(35, 47);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(90, 15);
+            this.label1.TabIndex = 2;
+            this.label1.Text = "Наименование";
             // 
             // label2
             // 
-            label2.AutoSize = true;
-            label2.Location = new Point(35, 79);
-            label2.Name = "label2";
-            label2.Size = new Size(74, 15);
-            label2.TabIndex = 3;
-            label2.Text = "Дата начала";
+            this.label2.AutoSize = true;
+            this.label2.Location = new System.Drawing.Point(35, 79);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(74, 15);
+            this.label2.TabIndex = 3;
+            this.label2.Text = "Дата начала";
             // 
             // label3
             // 
-            label3.AutoSize = true;
-            label3.Location = new Point(456, 79);
-            label3.Name = "label3";
-            label3.Size = new Size(95, 15);
-            label3.TabIndex = 4;
-            label3.Text = "Дата окончания";
+            this.label3.AutoSize = true;
+            this.label3.Location = new System.Drawing.Point(456, 79);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(95, 15);
+            this.label3.TabIndex = 4;
+            this.label3.Text = "Дата окончания";
             // 
             // label4
             // 
-            label4.AutoSize = true;
-            label4.Location = new Point(35, 105);
-            label4.Name = "label4";
-            label4.Size = new Size(78, 15);
-            label4.TabIndex = 5;
-            label4.Text = "Примечание";
+            this.label4.AutoSize = true;
+            this.label4.Location = new System.Drawing.Point(35, 105);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(78, 15);
+            this.label4.TabIndex = 5;
+            this.label4.Text = "Примечание";
             // 
             // label5
             // 
-            label5.AutoSize = true;
-            label5.Location = new Point(35, 134);
-            label5.Name = "label5";
-            label5.Size = new Size(88, 15);
-            label5.TabIndex = 6;
-            label5.Text = "Главный судья";
+            this.label5.AutoSize = true;
+            this.label5.Location = new System.Drawing.Point(35, 134);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(88, 15);
+            this.label5.TabIndex = 6;
+            this.label5.Text = "Главный судья";
             // 
             // secretLable
             // 
-            secretLable.AutoSize = true;
-            secretLable.Location = new Point(430, 134);
-            secretLable.Name = "secretLable";
-            secretLable.Size = new Size(64, 15);
-            secretLable.TabIndex = 7;
-            secretLable.Text = "Секретарь";
+            this.secretLable.AutoSize = true;
+            this.secretLable.Location = new System.Drawing.Point(430, 134);
+            this.secretLable.Name = "secretLable";
+            this.secretLable.Size = new System.Drawing.Size(64, 15);
+            this.secretLable.TabIndex = 7;
+            this.secretLable.Text = "Секретарь";
             // 
             // name
             // 
-            name.Location = new Point(133, 44);
-            name.Name = "name";
-            name.Size = new Size(624, 23);
-            name.TabIndex = 8;
+            this.name.Location = new System.Drawing.Point(133, 44);
+            this.name.Name = "name";
+            this.name.Size = new System.Drawing.Size(624, 23);
+            this.name.TabIndex = 8;
             // 
             // dateTimePicker1
             // 
-            dateTimePicker1.Location = new Point(133, 73);
-            dateTimePicker1.Name = "dateTimePicker1";
-            dateTimePicker1.Size = new Size(200, 23);
-            dateTimePicker1.TabIndex = 9;
+            this.dateTimePicker1.Location = new System.Drawing.Point(133, 73);
+            this.dateTimePicker1.Name = "dateTimePicker1";
+            this.dateTimePicker1.Size = new System.Drawing.Size(200, 23);
+            this.dateTimePicker1.TabIndex = 9;
             // 
             // dateTimePicker2
             // 
-            dateTimePicker2.Location = new Point(557, 73);
-            dateTimePicker2.Name = "dateTimePicker2";
-            dateTimePicker2.Size = new Size(200, 23);
-            dateTimePicker2.TabIndex = 10;
+            this.dateTimePicker2.Location = new System.Drawing.Point(557, 73);
+            this.dateTimePicker2.Name = "dateTimePicker2";
+            this.dateTimePicker2.Size = new System.Drawing.Size(200, 23);
+            this.dateTimePicker2.TabIndex = 10;
             // 
             // note
             // 
-            note.Location = new Point(133, 102);
-            note.Name = "note";
-            note.Size = new Size(624, 23);
-            note.TabIndex = 11;
+            this.note.Location = new System.Drawing.Point(133, 102);
+            this.note.Name = "note";
+            this.note.Size = new System.Drawing.Size(624, 23);
+            this.note.TabIndex = 11;
             // 
             // mainJudge
             // 
-            mainJudge.Location = new Point(133, 131);
-            mainJudge.Name = "mainJudge";
-            mainJudge.Size = new Size(274, 23);
-            mainJudge.TabIndex = 12;
+            this.mainJudge.Location = new System.Drawing.Point(133, 131);
+            this.mainJudge.Name = "mainJudge";
+            this.mainJudge.Size = new System.Drawing.Size(274, 23);
+            this.mainJudge.TabIndex = 12;
             // 
             // secret
             // 
-            secret.Location = new Point(500, 131);
-            secret.Name = "secret";
-            secret.Size = new Size(257, 23);
-            secret.TabIndex = 13;
+            this.secret.Location = new System.Drawing.Point(500, 131);
+            this.secret.Name = "secret";
+            this.secret.Size = new System.Drawing.Size(257, 23);
+            this.secret.TabIndex = 13;
             // 
             // dataGridView1
             // 
-            dataGridView1.AllowDrop = true;
-            dataGridView1.AllowUserToAddRows = false;
-            dataGridView1.AllowUserToDeleteRows = false;
-            dataGridView1.AllowUserToResizeColumns = false;
-            dataGridView1.AllowUserToResizeRows = false;
-            dataGridView1.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
-            dataGridView1.BackgroundColor = SystemColors.Window;
-            dataGridView1.BorderStyle = BorderStyle.Fixed3D;
-            dataGridView1.CellBorderStyle = DataGridViewCellBorderStyle.SingleHorizontal;
-            dataGridView1.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            dataGridView1.Location = new Point(35, 160);
-            dataGridView1.Name = "dataGridView1";
-            dataGridView1.ReadOnly = true;
-            dataGridView1.RowHeadersVisible = false;
-            dataGridView1.RowTemplate.Height = 25;
-            dataGridView1.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-            dataGridView1.Size = new Size(722, 261);
-            dataGridView1.TabIndex = 14;
+            this.dataGridView1.AllowDrop = true;
+            this.dataGridView1.AllowUserToAddRows = false;
+            this.dataGridView1.AllowUserToDeleteRows = false;
+            this.dataGridView1.AllowUserToResizeColumns = false;
+            this.dataGridView1.AllowUserToResizeRows = false;
+            this.dataGridView1.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
+            this.dataGridView1.BackgroundColor = System.Drawing.SystemColors.Window;
+            this.dataGridView1.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+            this.dataGridView1.CellBorderStyle = System.Windows.Forms.DataGridViewCellBorderStyle.SingleHorizontal;
+            this.dataGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dataGridView1.Location = new System.Drawing.Point(35, 160);
+            this.dataGridView1.Name = "dataGridView1";
+            this.dataGridView1.ReadOnly = true;
+            this.dataGridView1.RowHeadersVisible = false;
+            this.dataGridView1.RowTemplate.Height = 25;
+            this.dataGridView1.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
+            this.dataGridView1.Size = new System.Drawing.Size(722, 261);
+            this.dataGridView1.TabIndex = 14;
             // 
             // contextMenuStrip1
             // 
-            contextMenuStrip1.Items.AddRange(new ToolStripItem[] { создатьТурнирнуюТаблицуToolStripMenuItem, изменитьToolStripMenuItem, удалитьToolStripMenuItem });
-            contextMenuStrip1.Name = "contextMenuStrip1";
-            contextMenuStrip1.Size = new Size(181, 92);
+            this.contextMenuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.создатьТурнирнуюТаблицуToolStripMenuItem,
+            this.изменитьToolStripMenuItem,
+            this.удалитьToolStripMenuItem});
+            this.contextMenuStrip1.Name = "contextMenuStrip1";
+            this.contextMenuStrip1.Size = new System.Drawing.Size(129, 70);
             // 
             // создатьТурнирнуюТаблицуToolStripMenuItem
             // 
-            создатьТурнирнуюТаблицуToolStripMenuItem.Name = "создатьТурнирнуюТаблицуToolStripMenuItem";
-            создатьТурнирнуюТаблицуToolStripMenuItem.Size = new Size(180, 22);
-            создатьТурнирнуюТаблицуToolStripMenuItem.Text = "Создать";
-            создатьТурнирнуюТаблицуToolStripMenuItem.Click += создатьТурнирнуюТаблицуToolStripMenuItem_Click;
+            this.создатьТурнирнуюТаблицуToolStripMenuItem.Name = "создатьТурнирнуюТаблицуToolStripMenuItem";
+            this.создатьТурнирнуюТаблицуToolStripMenuItem.Size = new System.Drawing.Size(128, 22);
+            this.создатьТурнирнуюТаблицуToolStripMenuItem.Text = "Создать";
+            this.создатьТурнирнуюТаблицуToolStripMenuItem.Click += new System.EventHandler(this.создатьТурнирнуюТаблицуToolStripMenuItem_Click);
             // 
             // изменитьToolStripMenuItem
             // 
-            изменитьToolStripMenuItem.Name = "изменитьToolStripMenuItem";
-            изменитьToolStripMenuItem.Size = new Size(180, 22);
-            изменитьToolStripMenuItem.Text = "Изменить";
+            this.изменитьToolStripMenuItem.Name = "изменитьToolStripMenuItem";
+            this.изменитьToolStripMenuItem.Size = new System.Drawing.Size(128, 22);
+            this.изменитьToolStripMenuItem.Text = "Изменить";
             // 
             // удалитьToolStripMenuItem
             // 
-            удалитьToolStripMenuItem.Name = "удалитьToolStripMenuItem";
-            удалитьToolStripMenuItem.Size = new Size(180, 22);
-            удалитьToolStripMenuItem.Text = "Удалить";
+            this.удалитьToolStripMenuItem.Name = "удалитьToolStripMenuItem";
+            this.удалитьToolStripMenuItem.Size = new System.Drawing.Size(128, 22);
+            this.удалитьToolStripMenuItem.Text = "Удалить";
             // 
             // menuStrip1
             // 
-            menuStrip1.Items.AddRange(new ToolStripItem[] { файлToolStripMenuItem, турнирнаяТаблицаToolStripMenuItem });
-            menuStrip1.Location = new Point(0, 0);
-            menuStrip1.Name = "menuStrip1";
-            menuStrip1.Size = new Size(785, 24);
-            menuStrip1.TabIndex = 15;
-            menuStrip1.Text = "menuStrip1";
+            this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.файлToolStripMenuItem,
+            this.турнирнаяТаблицаToolStripMenuItem});
+            this.menuStrip1.Location = new System.Drawing.Point(0, 0);
+            this.menuStrip1.Name = "menuStrip1";
+            this.menuStrip1.Size = new System.Drawing.Size(785, 24);
+            this.menuStrip1.TabIndex = 15;
+            this.menuStrip1.Text = "menuStrip1";
             // 
             // файлToolStripMenuItem
             // 
-            файлToolStripMenuItem.Name = "файлToolStripMenuItem";
-            файлToolStripMenuItem.Size = new Size(48, 20);
-            файлToolStripMenuItem.Text = "Файл";
+            this.файлToolStripMenuItem.Name = "файлToolStripMenuItem";
+            this.файлToolStripMenuItem.Size = new System.Drawing.Size(48, 20);
+            this.файлToolStripMenuItem.Text = "Файл";
             // 
             // турнирнаяТаблицаToolStripMenuItem
             // 
-            турнирнаяТаблицаToolStripMenuItem.Name = "турнирнаяТаблицаToolStripMenuItem";
-            турнирнаяТаблицаToolStripMenuItem.Size = new Size(126, 20);
-            турнирнаяТаблицаToolStripMenuItem.Text = "Турнирная таблица";
+            this.турнирнаяТаблицаToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.создатьToolStripMenuItem});
+            this.турнирнаяТаблицаToolStripMenuItem.Name = "турнирнаяТаблицаToolStripMenuItem";
+            this.турнирнаяТаблицаToolStripMenuItem.Size = new System.Drawing.Size(126, 20);
+            this.турнирнаяТаблицаToolStripMenuItem.Text = "Турнирная таблица";
+            // 
+            // создатьToolStripMenuItem
+            // 
+            this.создатьToolStripMenuItem.Name = "создатьToolStripMenuItem";
+            this.создатьToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.создатьToolStripMenuItem.Text = "Создать";
+            this.создатьToolStripMenuItem.Click += new System.EventHandler(this.создатьТурнирнуюТаблицуToolStripMenuItem_Click);
             // 
             // CreateTournament
             // 
-            AutoScaleDimensions = new SizeF(7F, 15F);
-            AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(785, 487);
-            Controls.Add(menuStrip1);
-            Controls.Add(dataGridView1);
-            Controls.Add(secret);
-            Controls.Add(mainJudge);
-            Controls.Add(note);
-            Controls.Add(dateTimePicker2);
-            Controls.Add(dateTimePicker1);
-            Controls.Add(name);
-            Controls.Add(secretLable);
-            Controls.Add(label5);
-            Controls.Add(label4);
-            Controls.Add(label3);
-            Controls.Add(label2);
-            Controls.Add(label1);
-            Controls.Add(cancelButton);
-            Controls.Add(createButton);
-            MainMenuStrip = menuStrip1;
-            Name = "CreateTournament";
-            Text = "Создать соревнование";
-            ((System.ComponentModel.ISupportInitialize)dataGridView1).EndInit();
-            contextMenuStrip1.ResumeLayout(false);
-            menuStrip1.ResumeLayout(false);
-            menuStrip1.PerformLayout();
-            ResumeLayout(false);
-            PerformLayout();
+            this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
+            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.ClientSize = new System.Drawing.Size(785, 487);
+            this.Controls.Add(this.menuStrip1);
+            this.Controls.Add(this.dataGridView1);
+            this.Controls.Add(this.secret);
+            this.Controls.Add(this.mainJudge);
+            this.Controls.Add(this.note);
+            this.Controls.Add(this.dateTimePicker2);
+            this.Controls.Add(this.dateTimePicker1);
+            this.Controls.Add(this.name);
+            this.Controls.Add(this.secretLable);
+            this.Controls.Add(this.label5);
+            this.Controls.Add(this.label4);
+            this.Controls.Add(this.label3);
+            this.Controls.Add(this.label2);
+            this.Controls.Add(this.label1);
+            this.Controls.Add(this.cancelButton);
+            this.MainMenuStrip = this.menuStrip1;
+            this.Name = "CreateTournament";
+            this.Text = "Создать соревнование";
+            ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();
+            this.contextMenuStrip1.ResumeLayout(false);
+            this.menuStrip1.ResumeLayout(false);
+            this.menuStrip1.PerformLayout();
+            this.ResumeLayout(false);
+            this.PerformLayout();
+
         }
 
         #endregion
-
-        private Button createButton;
         private Button cancelButton;
         private Label label1;
         private Label label2;
@@ -295,5 +296,6 @@
         private MenuStrip menuStrip1;
         private ToolStripMenuItem файлToolStripMenuItem;
         private ToolStripMenuItem турнирнаяТаблицаToolStripMenuItem;
+        private ToolStripMenuItem создатьToolStripMenuItem;
     }
 }
