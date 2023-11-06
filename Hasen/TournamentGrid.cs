@@ -23,21 +23,25 @@ namespace Kaharman
             {
                 for (int y = 0; y < grid.Items[x].Count; y++)
                 {
-                    if (x == 0)
-                        grid.Items[x][y].ItemText.Click += Item_Click;
+                    grid.Items[x][y].ItemText.Click += Item_Click;
                     panel1.Controls.Add(grid.Items[x][y].ItemText);
                 }
             }
         }
-
         private void Item_Click(object? sender, EventArgs e)
         {
             GridItemText? item = sender as GridItemText;
             if (item == null)
                 return;
-            WonPosition(item);
+            if (item.TablePoint.X != Grid.Items.Count - 1)
+            {
+                int pos = (item.TablePoint.Y / 2) * 2;
+                if (Grid.Items[item.TablePoint.X][pos].Status == StatusGrid.init && Grid.Items[item.TablePoint.X][pos + 1].Status == StatusGrid.init)
+                {
+                    WonPosition(item);
+                }
+            }
         }
-
         private void выходToolStripMenuItem_Click(object sender, EventArgs e)
         {
             Close();
@@ -47,11 +51,10 @@ namespace Kaharman
         }
         private void WonPosition(GridItemText item1)
         {
-            EnabledItems(item1.TablePoint);
+            ChangeStatisItems(item1.TablePoint);
             int positionY = item1.TablePoint.Y / 2;
+            Grid.Items[item1.TablePoint.X + 1][positionY].SetParticipant(item1.Participant);
             GridItemText item2 = Grid.Items[item1.TablePoint.X + 1][positionY].ItemText;
-            item2.Click += Item_Click;
-            item2.Text = item1.Text;
             Point point1 = new Point(item1.Right, item1.Location.Y + item1.Height / 2);
             Point point4 = new Point(item2.Left, item2.Location.Y + item2.Height / 2);
             Point point2 = new Point(point1.X + 30, point1.Y);
@@ -60,11 +63,14 @@ namespace Kaharman
             graphics.DrawLine(Pens.Red, point2, point3);
             graphics.DrawLine(Pens.Red, point3, point4);
         }
-        private void EnabledItems(Point item)
+        private void ChangeStatisItems(Point item)
         {
             int pos = (item.Y / 2) * 2;
-            Grid.Items[item.X][pos].ItemText.Click -= Item_Click;
-            Grid.Items[item.X][pos + 1].ItemText.Click -= Item_Click;
+            Grid.Items[item.X][item.Y].ChangeStatus(StatusGrid.win);
+            if(pos == item.Y)
+                Grid.Items[item.X][item.Y + 1].ChangeStatus(StatusGrid.lose);
+            else
+                Grid.Items[item.X][item.Y - 1].ChangeStatus(StatusGrid.lose);
         }
     }
 }

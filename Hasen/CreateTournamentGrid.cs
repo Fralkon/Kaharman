@@ -102,15 +102,14 @@ namespace Kaharman
             {
                 List<GridItems> itemJsonGrid = new List<GridItems>();
                 for (int i = 0; i < type; i++)
-                    itemJsonGrid.Add(new GridItems(new Point(step, i), -1, (int)StatusGrid.none));
+                    itemJsonGrid.Add(new GridItems(new Point(step, i)));
                 grid.Items.Add(itemJsonGrid);
                 step++;
                 if (type == 1)
                     break;
                 type /= 2;
             }
-            
-            grid.FillItems(Participant.GetListToID(ListAllParticipants, GetListIntID()));
+            grid.FillNewGridItems(Participant.GetListToID(ListAllParticipants, GetListIntID()));
 
             if (StatusForm == StatusFormTournamentGrid.Create)
             {

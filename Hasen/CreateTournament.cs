@@ -102,31 +102,31 @@ namespace Kaharman
                 MessageBox.Show("Выделите строку.");
                 return;
             }
-            string IDGrid = dataGridView1.SelectedRows[0].Cells["ID"].ToString();
+            //string IDGrid = dataGridView1.SelectedRows[0].Cells["ID"].ToString();
 
-            int type = grid.Type;
-            while (true)
-            {
-                List<GridItems> itemJsonGrid = new List<GridItems>();
-                for (int i = 0; i < type; i++)
-                    itemJsonGrid.Add(new GridItems(new Point(step, i), -1, (int)StatusGrid.none));
-                grid.Items.Add(itemJsonGrid);
-                step++;
-                if (type == 1)
-                    break;
-                type /= 2;
-            }
+            //int type = grid.Type;
+            //while (true)
+            //{
+            //    List<GridItems> itemJsonGrid = new List<GridItems>();
+            //    for (int i = 0; i < type; i++)
+            //        itemJsonGrid.Add(new GridItems(new Point(step, i), -1, (int)StatusGrid.none));
+            //    grid.Items.Add(itemJsonGrid);
+            //    step++;
+            //    if (type == 1)
+            //        break;
+            //    type /= 2;
+            //}
 
-            grid.FillItems(Participant.GetListToID(ListAllParticipants, GetListIntID()));
+            //grid.FillItems(Participant.GetListToID(ListAllParticipants, GetListIntID()));
 
-            if (StatusForm == StatusFormTournamentGrid.Create)
-            {
-                Save(IdTournament, dateTimePicker1.Value, nameTextBox.Text, GetListStringID(), JsonSerializer.Serialize(grid));
-                IdGrid = AccessSQL.GetIDInsert().ToString();
-            }
-            else if (StatusForm == StatusFormTournamentGrid.Visit) { }
-            TournamentGrid tournament = new TournamentGrid(IdGrid, textBox2.Text, nameTextBox.Text, grid, AccessSQL);
-            tournament.ShowDialog();
+            //if (StatusForm == StatusFormTournamentGrid.Create)
+            //{
+            //    Save(IdTournament, dateTimePicker1.Value, nameTextBox.Text, GetListStringID(), JsonSerializer.Serialize(grid));
+            //    IdGrid = AccessSQL.GetIDInsert().ToString();
+            //}
+            //else if (StatusForm == StatusFormTournamentGrid.Visit) { }
+            //TournamentGrid tournament = new TournamentGrid(IdGrid, textBox2.Text, nameTextBox.Text, grid, AccessSQL);
+            //tournament.ShowDialog();
         }
     }
 }

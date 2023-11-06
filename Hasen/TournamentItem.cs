@@ -26,7 +26,8 @@ namespace Kaharman
     }
 
     public enum StatusGrid { 
-        none,
+        init,
+        close,
         lose,
         win
     }
@@ -165,6 +166,20 @@ namespace Kaharman
             }
             return list;
         }
+        public static (Participant,Participant) GetPairParticipants(List<Participant> list)
+        {
+            Participant item1 = list[0];
+            Participant item2 = list[1];
+            list.Remove(item1);
+            list.Remove(item2);
+            return (item1, item2);
+        }
+        public static Participant GetParticipants(List<Participant> list)
+        {
+            Participant item1 = list[0];
+            list.Remove(item1);
+            return item1;
+        }
     }
     //internal class TournamentItem: TextBox
     //{
@@ -187,13 +202,13 @@ namespace Kaharman
     {
         public Participant? Participant { get; set; }
         public Point TablePoint { get; }
-        public StatusGrid Status { get; set; }
-        public GridItemText(Participant? participan, Point point, StatusGrid status = StatusGrid.none)
+        public StatusGrid Status { get; private set; }
+        public GridItemText(Participant? participan, Point point, StatusGrid status = StatusGrid.close)
         {
             this.Location = new Point(20 + (point.X * 225), 10 * ((int)Math.Pow(2, point.X + 1)) + (10 * ((int)Math.Pow(2, point.X + 2))) * point.Y);
             this.Participant = participan;
             this.TablePoint = point;
-            this.Status = status;
+            ChangeStatus(status);
             this.Name = point.ToString();
             this.AccessibleRole = AccessibleRole.None;
             this.BorderStyle = BorderStyle.FixedSingle;
@@ -205,13 +220,30 @@ namespace Kaharman
                 this.Text = "";
             this.TabStop = false;
         }
+        public void ChangeStatus(StatusGrid status)
+        {
+            this.Status = status;
+            switch(status)
+            {
+                case StatusGrid.win:
+                    {
+                        this.BackColor = Color.Green;
+                        return;
+                    }
+                case StatusGrid.lose:
+                    {
+                        this.BackColor = Color.Red; 
+                        return;
+                    }
+            }
+        }
     }
     public class GridItems
     {
         public Point Point { get; set; }
         public int ID { get;set; }
-        public int Status { get; set; }
-        public GridItems(Point point, int iD, int status)
+        public StatusGrid Status { get; set; }
+        public GridItems(Point point, int iD = -1, StatusGrid status = StatusGrid.close)
         {
             this.Point = point;
             ID = iD;
@@ -222,6 +254,28 @@ namespace Kaharman
         }
         [JsonIgnore]
         public GridItemText? ItemText { get; set; }
+        public void CreateItemTextBox()
+        {
+            ItemText = new GridItemText(null, Point);
+        }
+        public void CreateItemTextBox(Participant participant, StatusGrid status)
+        {
+            ItemText = new GridItemText(participant, Point, status);
+        }
+        public void ChangeStatus(StatusGrid status)
+        {
+            this.Status = status;
+            if(ItemText != null)
+            {
+                ItemText.ChangeStatus(status);
+            }
+        }
+        public void SetParticipant(Participant participant)
+        {
+            ChangeStatus(StatusGrid.init);
+            ItemText.Participant = participant;
+            this.ItemText.Text = participant.Name;
+        }
     }
     public class Grid
     {
@@ -237,10 +291,30 @@ namespace Kaharman
                 foreach (GridItems gridItem in gridItems)
                 {
                     if (gridItem.ID == -1)
-                        gridItem.ItemText = new GridItemText(null, gridItem.Point);
+                        gridItem.CreateItemTextBox();
                     else
-                        gridItem.ItemText = new GridItemText(participants.Find(item => item.ID == gridItem.ID), gridItem.Point, (StatusGrid)gridItem.Status);
+                        gridItem.CreateItemTextBox(participants.Find(item => item.ID == gridItem.ID),(StatusGrid)gridItem.Status);
                 }
+            }
+        }
+        public void FillNewGridItems(List<Participant> participants)
+        {
+            foreach (List<GridItems> gridItems in Items)
+                foreach (GridItems gridItem in gridItems)
+                        gridItem.CreateItemTextBox();
+            int colPart = participants.Count;
+            int firstLap = (colPart - (Type / 2)) * 2;
+            int secondLap = colPart - firstLap;
+            for (int i = 0; i < firstLap; i+=2) 
+            {
+                var pair = Participant.GetPairParticipants(participants);
+                Items[0][i].SetParticipant(pair.Item1);
+                Items[0][i+1].SetParticipant(pair.Item2);
+            }
+            int secondLapCount = Items[1].Count;
+            for(int i = 1; i <= secondLap; i++)
+            {
+                Items[1][secondLapCount - i].SetParticipant(Participant.GetParticipants(participants));
             }
         }
     }
