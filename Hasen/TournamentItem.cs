@@ -273,6 +273,7 @@ namespace Kaharman
         public void SetParticipant(Participant participant)
         {
             ChangeStatus(StatusGrid.init);
+            ID = participant.ID;
             ItemText.Participant = participant;
             this.ItemText.Text = participant.Name;
         }
@@ -293,7 +294,7 @@ namespace Kaharman
                     if (gridItem.ID == -1)
                         gridItem.CreateItemTextBox();
                     else
-                        gridItem.CreateItemTextBox(participants.Find(item => item.ID == gridItem.ID),(StatusGrid)gridItem.Status);
+                        gridItem.CreateItemTextBox(participants.Find(item => item.ID == gridItem.ID),gridItem.Status);
                 }
             }
         }
