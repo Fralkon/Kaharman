@@ -190,26 +190,27 @@
             this.изменитьToolStripMenuItem,
             this.удалитьToolStripMenuItem});
             this.contextMenuStrip1.Name = "contextMenuStrip1";
-            this.contextMenuStrip1.Size = new System.Drawing.Size(129, 70);
+            this.contextMenuStrip1.Size = new System.Drawing.Size(181, 92);
             // 
             // создатьТурнирнуюТаблицуToolStripMenuItem
             // 
             this.создатьТурнирнуюТаблицуToolStripMenuItem.Name = "создатьТурнирнуюТаблицуToolStripMenuItem";
-            this.создатьТурнирнуюТаблицуToolStripMenuItem.Size = new System.Drawing.Size(128, 22);
+            this.создатьТурнирнуюТаблицуToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.создатьТурнирнуюТаблицуToolStripMenuItem.Text = "Создать";
             this.создатьТурнирнуюТаблицуToolStripMenuItem.Click += new System.EventHandler(this.создатьТурнирнуюТаблицуToolStripMenuItem_Click);
             // 
             // изменитьToolStripMenuItem
             // 
             this.изменитьToolStripMenuItem.Name = "изменитьToolStripMenuItem";
-            this.изменитьToolStripMenuItem.Size = new System.Drawing.Size(128, 22);
+            this.изменитьToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.изменитьToolStripMenuItem.Text = "Изменить";
             // 
             // удалитьToolStripMenuItem
             // 
             this.удалитьToolStripMenuItem.Name = "удалитьToolStripMenuItem";
-            this.удалитьToolStripMenuItem.Size = new System.Drawing.Size(128, 22);
+            this.удалитьToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.удалитьToolStripMenuItem.Text = "Удалить";
+            this.удалитьToolStripMenuItem.Click += new System.EventHandler(this.удалитьToolStripMenuItem_Click);
             // 
             // menuStrip1
             // 

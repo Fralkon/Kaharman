@@ -152,5 +152,9 @@ namespace Kaharman
             TournamentGrid tournament = new TournamentGrid(IDGrid, name.Text, nameGrid, grid, AccessSQL);
             tournament.ShowDialog();
         }
+        private void удалитьToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+
+        }
     }
 }

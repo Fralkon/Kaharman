@@ -1,4 +1,7 @@
 ﻿using Hasen;
+using System.Drawing.Printing;
+using System.Text.Json;
+using System.Windows.Forms;
 
 namespace Kaharman
 {
@@ -6,10 +9,13 @@ namespace Kaharman
     {
         AccessSQL AccessSQL;
         Graphics graphics;
+        Bitmap memoryImage;
         Grid Grid { get; set; }
+        string ID;
         public TournamentGrid(string id, string nameT, string name, Grid grid, AccessSQL AccessSQL)
         {
             InitializeComponent();
+            this.ID = id;
             nameTournament.Text = nameT;
             nameGrid.Text = name;
             this.AccessSQL = AccessSQL;
@@ -48,6 +54,22 @@ namespace Kaharman
         }
         private void печатьToolStripMenuItem_Click(object sender, EventArgs e)
         {
+            Graphics myGraphics = this.CreateGraphics();
+            Size s = this.Size;
+            memoryImage = new Bitmap(s.Width, s.Height, myGraphics);
+            Graphics memoryGraphics = Graphics.FromImage(memoryImage);
+            memoryGraphics.CopyFromScreen(this.Location.X, this.Location.Y, 0, 0, s);
+            
+            printDialog1.Document = printDocument1;
+            printDialog1.ShowDialog();
+            printDocument1.PrinterSettings = printDialog1.PrinterSettings;
+            PrintPreviewDialog printPrvDlg = new PrintPreviewDialog();
+
+            // preview the assigned document or you can create a different previewButton for it
+            printPrvDlg.Document = printDocument1;
+            printPrvDlg.ShowDialog(); // this shows the preview and then show the Printer Dlg below
+
+            printDocument1.Print();
         }
         private void WonPosition(GridItemText item1)
         {
@@ -71,6 +93,15 @@ namespace Kaharman
                 Grid.Items[item.X][item.Y + 1].ChangeStatus(StatusGrid.lose);
             else
                 Grid.Items[item.X][item.Y - 1].ChangeStatus(StatusGrid.lose);
+        }
+        private void TournamentGrid_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            AccessSQL.SendSQL($"UPDATE TournamentGrid SET grid = '{JsonSerializer.Serialize(Grid)}' WHERE id = {ID}");
+        }
+
+        private void printDocument1_PrintPage(object sender, PrintPageEventArgs e)
+        {
+            e.Graphics.DrawImage(memoryImage, 0, 0);
         }
     }
 }

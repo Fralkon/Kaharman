@@ -38,12 +38,13 @@ namespace Hasen
         {
             показатьУчастниковToolStripMenuItem.Checked = false;
             базаДанныхToolStripMenuItem.Checked = false;
-            историяТурнировToolStripMenuItem.Checked= false;
+            историяТурнировToolStripMenuItem.Checked = false;
             switch (tableVisible)
             {
                 case TableVisible.DataParticipants:
                     {
                         базаДанныхToolStripMenuItem.Checked = true;
+                        dataGridView1.ContextMenuStrip = null;
                         AccessSQL.FillDataTableSQL("SELECT * FROM Participants", DataParticipantsTable);
                         dataGridView1.DataSource = DataParticipantsTable.dataView;
                         //dataGridView1.Columns[0].Visible = false;
@@ -51,13 +52,15 @@ namespace Hasen
                     }
                 case TableVisible.HistoryTournaments:
                     {
-                        историяТурнировToolStripMenuItem.Checked= true;
+                        историяТурнировToolStripMenuItem.Checked = true;
                         DataHistoryTournaments.Rows.Clear();
+                        dataGridView1.ContextMenuStrip = contextMenuStrip1;
                         using (DataTable data = AccessSQL.GetDataTableSQL("SELECT * FROM Tournament"))
                         {
-                            foreach(DataRow row in data.Rows) {
+                            foreach (DataRow row in data.Rows)
+                            {
                                 DataRow newRow = DataHistoryTournaments.NewRow();
-                                for(int i = 0; i< 5;i++)
+                                for (int i = 0; i < 5; i++)
                                 {
                                     newRow[i] = row[i];
                                 }
@@ -70,6 +73,7 @@ namespace Hasen
                     }
                 case TableVisible.Participants:
                     {
+                        dataGridView1.ContextMenuStrip = null;
                         показатьУчастниковToolStripMenuItem.Checked = true;
                         dataGridView1.DataSource = ParticipantsTable.dataView;
                         //dataGridView1.Columns[0].Visible = false;
@@ -145,7 +149,7 @@ namespace Hasen
         }
         private void добавитьToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            Participants participants = new Participants();
+            ParticipantForm participants = new ParticipantForm(AccessSQL);
             participants.ShowDialog();
         }
         private void городаToolStripMenuItem_Click(object sender, EventArgs e)
@@ -333,12 +337,37 @@ namespace Hasen
         }
         private void dataGridView1_MouseDoubleClick(object sender, MouseEventArgs e)
         {
-            if(dataGridView1.SelectedRows.Count == 0) {
+            if (dataGridView1.SelectedRows.Count == 0)
+            {
                 MessageBox.Show("Выберите строку");
                 return;
             }
-            CreateTournament createTournament = new CreateTournament(dataGridView1.SelectedRows[0].Cells["ID"].Value.ToString(),AccessSQL);
-            createTournament.ShowDialog();
+            if (tableVisible == TableVisible.HistoryTournaments)
+            {
+                CreateTournament createTournament = new CreateTournament(dataGridView1.SelectedRows[0].Cells["ID"].Value.ToString(), AccessSQL);
+                createTournament.ShowDialog();
+                return;
+            }
+            else if (tableVisible == TableVisible.Participants || tableVisible == TableVisible.DataParticipants)
+            {
+                ParticipantForm participants = new ParticipantForm(dataGridView1.SelectedRows[0].Cells["ID"].Value.ToString(), AccessSQL);
+                participants.ShowDialog();
+                return;
+            }
+        }
+        private void удалитьToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (dataGridView1.SelectedRows.Count == 0)
+            {
+                MessageBox.Show("Выберите строку");
+                return;
+            }
+            DialogResult dr = MessageBox.Show($"Удалить турнир {dataGridView1.SelectedRows[0].Cells["Наименование"].Value}?", "Удаление турнира", MessageBoxButtons.YesNo);
+            if (dr == DialogResult.Yes)
+            {
+                AccessSQL.SendSQL("DELETE * FROM Tournament WHERE id = " + dataGridView1.SelectedRows[0].Cells["ID"].Value.ToString());
+                UpDateTable();
+            }
         }
     }
 }

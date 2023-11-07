@@ -29,12 +29,14 @@
         private void InitializeComponent()
         {
             this.panel1 = new System.Windows.Forms.Panel();
+            this.nameGrid = new System.Windows.Forms.Label();
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.файлToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.печатьToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.выходToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.nameTournament = new System.Windows.Forms.Label();
-            this.nameGrid = new System.Windows.Forms.Label();
+            this.printDocument1 = new System.Drawing.Printing.PrintDocument();
+            this.printDialog1 = new System.Windows.Forms.PrintDialog();
             this.panel1.SuspendLayout();
             this.menuStrip1.SuspendLayout();
             this.SuspendLayout();
@@ -46,6 +48,15 @@
             this.panel1.Name = "panel1";
             this.panel1.Size = new System.Drawing.Size(1153, 647);
             this.panel1.TabIndex = 0;
+            // 
+            // nameGrid
+            // 
+            this.nameGrid.AutoSize = true;
+            this.nameGrid.Location = new System.Drawing.Point(550, 30);
+            this.nameGrid.Name = "nameGrid";
+            this.nameGrid.Size = new System.Drawing.Size(38, 15);
+            this.nameGrid.TabIndex = 3;
+            this.nameGrid.Text = "label2";
             // 
             // menuStrip1
             // 
@@ -89,14 +100,13 @@
             this.nameTournament.TabIndex = 2;
             this.nameTournament.Text = "label1";
             // 
-            // nameGrid
+            // printDocument1
             // 
-            this.nameGrid.AutoSize = true;
-            this.nameGrid.Location = new System.Drawing.Point(550, 30);
-            this.nameGrid.Name = "nameGrid";
-            this.nameGrid.Size = new System.Drawing.Size(38, 15);
-            this.nameGrid.TabIndex = 3;
-            this.nameGrid.Text = "label2";
+            this.printDocument1.PrintPage += new System.Drawing.Printing.PrintPageEventHandler(this.printDocument1_PrintPage);
+            // 
+            // printDialog1
+            // 
+            this.printDialog1.UseEXDialog = true;
             // 
             // TournamentGrid
             // 
@@ -109,6 +119,7 @@
             this.MainMenuStrip = this.menuStrip1;
             this.Name = "TournamentGrid";
             this.Text = "Tournament";
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.TournamentGrid_FormClosing);
             this.panel1.ResumeLayout(false);
             this.panel1.PerformLayout();
             this.menuStrip1.ResumeLayout(false);
@@ -127,5 +138,7 @@
         private ToolStripMenuItem печатьToolStripMenuItem;
         private Label nameTournament;
         private Label nameGrid;
+        private System.Drawing.Printing.PrintDocument printDocument1;
+        private PrintDialog printDialog1;
     }
 }
