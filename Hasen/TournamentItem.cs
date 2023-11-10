@@ -319,12 +319,4 @@ namespace Kaharman
             }
         }
     }
-    //internal class TournamentGrid
-    //{
-    //    public int Type { get; set; }
-    //    public int Id { get; set; }
-    //    public string Name { get; set; }
-    //    public DateTime Date { get; set; }
-    //    public List<Particpant> Particpants { get; set; } = new List<Particpant>();
-    //}
 }

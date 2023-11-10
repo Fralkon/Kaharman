@@ -28,237 +28,218 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.components = new System.ComponentModel.Container();
-            this.menuStrip1 = new System.Windows.Forms.MenuStrip();
-            this.файлToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.выходToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.турнирыToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.создатьToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.показатьУчастниковToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.историяТурнировToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.участникиToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.добавитьToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.найтиToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.базаДанныхToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.тренераToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.добавитьToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
-            this.показатьToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.базаДанныхToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
-            this.настройкиToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.весовыеКатегорииToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.городаToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.dataGridView1 = new System.Windows.Forms.DataGridView();
-            this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
-            this.создатьТурнирToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.удалитьToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.menuStrip1.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
-            this.contextMenuStrip1.SuspendLayout();
-            this.SuspendLayout();
+            components = new System.ComponentModel.Container();
+            menuStrip1 = new MenuStrip();
+            файлToolStripMenuItem = new ToolStripMenuItem();
+            выходToolStripMenuItem = new ToolStripMenuItem();
+            турнирыToolStripMenuItem = new ToolStripMenuItem();
+            создатьToolStripMenuItem = new ToolStripMenuItem();
+            показатьУчастниковToolStripMenuItem = new ToolStripMenuItem();
+            историяТурнировToolStripMenuItem = new ToolStripMenuItem();
+            участникиToolStripMenuItem = new ToolStripMenuItem();
+            добавитьToolStripMenuItem = new ToolStripMenuItem();
+            найтиToolStripMenuItem = new ToolStripMenuItem();
+            базаДанныхToolStripMenuItem = new ToolStripMenuItem();
+            тренераToolStripMenuItem = new ToolStripMenuItem();
+            добавитьToolStripMenuItem1 = new ToolStripMenuItem();
+            показатьToolStripMenuItem = new ToolStripMenuItem();
+            базаДанныхToolStripMenuItem1 = new ToolStripMenuItem();
+            настройкиToolStripMenuItem = new ToolStripMenuItem();
+            весовыеКатегорииToolStripMenuItem = new ToolStripMenuItem();
+            городаToolStripMenuItem = new ToolStripMenuItem();
+            dataGridView1 = new DataGridView();
+            contextMenuStrip1 = new ContextMenuStrip(components);
+            создатьТурнирToolStripMenuItem = new ToolStripMenuItem();
+            удалитьToolStripMenuItem = new ToolStripMenuItem();
+            menuStrip1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)dataGridView1).BeginInit();
+            contextMenuStrip1.SuspendLayout();
+            SuspendLayout();
             // 
             // menuStrip1
             // 
-            this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.файлToolStripMenuItem,
-            this.турнирыToolStripMenuItem,
-            this.участникиToolStripMenuItem,
-            this.тренераToolStripMenuItem,
-            this.настройкиToolStripMenuItem});
-            this.menuStrip1.Location = new System.Drawing.Point(0, 0);
-            this.menuStrip1.Name = "menuStrip1";
-            this.menuStrip1.Size = new System.Drawing.Size(834, 24);
-            this.menuStrip1.TabIndex = 0;
-            this.menuStrip1.Text = "menuStrip1";
+            menuStrip1.Items.AddRange(new ToolStripItem[] { файлToolStripMenuItem, турнирыToolStripMenuItem, участникиToolStripMenuItem, тренераToolStripMenuItem, настройкиToolStripMenuItem });
+            menuStrip1.Location = new Point(0, 0);
+            menuStrip1.Name = "menuStrip1";
+            menuStrip1.Size = new Size(834, 24);
+            menuStrip1.TabIndex = 0;
+            menuStrip1.Text = "menuStrip1";
             // 
             // файлToolStripMenuItem
             // 
-            this.файлToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.выходToolStripMenuItem});
-            this.файлToolStripMenuItem.Name = "файлToolStripMenuItem";
-            this.файлToolStripMenuItem.Size = new System.Drawing.Size(48, 20);
-            this.файлToolStripMenuItem.Text = "Файл";
+            файлToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { выходToolStripMenuItem });
+            файлToolStripMenuItem.Name = "файлToolStripMenuItem";
+            файлToolStripMenuItem.Size = new Size(48, 20);
+            файлToolStripMenuItem.Text = "Файл";
             // 
             // выходToolStripMenuItem
             // 
-            this.выходToolStripMenuItem.Name = "выходToolStripMenuItem";
-            this.выходToolStripMenuItem.Size = new System.Drawing.Size(109, 22);
-            this.выходToolStripMenuItem.Text = "Выход";
+            выходToolStripMenuItem.Name = "выходToolStripMenuItem";
+            выходToolStripMenuItem.Size = new Size(109, 22);
+            выходToolStripMenuItem.Text = "Выход";
             // 
             // турнирыToolStripMenuItem
             // 
-            this.турнирыToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.создатьToolStripMenuItem,
-            this.показатьУчастниковToolStripMenuItem,
-            this.историяТурнировToolStripMenuItem});
-            this.турнирыToolStripMenuItem.Name = "турнирыToolStripMenuItem";
-            this.турнирыToolStripMenuItem.Size = new System.Drawing.Size(59, 20);
-            this.турнирыToolStripMenuItem.Text = "Турнир";
+            турнирыToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { создатьToolStripMenuItem, показатьУчастниковToolStripMenuItem, историяТурнировToolStripMenuItem });
+            турнирыToolStripMenuItem.Name = "турнирыToolStripMenuItem";
+            турнирыToolStripMenuItem.Size = new Size(59, 20);
+            турнирыToolStripMenuItem.Text = "Турнир";
             // 
             // создатьToolStripMenuItem
             // 
-            this.создатьToolStripMenuItem.Name = "создатьToolStripMenuItem";
-            this.создатьToolStripMenuItem.Size = new System.Drawing.Size(190, 22);
-            this.создатьToolStripMenuItem.Text = "Создать";
-            this.создатьToolStripMenuItem.Click += new System.EventHandler(this.создатьToolStripMenuItem_Click);
+            создатьToolStripMenuItem.Name = "создатьToolStripMenuItem";
+            создатьToolStripMenuItem.Size = new Size(190, 22);
+            создатьToolStripMenuItem.Text = "Создать";
+            создатьToolStripMenuItem.Click += создатьToolStripMenuItem_Click;
             // 
             // показатьУчастниковToolStripMenuItem
             // 
-            this.показатьУчастниковToolStripMenuItem.Name = "показатьУчастниковToolStripMenuItem";
-            this.показатьУчастниковToolStripMenuItem.Size = new System.Drawing.Size(190, 22);
-            this.показатьУчастниковToolStripMenuItem.Text = "Показать участников";
-            this.показатьУчастниковToolStripMenuItem.Click += new System.EventHandler(this.показатьУчастниковToolStripMenuItem_Click_1);
+            показатьУчастниковToolStripMenuItem.Name = "показатьУчастниковToolStripMenuItem";
+            показатьУчастниковToolStripMenuItem.Size = new Size(190, 22);
+            показатьУчастниковToolStripMenuItem.Text = "Показать участников";
+            показатьУчастниковToolStripMenuItem.Click += показатьУчастниковToolStripMenuItem_Click_1;
             // 
             // историяТурнировToolStripMenuItem
             // 
-            this.историяТурнировToolStripMenuItem.Name = "историяТурнировToolStripMenuItem";
-            this.историяТурнировToolStripMenuItem.Size = new System.Drawing.Size(190, 22);
-            this.историяТурнировToolStripMenuItem.Text = "История турниров";
-            this.историяТурнировToolStripMenuItem.Click += new System.EventHandler(this.историяТурнировToolStripMenuItem_Click);
+            историяТурнировToolStripMenuItem.Name = "историяТурнировToolStripMenuItem";
+            историяТурнировToolStripMenuItem.Size = new Size(190, 22);
+            историяТурнировToolStripMenuItem.Text = "История турниров";
+            историяТурнировToolStripMenuItem.Click += историяТурнировToolStripMenuItem_Click;
             // 
             // участникиToolStripMenuItem
             // 
-            this.участникиToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.добавитьToolStripMenuItem,
-            this.найтиToolStripMenuItem,
-            this.базаДанныхToolStripMenuItem});
-            this.участникиToolStripMenuItem.Name = "участникиToolStripMenuItem";
-            this.участникиToolStripMenuItem.Size = new System.Drawing.Size(77, 20);
-            this.участникиToolStripMenuItem.Text = "Участники";
+            участникиToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { добавитьToolStripMenuItem, найтиToolStripMenuItem, базаДанныхToolStripMenuItem });
+            участникиToolStripMenuItem.Name = "участникиToolStripMenuItem";
+            участникиToolStripMenuItem.Size = new Size(77, 20);
+            участникиToolStripMenuItem.Text = "Участники";
             // 
             // добавитьToolStripMenuItem
             // 
-            this.добавитьToolStripMenuItem.Name = "добавитьToolStripMenuItem";
-            this.добавитьToolStripMenuItem.Size = new System.Drawing.Size(142, 22);
-            this.добавитьToolStripMenuItem.Text = "Добавить";
-            this.добавитьToolStripMenuItem.Click += new System.EventHandler(this.добавитьToolStripMenuItem_Click);
+            добавитьToolStripMenuItem.Name = "добавитьToolStripMenuItem";
+            добавитьToolStripMenuItem.Size = new Size(142, 22);
+            добавитьToolStripMenuItem.Text = "Добавить";
+            добавитьToolStripMenuItem.Click += добавитьToolStripMenuItem_Click;
             // 
             // найтиToolStripMenuItem
             // 
-            this.найтиToolStripMenuItem.Name = "найтиToolStripMenuItem";
-            this.найтиToolStripMenuItem.Size = new System.Drawing.Size(142, 22);
-            this.найтиToolStripMenuItem.Text = "Найти";
+            найтиToolStripMenuItem.Name = "найтиToolStripMenuItem";
+            найтиToolStripMenuItem.Size = new Size(142, 22);
+            найтиToolStripMenuItem.Text = "Найти";
             // 
             // базаДанныхToolStripMenuItem
             // 
-            this.базаДанныхToolStripMenuItem.Name = "базаДанныхToolStripMenuItem";
-            this.базаДанныхToolStripMenuItem.Size = new System.Drawing.Size(142, 22);
-            this.базаДанныхToolStripMenuItem.Text = "База данных";
-            this.базаДанныхToolStripMenuItem.Click += new System.EventHandler(this.базаДанныхToolStripMenuItem_Click_1);
+            базаДанныхToolStripMenuItem.Name = "базаДанныхToolStripMenuItem";
+            базаДанныхToolStripMenuItem.Size = new Size(142, 22);
+            базаДанныхToolStripMenuItem.Text = "База данных";
+            базаДанныхToolStripMenuItem.Click += базаДанныхToolStripMenuItem_Click_1;
             // 
             // тренераToolStripMenuItem
             // 
-            this.тренераToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.добавитьToolStripMenuItem1,
-            this.показатьToolStripMenuItem,
-            this.базаДанныхToolStripMenuItem1});
-            this.тренераToolStripMenuItem.Name = "тренераToolStripMenuItem";
-            this.тренераToolStripMenuItem.Size = new System.Drawing.Size(64, 20);
-            this.тренераToolStripMenuItem.Text = "Тренера";
+            тренераToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { добавитьToolStripMenuItem1, показатьToolStripMenuItem, базаДанныхToolStripMenuItem1 });
+            тренераToolStripMenuItem.Name = "тренераToolStripMenuItem";
+            тренераToolStripMenuItem.Size = new Size(64, 20);
+            тренераToolStripMenuItem.Text = "Тренера";
             // 
             // добавитьToolStripMenuItem1
             // 
-            this.добавитьToolStripMenuItem1.Name = "добавитьToolStripMenuItem1";
-            this.добавитьToolStripMenuItem1.Size = new System.Drawing.Size(142, 22);
-            this.добавитьToolStripMenuItem1.Text = "Добавить";
+            добавитьToolStripMenuItem1.Name = "добавитьToolStripMenuItem1";
+            добавитьToolStripMenuItem1.Size = new Size(142, 22);
+            добавитьToolStripMenuItem1.Text = "Добавить";
             // 
             // показатьToolStripMenuItem
             // 
-            this.показатьToolStripMenuItem.Name = "показатьToolStripMenuItem";
-            this.показатьToolStripMenuItem.Size = new System.Drawing.Size(142, 22);
-            this.показатьToolStripMenuItem.Text = "Показать";
+            показатьToolStripMenuItem.Name = "показатьToolStripMenuItem";
+            показатьToolStripMenuItem.Size = new Size(142, 22);
+            показатьToolStripMenuItem.Text = "Показать";
             // 
             // базаДанныхToolStripMenuItem1
             // 
-            this.базаДанныхToolStripMenuItem1.Name = "базаДанныхToolStripMenuItem1";
-            this.базаДанныхToolStripMenuItem1.Size = new System.Drawing.Size(142, 22);
-            this.базаДанныхToolStripMenuItem1.Text = "База данных";
+            базаДанныхToolStripMenuItem1.Name = "базаДанныхToolStripMenuItem1";
+            базаДанныхToolStripMenuItem1.Size = new Size(142, 22);
+            базаДанныхToolStripMenuItem1.Text = "База данных";
             // 
             // настройкиToolStripMenuItem
             // 
-            this.настройкиToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.весовыеКатегорииToolStripMenuItem,
-            this.городаToolStripMenuItem});
-            this.настройкиToolStripMenuItem.Name = "настройкиToolStripMenuItem";
-            this.настройкиToolStripMenuItem.Size = new System.Drawing.Size(79, 20);
-            this.настройкиToolStripMenuItem.Text = "Настройки";
+            настройкиToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { весовыеКатегорииToolStripMenuItem, городаToolStripMenuItem });
+            настройкиToolStripMenuItem.Name = "настройкиToolStripMenuItem";
+            настройкиToolStripMenuItem.Size = new Size(79, 20);
+            настройкиToolStripMenuItem.Text = "Настройки";
             // 
             // весовыеКатегорииToolStripMenuItem
             // 
-            this.весовыеКатегорииToolStripMenuItem.Name = "весовыеКатегорииToolStripMenuItem";
-            this.весовыеКатегорииToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
-            this.весовыеКатегорииToolStripMenuItem.Text = "Весовые категории";
-            this.весовыеКатегорииToolStripMenuItem.Click += new System.EventHandler(this.весовыеКатегорииToolStripMenuItem_Click);
+            весовыеКатегорииToolStripMenuItem.Name = "весовыеКатегорииToolStripMenuItem";
+            весовыеКатегорииToolStripMenuItem.Size = new Size(180, 22);
+            весовыеКатегорииToolStripMenuItem.Text = "Весовые категории";
+            весовыеКатегорииToolStripMenuItem.Click += весовыеКатегорииToolStripMenuItem_Click;
             // 
             // городаToolStripMenuItem
             // 
-            this.городаToolStripMenuItem.Name = "городаToolStripMenuItem";
-            this.городаToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
-            this.городаToolStripMenuItem.Text = "Города";
+            городаToolStripMenuItem.Name = "городаToolStripMenuItem";
+            городаToolStripMenuItem.Size = new Size(180, 22);
+            городаToolStripMenuItem.Text = "Города";
+            городаToolStripMenuItem.Click += городаToolStripMenuItem_Click;
             // 
             // dataGridView1
             // 
-            this.dataGridView1.AllowDrop = true;
-            this.dataGridView1.AllowUserToAddRows = false;
-            this.dataGridView1.AllowUserToDeleteRows = false;
-            this.dataGridView1.AllowUserToResizeColumns = false;
-            this.dataGridView1.AllowUserToResizeRows = false;
-            this.dataGridView1.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
-            this.dataGridView1.BackgroundColor = System.Drawing.SystemColors.Window;
-            this.dataGridView1.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
-            this.dataGridView1.CellBorderStyle = System.Windows.Forms.DataGridViewCellBorderStyle.SingleHorizontal;
-            this.dataGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dataGridView1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.dataGridView1.Location = new System.Drawing.Point(0, 24);
-            this.dataGridView1.Name = "dataGridView1";
-            this.dataGridView1.ReadOnly = true;
-            this.dataGridView1.RowHeadersVisible = false;
-            this.dataGridView1.RowTemplate.Height = 25;
-            this.dataGridView1.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.dataGridView1.Size = new System.Drawing.Size(834, 494);
-            this.dataGridView1.TabIndex = 1;
-            this.dataGridView1.DragDrop += new System.Windows.Forms.DragEventHandler(this.dataGridView1_DragDrop);
-            this.dataGridView1.DragEnter += new System.Windows.Forms.DragEventHandler(this.dataGridView1_DragEnter);
-            this.dataGridView1.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.dataGridView1_MouseDoubleClick);
+            dataGridView1.AllowDrop = true;
+            dataGridView1.AllowUserToAddRows = false;
+            dataGridView1.AllowUserToDeleteRows = false;
+            dataGridView1.AllowUserToResizeColumns = false;
+            dataGridView1.AllowUserToResizeRows = false;
+            dataGridView1.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
+            dataGridView1.BackgroundColor = SystemColors.Window;
+            dataGridView1.BorderStyle = BorderStyle.Fixed3D;
+            dataGridView1.CellBorderStyle = DataGridViewCellBorderStyle.SingleHorizontal;
+            dataGridView1.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            dataGridView1.Dock = DockStyle.Fill;
+            dataGridView1.Location = new Point(0, 24);
+            dataGridView1.Name = "dataGridView1";
+            dataGridView1.ReadOnly = true;
+            dataGridView1.RowHeadersVisible = false;
+            dataGridView1.RowTemplate.Height = 25;
+            dataGridView1.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
+            dataGridView1.Size = new Size(834, 494);
+            dataGridView1.TabIndex = 1;
+            dataGridView1.DragDrop += dataGridView1_DragDrop;
+            dataGridView1.DragEnter += dataGridView1_DragEnter;
+            dataGridView1.MouseDoubleClick += dataGridView1_MouseDoubleClick;
             // 
             // contextMenuStrip1
             // 
-            this.contextMenuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.создатьТурнирToolStripMenuItem,
-            this.удалитьToolStripMenuItem});
-            this.contextMenuStrip1.Name = "contextMenuStrip1";
-            this.contextMenuStrip1.Size = new System.Drawing.Size(119, 48);
+            contextMenuStrip1.Items.AddRange(new ToolStripItem[] { создатьТурнирToolStripMenuItem, удалитьToolStripMenuItem });
+            contextMenuStrip1.Name = "contextMenuStrip1";
+            contextMenuStrip1.Size = new Size(119, 48);
             // 
             // создатьТурнирToolStripMenuItem
             // 
-            this.создатьТурнирToolStripMenuItem.Name = "создатьТурнирToolStripMenuItem";
-            this.создатьТурнирToolStripMenuItem.Size = new System.Drawing.Size(118, 22);
-            this.создатьТурнирToolStripMenuItem.Text = "Создать";
-            this.создатьТурнирToolStripMenuItem.Click += new System.EventHandler(this.создатьToolStripMenuItem_Click);
+            создатьТурнирToolStripMenuItem.Name = "создатьТурнирToolStripMenuItem";
+            создатьТурнирToolStripMenuItem.Size = new Size(118, 22);
+            создатьТурнирToolStripMenuItem.Text = "Создать";
+            создатьТурнирToolStripMenuItem.Click += создатьToolStripMenuItem_Click;
             // 
             // удалитьToolStripMenuItem
             // 
-            this.удалитьToolStripMenuItem.Name = "удалитьToolStripMenuItem";
-            this.удалитьToolStripMenuItem.Size = new System.Drawing.Size(118, 22);
-            this.удалитьToolStripMenuItem.Text = "Удалить";
-            this.удалитьToolStripMenuItem.Click += new System.EventHandler(this.удалитьToolStripMenuItem_Click);
+            удалитьToolStripMenuItem.Name = "удалитьToolStripMenuItem";
+            удалитьToolStripMenuItem.Size = new Size(118, 22);
+            удалитьToolStripMenuItem.Text = "Удалить";
+            удалитьToolStripMenuItem.Click += удалитьToolStripMenuItem_Click;
             // 
             // Kaharman
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
-            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(834, 518);
-            this.Controls.Add(this.dataGridView1);
-            this.Controls.Add(this.menuStrip1);
-            this.MainMenuStrip = this.menuStrip1;
-            this.Name = "Kaharman";
-            this.Text = "Form1";
-            this.menuStrip1.ResumeLayout(false);
-            this.menuStrip1.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();
-            this.contextMenuStrip1.ResumeLayout(false);
-            this.ResumeLayout(false);
-            this.PerformLayout();
-
+            AutoScaleDimensions = new SizeF(7F, 15F);
+            AutoScaleMode = AutoScaleMode.Font;
+            ClientSize = new Size(834, 518);
+            Controls.Add(dataGridView1);
+            Controls.Add(menuStrip1);
+            MainMenuStrip = menuStrip1;
+            Name = "Kaharman";
+            Text = "Form1";
+            menuStrip1.ResumeLayout(false);
+            menuStrip1.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)dataGridView1).EndInit();
+            contextMenuStrip1.ResumeLayout(false);
+            ResumeLayout(false);
+            PerformLayout();
         }
 
         #endregion

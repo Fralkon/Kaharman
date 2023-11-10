@@ -13,14 +13,14 @@ namespace Kaharman
         Edit,
         Visit
     }
-    public partial class CreateTournamentGrid : Form
+    public partial class TournamentGridForm : Form
     {
         AccessSQL AccessSQL;
         List<Participant> ListAllParticipants;
         string IdTournament;
         string IdGrid = "-1";
         StatusFormTournamentGrid StatusForm;
-        public CreateTournamentGrid(string idTOurnament, string nameTournament, DateTime dateTime, List<Participant> iDList, StatusFormTournamentGrid statusForm, AccessSQL accessSQL)
+        public TournamentGridForm(string idTOurnament, string nameTournament, DateTime dateTime, List<Participant> iDList, StatusFormTournamentGrid statusForm, AccessSQL accessSQL)
         {
             InitializeComponent();
             StatusForm = statusForm;
@@ -82,7 +82,7 @@ namespace Kaharman
         {
             Grid grid = new Grid();
             int step = 0;
-            if(dataGridView1.RowCount == 0)
+            if (dataGridView1.RowCount == 0)
             {
                 MessageBox.Show("Отсутствуют участники в таблице.");
                 return;
@@ -117,17 +117,17 @@ namespace Kaharman
                 IdGrid = AccessSQL.GetIDInsert().ToString();
             }
             else if (StatusForm == StatusFormTournamentGrid.Visit) { }
-            TournamentGrid tournament = new TournamentGrid(IdGrid, textBox2.Text, nameTextBox.Text, grid, AccessSQL);
+            GridForm tournament = new GridForm(IdGrid, textBox2.Text, nameTextBox.Text, grid, AccessSQL);
             tournament.ShowDialog();
         }
-        private void Save(string id_tournament, DateTime date,string name,string id_participants,string grid)
+        private void Save(string id_tournament, DateTime date, string name, string id_participants, string grid)
         {
             AccessSQL.SendSQL($"INSERT INTO TournamentGrid (id_tournament,[date],name,id_participants,grid) VALUES ({id_tournament},'{date.ToString("dd,MM.yyyy")}','{name}','{id_participants}','{grid}')");
         }
         private string GetListStringID()
         {
             List<string> list = new List<string>();
-            foreach(DataGridViewRow row in dataGridView1.Rows)
+            foreach (DataGridViewRow row in dataGridView1.Rows)
                 list.Add(row.Cells["ID"].Value.ToString());
             return string.Join(",", list);
         }

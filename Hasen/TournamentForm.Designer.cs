@@ -1,6 +1,6 @@
 ﻿namespace Kaharman
 {
-    partial class CreateTournament
+    partial class TournamentForm
     {
         /// <summary>
         /// Required designer variable.

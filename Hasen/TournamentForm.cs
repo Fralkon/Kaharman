@@ -4,12 +4,12 @@ using System.Text.Json;
 
 namespace Kaharman
 {
-    public partial class CreateTournament : Form
+    public partial class TournamentForm : Form
     {
         AccessSQL AccessSQL;
         List<Participant> IDList;
         string ID;
-        public CreateTournament(List<Participant> Idlist, AccessSQL accessSQL)
+        public TournamentForm(List<Participant> Idlist, AccessSQL accessSQL)
         {
             InitializeComponent();
             this.IDList = Idlist;
@@ -17,7 +17,7 @@ namespace Kaharman
             ID = "-1";
             InitializeTable();
         }
-        public CreateTournament(string ID, AccessSQL accessSQL)
+        public TournamentForm(string ID, AccessSQL accessSQL)
         {
             InitializeComponent();
             AccessSQL = accessSQL;
@@ -111,7 +111,7 @@ namespace Kaharman
                 AccessSQL.SendSQL($"INSERT INTO Tournament (name,[start_date],[end_date],note_tournament,main_judge,secret) VALUES ('{name.Text}','{dateTimePicker1.Value.ToString("dd.MM.yyyy")}','{dateTimePicker2.Value.ToString("dd.MM.yyyy")}','{note.Text}','{mainJudge.Text}','{secret.Text}')");
                 ID = AccessSQL.GetIDInsert().ToString();
             }
-            CreateTournamentGrid tournamentGrid = new CreateTournamentGrid(ID, name.Text, dateTimePicker1.Value, IDList, StatusFormTournamentGrid.Create, AccessSQL);
+            TournamentGridForm tournamentGrid = new TournamentGridForm(ID, name.Text, dateTimePicker1.Value, IDList, StatusFormTournamentGrid.Create, AccessSQL);
             tournamentGrid.ShowDialog();
             UpDataGrid();
         }
@@ -149,7 +149,7 @@ namespace Kaharman
 
             grid.FillItems(Participant.GetParticipantsOnAccess(IDPart, AccessSQL));
 
-            TournamentGrid tournament = new TournamentGrid(IDGrid, name.Text, nameGrid, grid, AccessSQL);
+            GridForm tournament = new GridForm(IDGrid, name.Text, nameGrid, grid, AccessSQL);
             tournament.ShowDialog();
         }
         private void удалитьToolStripMenuItem_Click(object sender, EventArgs e)

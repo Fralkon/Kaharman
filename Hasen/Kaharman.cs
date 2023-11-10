@@ -317,7 +317,7 @@ namespace Hasen
         }
         private void ñîçäàòüToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            CreateTournament createTournament = new CreateTournament(Participant.ToList(dataGridView1), AccessSQL);
+            TournamentForm createTournament = new TournamentForm(Participant.ToList(dataGridView1), AccessSQL);
             createTournament.ShowDialog();
         }
         private void ïîêàçàòüÓ÷àñòíèêîâToolStripMenuItem_Click_1(object sender, EventArgs e)
@@ -344,7 +344,7 @@ namespace Hasen
             }
             if (tableVisible == TableVisible.HistoryTournaments)
             {
-                CreateTournament createTournament = new CreateTournament(dataGridView1.SelectedRows[0].Cells["ID"].Value.ToString(), AccessSQL);
+                TournamentForm createTournament = new TournamentForm(dataGridView1.SelectedRows[0].Cells["ID"].Value.ToString(), AccessSQL);
                 createTournament.ShowDialog();
                 return;
             }
