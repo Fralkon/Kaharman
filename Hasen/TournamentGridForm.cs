@@ -16,63 +16,37 @@ namespace Kaharman
     public partial class TournamentGridForm : Form
     {
         AccessSQL AccessSQL;
-        List<Participant> ListAllParticipants;
+        ParticipantDataTable ParticipantsTable;
         string IdTournament;
-        string IdGrid = "-1";
+        string? IdGrid;
         StatusFormTournamentGrid StatusForm;
-        public TournamentGridForm(string idTOurnament, string nameTournament, DateTime dateTime, List<Participant> iDList, StatusFormTournamentGrid statusForm, AccessSQL accessSQL)
+        public CreateTournamentGrid(string idTOurnament, string nameTournament, DateTime dateTime, List<Participant> iDList, StatusFormTournamentGrid statusForm, AccessSQL accessSQL)
         {
             InitializeComponent();
+            AccessSQL = accessSQL;
             StatusForm = statusForm;
             dateTimePicker1.Value = dateTime;
-            IdTournament = idTOurnament;
-            textBox2.Text = nameTournament;
-            ListAllParticipants = iDList;
-            AccessSQL = accessSQL;
-            dataGridView1.Columns.Add("ID", "ID");
-            dataGridView1.Columns.Add("name", "Фамилия и имя");
-            dataGridView1.Columns.Add("gender", "Пол");
-            dataGridView1.Columns.Add("age", "Возраст");
-            dataGridView1.Columns.Add("weight", "Вес");
-            dataGridView1.Columns.Add("city", "Город");
-            dataGridView1.Columns.Add("traiter", "Тренер");
-            dataGridView1.Columns["ID"].Visible = false;
-            genderComboBox.Items.Add("муж");
-            genderComboBox.Items.Add("жен");
-            DataTable dataWeigth = AccessSQL.GetDataTableSQL($"SELECT * FROM Catigory");
-            foreach (DataRow row in dataWeigth.Rows)
-                categoryComboBox.Items.Add(row["cat"]);
+            IdTournament = idTournament;
+            textBox2.Text = nameTournament; 
+            ParticipantsTable = new ParticipantDataTable(AccessSQL);
+            ParticipantsTable.FillTable(participantsTable);
             UpDatetable();
         }
         private void UpDatetable()
         {
             dataGridView1.Rows.Clear();
-            foreach (Participant particpant in ListAllParticipants)
+            dataGridView1.DataSource = ParticipantsTable.DataView;
+        }
+        private void dataGridView1_ColumnHeaderMouseClick(object sender, DataGridViewCellMouseEventArgs e)
+        {
+            if (e.Button == MouseButtons.Right)
             {
-                if (genderComboBox.Text != "")
-                {
-                    if (genderComboBox.Text != particpant.Gender)
-                        continue;
-                }
-                if (ageMaxTextBox.Text != "" || ageMinTextBox.Text != "")
-                {
-                    if (!particpant.CheckIgeFilter(ageMinTextBox.Text, ageMaxTextBox.Text))
-                        continue;
-                }
-                if (categoryComboBox.Text != "")
-                {
-                    if (!particpant.CheckCategoryFilter(new Category(categoryComboBox.Text)))
-                        continue;
-                }
-                int idRow = dataGridView1.Rows.Add();
-                dataGridView1.Rows[idRow].Cells[0].Value = particpant.ID;
-                dataGridView1.Rows[idRow].Cells[1].Value = particpant.Name;
-                dataGridView1.Rows[idRow].Cells[2].Value = particpant.Gender;
-                dataGridView1.Rows[idRow].Cells[3].Value = particpant.Age;
-                dataGridView1.Rows[idRow].Cells[4].Value = particpant.Weight;
-                dataGridView1.Rows[idRow].Cells[5].Value = particpant.City;
-                dataGridView1.Rows[idRow].Cells[6].Value = particpant.Trainer;
+                ParticipantsTable.ShowContextMenu(e.ColumnIndex, MousePosition);
             }
+        }
+        private void dataGridView1_MouseClick(object sender, MouseEventArgs e)
+        {
+            ParticipantsTable.CloseContextMenu();
         }
         private void categoryComboBox_SelectedIndexChanged(object sender, EventArgs e)
         {
@@ -109,7 +83,7 @@ namespace Kaharman
                     break;
                 type /= 2;
             }
-            grid.FillNewGridItems(Participant.GetListToID(ListAllParticipants, GetListIntID()));
+            grid.FillNewGridItems(Participant.GetListToID(ParticipantsTable, GetListIntID()));
 
             if (StatusForm == StatusFormTournamentGrid.Create)
             {
@@ -139,5 +113,4 @@ namespace Kaharman
             return list;
         }
     }
-
 }

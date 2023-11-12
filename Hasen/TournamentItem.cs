@@ -135,14 +135,14 @@ namespace Kaharman
             }
             return list;
         }
-        public static List<Participant> GetListToID(List<Participant> inputList, List<int> listID)
+        public static List<Participant> GetListToID(ParticipantDataTable table, List<int> listID)
         {
             List<Participant> outputList = new List<Participant>();
-            foreach(int participant in listID)
+            foreach(DataRow row in table.Rows)
             {
-                Participant? p = inputList.Find(i => i.ID == participant);
+                int? p = listID.Find(i => i == int.Parse(row["ID"].ToString()));
                 if(p != null)
-                    outputList.Add(p);
+                    outputList.Add(new Participant(row));
             }
             return outputList;
         }

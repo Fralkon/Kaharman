@@ -1,8 +1,12 @@
-﻿using System.Data;
+﻿using Hasen;
+using System.Data;
+using System.Data.OleDb;
+using System.Globalization;
+using System.Windows.Forms;
 
 namespace Kaharman
 {
-    internal class ContextMenuFilter : ContextMenuStrip 
+    public class ContextMenuFilter : ContextMenuStrip 
     {
         public bool AddAutoItems = true;
         public virtual string? GetFilter()
@@ -25,7 +29,7 @@ namespace Kaharman
             return null;
         }
     }
-    internal class ContextMenuFilterName : ContextMenuFilter
+    public class ContextMenuFilterName : ContextMenuFilter
     {
         ToolStripTextBox TextBox = new ToolStripTextBox();
         public ContextMenuFilterName() : base()
@@ -47,7 +51,7 @@ namespace Kaharman
             return null;
         }
     }
-    internal class ContextMenuFilterWeigth: ContextMenuFilter
+    public class ContextMenuFilterWeigth: ContextMenuFilter
     {
         public ContextMenuFilterWeigth(List<string> values) : base()
         {
@@ -75,16 +79,15 @@ namespace Kaharman
             return null;
         }
     }
-    internal class DataTableContextMenu : DataTable
+    public class DataTableContextMenu : DataTable
     {
-        public DataView dataView { get; }
+        List<ContextMenuStrip> listContextMenu = new List<ContextMenuStrip>();
+        public DataView DataView { get; }
         public DataTableContextMenu() : base()
         {
             RowChanged += DataTableContextMenu_RowChanged; 
-            dataView = new DataView(this);
+            DataView = new DataView(this);
         }
-
-        List<ContextMenuStrip> listContextMenu = new List<ContextMenuStrip>();
         public void AddColunm(string name)
         {
             Columns.Add(name);
@@ -158,9 +161,8 @@ namespace Kaharman
                     filters.Add(filter);
                 }
             }
-            dataView.RowFilter = string.Join(" AND ", filters);
-        }
-      
+            DataView.RowFilter = string.Join(" AND ", filters);
+        }      
         private void DataTableContextMenu_RowChanged(object sender, DataRowChangeEventArgs e)
         {
             if (e.Action == DataRowAction.Add)
@@ -190,6 +192,13 @@ namespace Kaharman
             foreach (ContextMenuStrip c in listContextMenu)
                 c.Close();
         }
+        public void FillTable(DataTable table)
+        {
+            foreach(DataRow row in table.Rows)
+            {
+                this.AddRow(row);
+            }
+        }
         public void AddRow(DataRow Row)
         {
             object[]? cells = Row.ItemArray;
@@ -197,19 +206,176 @@ namespace Kaharman
             {
                 for (int i = 0; i < cells.Length; i++)
                 {
-                    string? item = cells[i].ToString();
-                    if (item != null && item.Length != 0)
-                        AddItemContextMenu(listContextMenu[i], item);
+                    if (((ContextMenuFilter)listContextMenu[i]).AddAutoItems)
+                    {
+                        string? item = cells[i].ToString();
+                        if (item != null && item.Length != 0)
+                            AddItemContextMenu(listContextMenu[i], item);
+                    }
                 }
             }
-            this.Rows.Add(Row);
+            this.Rows.Add(cells);
         }
         private void AddItemContextMenu(ContextMenuStrip menuStrip, string item)
         {
             foreach (ToolStripMenuItem toolStrip in menuStrip.Items)
                 if (toolStrip.Text == item)
                     return;
-            ((ToolStripMenuItem)menuStrip.Items.Add(item)).Checked = true;            
+            ((ToolStripMenuItem)menuStrip.Items.Add(item)).Checked = true;
+        }
+    }
+    public class ParticipantDataTable : DataTableContextMenu {
+        AccessSQL AccessSQL;
+        public ParticipantDataTable(AccessSQL accessSQL) : base() {
+            AccessSQL = accessSQL;
+
+            AddColunm("ID", typeof(int));
+
+            ContextMenuFilterName contextMenuName = new ContextMenuFilterName();
+            AddColunm("Фамилия и имя", contextMenuName);
+
+            AddColunm("Пол");
+
+            AddColunm("Дата рождения", typeof(DateTime));
+            AddColunm("Возраст", typeof(int));
+
+            DataTable dataWeigth = AccessSQL.GetDataTableSQL($"SELECT * FROM Catigory");
+            List<string> weigth = new List<string>();
+            foreach (DataRow row in dataWeigth.Rows)
+                weigth.Add(row["cat"].ToString());
+            AddColunm("Вес", typeof(float), new ContextMenuFilterWeigth(weigth));
+
+            ContextMenuFilter contextMenuQualiti = new ContextMenuFilter();
+            ((ToolStripMenuItem)contextMenuQualiti.Items.Add("Пустые")).Checked = true;
+            AddColunm("Квалификация", contextMenuQualiti);
+
+            ContextMenuFilter contextMenuCity = new ContextMenuFilter();
+            ((ToolStripMenuItem)contextMenuCity.Items.Add("Пустые")).Checked = true;
+            AddColunm("Город", contextMenuCity);
+
+            ContextMenuFilter contextMenuTrainer = new ContextMenuFilter();
+            ((ToolStripMenuItem)contextMenuTrainer.Items.Add("Пустые")).Checked = true;
+            AddColunm("Тренер", contextMenuTrainer);
+
+            RowChanged += ParticipantsTable_RowChanged;
+        }
+        private void ParticipantsTable_RowChanged(object sender, DataRowChangeEventArgs e)
+        {
+            if (e.Action == DataRowAction.Add)
+            {
+                DataRow row = e.Row;
+                DataTable data = AccessSQL.GetDataTableSQL($"SELECT id FROM Participants WHERE name = '{row[1]}'");
+                if (data.Rows.Count == 0)
+                {
+                    AccessSQL.SendSQL($"INSERT INTO Participants (name,gender,[date_of_birth],age,weight,qualification,city,trainer) VALUES ('{row[1]}','{row[2]}','{((DateTime)row["Дата рождения"]).ToString("dd.MM.yyyy")}',{row[4]},{row[5]},'{row[6]}','{row[7]}','{row[8]}')");
+                    row["ID"] = AccessSQL.GetIDInsert();
+                }
+                else
+                    row["ID"] = data.Rows[0]["id"];
+            }
+        }
+        public string GetIDsPartString()
+        {
+            string[] strings = new string[Rows.Count];
+            for(int i = 0; i < Rows.Count; i++)
+                strings[i] = $"\"{Rows[i]["ID"]}\"";
+            return string.Join(";",strings);
+        }
+        public void LoadPartOnIDs(string ids)
+        {
+            string[] strings = ids.Split(';');
+            for(int i = 0; i < strings.Length; i++)
+                strings[i] = strings[i].Trim('\"');
+            if (ids.Length > 0)
+            {
+                using (DataTable data = AccessSQL.GetDataTableSQL($"SELECT * FROM Participants WHERE id IN ({string.Join(", ", strings)})"))
+                {
+                    this.FillTable(data);
+                }
+            }
+        }
+        private DataTable LoadDataTableOnFile(string file)
+        {
+            using (OleDbConnection conn = new OleDbConnection(@"Provider=Microsoft.ACE.OLEDB.12.0;Data Source=" + file + ";Extended Properties=\"Excel 12.0;HDR=YES;\""))
+            {
+                conn.Open();
+                OleDbCommand cmd = new OleDbCommand();
+                cmd.Connection = conn;
+
+                DataTable dtSheet = conn.GetOleDbSchemaTable(OleDbSchemaGuid.Tables, null);
+
+                string sheetName = String.Empty;
+                try
+                {
+                    sheetName = dtSheet.Rows[0]["TABLE_NAME"].ToString();
+                    cmd.CommandText = "SELECT * FROM [" + sheetName + "]";
+                    DataTable dt = new DataTable();
+                    dt.TableName = sheetName;
+                    OleDbDataAdapter da = new OleDbDataAdapter(cmd);
+                    da.Fill(dt);
+                    return dt;
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(string.Format("Ошибка заполнения таблицы. Error:{0}", ex.Message));
+                    return null;
+                }
+            }
+        }
+        public void LoadDataOnFiles(string[] files)
+        {
+            if (files.Length != 0)
+            {
+                foreach (string file in files)
+                {
+                    using (DataTable dataExcel = LoadDataTableOnFile(file))
+                    {
+                        try
+                        {
+                            var rowExcel = dataExcel.Rows;
+                            for (int i = 4; i < rowExcel.Count; i++)
+                            {
+                                if (rowExcel[i][1].ToString() == "")
+                                    continue;
+                                bool cont = false;
+                                foreach (DataRow r in Rows)
+                                {
+                                    if (r[1].ToString() == rowExcel[i][1].ToString())
+                                    {
+                                        cont = true;
+                                        break;
+                                    }
+                                }
+                                if (cont)
+                                    continue;
+                                DataRow newRow = NewRow();
+                                newRow[1] = rowExcel[i][1].ToString();
+                                newRow[2] = rowExcel[i][2].ToString();
+                                if (DateTime.TryParse(rowExcel[i][3].ToString(), out DateTime time))
+                                    newRow[3] = time;
+                                if (int.TryParse(rowExcel[i][4].ToString(), out int year))
+                                    newRow[4] = year;
+                                if (float.TryParse(rowExcel[i][5].ToString(), new NumberFormatInfo { NumberDecimalSeparator = "." }, out float wight))
+                                    newRow[5] = wight;
+                                else
+                                {
+                                    if (float.TryParse(rowExcel[i][5].ToString(), new NumberFormatInfo { NumberDecimalSeparator = "," }, out wight))
+                                        newRow[5] = wight;
+                                }
+                                newRow[6] = rowExcel[i][6].ToString().ToLower();
+                                newRow[7] = rowExcel[i][12].ToString();
+                                newRow[8] = rowExcel[i][13].ToString();
+                                Rows.Add(newRow);
+                            }
+                        }
+                        catch (Exception ex)
+                        {
+                            MessageBox.Show(ex.Message);
+                        }
+                    }
+                }
+                MessageBox.Show("Загрузка завершена");
+            }
         }
     }
 }
