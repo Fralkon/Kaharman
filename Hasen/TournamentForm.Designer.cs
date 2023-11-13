@@ -1,10 +1,6 @@
 ﻿namespace Kaharman
 {
-<<<<<<< HEAD:Hasen/TournamentForm.Designer.cs
     partial class TournamentForm
-=======
-    partial class Tournament
->>>>>>> 12.11 home/ Start ver 2/0:Hasen/Tournament.Designer.cs
     {
         /// <summary>
         /// Required designer variable.

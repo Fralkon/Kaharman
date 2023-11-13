@@ -119,41 +119,13 @@ namespace Hasen
                 MessageBox.Show("Перетащите файлы");
                 return;
             }
-            LoadData(files);
+            ParticipantsTable.LoadDataOnFiles(files);
         }
         private void dataGridView1_DragEnter(object sender, DragEventArgs e)
         {
             if (e.Data.GetDataPresent(DataFormats.FileDrop))
                 e.Effect = DragDropEffects.Copy;
-        }
-        private DataTable LoadDataTableOnFile(string file)
-        {
-            using (OleDbConnection conn = new OleDbConnection(@"Provider=Microsoft.ACE.OLEDB.12.0;Data Source=" + file + ";Extended Properties=\"Excel 12.0;HDR=YES;\""))
-            {
-                conn.Open();
-                OleDbCommand cmd = new OleDbCommand();
-                cmd.Connection = conn;
-
-                DataTable dtSheet = conn.GetOleDbSchemaTable(OleDbSchemaGuid.Tables, null);
-
-                string sheetName = String.Empty;
-                try
-                {
-                    sheetName = dtSheet.Rows[0]["TABLE_NAME"].ToString();
-                    cmd.CommandText = "SELECT * FROM [" + sheetName + "]";
-                    DataTable dt = new DataTable();
-                    dt.TableName = sheetName;
-                    OleDbDataAdapter da = new OleDbDataAdapter(cmd);
-                    da.Fill(dt);
-                    return dt;
-                }
-                catch (Exception ex)
-                {
-                    MessageBox.Show(string.Format("Ошибка заполнения таблицы. Error:{0}", ex.Message));
-                    return null;
-                }
-            }
-        }
+        }      
         private void выходToolStripMenuItem_Click(object sender, EventArgs e)
         {
             this.Close();
@@ -162,63 +134,7 @@ namespace Hasen
         {
             Trainers trainers = new Trainers();
             trainers.ShowDialog();
-        }
-        public static void LoadData(string[] files, DataTable table)
-        {
-            if (files.Length != 0)
-            {
-                foreach (string file in files)
-                {
-                    using (DataTable dataExcel = LoadDataTableOnFile(file))
-                    {
-                        try
-                        {
-                            var rowExcel = dataExcel.Rows;
-                            for (int i = 4; i < rowExcel.Count; i++)
-                            {
-                                if (rowExcel[i][1].ToString() == "")
-                                    continue;
-                                bool cont = false;
-                                foreach (DataRow r in ParticipantsTable.Rows)
-                                {
-                                    if (r[1].ToString() == rowExcel[i][1].ToString())
-                                    {
-                                        cont = true;
-                                        break;
-                                    }
-                                }
-                                if (cont)
-                                    continue;
-                                DataRow newRow = ParticipantsTable.NewRow();
-                                newRow[1] = rowExcel[i][1].ToString();
-                                newRow[2] = rowExcel[i][2].ToString();
-                                if (DateTime.TryParse(rowExcel[i][3].ToString(), out DateTime time))
-                                    newRow[3] = time;
-                                if (int.TryParse(rowExcel[i][4].ToString(), out int year))
-                                    newRow[4] = year;
-                                if (float.TryParse(rowExcel[i][5].ToString(), new NumberFormatInfo { NumberDecimalSeparator = "." }, out float wight))
-                                    newRow[5] = wight;
-                                else
-                                {
-                                    if (float.TryParse(rowExcel[i][5].ToString(), new NumberFormatInfo { NumberDecimalSeparator = "," }, out wight))
-                                        newRow[5] = wight;
-                                }
-                                newRow[6] = rowExcel[i][6].ToString().ToLower();
-                                newRow[7] = rowExcel[i][12].ToString();
-                                newRow[8] = rowExcel[i][13].ToString();
-                                ParticipantsTable.Rows.Add(newRow);
-                            }
-                        }
-                        catch (Exception ex)
-                        {
-                            MessageBox.Show(ex.Message);
-                        }
-                    }
-                }
-                dataGridView1.DataSource = ParticipantsTable.DataView;
-                MessageBox.Show("Загрузка завершена");
-            }
-        }
+        }      
         private void dataGridView1_ColumnHeaderMouseClick(object sender, DataGridViewCellMouseEventArgs e)
         {
             if (e.Button == MouseButtons.Right)
@@ -241,11 +157,11 @@ namespace Hasen
         }
         private void показатьУчастниковToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            dataGridView1.DataSource = ParticipantsTable.dataView;
+            dataGridView1.DataSource = ParticipantsTable.DataView;
         }
         private void создатьToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            CreateTournament createTournament = new CreateTournament(Participant.ToList(dataGridView1), AccessSQL);
+            TournamentForm createTournament = new TournamentForm(ParticipantsTable, AccessSQL);
             createTournament.ShowDialog();
         }
         private void показатьУчастниковToolStripMenuItem_Click_1(object sender, EventArgs e)
@@ -272,7 +188,7 @@ namespace Hasen
             }
             if (tableVisible == TableVisible.HistoryTournaments)
             {
-                CreateTournament createTournament = new CreateTournament(dataGridView1.SelectedRows[0].Cells["ID"].Value.ToString(), AccessSQL);
+                TournamentForm createTournament = new TournamentForm(dataGridView1.SelectedRows[0].Cells["ID"].Value.ToString(), AccessSQL);
                 createTournament.ShowDialog();
                 return;
             }

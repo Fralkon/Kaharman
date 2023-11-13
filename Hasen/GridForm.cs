@@ -9,7 +9,6 @@ namespace Kaharman
     {
         AccessSQL AccessSQL;
         Graphics graphics;
-        Bitmap memoryImage;
         Grid Grid { get; set; }
         string ID;
         public GridForm(string id, string nameT, string name, Grid grid, AccessSQL AccessSQL)
@@ -33,7 +32,7 @@ namespace Kaharman
                     panel1.Controls.Add(item.ItemText);
                     if (item.Status == StatusGrid.win)
                     {
-                        DrawLines(e.Graphics,item.ItemText);
+                        DrawLines(e.Graphics, item.ItemText);
                     }
                 }
             }
@@ -73,7 +72,7 @@ namespace Kaharman
             }
             bitmap.Save(@"C:\ClickMashine\123.png");
             string commandText = @"C:\ClickMashine\123.png";
-            var proc = new Process(); 
+            var proc = new Process();
             proc.StartInfo.FileName = commandText;
             proc.StartInfo.UseShellExecute = true;
             proc.Start();
@@ -118,11 +117,6 @@ namespace Kaharman
         private void TournamentGrid_FormClosing(object sender, FormClosingEventArgs e)
         {
             AccessSQL.SendSQL($"UPDATE TournamentGrid SET grid = '{JsonSerializer.Serialize(Grid)}' WHERE id = {ID}");
-        }
-
-        private void printDocument1_PrintPage(object sender, PrintPageEventArgs e)
-        {
-            e.Graphics.DrawImage(memoryImage, 0, 0);
         }
     }
 }

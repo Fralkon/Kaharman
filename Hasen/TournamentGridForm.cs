@@ -20,7 +20,7 @@ namespace Kaharman
         string IdTournament;
         string? IdGrid;
         StatusFormTournamentGrid StatusForm;
-        public CreateTournamentGrid(string idTOurnament, string nameTournament, DateTime dateTime, List<Participant> iDList, StatusFormTournamentGrid statusForm, AccessSQL accessSQL)
+        public TournamentGridForm(string idTournament, string nameTournament, DateTime dateTime, ParticipantDataTable participantsTable, StatusFormTournamentGrid statusForm, AccessSQL accessSQL)
         {
             InitializeComponent();
             AccessSQL = accessSQL;

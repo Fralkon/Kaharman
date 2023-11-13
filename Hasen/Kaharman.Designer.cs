@@ -40,13 +40,8 @@
             this.добавитьToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.найтиToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.базаДанныхToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.тренераToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.добавитьToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
-            this.показатьToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.базаДанныхToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
             this.настройкиToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.весовыеКатегорииToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.городаToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.dataGridView1 = new System.Windows.Forms.DataGridView();
             this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.создатьТурнирToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -62,7 +57,6 @@
             this.файлToolStripMenuItem,
             this.турнирыToolStripMenuItem,
             this.участникиToolStripMenuItem,
-            this.тренераToolStripMenuItem,
             this.настройкиToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
@@ -138,39 +132,10 @@
             базаДанныхToolStripMenuItem.Text = "База данных";
             базаДанныхToolStripMenuItem.Click += базаДанныхToolStripMenuItem_Click_1;
             // 
-            // тренераToolStripMenuItem
-            // 
-            this.тренераToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.добавитьToolStripMenuItem1,
-            this.показатьToolStripMenuItem,
-            this.базаДанныхToolStripMenuItem1});
-            this.тренераToolStripMenuItem.Name = "тренераToolStripMenuItem";
-            this.тренераToolStripMenuItem.Size = new System.Drawing.Size(64, 20);
-            this.тренераToolStripMenuItem.Text = "Тренера";
-            // 
-            // добавитьToolStripMenuItem1
-            // 
-            this.добавитьToolStripMenuItem1.Name = "добавитьToolStripMenuItem1";
-            this.добавитьToolStripMenuItem1.Size = new System.Drawing.Size(142, 22);
-            this.добавитьToolStripMenuItem1.Text = "Добавить";
-            // 
-            // показатьToolStripMenuItem
-            // 
-            this.показатьToolStripMenuItem.Name = "показатьToolStripMenuItem";
-            this.показатьToolStripMenuItem.Size = new System.Drawing.Size(142, 22);
-            this.показатьToolStripMenuItem.Text = "Показать";
-            // 
-            // базаДанныхToolStripMenuItem1
-            // 
-            this.базаДанныхToolStripMenuItem1.Name = "базаДанныхToolStripMenuItem1";
-            this.базаДанныхToolStripMenuItem1.Size = new System.Drawing.Size(142, 22);
-            this.базаДанныхToolStripMenuItem1.Text = "База данных";
-            // 
             // настройкиToolStripMenuItem
             // 
             this.настройкиToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.весовыеКатегорииToolStripMenuItem,
-            this.городаToolStripMenuItem});
+            this.весовыеКатегорииToolStripMenuItem});
             this.настройкиToolStripMenuItem.Name = "настройкиToolStripMenuItem";
             this.настройкиToolStripMenuItem.Size = new System.Drawing.Size(79, 20);
             this.настройкиToolStripMenuItem.Text = "Настройки";
@@ -181,12 +146,6 @@
             весовыеКатегорииToolStripMenuItem.Size = new Size(180, 22);
             весовыеКатегорииToolStripMenuItem.Text = "Весовые категории";
             весовыеКатегорииToolStripMenuItem.Click += весовыеКатегорииToolStripMenuItem_Click;
-            // 
-            // городаToolStripMenuItem
-            // 
-            this.городаToolStripMenuItem.Name = "городаToolStripMenuItem";
-            this.городаToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
-            this.городаToolStripMenuItem.Text = "Города";
             // 
             // dataGridView1
             // 

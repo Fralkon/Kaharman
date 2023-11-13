@@ -4,21 +4,12 @@ using System.Text.Json;
 
 namespace Kaharman
 {
-<<<<<<< HEAD:Hasen/TournamentForm.cs
     public partial class TournamentForm : Form
-    {
-        AccessSQL AccessSQL;
-        List<Participant> IDList;
-        string ID;
-        public TournamentForm(List<Participant> Idlist, AccessSQL accessSQL)
-=======
-    public partial class Tournament : Form
     {
         AccessSQL AccessSQL;
         string? ID;
         ParticipantDataTable ParticipantsTable;
-        public Tournament(DataTableContextMenu participantsTable, AccessSQL accessSQL)
->>>>>>> 12.11 home/ Start ver 2/0:Hasen/Tournament.cs
+        public TournamentForm(DataTableContextMenu participantsTable, AccessSQL accessSQL)
         {
             InitializeComponent();
             AccessSQL = accessSQL;
@@ -26,18 +17,14 @@ namespace Kaharman
             ParticipantsTable.FillTable(participantsTable);
             InitializeTable();
         }
-<<<<<<< HEAD:Hasen/TournamentForm.cs
-        public TournamentForm(string ID, AccessSQL accessSQL)
-=======
-        public Tournament(AccessSQL accessSQL)
->>>>>>> 12.11 home/ Start ver 2/0:Hasen/Tournament.cs
+        public TournamentForm(AccessSQL accessSQL)
         {
             InitializeComponent();
             AccessSQL = accessSQL;
             ParticipantsTable = new ParticipantDataTable(AccessSQL);
             InitializeTable();
         }
-        public Tournament(string ID, AccessSQL accessSQL)
+        public TournamentForm(string ID, AccessSQL accessSQL)
         {
             InitializeComponent();
             AccessSQL = accessSQL;
@@ -119,11 +106,7 @@ namespace Kaharman
                 AccessSQL.SendSQL($"INSERT INTO Tournament (name,[start_date],[end_date],note_tournament,main_judge,secret,id_participants) VALUES ('{name.Text}','{dateTimePicker1.Value.ToString("dd.MM.yyyy")}','{dateTimePicker2.Value.ToString("dd.MM.yyyy")}','{note.Text}','{mainJudge.Text}','{secret.Text}','{ParticipantsTable.GetIDsPartString()}')");
                 ID = AccessSQL.GetIDInsert().ToString();
             }
-<<<<<<< HEAD:Hasen/TournamentForm.cs
-            TournamentGridForm tournamentGrid = new TournamentGridForm(ID, name.Text, dateTimePicker1.Value, IDList, StatusFormTournamentGrid.Create, AccessSQL);
-=======
-            CreateTournamentGrid tournamentGrid = new CreateTournamentGrid(ID, name.Text, dateTimePicker1.Value, ParticipantsTable, StatusFormTournamentGrid.Create, AccessSQL);
->>>>>>> 12.11 home/ Start ver 2/0:Hasen/Tournament.cs
+            TournamentGridForm tournamentGrid = new TournamentGridForm(ID, name.Text, dateTimePicker1.Value, ParticipantsTable , StatusFormTournamentGrid.Create, AccessSQL);
             tournamentGrid.ShowDialog();
             UpDataGrid();
         }
@@ -179,7 +162,6 @@ namespace Kaharman
         {
 
         }
-
         private void Tournament_Load(object sender, EventArgs e)
         {
 

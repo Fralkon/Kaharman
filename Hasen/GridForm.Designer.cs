@@ -35,8 +35,6 @@
             печатьToolStripMenuItem = new ToolStripMenuItem();
             выходToolStripMenuItem = new ToolStripMenuItem();
             nameTournament = new Label();
-            printDocument1 = new System.Drawing.Printing.PrintDocument();
-            printDialog1 = new PrintDialog();
             panel1.SuspendLayout();
             menuStrip1.SuspendLayout();
             SuspendLayout();
@@ -97,15 +95,7 @@
             nameTournament.TabIndex = 2;
             nameTournament.Text = "label1";
             // 
-            // printDocument1
-            // 
-            printDocument1.PrintPage += printDocument1_PrintPage;
-            // 
-            // printDialog1
-            // 
-            printDialog1.UseEXDialog = true;
-            // 
-            // TournamentGrid
+            // GridForm
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
@@ -114,7 +104,7 @@
             Controls.Add(panel1);
             Controls.Add(menuStrip1);
             MainMenuStrip = menuStrip1;
-            Name = "TournamentGrid";
+            Name = "GridForm";
             Text = "Tournament";
             FormClosing += TournamentGrid_FormClosing;
             panel1.ResumeLayout(false);
@@ -134,7 +124,5 @@
         private ToolStripMenuItem печатьToolStripMenuItem;
         private Label nameTournament;
         private Label nameGrid;
-        private System.Drawing.Printing.PrintDocument printDocument1;
-        private PrintDialog printDialog1;
     }
 }
