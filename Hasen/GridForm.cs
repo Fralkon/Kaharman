@@ -11,14 +11,16 @@ namespace Kaharman
         Graphics graphics;
         Grid Grid { get; set; }
         string ID;
+        ToolTip ToolTip { get; set; } = new ToolTip();
         public GridForm(string id, string nameT, string name, Grid grid, AccessSQL AccessSQL)
         {
             InitializeComponent();
             graphics = panel1.CreateGraphics();
             panel1.Paint += Panel1_Paint;
             this.ID = id;
-            nameTournament.Text = nameT;
+            nameTournamet.Text = nameT;
             nameGrid.Text = name;
+            ToolTip.SetToolTip(nameGrid, "asdasdasdasd");
             this.AccessSQL = AccessSQL;
             Grid = grid;
         }

@@ -17,6 +17,7 @@ namespace Kaharman
     {
         AccessSQL AccessSQL;
         ParticipantDataTable ParticipantsTable;
+        ParticipantDataTable ParticipantGridTable;
         string IdTournament;
         string? IdGrid;
         StatusFormTournamentGrid StatusForm;
@@ -28,48 +29,26 @@ namespace Kaharman
             dateTimePicker1.Value = dateTime;
             IdTournament = idTournament;
             textBox2.Text = nameTournament;
-            ParticipantsTable = new ParticipantDataTable(AccessSQL);
+            ParticipantsTable = new ParticipantDataTable(dataGridView1, AccessSQL);
+            ParticipantGridTable = new ParticipantDataTable(dataGridView2, AccessSQL);
             ParticipantsTable.FillTable(participantsTable);
-            dataGridView1.ColumnHeaderMouseClick += ParticipantsTable.ColumnHeaderMouseClick;
-            dataGridView1.MouseClick += ParticipantsTable.MouseClick;
-            UpDatetable();
-        }
-        private void UpDatetable()
-        {
-            dataGridView1.Rows.Clear();
-            dataGridView1.DataSource = ParticipantsTable.DataView;
-        }
-        private void dataGridView1_ColumnHeaderMouseClick(object sender, DataGridViewCellMouseEventArgs e)
-        {
-            if (e.Button == MouseButtons.Right)
-            {
-                ParticipantsTable.ShowContextMenu(e.ColumnIndex, MousePosition);
-            }
-        }
-        private void dataGridView1_MouseClick(object sender, MouseEventArgs e)
-        {
-            ParticipantsTable.CloseContextMenu();
-        }
-        private void categoryComboBox_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            UpDatetable();
         }
         private void button1_Click(object sender, EventArgs e)
         {
             Grid grid = new Grid();
             int step = 0;
-            if (dataGridView1.RowCount == 0)
+            if (dataGridView2.RowCount == 0)
             {
                 MessageBox.Show("Отсутствуют участники в таблице.");
                 return;
             }
-            if (dataGridView1.RowCount <= 4)
+            if (dataGridView2.RowCount <= 4)
                 grid.Type = 4;
-            else if (dataGridView1.RowCount <= 8)
+            else if (dataGridView2.RowCount <= 8)
                 grid.Type = 8;
-            else if (dataGridView1.RowCount <= 16)
+            else if (dataGridView2.RowCount <= 16)
                 grid.Type = 16;
-            else if (dataGridView1.RowCount <= 32)
+            else if (dataGridView2.RowCount <= 32)
                 grid.Type = 32;
             else
                 throw new Exception("Больше 32 участников не предусмотрено");
@@ -85,7 +64,7 @@ namespace Kaharman
                     break;
                 type /= 2;
             }
-            grid.FillNewGridItems(Participant.GetListToID(ParticipantsTable, GetListIntID()));
+            grid.FillNewGridItems(Participant.GetListToID(ParticipantGridTable));
 
             if (StatusForm == StatusFormTournamentGrid.Create)
             {
@@ -95,6 +74,7 @@ namespace Kaharman
             else if (StatusForm == StatusFormTournamentGrid.Visit) { }
             GridForm tournament = new GridForm(IdGrid, textBox2.Text, nameTextBox.Text, grid, AccessSQL);
             tournament.ShowDialog();
+            this.Close();
         }
         private void Save(string id_tournament, DateTime date, string name, string id_participants, string grid)
         {
@@ -103,16 +83,37 @@ namespace Kaharman
         private string GetListStringID()
         {
             List<string> list = new List<string>();
-            foreach (DataGridViewRow row in dataGridView1.Rows)
-                list.Add(row.Cells["ID"].Value.ToString());
-            return string.Join(",", list);
+            foreach (DataRow row in ParticipantGridTable.Rows)
+                list.Add($"\"{row["ID"]}\"");
+            return string.Join(";", list);
         }
-        private List<int> GetListIntID()
+        private void button3_Click(object sender, EventArgs e)
         {
-            List<int> list = new List<int>();
-            foreach (DataGridViewRow row in dataGridView1.Rows)
-                list.Add(int.Parse(row.Cells["ID"].Value.ToString()));
-            return list;
+            if(dataGridView1.SelectedRows.Count == 0) return;
+            foreach(DataGridViewRow row in dataGridView1.SelectedRows)
+            {
+                DataRow? row1 = ParticipantsTable.GetRowToID(row.Cells["ID"].Value.ToString());
+                if(row1 !=null)
+                {
+                    ParticipantGridTable.Rows.Add(row1.ItemArray);
+                    ParticipantsTable.DeleteRow(row1);
+                }
+                else MessageBox.Show("error");
+            }
+        }
+        private void button4_Click(object sender, EventArgs e)
+        {
+            if (dataGridView2.SelectedRows.Count == 0) return;
+            foreach (DataGridViewRow row in dataGridView2.SelectedRows)
+            {
+                DataRow? row1 = ParticipantGridTable.GetRowToID(row.Cells["ID"].Value.ToString());
+                if (row1 != null)
+                {
+                    ParticipantsTable.Rows.Add(row1.ItemArray);
+                    ParticipantGridTable.DeleteRow(row1);
+                }
+                else MessageBox.Show("error");
+            }
         }
     }
 }

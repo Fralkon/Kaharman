@@ -28,91 +28,93 @@
         /// </summary>
         private void InitializeComponent()
         {
-            panel1 = new Panel();
-            nameGrid = new Label();
-            menuStrip1 = new MenuStrip();
-            файлToolStripMenuItem = new ToolStripMenuItem();
-            печатьToolStripMenuItem = new ToolStripMenuItem();
-            выходToolStripMenuItem = new ToolStripMenuItem();
-            nameTournament = new Label();
-            panel1.SuspendLayout();
-            menuStrip1.SuspendLayout();
-            SuspendLayout();
+            this.panel1 = new System.Windows.Forms.Panel();
+            this.nameTournamet = new System.Windows.Forms.Label();
+            this.nameGrid = new System.Windows.Forms.Label();
+            this.menuStrip1 = new System.Windows.Forms.MenuStrip();
+            this.файлToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.печатьToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.выходToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.panel1.SuspendLayout();
+            this.menuStrip1.SuspendLayout();
+            this.SuspendLayout();
             // 
             // panel1
             // 
-            panel1.Controls.Add(nameGrid);
-            panel1.Location = new Point(0, 27);
-            panel1.Name = "panel1";
-            panel1.Size = new Size(1153, 647);
-            panel1.TabIndex = 0;
+            this.panel1.Controls.Add(this.nameTournamet);
+            this.panel1.Controls.Add(this.nameGrid);
+            this.panel1.Location = new System.Drawing.Point(0, 27);
+            this.panel1.Name = "panel1";
+            this.panel1.Size = new System.Drawing.Size(1153, 647);
+            this.panel1.TabIndex = 0;
+            // 
+            // nameTournamet
+            // 
+            this.nameTournamet.AutoSize = true;
+            this.nameTournamet.Location = new System.Drawing.Point(550, 15);
+            this.nameTournamet.Name = "nameTournamet";
+            this.nameTournamet.Size = new System.Drawing.Size(38, 15);
+            this.nameTournamet.TabIndex = 4;
+            this.nameTournamet.Text = "label2";
             // 
             // nameGrid
             // 
-            nameGrid.AutoSize = true;
-            nameGrid.Location = new Point(550, 30);
-            nameGrid.Name = "nameGrid";
-            nameGrid.Size = new Size(38, 15);
-            nameGrid.TabIndex = 3;
-            nameGrid.Text = "label2";
+            this.nameGrid.AutoSize = true;
+            this.nameGrid.Location = new System.Drawing.Point(550, 42);
+            this.nameGrid.Name = "nameGrid";
+            this.nameGrid.Size = new System.Drawing.Size(38, 15);
+            this.nameGrid.TabIndex = 3;
+            this.nameGrid.Text = "label2";
             // 
             // menuStrip1
             // 
-            menuStrip1.Items.AddRange(new ToolStripItem[] { файлToolStripMenuItem });
-            menuStrip1.Location = new Point(0, 0);
-            menuStrip1.Name = "menuStrip1";
-            menuStrip1.Size = new Size(1153, 24);
-            menuStrip1.TabIndex = 1;
-            menuStrip1.Text = "menuStrip1";
+            this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.файлToolStripMenuItem});
+            this.menuStrip1.Location = new System.Drawing.Point(0, 0);
+            this.menuStrip1.Name = "menuStrip1";
+            this.menuStrip1.Size = new System.Drawing.Size(1153, 24);
+            this.menuStrip1.TabIndex = 1;
+            this.menuStrip1.Text = "menuStrip1";
             // 
             // файлToolStripMenuItem
             // 
-            файлToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { печатьToolStripMenuItem, выходToolStripMenuItem });
-            файлToolStripMenuItem.Name = "файлToolStripMenuItem";
-            файлToolStripMenuItem.Size = new Size(48, 20);
-            файлToolStripMenuItem.Text = "Файл";
+            this.файлToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.печатьToolStripMenuItem,
+            this.выходToolStripMenuItem});
+            this.файлToolStripMenuItem.Name = "файлToolStripMenuItem";
+            this.файлToolStripMenuItem.Size = new System.Drawing.Size(48, 20);
+            this.файлToolStripMenuItem.Text = "Файл";
             // 
             // печатьToolStripMenuItem
             // 
-            печатьToolStripMenuItem.Name = "печатьToolStripMenuItem";
-            печатьToolStripMenuItem.Size = new Size(113, 22);
-            печатьToolStripMenuItem.Text = "Печать";
-            печатьToolStripMenuItem.Click += печатьToolStripMenuItem_Click;
+            this.печатьToolStripMenuItem.Name = "печатьToolStripMenuItem";
+            this.печатьToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.печатьToolStripMenuItem.Text = "Печать";
+            this.печатьToolStripMenuItem.Click += new System.EventHandler(this.печатьToolStripMenuItem_Click);
             // 
             // выходToolStripMenuItem
             // 
-            выходToolStripMenuItem.Name = "выходToolStripMenuItem";
-            выходToolStripMenuItem.Size = new Size(113, 22);
-            выходToolStripMenuItem.Text = "Выход";
-            выходToolStripMenuItem.Click += выходToolStripMenuItem_Click;
-            // 
-            // nameTournament
-            // 
-            nameTournament.AutoSize = true;
-            nameTournament.Location = new Point(550, 33);
-            nameTournament.Name = "nameTournament";
-            nameTournament.Size = new Size(38, 15);
-            nameTournament.TabIndex = 2;
-            nameTournament.Text = "label1";
+            this.выходToolStripMenuItem.Name = "выходToolStripMenuItem";
+            this.выходToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.выходToolStripMenuItem.Text = "Выход";
             // 
             // GridForm
             // 
-            AutoScaleDimensions = new SizeF(7F, 15F);
-            AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(1153, 674);
-            Controls.Add(nameTournament);
-            Controls.Add(panel1);
-            Controls.Add(menuStrip1);
-            MainMenuStrip = menuStrip1;
-            Name = "GridForm";
-            Text = "Tournament";
-            FormClosing += TournamentGrid_FormClosing;
-            panel1.ResumeLayout(false);
-            panel1.PerformLayout();
-            menuStrip1.ResumeLayout(false);
-            menuStrip1.PerformLayout();
-            ResumeLayout(false);
-            PerformLayout();
+            this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
+            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.ClientSize = new System.Drawing.Size(1153, 674);
+            this.Controls.Add(this.panel1);
+            this.Controls.Add(this.menuStrip1);
+            this.MainMenuStrip = this.menuStrip1;
+            this.Name = "GridForm";
+            this.Text = "Tournament";
+            this.panel1.ResumeLayout(false);
+            this.panel1.PerformLayout();
+            this.menuStrip1.ResumeLayout(false);
+            this.menuStrip1.PerformLayout();
+            this.ResumeLayout(false);
+            this.PerformLayout();
+
         }
 
         #endregion
@@ -122,7 +124,7 @@
         private ToolStripMenuItem файлToolStripMenuItem;
         private ToolStripMenuItem выходToolStripMenuItem;
         private ToolStripMenuItem печатьToolStripMenuItem;
-        private Label nameTournament;
         private Label nameGrid;
+        private Label nameTournamet;
     }
 }

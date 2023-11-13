@@ -135,15 +135,11 @@ namespace Kaharman
             }
             return list;
         }
-        public static List<Participant> GetListToID(ParticipantDataTable table, List<int> listID)
+        public static List<Participant> GetListToID(ParticipantDataTable table)
         {
             List<Participant> outputList = new List<Participant>();
             foreach(DataRow row in table.Rows)
-            {
-                int? p = listID.Find(i => i == int.Parse(row["ID"].ToString()));
-                if(p != null)
                     outputList.Add(new Participant(row));
-            }
             return outputList;
         }
         public static string GetListID(List<Participant> list)
@@ -181,38 +177,20 @@ namespace Kaharman
             return item1;
         }
     }
-    //internal class TournamentItem: TextBox
-    //{
-    //    public Point TablePoint { get; set; } = new Point();
-    //    public TournamentItem(string? name) : base()
-    //    {
-    //        if (name != null)
-    //        {
-    //            this.AccessibleRole = AccessibleRole.None;
-    //            this.BorderStyle = BorderStyle.FixedSingle;
-    //            this.Name = name;
-    //            this.ReadOnly = true;
-    //            this.Size = new Size(150, 20);
-    //            this.Text = name;
-    //            this.TabStop = false;
-    //        }            
-    //    }
-    //}
-    public class GridItemText : TextBox
+    public class GridItemText : Label
     {
         public Participant? Participant { get; set; }
         public Point TablePoint { get; }
         public StatusGrid Status { get; private set; }
         public GridItemText(Participant? participan, Point point, StatusGrid status = StatusGrid.close)
         {
-            this.Location = new Point(20 + (point.X * 225), 10 * ((int)Math.Pow(2, point.X + 1)) + (10 * ((int)Math.Pow(2, point.X + 2))) * point.Y);
+            this.Location = new Point(40 + (point.X * 225),50 + 10 * ((int)Math.Pow(2, point.X + 1)) + (10 * ((int)Math.Pow(2, point.X + 2))) * point.Y);
             this.Participant = participan;
             this.TablePoint = point;
             ChangeStatus(status);
             this.Name = point.ToString();
             this.AccessibleRole = AccessibleRole.None;
             this.BorderStyle = BorderStyle.FixedSingle;
-            this.ReadOnly = true;
             this.Size = new Size(150, 20);
             if (participan != null)
                 this.Text = participan.Name;

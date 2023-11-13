@@ -13,7 +13,7 @@ namespace Kaharman
         {
             InitializeComponent();
             AccessSQL = accessSQL;
-            ParticipantsTable = new ParticipantDataTable(AccessSQL);
+            ParticipantsTable = new ParticipantDataTable(dataGridView2,AccessSQL);
             ParticipantsTable.FillTable(participantsTable);
             InitializeTable();
         }
@@ -28,7 +28,7 @@ namespace Kaharman
         {
             InitializeComponent();
             AccessSQL = accessSQL;
-            ParticipantsTable = new ParticipantDataTable(AccessSQL);
+            ParticipantsTable = new ParticipantDataTable(dataGridView2,AccessSQL);
             using (DataTable data = AccessSQL.GetDataTableSQL("SELECT * FROM Tournament WHERE id = " + ID))
             {
                 if(data.Rows.Count == 1)
@@ -60,8 +60,6 @@ namespace Kaharman
             dataGridView1.Columns.Add("date", "Дата");
             dataGridView1.Columns.Add("count", "Количество участников");
             dataGridView1.Columns.Add("status", "Статус");
-
-            dataGridView2.DataSource = ParticipantsTable.DataView;
         }
         private void UpDataGrid()
         {
@@ -74,7 +72,7 @@ namespace Kaharman
                     dataGridView1.Rows[idRows].Cells["ID"].Value = row["ID"].ToString();
                     dataGridView1.Rows[idRows].Cells["name"].Value = row["name"].ToString();
                     dataGridView1.Rows[idRows].Cells["date"].Value = DateTime.Parse(row["date"].ToString()).ToString("dd.MM.yyyy");
-                    string[] ids = row["id_participants"].ToString().Split(",");
+                    string[] ids = row["id_participants"].ToString().Split(";");
                     dataGridView1.Rows[idRows].Cells["count"].Value = ids.Length;
                     dataGridView1.Rows[idRows].Cells["status"].Value = row["status"].ToString();
                 }
@@ -131,7 +129,7 @@ namespace Kaharman
                     DataRow row = data.Rows[0];
                     dateTime = DateTime.Parse(row["date"].ToString());
                     nameGrid = row["name"].ToString();
-                    IDPart.AddRange(row["id_participants"].ToString().Split(","));
+                    IDPart.AddRange(row["id_participants"].ToString().Split(";").Select(item => item.Trim('"')));
                     grid = JsonSerializer.Deserialize<Grid>(row["grid"].ToString());
                     statusGrid = (StatusGrid)int.Parse(row["status"].ToString());
                 }
@@ -149,6 +147,7 @@ namespace Kaharman
         }
         private void dataGridView2_ColumnHeaderMouseClick(object sender, DataGridViewCellMouseEventArgs e)
         {
+            contextMenuStrip2.Close();
             if (e.Button == MouseButtons.Right)
             {
                 ParticipantsTable.ShowContextMenu(e.ColumnIndex, MousePosition);
@@ -160,11 +159,24 @@ namespace Kaharman
         }
         private void удалитьToolStripMenuItem_Click(object sender, EventArgs e)
         {
-
+            if(dataGridView1.SelectedRows.Count== 0)
+            {
+                MessageBox.Show("Выделите таблицы которые желаете удалить");
+            }
+            foreach(DataGridViewRow row in dataGridView1.SelectedRows)
+                AccessSQL.SendSQL("DELETE * FROM TournamentGrid WHERE id = " + row.Cells["ID"].Value.ToString());
+            UpDataGrid();
         }
         private void Tournament_Load(object sender, EventArgs e)
         {
 
+        }
+        private void dataGridView2_CellClick(object sender, DataGridViewCellMouseEventArgs e)
+        {
+            if (e.Button == MouseButtons.Right)
+            {
+                contextMenuStrip2.Show(Control.MousePosition);
+            }
         }
     }
 }

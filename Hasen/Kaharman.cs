@@ -26,12 +26,11 @@ namespace Hasen
         {
             InitializeComponent();
             AccessSQL = new AccessSQL();
-            ParticipantsTable = new ParticipantDataTable(AccessSQL);
+            ParticipantsTable = new ParticipantDataTable(dataGridView1,AccessSQL);
             DataParticipantsTable = new ParticipantDataTable(AccessSQL);
             InitializeDataTournament(DataHistoryTournaments);
             tableVisible = TableVisible.Participants;
             UpDateTable();
-
         }
         private void UpDateTable()
         {
@@ -130,11 +129,6 @@ namespace Hasen
         {
             this.Close();
         }
-        private void ‰Ó·‡‚ËÚ¸ToolStripMenuItem1_Click(object sender, EventArgs e)
-        {
-            Trainers trainers = new Trainers();
-            trainers.ShowDialog();
-        }      
         private void dataGridView1_ColumnHeaderMouseClick(object sender, DataGridViewCellMouseEventArgs e)
         {
             if (e.Button == MouseButtons.Right)

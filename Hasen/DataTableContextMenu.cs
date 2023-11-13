@@ -223,12 +223,38 @@ namespace Kaharman
                     return;
             ((ToolStripMenuItem)menuStrip.Items.Add(item)).Checked = true;
         }
+        public DataRow? GetRowToID(string id)
+        {
+            foreach(DataRow row in Rows)
+            {
+                if (row["ID"].ToString() == id)
+                    return row;
+            }
+            return null;
+        }
+        public void DeleteRow(DataRow row)
+        {
+            Rows.Remove(row);
+        }
     }
     public class ParticipantDataTable : DataTableContextMenu {
+        DataGridView dataGridView1;
         AccessSQL AccessSQL;
         public ParticipantDataTable(AccessSQL accessSQL) : base() {
             AccessSQL = accessSQL;
-
+            Initialize();
+        }
+        public ParticipantDataTable(DataGridView dataGridView, AccessSQL accessSQL) : base()
+        {
+            AccessSQL = accessSQL;
+            Initialize();
+            dataGridView1 = dataGridView;           
+            dataGridView.DataSource = DataView;
+            dataGridView.MouseClick += MouseClick;
+            dataGridView.ColumnHeaderMouseClick += ColumnHeaderMouseClick;
+        }
+        private void Initialize()
+        {
             AddColunm("ID", typeof(int));
 
             ContextMenuFilterName contextMenuName = new ContextMenuFilterName();
