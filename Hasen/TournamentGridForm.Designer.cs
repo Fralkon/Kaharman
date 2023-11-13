@@ -37,16 +37,10 @@
             label2 = new Label();
             textBox2 = new TextBox();
             label3 = new Label();
-            label4 = new Label();
-            genderComboBox = new ComboBox();
-            categoryComboBox = new ComboBox();
-            label5 = new Label();
-            label6 = new Label();
             dataGridView1 = new DataGridView();
-            ageMinTextBox = new TextBox();
-            ageMaxTextBox = new TextBox();
-            label7 = new Label();
             dataGridView2 = new DataGridView();
+            label4 = new Label();
+            label5 = new Label();
             ((System.ComponentModel.ISupportInitialize)dataGridView1).BeginInit();
             ((System.ComponentModel.ISupportInitialize)dataGridView2).BeginInit();
             SuspendLayout();
@@ -104,7 +98,7 @@
             // label2
             // 
             label2.AutoSize = true;
-            label2.Location = new Point(34, 44);
+            label2.Location = new Point(31, 44);
             label2.Name = "label2";
             label2.Size = new Size(87, 15);
             label2.TabIndex = 7;
@@ -127,53 +121,6 @@
             label3.TabIndex = 8;
             label3.Text = "Дата";
             // 
-            // label4
-            // 
-            label4.AutoSize = true;
-            label4.Location = new Point(34, 104);
-            label4.Name = "label4";
-            label4.Size = new Size(30, 15);
-            label4.TabIndex = 9;
-            label4.Text = "Пол";
-            // 
-            // genderComboBox
-            // 
-            genderComboBox.DropDownStyle = ComboBoxStyle.DropDownList;
-            genderComboBox.FormattingEnabled = true;
-            genderComboBox.Location = new Point(130, 101);
-            genderComboBox.Name = "genderComboBox";
-            genderComboBox.Size = new Size(90, 23);
-            genderComboBox.TabIndex = 10;
-            genderComboBox.SelectedIndexChanged += categoryComboBox_SelectedIndexChanged;
-            // 
-            // categoryComboBox
-            // 
-            categoryComboBox.DropDownStyle = ComboBoxStyle.DropDownList;
-            categoryComboBox.FormattingEnabled = true;
-            categoryComboBox.Location = new Point(371, 101);
-            categoryComboBox.Name = "categoryComboBox";
-            categoryComboBox.Size = new Size(119, 23);
-            categoryComboBox.TabIndex = 12;
-            categoryComboBox.SelectedIndexChanged += categoryComboBox_SelectedIndexChanged;
-            // 
-            // label5
-            // 
-            label5.AutoSize = true;
-            label5.Location = new Point(256, 104);
-            label5.Name = "label5";
-            label5.Size = new Size(109, 15);
-            label5.TabIndex = 11;
-            label5.Text = "Весовая категория";
-            // 
-            // label6
-            // 
-            label6.AutoSize = true;
-            label6.Location = new Point(568, 104);
-            label6.Name = "label6";
-            label6.Size = new Size(50, 15);
-            label6.TabIndex = 13;
-            label6.Text = "Возраст";
-            // 
             // dataGridView1
             // 
             dataGridView1.AllowDrop = true;
@@ -186,39 +133,14 @@
             dataGridView1.BorderStyle = BorderStyle.Fixed3D;
             dataGridView1.CellBorderStyle = DataGridViewCellBorderStyle.SingleHorizontal;
             dataGridView1.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            dataGridView1.Location = new Point(34, 130);
+            dataGridView1.Location = new Point(34, 132);
             dataGridView1.Name = "dataGridView1";
             dataGridView1.ReadOnly = true;
             dataGridView1.RowHeadersVisible = false;
             dataGridView1.RowTemplate.Height = 25;
             dataGridView1.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-            dataGridView1.Size = new Size(456, 369);
+            dataGridView1.Size = new Size(456, 367);
             dataGridView1.TabIndex = 15;
-            // 
-            // ageMinTextBox
-            // 
-            ageMinTextBox.Location = new Point(624, 101);
-            ageMinTextBox.Name = "ageMinTextBox";
-            ageMinTextBox.Size = new Size(61, 23);
-            ageMinTextBox.TabIndex = 16;
-            ageMinTextBox.TextChanged += categoryComboBox_SelectedIndexChanged;
-            // 
-            // ageMaxTextBox
-            // 
-            ageMaxTextBox.Location = new Point(709, 101);
-            ageMaxTextBox.Name = "ageMaxTextBox";
-            ageMaxTextBox.Size = new Size(61, 23);
-            ageMaxTextBox.TabIndex = 17;
-            ageMaxTextBox.TextChanged += categoryComboBox_SelectedIndexChanged;
-            // 
-            // label7
-            // 
-            label7.AutoSize = true;
-            label7.Location = new Point(691, 104);
-            label7.Name = "label7";
-            label7.Size = new Size(12, 15);
-            label7.TabIndex = 18;
-            label7.Text = "-";
             // 
             // dataGridView2
             // 
@@ -232,30 +154,42 @@
             dataGridView2.BorderStyle = BorderStyle.Fixed3D;
             dataGridView2.CellBorderStyle = DataGridViewCellBorderStyle.SingleHorizontal;
             dataGridView2.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            dataGridView2.Location = new Point(592, 130);
+            dataGridView2.Location = new Point(592, 132);
             dataGridView2.Name = "dataGridView2";
             dataGridView2.ReadOnly = true;
             dataGridView2.RowHeadersVisible = false;
             dataGridView2.RowTemplate.Height = 25;
             dataGridView2.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-            dataGridView2.Size = new Size(468, 369);
+            dataGridView2.Size = new Size(468, 367);
             dataGridView2.TabIndex = 19;
+            // 
+            // label4
+            // 
+            label4.AutoSize = true;
+            label4.Location = new Point(592, 114);
+            label4.Name = "label4";
+            label4.Size = new Size(87, 15);
+            label4.TabIndex = 20;
+            label4.Text = "Соревнование";
+            // 
+            // label5
+            // 
+            label5.AutoSize = true;
+            label5.Location = new Point(31, 114);
+            label5.Name = "label5";
+            label5.Size = new Size(87, 15);
+            label5.TabIndex = 21;
+            label5.Text = "Соревнование";
             // 
             // TournamentGridForm
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(1107, 588);
-            Controls.Add(dataGridView2);
-            Controls.Add(label7);
-            Controls.Add(ageMaxTextBox);
-            Controls.Add(ageMinTextBox);
-            Controls.Add(dataGridView1);
-            Controls.Add(label6);
-            Controls.Add(categoryComboBox);
             Controls.Add(label5);
-            Controls.Add(genderComboBox);
             Controls.Add(label4);
+            Controls.Add(dataGridView2);
+            Controls.Add(dataGridView1);
             Controls.Add(label3);
             Controls.Add(label2);
             Controls.Add(textBox2);
@@ -285,15 +219,9 @@
         private Label label2;
         private TextBox textBox2;
         private Label label3;
-        private Label label4;
-        private ComboBox genderComboBox;
-        private ComboBox categoryComboBox;
-        private Label label5;
-        private Label label6;
         private DataGridView dataGridView1;
-        private TextBox ageMinTextBox;
-        private TextBox ageMaxTextBox;
-        private Label label7;
         private DataGridView dataGridView2;
+        private Label label4;
+        private Label label5;
     }
 }

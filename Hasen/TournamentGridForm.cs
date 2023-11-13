@@ -27,7 +27,7 @@ namespace Kaharman
             StatusForm = statusForm;
             dateTimePicker1.Value = dateTime;
             IdTournament = idTournament;
-            textBox2.Text = nameTournament; 
+            textBox2.Text = nameTournament;
             ParticipantsTable = new ParticipantDataTable(AccessSQL);
             ParticipantsTable.FillTable(participantsTable);
             UpDatetable();
