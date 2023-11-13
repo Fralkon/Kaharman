@@ -41,13 +41,15 @@
             dataGridView2 = new DataGridView();
             label4 = new Label();
             label5 = new Label();
+            button3 = new Button();
+            button4 = new Button();
             ((System.ComponentModel.ISupportInitialize)dataGridView1).BeginInit();
             ((System.ComponentModel.ISupportInitialize)dataGridView2).BeginInit();
             SuspendLayout();
             // 
             // button1
             // 
-            button1.Location = new Point(985, 524);
+            button1.Location = new Point(999, 529);
             button1.Name = "button1";
             button1.Size = new Size(75, 23);
             button1.TabIndex = 0;
@@ -57,7 +59,7 @@
             // 
             // button2
             // 
-            button2.Location = new Point(886, 524);
+            button2.Location = new Point(900, 529);
             button2.Name = "button2";
             button2.Size = new Size(75, 23);
             button2.TabIndex = 1;
@@ -66,7 +68,7 @@
             // 
             // dateTimePicker1
             // 
-            dateTimePicker1.Location = new Point(696, 41);
+            dateTimePicker1.Location = new Point(708, 41);
             dateTimePicker1.Name = "dateTimePicker1";
             dateTimePicker1.Size = new Size(200, 23);
             dateTimePicker1.TabIndex = 2;
@@ -115,11 +117,11 @@
             // label3
             // 
             label3.AutoSize = true;
-            label3.Location = new Point(658, 44);
+            label3.Location = new Point(592, 44);
             label3.Name = "label3";
-            label3.Size = new Size(32, 15);
+            label3.Size = new Size(100, 15);
             label3.TabIndex = 8;
-            label3.Text = "Дата";
+            label3.Text = "Дата проведения";
             // 
             // dataGridView1
             // 
@@ -139,7 +141,7 @@
             dataGridView1.RowHeadersVisible = false;
             dataGridView1.RowTemplate.Height = 25;
             dataGridView1.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-            dataGridView1.Size = new Size(456, 367);
+            dataGridView1.Size = new Size(502, 367);
             dataGridView1.TabIndex = 15;
             // 
             // dataGridView2
@@ -160,7 +162,7 @@
             dataGridView2.RowHeadersVisible = false;
             dataGridView2.RowTemplate.Height = 25;
             dataGridView2.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-            dataGridView2.Size = new Size(468, 367);
+            dataGridView2.Size = new Size(482, 367);
             dataGridView2.TabIndex = 19;
             // 
             // label4
@@ -168,24 +170,44 @@
             label4.AutoSize = true;
             label4.Location = new Point(592, 114);
             label4.Name = "label4";
-            label4.Size = new Size(87, 15);
+            label4.Size = new Size(98, 15);
             label4.TabIndex = 20;
-            label4.Text = "Соревнование";
+            label4.Text = "Участники сетки";
             // 
             // label5
             // 
             label5.AutoSize = true;
             label5.Location = new Point(31, 114);
             label5.Name = "label5";
-            label5.Size = new Size(87, 15);
+            label5.Size = new Size(86, 15);
             label5.TabIndex = 21;
-            label5.Text = "Соревнование";
+            label5.Text = "Все участники";
+            // 
+            // button3
+            // 
+            button3.Location = new Point(542, 274);
+            button3.Name = "button3";
+            button3.Size = new Size(44, 23);
+            button3.TabIndex = 22;
+            button3.Text = ">";
+            button3.UseVisualStyleBackColor = true;
+            // 
+            // button4
+            // 
+            button4.Location = new Point(542, 303);
+            button4.Name = "button4";
+            button4.Size = new Size(44, 23);
+            button4.TabIndex = 23;
+            button4.Text = "<";
+            button4.UseVisualStyleBackColor = true;
             // 
             // TournamentGridForm
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(1107, 588);
+            ClientSize = new Size(1107, 577);
+            Controls.Add(button4);
+            Controls.Add(button3);
             Controls.Add(label5);
             Controls.Add(label4);
             Controls.Add(dataGridView2);
@@ -223,5 +245,7 @@
         private DataGridView dataGridView2;
         private Label label4;
         private Label label5;
+        private Button button3;
+        private Button button4;
     }
 }

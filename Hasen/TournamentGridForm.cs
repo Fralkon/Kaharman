@@ -30,6 +30,8 @@ namespace Kaharman
             textBox2.Text = nameTournament;
             ParticipantsTable = new ParticipantDataTable(AccessSQL);
             ParticipantsTable.FillTable(participantsTable);
+            dataGridView1.ColumnHeaderMouseClick += ParticipantsTable.ColumnHeaderMouseClick;
+            dataGridView1.MouseClick += ParticipantsTable.MouseClick;
             UpDatetable();
         }
         private void UpDatetable()

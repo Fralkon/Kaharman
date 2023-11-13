@@ -377,5 +377,16 @@ namespace Kaharman
                 MessageBox.Show("Загрузка завершена");
             }
         }
+        public void ColumnHeaderMouseClick(object sender, DataGridViewCellMouseEventArgs e)
+        {
+            if (e.Button == MouseButtons.Right)
+            {
+                ShowContextMenu(e.ColumnIndex, Control.MousePosition);
+            }
+        }
+        public void MouseClick(object sender, MouseEventArgs e)
+        {
+            CloseContextMenu();
+        }
     }
 }
