@@ -3,6 +3,7 @@ using System.Data;
 using System.Data.OleDb;
 using System.Globalization;
 using System.Windows.Forms;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 
 namespace Kaharman
 {
@@ -236,9 +237,19 @@ namespace Kaharman
         {
             Rows.Remove(row);
         }
+        public void DeleteRow(string id)
+        {
+            foreach (DataRow row in Rows)
+            {
+                if (row["ID"].ToString() == id)
+                {
+                    Rows.Remove(row);
+                    return;
+                }
+            }
+        }
     }
     public class ParticipantDataTable : DataTableContextMenu {
-        DataGridView dataGridView1;
         AccessSQL AccessSQL;
         public ParticipantDataTable(AccessSQL accessSQL) : base() {
             AccessSQL = accessSQL;
@@ -248,10 +259,10 @@ namespace Kaharman
         {
             AccessSQL = accessSQL;
             Initialize();
-            dataGridView1 = dataGridView;           
             dataGridView.DataSource = DataView;
             dataGridView.MouseClick += MouseClick;
             dataGridView.ColumnHeaderMouseClick += ColumnHeaderMouseClick;
+            dataGridView.Columns[0].Visible = false;
         }
         private void Initialize()
         {
@@ -262,7 +273,6 @@ namespace Kaharman
 
             AddColunm("Пол");
 
-            AddColunm("Дата рождения", typeof(DateTime));
             AddColunm("Возраст", typeof(int));
 
             DataTable dataWeigth = AccessSQL.GetDataTableSQL($"SELECT * FROM Catigory");
@@ -293,11 +303,14 @@ namespace Kaharman
                 DataTable data = AccessSQL.GetDataTableSQL($"SELECT id FROM Participants WHERE name = '{row[1]}'");
                 if (data.Rows.Count == 0)
                 {
-                    AccessSQL.SendSQL($"INSERT INTO Participants (name,gender,[date_of_birth],age,weight,qualification,city,trainer) VALUES ('{row[1]}','{row[2]}','{((DateTime)row["Дата рождения"]).ToString("dd.MM.yyyy")}',{row[4]},{row[5]},'{row[6]}','{row[7]}','{row[8]}')");
+                    AccessSQL.SendSQL($"INSERT INTO Participants (name,gender,[date_of_birth],weight,qualification,city,trainer) VALUES ('{row[1]}','{row[2]}','{((DateTime)row["Дата рождения"]).ToString("dd.MM.yyyy")}',{row[4]},'{row[5]}','{row[6]}','{row[7]}')");
                     row["ID"] = AccessSQL.GetIDInsert();
                 }
                 else
+                {
                     row["ID"] = data.Rows[0]["id"];
+                    AccessSQL.SendSQL($"UPDATE Participants SET weight = {row[4]}, qualification = '{row[5]}', city = '{row[6]}', trainer = '{row[7]}' WHERE id = {row["ID"]}");
+                }
             }
         }
         public string GetIDsPartString()
@@ -378,19 +391,17 @@ namespace Kaharman
                                 newRow[1] = rowExcel[i][1].ToString();
                                 newRow[2] = rowExcel[i][2].ToString();
                                 if (DateTime.TryParse(rowExcel[i][3].ToString(), out DateTime time))
-                                    newRow[3] = time;
-                                if (int.TryParse(rowExcel[i][4].ToString(), out int year))
-                                    newRow[4] = year;
+                                    newRow[3] = (int)((DateTime.Now - time).TotalDays / ParticipantForm.ValyeDayYear);
                                 if (float.TryParse(rowExcel[i][5].ToString(), new NumberFormatInfo { NumberDecimalSeparator = "." }, out float wight))
-                                    newRow[5] = wight;
+                                    newRow[4] = wight;
                                 else
                                 {
                                     if (float.TryParse(rowExcel[i][5].ToString(), new NumberFormatInfo { NumberDecimalSeparator = "," }, out wight))
-                                        newRow[5] = wight;
+                                        newRow[4] = wight;
                                 }
-                                newRow[6] = rowExcel[i][6].ToString().ToLower();
-                                newRow[7] = rowExcel[i][12].ToString();
-                                newRow[8] = rowExcel[i][13].ToString();
+                                newRow[5] = rowExcel[i][6].ToString().ToLower();
+                                newRow[6] = rowExcel[i][12].ToString();
+                                newRow[7] = rowExcel[i][13].ToString();
                                 Rows.Add(newRow);
                             }
                         }

@@ -59,7 +59,10 @@ namespace Hasen
                     dataAdapter.Fill(table);
                     foreach (DataRow row in table.Rows)
                     {
-                        dataTable.Rows.Add(row.ItemArray);
+                        var objects = row.ItemArray;
+                        objects[3] = (int)(DateTime.Now - DateTime.Parse(row["date_of_birth"].ToString())).TotalDays / ParticipantForm.ValyeDayYear;
+                        dataTable.Rows.Add(objects);
+                        
                     }
                 }
             }

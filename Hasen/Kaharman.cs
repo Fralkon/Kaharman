@@ -26,7 +26,7 @@ namespace Hasen
         {
             InitializeComponent();
             AccessSQL = new AccessSQL();
-            ParticipantsTable = new ParticipantDataTable(dataGridView1,AccessSQL);
+            ParticipantsTable = new ParticipantDataTable(dataGridView1, AccessSQL);
             DataParticipantsTable = new ParticipantDataTable(AccessSQL);
             InitializeDataTournament(DataHistoryTournaments);
             tableVisible = TableVisible.Participants;
@@ -45,7 +45,6 @@ namespace Hasen
                         dataGridView1.ContextMenuStrip = null;
                         AccessSQL.FillDataTableSQL("SELECT * FROM Participants", DataParticipantsTable);
                         dataGridView1.DataSource = DataParticipantsTable.DataView;
-                        //dataGridView1.Columns[0].Visible = false;
                         return;
                     }
                 case TableVisible.HistoryTournaments:
@@ -66,7 +65,6 @@ namespace Hasen
                             }
                         }
                         dataGridView1.DataSource = DataHistoryTournaments.DataView;
-                        //dataGridView1.Columns[0].Visible = false;
                         return;
                     }
                 case TableVisible.Participants:
@@ -74,7 +72,6 @@ namespace Hasen
                         dataGridView1.ContextMenuStrip = null;
                         ïîêàçàòüÓ÷àñòíèêîâToolStripMenuItem.Checked = true;
                         dataGridView1.DataSource = ParticipantsTable.DataView;
-                        //dataGridView1.Columns[0].Visible = false;
                         return;
                     }
             }
@@ -100,11 +97,6 @@ namespace Hasen
                 Close();
             }
         }
-        private void äîáàâèòüToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            ParticipantForm participants = new ParticipantForm(AccessSQL);
-            participants.ShowDialog();
-        }
         private void âåñîâûåÊàòåãîğèèToolStripMenuItem_Click(object sender, EventArgs e)
         {
             CategoryForm category = new CategoryForm(AccessSQL);
@@ -124,7 +116,7 @@ namespace Hasen
         {
             if (e.Data.GetDataPresent(DataFormats.FileDrop))
                 e.Effect = DragDropEffects.Copy;
-        }      
+        }
         private void âûõîäToolStripMenuItem_Click(object sender, EventArgs e)
         {
             this.Close();
@@ -144,24 +136,15 @@ namespace Hasen
         {
             contextMenuStrip1.Show();
         }
-        private void âåñîâûåÊàòåãîğèèToolStripMenuItem_Click_1(object sender, EventArgs e)
-        {
-            CategoryForm category = new CategoryForm(AccessSQL);
-            category.ShowDialog();
-        }
         private void ïîêàçàòüÓ÷àñòíèêîâToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            dataGridView1.DataSource = ParticipantsTable.DataView;
+            tableVisible = TableVisible.Participants;
+            UpDateTable();
         }
         private void ñîçäàòüToolStripMenuItem_Click(object sender, EventArgs e)
         {
             TournamentForm createTournament = new TournamentForm(ParticipantsTable, AccessSQL);
             createTournament.ShowDialog();
-        }
-        private void ïîêàçàòüÓ÷àñòíèêîâToolStripMenuItem_Click_1(object sender, EventArgs e)
-        {
-            tableVisible = TableVisible.Participants;
-            UpDateTable();
         }
         private void èñòîğèÿÒóğíèğîâToolStripMenuItem_Click(object sender, EventArgs e)
         {
@@ -206,6 +189,19 @@ namespace Hasen
                 AccessSQL.SendSQL("DELETE * FROM Tournament WHERE id = " + dataGridView1.SelectedRows[0].Cells["ID"].Value.ToString());
                 UpDateTable();
             }
+        }
+        private void äîáàâèòüToolStripMenuItem_Click_1(object sender, EventArgs e)
+        {
+            OpenFileDialog openFile = new OpenFileDialog();
+            openFile.Multiselect = true;
+            openFile.Filter = "Exel Files(*.xlsx)|*.xlsx|Exel Files(*.xls)|*.xls";
+            if (openFile.ShowDialog() == DialogResult.Cancel) { return; }
+            ParticipantsTable.LoadDataOnFiles(openFile.FileNames);
+        }
+        private void ñîçäàòüToolStripMenuItem1_Click(object sender, EventArgs e)
+        {
+            ParticipantForm participants = new ParticipantForm(AccessSQL);
+            participants.ShowDialog();
         }
     }
 }

@@ -28,208 +28,188 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.name = new System.Windows.Forms.TextBox();
-            this.button1 = new System.Windows.Forms.Button();
-            this.button2 = new System.Windows.Forms.Button();
-            this.label1 = new System.Windows.Forms.Label();
-            this.label2 = new System.Windows.Forms.Label();
-            this.label3 = new System.Windows.Forms.Label();
-            this.label4 = new System.Windows.Forms.Label();
-            this.age = new System.Windows.Forms.TextBox();
-            this.label5 = new System.Windows.Forms.Label();
-            this.weigth = new System.Windows.Forms.TextBox();
-            this.label6 = new System.Windows.Forms.Label();
-            this.qualification = new System.Windows.Forms.TextBox();
-            this.label7 = new System.Windows.Forms.Label();
-            this.city = new System.Windows.Forms.TextBox();
-            this.label8 = new System.Windows.Forms.Label();
-            this.trainer = new System.Windows.Forms.TextBox();
-            this.gender = new System.Windows.Forms.ComboBox();
-            this.dateOfBirth = new System.Windows.Forms.DateTimePicker();
-            this.SuspendLayout();
+            name = new TextBox();
+            button1 = new Button();
+            button2 = new Button();
+            label1 = new Label();
+            label2 = new Label();
+            label3 = new Label();
+            label5 = new Label();
+            weigth = new TextBox();
+            label6 = new Label();
+            qualification = new TextBox();
+            label7 = new Label();
+            city = new TextBox();
+            label8 = new Label();
+            trainer = new TextBox();
+            gender = new ComboBox();
+            dateOfBirth = new DateTimePicker();
+            SuspendLayout();
             // 
-            // textBox1
+            // name
             // 
-            this.name.AllowDrop = true;
-            this.name.Location = new System.Drawing.Point(156, 66);
-            this.name.Name = "textBox1";
-            this.name.Size = new System.Drawing.Size(329, 23);
-            this.name.TabIndex = 0;
+            name.AllowDrop = true;
+            name.Location = new Point(156, 66);
+            name.Name = "name";
+            name.Size = new Size(329, 23);
+            name.TabIndex = 0;
             // 
             // button1
             // 
-            this.button1.Location = new System.Drawing.Point(410, 367);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(75, 23);
-            this.button1.TabIndex = 1;
-            this.button1.Text = "Сохранить";
-            this.button1.UseVisualStyleBackColor = true;
+            button1.Location = new Point(411, 291);
+            button1.Name = "button1";
+            button1.Size = new Size(75, 23);
+            button1.TabIndex = 1;
+            button1.Text = "Сохранить";
+            button1.UseVisualStyleBackColor = true;
+            button1.Click += button1_Click;
             // 
             // button2
             // 
-            this.button2.Location = new System.Drawing.Point(318, 367);
-            this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(75, 23);
-            this.button2.TabIndex = 2;
-            this.button2.Text = "Отмена";
-            this.button2.UseVisualStyleBackColor = true;
+            button2.Location = new Point(319, 291);
+            button2.Name = "button2";
+            button2.Size = new Size(75, 23);
+            button2.TabIndex = 2;
+            button2.Text = "Отмена";
+            button2.UseVisualStyleBackColor = true;
+            button2.Click += button2_Click;
             // 
             // label1
             // 
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(44, 69);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(93, 15);
-            this.label1.TabIndex = 3;
-            this.label1.Text = "Фамилия и имя";
+            label1.AutoSize = true;
+            label1.Location = new Point(44, 69);
+            label1.Name = "label1";
+            label1.Size = new Size(93, 15);
+            label1.TabIndex = 3;
+            label1.Text = "Фамилия и имя";
             // 
             // label2
             // 
-            this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(44, 98);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(30, 15);
-            this.label2.TabIndex = 5;
-            this.label2.Text = "Пол";
+            label2.AutoSize = true;
+            label2.Location = new Point(44, 98);
+            label2.Name = "label2";
+            label2.Size = new Size(30, 15);
+            label2.TabIndex = 5;
+            label2.Text = "Пол";
             // 
             // label3
             // 
-            this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(44, 127);
-            this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(90, 15);
-            this.label3.TabIndex = 7;
-            this.label3.Text = "Дата рождения";
-            // 
-            // label4
-            // 
-            this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(44, 156);
-            this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(50, 15);
-            this.label4.TabIndex = 9;
-            this.label4.Text = "Возраст";
-            // 
-            // textBox4
-            // 
-            this.age.AllowDrop = true;
-            this.age.Location = new System.Drawing.Point(156, 153);
-            this.age.Name = "textBox4";
-            this.age.Size = new System.Drawing.Size(329, 23);
-            this.age.TabIndex = 8;
+            label3.AutoSize = true;
+            label3.Location = new Point(44, 127);
+            label3.Name = "label3";
+            label3.Size = new Size(90, 15);
+            label3.TabIndex = 7;
+            label3.Text = "Дата рождения";
             // 
             // label5
             // 
-            this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(44, 185);
-            this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(26, 15);
-            this.label5.TabIndex = 11;
-            this.label5.Text = "Вес";
+            label5.AutoSize = true;
+            label5.Location = new Point(44, 157);
+            label5.Name = "label5";
+            label5.Size = new Size(26, 15);
+            label5.TabIndex = 11;
+            label5.Text = "Вес";
             // 
-            // textBox5
+            // weigth
             // 
-            this.weigth.AllowDrop = true;
-            this.weigth.Location = new System.Drawing.Point(156, 182);
-            this.weigth.Name = "textBox5";
-            this.weigth.Size = new System.Drawing.Size(329, 23);
-            this.weigth.TabIndex = 10;
+            weigth.AllowDrop = true;
+            weigth.Location = new Point(156, 154);
+            weigth.Name = "weigth";
+            weigth.Size = new Size(329, 23);
+            weigth.TabIndex = 10;
             // 
             // label6
             // 
-            this.label6.AutoSize = true;
-            this.label6.Location = new System.Drawing.Point(44, 214);
-            this.label6.Name = "label6";
-            this.label6.Size = new System.Drawing.Size(88, 15);
-            this.label6.TabIndex = 13;
-            this.label6.Text = "Квалификация";
+            label6.AutoSize = true;
+            label6.Location = new Point(44, 186);
+            label6.Name = "label6";
+            label6.Size = new Size(88, 15);
+            label6.TabIndex = 13;
+            label6.Text = "Квалификация";
             // 
-            // textBox6
+            // qualification
             // 
-            this.qualification.AllowDrop = true;
-            this.qualification.Location = new System.Drawing.Point(156, 211);
-            this.qualification.Name = "textBox6";
-            this.qualification.Size = new System.Drawing.Size(329, 23);
-            this.qualification.TabIndex = 12;
+            qualification.AllowDrop = true;
+            qualification.Location = new Point(156, 183);
+            qualification.Name = "qualification";
+            qualification.Size = new Size(329, 23);
+            qualification.TabIndex = 12;
             // 
             // label7
             // 
-            this.label7.AutoSize = true;
-            this.label7.Location = new System.Drawing.Point(44, 243);
-            this.label7.Name = "label7";
-            this.label7.Size = new System.Drawing.Size(40, 15);
-            this.label7.TabIndex = 15;
-            this.label7.Text = "Город";
+            label7.AutoSize = true;
+            label7.Location = new Point(44, 215);
+            label7.Name = "label7";
+            label7.Size = new Size(40, 15);
+            label7.TabIndex = 15;
+            label7.Text = "Город";
             // 
-            // textBox7
+            // city
             // 
-            this.city.AllowDrop = true;
-            this.city.Location = new System.Drawing.Point(156, 240);
-            this.city.Name = "textBox7";
-            this.city.Size = new System.Drawing.Size(329, 23);
-            this.city.TabIndex = 14;
+            city.AllowDrop = true;
+            city.Location = new Point(156, 212);
+            city.Name = "city";
+            city.Size = new Size(329, 23);
+            city.TabIndex = 14;
             // 
             // label8
             // 
-            this.label8.AutoSize = true;
-            this.label8.Location = new System.Drawing.Point(44, 272);
-            this.label8.Name = "label8";
-            this.label8.Size = new System.Drawing.Size(46, 15);
-            this.label8.TabIndex = 17;
-            this.label8.Text = "Тренер";
+            label8.AutoSize = true;
+            label8.Location = new Point(44, 244);
+            label8.Name = "label8";
+            label8.Size = new Size(46, 15);
+            label8.TabIndex = 17;
+            label8.Text = "Тренер";
             // 
-            // textBox8
+            // trainer
             // 
-            this.trainer.AllowDrop = true;
-            this.trainer.Location = new System.Drawing.Point(156, 269);
-            this.trainer.Name = "textBox8";
-            this.trainer.Size = new System.Drawing.Size(329, 23);
-            this.trainer.TabIndex = 16;
+            trainer.AllowDrop = true;
+            trainer.Location = new Point(156, 241);
+            trainer.Name = "trainer";
+            trainer.Size = new Size(329, 23);
+            trainer.TabIndex = 16;
             // 
-            // comboBox1
+            // gender
             // 
-            this.gender.FormattingEnabled = true;
-            this.gender.Location = new System.Drawing.Point(156, 95);
-            this.gender.Name = "comboBox1";
-            this.gender.Size = new System.Drawing.Size(329, 23);
-            this.gender.TabIndex = 18;
+            gender.FormattingEnabled = true;
+            gender.Location = new Point(156, 95);
+            gender.Name = "gender";
+            gender.Size = new Size(329, 23);
+            gender.TabIndex = 18;
             // 
-            // dateTimePicker1
+            // dateOfBirth
             // 
-            this.dateOfBirth.Location = new System.Drawing.Point(156, 124);
-            this.dateOfBirth.Name = "dateTimePicker1";
-            this.dateOfBirth.Size = new System.Drawing.Size(329, 23);
-            this.dateOfBirth.TabIndex = 19;
+            dateOfBirth.Location = new Point(156, 124);
+            dateOfBirth.Name = "dateOfBirth";
+            dateOfBirth.Size = new Size(329, 23);
+            dateOfBirth.TabIndex = 19;
             // 
-            // Participants
+            // ParticipantForm
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
-            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.BackColor = System.Drawing.SystemColors.Control;
-            this.ClientSize = new System.Drawing.Size(536, 417);
-            this.Controls.Add(this.dateOfBirth);
-            this.Controls.Add(this.gender);
-            this.Controls.Add(this.label8);
-            this.Controls.Add(this.trainer);
-            this.Controls.Add(this.label7);
-            this.Controls.Add(this.city);
-            this.Controls.Add(this.label6);
-            this.Controls.Add(this.qualification);
-            this.Controls.Add(this.label5);
-            this.Controls.Add(this.weigth);
-            this.Controls.Add(this.label4);
-            this.Controls.Add(this.age);
-            this.Controls.Add(this.label3);
-            this.Controls.Add(this.label2);
-            this.Controls.Add(this.label1);
-            this.Controls.Add(this.button2);
-            this.Controls.Add(this.button1);
-            this.Controls.Add(this.name);
-            this.Name = "Participants";
-            this.Text = "Participants";
-            this.ResumeLayout(false);
-            this.PerformLayout();
-
+            AutoScaleDimensions = new SizeF(7F, 15F);
+            AutoScaleMode = AutoScaleMode.Font;
+            BackColor = SystemColors.Control;
+            ClientSize = new Size(515, 343);
+            Controls.Add(dateOfBirth);
+            Controls.Add(gender);
+            Controls.Add(label8);
+            Controls.Add(trainer);
+            Controls.Add(label7);
+            Controls.Add(city);
+            Controls.Add(label6);
+            Controls.Add(qualification);
+            Controls.Add(label5);
+            Controls.Add(weigth);
+            Controls.Add(label3);
+            Controls.Add(label2);
+            Controls.Add(label1);
+            Controls.Add(button2);
+            Controls.Add(button1);
+            Controls.Add(name);
+            Name = "ParticipantForm";
+            Text = "Participants";
+            ResumeLayout(false);
+            PerformLayout();
         }
 
         #endregion
@@ -240,8 +220,6 @@
         private Label label1;
         private Label label2;
         private Label label3;
-        private Label label4;
-        private TextBox age;
         private Label label5;
         private TextBox weigth;
         private Label label6;

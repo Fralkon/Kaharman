@@ -52,7 +52,6 @@ namespace Kaharman
         public int ID { get; }
         public  string Name { get; }
         public string Gender { get; }
-        public DateTime DateOfBirth { get; }
         public int Age { get; }
         public float Weight { get; }
         public string Gualiti { get; }
@@ -72,19 +71,17 @@ namespace Kaharman
             ID = int.Parse(row[0].ToString());
             Name = row[1].ToString();
             Gender = row[2].ToString();
-            DateOfBirth = DateTime.Parse(row[3].ToString());
-            Age = int.Parse(row[4].ToString());
-            Weight = float.Parse(row[5].ToString());
-            Gualiti = row[6].ToString();
-            City = row[7].ToString();
-            Trainer = row[8].ToString();
+            Age = int.Parse(row[3].ToString());
+            Weight = float.Parse(row[4].ToString());
+            Gualiti = row[5].ToString();
+            City = row[6].ToString();
+            Trainer = row[7].ToString();
         }
         public Participant(DataGridViewRow row)
         {
             ID = int.Parse(row.Cells["ID"].Value.ToString());
             Name = row.Cells["Фамилия и имя"].Value.ToString();
             Gender = row.Cells["Пол"].Value.ToString();
-            DateOfBirth = DateTime.Parse(row.Cells["Дата рождения"].Value.ToString());
             Age = int.Parse(row.Cells["Возраст"].Value.ToString());
             Weight = float.Parse(row.Cells["Вес"].Value.ToString());
             Gualiti = row.Cells["Квалификация"].Value.ToString();
