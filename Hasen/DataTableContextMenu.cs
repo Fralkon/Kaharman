@@ -200,9 +200,34 @@ namespace Kaharman
                 this.AddRow(row);
             }
         }
+        public void FillTableOnAccess(DataTable table)
+        {
+            foreach (DataRow row in table.Rows)
+            {
+                var objects = row.ItemArray;
+                objects[3] = (int)(DateTime.Now - DateTime.Parse(row["date_of_birth"].ToString())).TotalDays / ParticipantForm.ValyeDayYear;
+                AddRow(objects);
+            }
+        }
         public void AddRow(DataRow Row)
         {
             object[]? cells = Row.ItemArray;
+            if (cells != null && cells.Length == listContextMenu.Count)
+            {
+                for (int i = 0; i < cells.Length; i++)
+                {
+                    if (((ContextMenuFilter)listContextMenu[i]).AddAutoItems)
+                    {
+                        string? item = cells[i].ToString();
+                        if (item != null && item.Length != 0)
+                            AddItemContextMenu(listContextMenu[i], item);
+                    }
+                }
+            }
+            this.Rows.Add(cells);
+        }
+        public void AddRow(object[]? cells)
+        {
             if (cells != null && cells.Length == listContextMenu.Count)
             {
                 for (int i = 0; i < cells.Length; i++)
@@ -329,7 +354,7 @@ namespace Kaharman
             {
                 using (DataTable data = AccessSQL.GetDataTableSQL($"SELECT * FROM Participants WHERE id IN ({string.Join(", ", strings)})"))
                 {
-                    this.FillTable(data);
+                    this.FillTableOnAccess(data);
                 }
             }
         }

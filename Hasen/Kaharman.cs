@@ -30,6 +30,7 @@ namespace Hasen
             DataParticipantsTable = new ParticipantDataTable(AccessSQL);
             InitializeDataTournament(DataHistoryTournaments);
             tableVisible = TableVisible.Participants;
+            dataGridView1.MouseDoubleClick += dataGridView1_MouseDoubleClick;
             UpDateTable();
         }
         private void UpDateTable()
@@ -166,13 +167,17 @@ namespace Hasen
             if (tableVisible == TableVisible.HistoryTournaments)
             {
                 TournamentForm createTournament = new TournamentForm(dataGridView1.SelectedRows[0].Cells["ID"].Value.ToString(), AccessSQL);
+                this.Hide();
                 createTournament.ShowDialog();
+                this.Show();
                 return;
             }
             else if (tableVisible == TableVisible.Participants || tableVisible == TableVisible.DataParticipants)
             {
                 ParticipantForm participants = new ParticipantForm(dataGridView1.SelectedRows[0].Cells["ID"].Value.ToString(), AccessSQL);
+                this.Hide();
                 participants.ShowDialog();
+                this.Show();
                 return;
             }
         }

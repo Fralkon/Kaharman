@@ -19,8 +19,9 @@ namespace Kaharman
             panel1.Paint += Panel1_Paint;
             this.ID = id;
             nameTournamet.Text = nameT;
+            nameTournamet.Location = new Point((panel1.Width/2)-(nameTournamet.Width/2), 10);
             nameGrid.Text = name;
-            ToolTip.SetToolTip(nameGrid, "asdasdasdasd");
+            nameGrid.Location = new Point((panel1.Width / 2) - (nameGrid.Width / 2), 30);
             this.AccessSQL = AccessSQL;
             Grid = grid;
         }
@@ -59,9 +60,14 @@ namespace Kaharman
         }
         private void печатьToolStripMenuItem_Click(object sender, EventArgs e)
         {
+            panel1.AutoSize = true;
+            panel1.Refresh();
             Bitmap bitmap = new Bitmap(Width, Height);
             panel1.DrawToBitmap(bitmap, new Rectangle(0, 0, panel1.Width, panel1.Height));
             Graphics g = Graphics.FromImage(bitmap);
+
+            panel1.AutoSize = false;
+            panel1.Refresh();
             foreach (List<GridItems> Items in Grid.Items)
             {
                 foreach (GridItems item in Items)

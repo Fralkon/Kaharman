@@ -57,7 +57,7 @@ namespace Kaharman
         public string Gualiti { get; }
         public string City { get; }
         public string Trainer { get; }
-        public Participant(DataRow row)
+        public Participant(DataRow row, bool date = false)
         {
             //ID = int.Parse(row["ID"].ToString());
             //Name = row["Фамилия и имя"].ToString();
@@ -71,7 +71,10 @@ namespace Kaharman
             ID = int.Parse(row[0].ToString());
             Name = row[1].ToString();
             Gender = row[2].ToString();
-            Age = int.Parse(row[3].ToString());
+            if(date)
+                Age = (int)((DateTime.Now - DateTime.Parse(row[3].ToString())).TotalDays/ParticipantForm.ValyeDayYear);
+            else
+                Age = int.Parse(row[3].ToString());
             Weight = float.Parse(row[4].ToString());
             Gualiti = row[5].ToString();
             City = row[6].ToString();
@@ -154,7 +157,7 @@ namespace Kaharman
                 using (DataTable data = accessSQL.GetDataTableSQL($"SELECT * FROM Participants WHERE id IN ({string.Join(", ", ids)})"))
                 {
                     foreach (DataRow row in data.Rows)
-                        list.Add(new Participant(row));
+                        list.Add(new Participant(row,true));
                 }
             }
             return list;
@@ -257,6 +260,9 @@ namespace Kaharman
     {
         public int Type { get; set; }
         public List<List<GridItems>> Items { get; set; } = new List<List<GridItems>>();
+        public GridItems First { get; set; } = new GridItems();
+        public GridItems Second { get; set; } = new GridItems();
+        public GridItems[] Thirt { get; set; } = new GridItems[2];
         public Grid()
         {
 
