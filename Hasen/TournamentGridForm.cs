@@ -36,29 +36,40 @@ namespace Kaharman
         private void button1_Click(object sender, EventArgs e)
         {
             Grid grid = new Grid();
-            int step = 0;
             if (dataGridView2.RowCount == 0)
             {
                 MessageBox.Show("Отсутствуют участники в таблице.");
                 return;
             }
             if (dataGridView2.RowCount <= 4)
+            {
                 grid.Type = 4;
+                grid.Items = new GridItems[3][];
+            }
             else if (dataGridView2.RowCount <= 8)
+            {
                 grid.Type = 8;
+                grid.Items = new GridItems[4][];
+            }
             else if (dataGridView2.RowCount <= 16)
+            {
                 grid.Type = 16;
+                grid.Items = new GridItems[5][];
+            }
             else if (dataGridView2.RowCount <= 32)
+            {
                 grid.Type = 32;
+                grid.Items = new GridItems[6][];
+            }
             else
                 throw new Exception("Больше 32 участников не предусмотрено");
             int type = grid.Type;
+            int step = 0;
             while (true)
             {
-                List<GridItems> itemJsonGrid = new List<GridItems>();
+                grid.Items[step] = new GridItems[type];
                 for (int i = 0; i < type; i++)
-                    itemJsonGrid.Add(new GridItems(new Point(step, i)));
-                grid.Items.Add(itemJsonGrid);
+                    grid.Items[step][i] = new GridItems(new PointItem(step, i));
                 step++;
                 if (type == 1)
                     break;

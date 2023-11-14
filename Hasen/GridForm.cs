@@ -27,30 +27,31 @@ namespace Kaharman
         }
         private void Panel1_Paint(object? sender, PaintEventArgs e)
         {
-            foreach (List<GridItems> Items in Grid.Items)
+            foreach (GridItems[] Items in Grid.Items)
             {
                 foreach (GridItems item in Items)
                 {
-                    item.ItemText.Click += Item_Click;
-                    panel1.Controls.Add(item.ItemText);
+                    item.Label.Click += Item_Click;
+                    panel1.Controls.Add(item.Label);
                     if (item.Status == StatusGrid.win)
                     {
-                        DrawLines(e.Graphics, item.ItemText);
+                        DrawLines(e.Graphics, item);
                     }
                 }
             }
         }
         private void Item_Click(object? sender, EventArgs e)
         {
-            GridItemText? item = sender as GridItemText;
+            Label? item = sender as Label;
             if (item == null)
                 return;
-            if (item.TablePoint.X != Grid.Items.Count - 1)
+            PointItem point = (PointItem)item.Tag;
+            if (point.X != Grid.Items.Length - 1)
             {
-                int pos = (item.TablePoint.Y / 2) * 2;
-                if (Grid.Items[item.TablePoint.X][pos].Status == StatusGrid.init && Grid.Items[item.TablePoint.X][pos + 1].Status == StatusGrid.init)
+                int pos = (point.Y / 2) * 2;
+                if (Grid.Items[point.X][pos].Status == StatusGrid.init && Grid.Items[point.X][pos + 1].Status == StatusGrid.init)
                 {
-                    WonPosition(item);
+                    WonPosition(Grid.Items[point.X][point.Y]);
                 }
             }
         }
@@ -68,13 +69,13 @@ namespace Kaharman
 
             panel1.AutoSize = false;
             panel1.Refresh();
-            foreach (List<GridItems> Items in Grid.Items)
+            foreach (GridItems[] Items in Grid.Items)
             {
                 foreach (GridItems item in Items)
                 {
                     if (item.Status == StatusGrid.win)
                     {
-                        DrawLines(g, item.ItemText);
+                        DrawLines(g, item);
                     }
                 }
             }
@@ -85,35 +86,24 @@ namespace Kaharman
             proc.StartInfo.UseShellExecute = true;
             proc.Start();
         }
-        private void WonPosition(GridItemText item1)
+        private void WonPosition(GridItems item)
         {
-            ChangeStatisItems(item1.TablePoint);
-
-            int positionY = item1.TablePoint.Y / 2;
-            Grid.Items[item1.TablePoint.X + 1][positionY].SetParticipant(item1.Participant);
-
-            GridItemText item2 = Grid.Items[item1.TablePoint.X + 1][positionY].ItemText;
-            Point point1 = new Point(item1.Right, item1.Location.Y + item1.Height / 2);
-            Point point4 = new Point(item2.Left, item2.Location.Y + item2.Height / 2);
-            Point point2 = new Point(point1.X + 30, point1.Y);
+            ChangeStatisItems(item.Point);
+            DrawLines(graphics, item);
+        }
+        public void DrawLines(Graphics graphics, GridItems item1)
+        {
+            int positionY = item1.Point.Y / 2;
+            GridItems item2 = Grid.Items[item1.Point.X + 1][positionY];
+            Point point1 = new Point(item1.Label.Right, item1.Label.Location.Y + item1.Label.Height / 2);
+            Point point4 = new Point(item2.Label.Left, item2.Label.Location.Y + item2.Label.Height / 2);
+            Point  point2 = new Point(point1.X + 30, point1.Y);
             Point point3 = new Point(point2.X, point4.Y);
             graphics.DrawLine(Pens.Red, point1, point2);
             graphics.DrawLine(Pens.Red, point2, point3);
             graphics.DrawLine(Pens.Red, point3, point4);
         }
-        public void DrawLines(Graphics graphics, GridItemText item1)
-        {
-            int positionY = item1.TablePoint.Y / 2;
-            GridItemText item2 = Grid.Items[item1.TablePoint.X + 1][positionY].ItemText;
-            Point point1 = new Point(item1.Right, item1.Location.Y + item1.Height / 2);
-            Point point4 = new Point(item2.Left, item2.Location.Y + item2.Height / 2);
-            Point point2 = new Point(point1.X + 30, point1.Y);
-            Point point3 = new Point(point2.X, point4.Y);
-            graphics.DrawLine(Pens.Red, point1, point2);
-            graphics.DrawLine(Pens.Red, point2, point3);
-            graphics.DrawLine(Pens.Red, point3, point4);
-        }
-        private void ChangeStatisItems(Point item)
+        private void ChangeStatisItems(PointItem item)
         {
             int pos = (item.Y / 2) * 2;
             Grid.Items[item.X][item.Y].ChangeStatus(StatusGrid.win);

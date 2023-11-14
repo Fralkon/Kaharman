@@ -31,6 +31,7 @@ namespace Hasen
             InitializeDataTournament(DataHistoryTournaments);
             tableVisible = TableVisible.Participants;
             dataGridView1.MouseDoubleClick += dataGridView1_MouseDoubleClick;
+            ñîçäàòüToolStripMenuItem.Click += ñîçäàòüToolStripMenuItem_Click;
             UpDateTable();
         }
         private void UpDateTable()

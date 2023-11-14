@@ -2,14 +2,9 @@
 using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Drawing;
 using System.Globalization;
-using System.Linq;
-using System.Net.NetworkInformation;
-using System.Text;
 using System.Text.Json.Serialization;
-using System.Threading.Tasks;
-using System.Windows.Forms;
-using System.Xml.Linq;
 
 namespace Kaharman
 {
@@ -24,7 +19,6 @@ namespace Kaharman
         }
   
     }
-
     public enum StatusGrid { 
         init,
         close,
@@ -45,6 +39,16 @@ namespace Kaharman
             string[] strings = cat.Split('-');
             Min = float.Parse(strings[0].Trim());
             Max = float.Parse(strings[1].Trim());
+        }
+    }
+    public class PointItem
+    {
+        public int X { get; set; }
+        public int Y { get; set; }
+        public PointItem(int x,int y)
+        {
+            X = x;
+            Y = y;
         }
     }
     public class Participant
@@ -177,127 +181,222 @@ namespace Kaharman
             return item1;
         }
     }
-    public class GridItemText : Label
-    {
-        public Participant? Participant { get; set; }
-        public Point TablePoint { get; }
-        public StatusGrid Status { get; private set; }
-        public GridItemText(Participant? participan, Point point, StatusGrid status = StatusGrid.close)
-        {
-            this.Location = new Point(40 + (point.X * 225),50 + 10 * ((int)Math.Pow(2, point.X + 1)) + (10 * ((int)Math.Pow(2, point.X + 2))) * point.Y);
-            this.Participant = participan;
-            this.TablePoint = point;
-            ChangeStatus(status);
-            this.Name = point.ToString();
-            this.AccessibleRole = AccessibleRole.None;
-            this.BorderStyle = BorderStyle.FixedSingle;
-            this.Size = new Size(150, 20);
-            if (participan != null)
-                this.Text = participan.Name;
-            else
-                this.Text = "";
-            this.TabStop = false;
-        }
-        public void ChangeStatus(StatusGrid status)
-        {
-            this.Status = status;
-            switch(status)
-            {
-                case StatusGrid.win:
-                    {
-                        this.BackColor = Color.Green;
-                        return;
-                    }
-                case StatusGrid.lose:
-                    {
-                        this.BackColor = Color.Red; 
-                        return;
-                    }
-            }
-        }
-    }
     public class GridItems
     {
-        public Point Point { get; set; }
-        public int ID { get;set; }
+        public PointItem Point { get; set; }
+        public int ID { get; set; }
         public StatusGrid Status { get; set; }
-        public GridItems(Point point, int iD = -1, StatusGrid status = StatusGrid.close)
+        [JsonIgnore]
+        public Participant? Participant { get; set; }
+        [JsonIgnore]
+        public Label Label { get; set; }
+        public GridItems(PointItem point, int iD = -1, StatusGrid status = StatusGrid.close)
         {
             this.Point = point;
             ID = iD;
             Status = status;
+            Label = new Label();
+            Label.Location = new Point(40 + (point.X * 225), 50 + 10 * ((int)Math.Pow(2, point.X + 1)) + (10 * ((int)Math.Pow(2, point.X + 2))) * point.Y);
+            ChangeStatus(status);
+            Label.AccessibleRole = AccessibleRole.None;
+            Label.BorderStyle = BorderStyle.FixedSingle;
+            Label.Size = new Size(150, 20);
+            Label.Text = "";
+            Label.TabStop = false;
+            Label.Tag = point;
         }
         public GridItems()
         {
-        }
-        [JsonIgnore]
-        public GridItemText? ItemText { get; set; }
-        public void CreateItemTextBox()
-        {
-            ItemText = new GridItemText(null, Point);
+            Label = new Label();
+            Label.Location = new Point(40 + (Point.X * 225), 50 + 10 * ((int)Math.Pow(2, Point.X + 1)) + (10 * ((int)Math.Pow(2, Point.X + 2))) * Point.Y);
+            Label.AccessibleRole = AccessibleRole.None;
+            Label.BorderStyle = BorderStyle.FixedSingle;
+            Label.Size = new Size(150, 20);
+            Label.Text = "";
         }
         public void CreateItemTextBox(Participant participant, StatusGrid status)
         {
-            ItemText = new GridItemText(participant, Point, status);
+            Participant = participant;
+            Status = status;
         }
         public void ChangeStatus(StatusGrid status)
         {
             this.Status = status;
-            if(ItemText != null)
-            {
-                ItemText.ChangeStatus(status);
-            }
         }
         public void SetParticipant(Participant participant)
         {
             ChangeStatus(StatusGrid.init);
             ID = participant.ID;
-            ItemText.Participant = participant;
-            this.ItemText.Text = participant.Name;
+            Participant = participant;
+            Label.Text = participant.Name;
         }
     }
     public class Grid
     {
         public int Type { get; set; }
-        public List<List<GridItems>> Items { get; set; } = new List<List<GridItems>>();
+        public GridItems[][] Items { get; set; }
         public GridItems First { get; set; } = new GridItems();
         public GridItems Second { get; set; } = new GridItems();
         public GridItems[] Thirt { get; set; } = new GridItems[2];
         public Grid()
         {
-
+            
         }
         public void FillItems(List<Participant> participants)
         {
-            foreach(List<GridItems> gridItems in Items) {
+            foreach (GridItems[] gridItems in Items)
+            {
                 foreach (GridItems gridItem in gridItems)
                 {
-                    if (gridItem.ID == -1)
-                        gridItem.CreateItemTextBox();
-                    else
-                        gridItem.CreateItemTextBox(participants.Find(item => item.ID == gridItem.ID),gridItem.Status);
+                    if (gridItem.ID != -1)
+                    {
+                        Participant? participant = participants.Find(item => item.ID == gridItem.ID);
+                        if (participant == null)
+                            continue;
+                        gridItem.SetParticipant(participant);
+                    }
                 }
             }
         }
         public void FillNewGridItems(List<Participant> participants)
         {
-            foreach (List<GridItems> gridItems in Items)
-                foreach (GridItems gridItem in gridItems)
-                        gridItem.CreateItemTextBox();
             int colPart = participants.Count;
             int firstLap = (colPart - (Type / 2)) * 2;
             int secondLap = colPart - firstLap;
-            for (int i = 0; i < firstLap; i+=2) 
+            for (int i = 0; i < firstLap; i += 2)
             {
                 var pair = Participant.GetPairParticipants(participants);
                 Items[0][i].SetParticipant(pair.Item1);
-                Items[0][i+1].SetParticipant(pair.Item2);
+                Items[0][i + 1].SetParticipant(pair.Item2);
             }
-            int secondLapCount = Items[1].Count;
-            for(int i = 1; i <= secondLap; i++)
+            int secondLapCount = Items[1].Length;
+            for (int i = 1; i <= secondLap; i++)
             {
                 Items[1][secondLapCount - i].SetParticipant(Participant.GetParticipants(participants));
             }
         }
     }
+    //public class GridItemText : Label
+    //{
+    //    public Participant? Participant { get; set; }
+    //    public Point TablePoint { get; }
+    //    public StatusGrid Status { get; private set; }
+    //    public GridItemText(Participant? participan, Point point, StatusGrid status = StatusGrid.close)
+    //    {
+    //        this.Location = new Point(40 + (point.X * 225),50 + 10 * ((int)Math.Pow(2, point.X + 1)) + (10 * ((int)Math.Pow(2, point.X + 2))) * point.Y);
+    //        this.Participant = participan;
+    //        this.TablePoint = point;
+    //        ChangeStatus(status);
+    //        this.Name = point.ToString();
+    //        this.AccessibleRole = AccessibleRole.None;
+    //        this.BorderStyle = BorderStyle.FixedSingle;
+    //        this.Size = new Size(150, 20);
+    //        if (participan != null)
+    //            this.Text = participan.Name;
+    //        else
+    //            this.Text = "";
+    //        this.TabStop = false;
+    //    }
+    //    public void ChangeStatus(StatusGrid status)
+    //    {
+    //        this.Status = status;
+    //        switch(status)
+    //        {
+    //            case StatusGrid.win:
+    //                {
+    //                    this.BackColor = Color.Green;
+    //                    return;
+    //                }
+    //            case StatusGrid.lose:
+    //                {
+    //                    this.BackColor = Color.Red; 
+    //                    return;
+    //                }
+    //        }
+    //    }
+    //}
+    //public class GridItems
+    //{
+    //    public Point Point { get; set; }
+    //    public int ID { get;set; }
+    //    public StatusGrid Status { get; set; }
+    //    public GridItems(Point point, int iD = -1, StatusGrid status = StatusGrid.close)
+    //    {
+    //        this.Point = point;
+    //        ID = iD;
+    //        Status = status;
+    //    }
+    //    public GridItems()
+    //    {
+    //    }
+    //    [JsonIgnore]
+    //    public GridItemText? ItemText { get; set; }
+    //    public void CreateItemTextBox()
+    //    {
+    //        ItemText = new GridItemText(null, Point);
+    //    }
+    //    public void CreateItemTextBox(Participant participant, StatusGrid status)
+    //    {
+    //        ItemText = new GridItemText(participant, Point, status);
+    //    }
+    //    public void ChangeStatus(StatusGrid status)
+    //    {
+    //        this.Status = status;
+    //        if(ItemText != null)
+    //        {
+    //            ItemText.ChangeStatus(status);
+    //        }
+    //    }
+    //    public void SetParticipant(Participant participant)
+    //    {
+    //        ChangeStatus(StatusGrid.init);
+    //        ID = participant.ID;
+    //        ItemText.Participant = participant;
+    //        this.ItemText.Text = participant.Name;
+    //    }
+    //}
+    //public class Grid
+    //{
+    //    public int Type { get; set; }
+    //    public List<List<GridItems>> Items { get; set; } = new List<List<GridItems>>();
+    //    public GridItems First { get; set; } = new GridItems();
+    //    public GridItems Second { get; set; } = new GridItems();
+    //    public GridItems[] Thirt { get; set; } = new GridItems[2];
+    //    public Grid()
+    //    {
+
+    //    }
+    //    public void FillItems(List<Participant> participants)
+    //    {
+    //        foreach(List<GridItems> gridItems in Items) {
+    //            foreach (GridItems gridItem in gridItems)
+    //            {
+    //                if (gridItem.ID == -1)
+    //                    gridItem.CreateItemTextBox();
+    //                else
+    //                    gridItem.CreateItemTextBox(participants.Find(item => item.ID == gridItem.ID),gridItem.Status);
+    //            }
+    //        }
+    //    }
+    //    public void FillNewGridItems(List<Participant> participants)
+    //    {
+    //        foreach (List<GridItems> gridItems in Items)
+    //            foreach (GridItems gridItem in gridItems)
+    //                    gridItem.CreateItemTextBox();
+    //        int colPart = participants.Count;
+    //        int firstLap = (colPart - (Type / 2)) * 2;
+    //        int secondLap = colPart - firstLap;
+    //        for (int i = 0; i < firstLap; i+=2) 
+    //        {
+    //            var pair = Participant.GetPairParticipants(participants);
+    //            Items[0][i].SetParticipant(pair.Item1);
+    //            Items[0][i+1].SetParticipant(pair.Item2);
+    //        }
+    //        int secondLapCount = Items[1].Count;
+    //        for(int i = 1; i <= secondLap; i++)
+    //        {
+    //            Items[1][secondLapCount - i].SetParticipant(Participant.GetParticipants(participants));
+    //        }
+    //    }
+    //}
 }
