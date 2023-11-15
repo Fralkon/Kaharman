@@ -11,7 +11,6 @@ namespace Kaharman
         Graphics graphics;
         Grid Grid { get; set; }
         string ID;
-        ToolTip ToolTip { get; set; } = new ToolTip();
         public GridForm(string id, string nameT, string name, Grid grid, AccessSQL AccessSQL)
         {
             InitializeComponent();
@@ -19,7 +18,7 @@ namespace Kaharman
             panel1.Paint += Panel1_Paint;
             this.ID = id;
             nameTournamet.Text = nameT;
-            nameTournamet.Location = new Point((panel1.Width/2)-(nameTournamet.Width/2), 10);
+            nameTournamet.Location = new Point((panel1.Width / 2) - (nameTournamet.Width / 2), 10);
             nameGrid.Text = name;
             nameGrid.Location = new Point((panel1.Width / 2) - (nameGrid.Width / 2), 30);
             this.AccessSQL = AccessSQL;
@@ -45,7 +44,9 @@ namespace Kaharman
             Label? item = sender as Label;
             if (item == null)
                 return;
-            PointItem point = (PointItem)item.Tag;
+            PointItem? point = item.Tag as PointItem;
+            if (point == null)
+                return;
             if (point.X != Grid.Items.Length - 1)
             {
                 int pos = (point.Y / 2) * 2;
@@ -97,7 +98,7 @@ namespace Kaharman
             GridItems item2 = Grid.Items[item1.Point.X + 1][positionY];
             Point point1 = new Point(item1.Label.Right, item1.Label.Location.Y + item1.Label.Height / 2);
             Point point4 = new Point(item2.Label.Left, item2.Label.Location.Y + item2.Label.Height / 2);
-            Point  point2 = new Point(point1.X + 30, point1.Y);
+            Point point2 = new Point(point1.X + 30, point1.Y);
             Point point3 = new Point(point2.X, point4.Y);
             graphics.DrawLine(Pens.Red, point1, point2);
             graphics.DrawLine(Pens.Red, point2, point3);
@@ -115,6 +116,10 @@ namespace Kaharman
         private void TournamentGrid_FormClosing(object sender, FormClosingEventArgs e)
         {
             AccessSQL.SendSQL($"UPDATE TournamentGrid SET grid = '{JsonSerializer.Serialize(Grid)}' WHERE id = {ID}");
+        }
+        private void GridForm_Resize(object sender, EventArgs e)
+        {
+            panel1.Location = new Point(this.Width / 2 - panel1.Width / 2,30);
         }
     }
 }

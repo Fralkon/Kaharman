@@ -30,8 +30,6 @@ namespace Hasen
             DataParticipantsTable = new ParticipantDataTable(AccessSQL);
             InitializeDataTournament(DataHistoryTournaments);
             tableVisible = TableVisible.Participants;
-            dataGridView1.MouseDoubleClick += dataGridView1_MouseDoubleClick;
-            ñîçäàòüToolStripMenuItem.Click += ñîçäàòüToolStripMenuItem_Click;
             UpDateTable();
         }
         private void UpDateTable()
@@ -207,7 +205,9 @@ namespace Hasen
         private void ñîçäàòüToolStripMenuItem1_Click(object sender, EventArgs e)
         {
             ParticipantForm participants = new ParticipantForm(AccessSQL);
+            this.Hide();
             participants.ShowDialog();
+            this.Show();
         }
     }
 }
