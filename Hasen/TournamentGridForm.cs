@@ -75,6 +75,9 @@ namespace Kaharman
                     break;
                 type /= 2;
             }
+            grid.Places = new GridItems[4];
+            for (int i = 0; i < grid.Places.Length; i++)
+                grid.Places[i] = new GridItems();
             grid.FillNewGridItems(Participant.GetListToID(ParticipantGridTable));
 
             if (StatusForm == StatusFormTournamentGrid.Create)

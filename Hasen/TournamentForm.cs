@@ -136,7 +136,6 @@ namespace Kaharman
             DateTime dateTime;
             string nameGrid;
             List<string> IDPart = new List<string>();
-            Grid? grid1;
             StatusGrid statusGrid;
             using (DataTable data = AccessSQL.GetDataTableSQL($"SELECT * FROM TournamentGrid WHERE id = {IDGrid}"))
             {
@@ -155,7 +154,9 @@ namespace Kaharman
                     return;
                 }
             }
-
+            grid.Places = new GridItems[4];
+            for (int i = 0; i < grid.Places.Length; i++)
+                grid.Places[i] = new GridItems();
             grid.FillItems(Participant.GetParticipantsOnAccess(IDPart, AccessSQL));
 
             GridForm tournament = new GridForm(IDGrid, name.Text, nameGrid, grid, AccessSQL);

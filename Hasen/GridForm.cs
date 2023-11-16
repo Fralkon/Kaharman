@@ -11,18 +11,36 @@ namespace Kaharman
         Graphics graphics;
         Grid Grid { get; set; }
         string ID;
+        Label[] placesText = new Label[4];
         public GridForm(string id, string nameT, string name, Grid grid, AccessSQL AccessSQL)
         {
             InitializeComponent();
+            Grid = grid;
             graphics = panel1.CreateGraphics();
             panel1.Paint += Panel1_Paint;
             this.ID = id;
             nameTournamet.Text = nameT;
-            nameTournamet.Location = new Point((panel1.Width / 2) - (nameTournamet.Width / 2), 10);
             nameGrid.Text = name;
+            placesText[0] = new Label();
+            placesText[0].Text = "Первое место";
+            placesText[1] = new Label();
+            placesText[1].Text = "Второе место";
+            placesText[2] = new Label();
+            placesText[2].Text = "Третье место";
+            placesText[3] = new Label();
+            placesText[3].Text = "Третье место";
+            foreach (Label label in placesText)
+                panel1.Controls.Add(label);
+
+            foreach (GridItems item in Grid.Places)
+                panel1.Controls.Add(item.Label);
+
             nameGrid.Location = new Point((panel1.Width / 2) - (nameGrid.Width / 2), 30);
+            for (int i = 0; i < Grid.Places.Length; i++)
+                Grid.Places[i].InitPosition(new Point(panel1.Width - Grid.Places[i].Label.Width - 100, 30 + (i * 50)));
+            for (int i = 0; i < placesText.Length; i++)
+                placesText[i].Location = new Point(panel1.Width - placesText[i].Width - 250, 30 + (i * 50));
             this.AccessSQL = AccessSQL;
-            Grid = grid;
         }
         private void Panel1_Paint(object? sender, PaintEventArgs e)
         {
@@ -47,6 +65,7 @@ namespace Kaharman
             PointItem? point = item.Tag as PointItem;
             if (point == null)
                 return;
+            MessageBox.Show("a123123sdasdasd");
             if (point.X != Grid.Items.Length - 1)
             {
                 int pos = (point.Y / 2) * 2;
@@ -89,7 +108,7 @@ namespace Kaharman
         }
         private void WonPosition(GridItems item)
         {
-            ChangeStatisItems(item.Point);
+            Grid.WinPosition(item);
             DrawLines(graphics, item);
         }
         public void DrawLines(Graphics graphics, GridItems item1)
@@ -104,22 +123,19 @@ namespace Kaharman
             graphics.DrawLine(Pens.Red, point2, point3);
             graphics.DrawLine(Pens.Red, point3, point4);
         }
-        private void ChangeStatisItems(PointItem item)
-        {
-            int pos = (item.Y / 2) * 2;
-            Grid.Items[item.X][item.Y].ChangeStatus(StatusGrid.win);
-            if (pos == item.Y)
-                Grid.Items[item.X][item.Y + 1].ChangeStatus(StatusGrid.lose);
-            else
-                Grid.Items[item.X][item.Y - 1].ChangeStatus(StatusGrid.lose);
-        }
         private void TournamentGrid_FormClosing(object sender, FormClosingEventArgs e)
         {
             AccessSQL.SendSQL($"UPDATE TournamentGrid SET grid = '{JsonSerializer.Serialize(Grid)}' WHERE id = {ID}");
         }
         private void GridForm_Resize(object sender, EventArgs e)
         {
-            panel1.Location = new Point(this.Width / 2 - panel1.Width / 2,30);
+            panel1.Location = new Point(this.Width / 2 - panel1.Width / 2, 30);
+            nameTournamet.Location = new Point((panel1.Width / 2) - (nameTournamet.Width / 2), 10);
+            nameGrid.Location = new Point((panel1.Width / 2) - (nameGrid.Width / 2), 30);
+            for (int i = 0; i < Grid.Places.Length; i++)
+                Grid.Places[i].Label.Location = new Point(panel1.Width - Grid.Places[0].Label.Width - 100, 30 + (i*50));
+            for (int i = 0; i < placesText.Length; i++)
+                placesText[i].Location = new Point(panel1.Width - placesText[i].Width - 200, 30 + (i * 50));
         }
     }
 }

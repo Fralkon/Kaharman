@@ -5,6 +5,7 @@ using System.Data;
 using System.Drawing;
 using System.Globalization;
 using System.Text.Json.Serialization;
+using System.Windows.Forms;
 
 namespace Kaharman
 {
@@ -183,7 +184,7 @@ namespace Kaharman
     }
     public class GridItems
     {
-        public PointItem Point { get; set; }
+        public PointItem? Point { get; set; }
         public int ID { get; set; }
         public StatusGrid Status { get; set; }
         [JsonIgnore]
@@ -196,7 +197,6 @@ namespace Kaharman
             ID = iD;
             Status = status;
             Label = new Label();
-            Label.Location = new Point(40 + (point.X * 225), 50 + 10 * ((int)Math.Pow(2, point.X + 1)) + (10 * ((int)Math.Pow(2, point.X + 2))) * point.Y);
             ChangeStatus(status);
             Label.AccessibleRole = AccessibleRole.None;
             Label.BorderStyle = BorderStyle.FixedSingle;
@@ -208,20 +208,34 @@ namespace Kaharman
         public GridItems()
         {
             Label = new Label();
-            Label.Location = new Point(40 + (Point.X * 225), 50 + 10 * ((int)Math.Pow(2, Point.X + 1)) + (10 * ((int)Math.Pow(2, Point.X + 2))) * Point.Y);
             Label.AccessibleRole = AccessibleRole.None;
             Label.BorderStyle = BorderStyle.FixedSingle;
             Label.Size = new Size(150, 20);
-            Label.Text = "";
         }
-        public void CreateItemTextBox(Participant participant, StatusGrid status)
+        public void InitPosition()
         {
-            Participant = participant;
-            Status = status;
+            if (Point != null)
+                Label.Location = new Point(40 + (Point.X * 225), 50 + 10 * ((int)Math.Pow(2, Point.X + 1)) + (10 * ((int)Math.Pow(2, Point.X + 2))) * Point.Y);
+        }
+        public void InitPosition(Point point)
+        {
+            Label.Location = point;
         }
         public void ChangeStatus(StatusGrid status)
         {
             this.Status = status;
+            if(status == StatusGrid.init)
+            {
+                Label.BackColor = Color.Aqua;
+            }
+            else if (status == StatusGrid.lose)
+            {
+                Label.BackColor = Color.Black;
+            }
+            else if (status == StatusGrid.win)
+            {
+                Label.BackColor = Color.Black;
+            }
         }
         public void SetParticipant(Participant participant)
         {
@@ -235,19 +249,36 @@ namespace Kaharman
     {
         public int Type { get; set; }
         public GridItems[][] Items { get; set; }
-        public GridItems First { get; set; } = new GridItems();
-        public GridItems Second { get; set; } = new GridItems();
-        public GridItems[] Thirt { get; set; } = new GridItems[2];
+        public GridItems[] Places { get; set; }
         public Grid()
         {
-            
+
+        }
+        public void WinPosition(GridItems item)
+        {
+            PointItem point = item.Point;
+            int pos = (point.Y / 2) * 2;
+            Items[point.X][point.Y].ChangeStatus(StatusGrid.win);
+            Items[point.X+1][point.Y/2].SetParticipant(item.Participant);
+            if (pos == point.Y)
+                Items[point.X][pos + 1].ChangeStatus(StatusGrid.lose);
+            else
+                Items[point.X][pos - 1].ChangeStatus(StatusGrid.lose);
         }
         public void FillItems(List<Participant> participants)
         {
+            foreach (GridItems items in Places)
+            {
+                Participant? participant = participants.Find(item => item.ID == items.ID);
+                if (participant == null)
+                    continue;
+                items.SetParticipant(participant);
+            }
             foreach (GridItems[] gridItems in Items)
             {
                 foreach (GridItems gridItem in gridItems)
                 {
+                    gridItem.InitPosition();
                     if (gridItem.ID != -1)
                     {
                         Participant? participant = participants.Find(item => item.ID == gridItem.ID);
