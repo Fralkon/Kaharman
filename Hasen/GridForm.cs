@@ -16,6 +16,22 @@ namespace Kaharman
         {
             InitializeComponent();
             Grid = grid;
+            switch (Grid.Type)
+            {
+                case 4:
+                    panel1.Size = new Size(1000, 300);
+                    break;
+                case 8:
+                    panel1.Size = new Size(1150, 500);
+                    break;
+                case 16:
+                    panel1.Size = new Size(1500, 750);
+                    break;
+                case 32:
+                    panel1.Size = new Size(1655, 1400);
+                    break;
+            }
+            panel1.Location = new Point(this.Width / 2 - panel1.Width / 2, 30);
             graphics = panel1.CreateGraphics();
             panel1.Paint += Panel1_Paint;
             this.ID = id;
@@ -37,9 +53,11 @@ namespace Kaharman
 
             nameGrid.Location = new Point((panel1.Width / 2) - (nameGrid.Width / 2), 30);
             for (int i = 0; i < Grid.Places.Length; i++)
-                Grid.Places[i].InitPosition(new Point(panel1.Width - Grid.Places[i].Label.Width - 100, 30 + (i * 50)));
-            for (int i = 0; i < placesText.Length; i++)
-                placesText[i].Location = new Point(panel1.Width - placesText[i].Width - 250, 30 + (i * 50));
+            {
+                int posY = 70 + (i * 35);
+                Grid.Places[i].InitPosition(new Point(panel1.Width - Grid.Places[i].Label.Width - 30, posY));
+                placesText[i].Location = new Point(panel1.Width - placesText[i].Width - 180, posY);
+            }
             this.AccessSQL = AccessSQL;
         }
         private void Panel1_Paint(object? sender, PaintEventArgs e)
@@ -65,7 +83,6 @@ namespace Kaharman
             PointItem? point = item.Tag as PointItem;
             if (point == null)
                 return;
-            MessageBox.Show("a123123sdasdasd");
             if (point.X != Grid.Items.Length - 1)
             {
                 int pos = (point.Y / 2) * 2;
@@ -81,14 +98,9 @@ namespace Kaharman
         }
         private void печатьToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            panel1.AutoSize = true;
-            panel1.Refresh();
-            Bitmap bitmap = new Bitmap(Width, Height);
+            Bitmap bitmap = new Bitmap(panel1.Width, panel1.Height);
             panel1.DrawToBitmap(bitmap, new Rectangle(0, 0, panel1.Width, panel1.Height));
             Graphics g = Graphics.FromImage(bitmap);
-
-            panel1.AutoSize = false;
-            panel1.Refresh();
             foreach (GridItems[] Items in Grid.Items)
             {
                 foreach (GridItems item in Items)
@@ -125,7 +137,8 @@ namespace Kaharman
         }
         private void TournamentGrid_FormClosing(object sender, FormClosingEventArgs e)
         {
-            AccessSQL.SendSQL($"UPDATE TournamentGrid SET grid = '{JsonSerializer.Serialize(Grid)}' WHERE id = {ID}");
+            if (MessageBox.Show("Сохранить изменения?", "Сохрание.", MessageBoxButtons.OKCancel) == DialogResult.OK)
+                AccessSQL.SendSQL($"UPDATE TournamentGrid SET grid = '{JsonSerializer.Serialize(Grid)}' WHERE id = {ID}");
         }
         private void GridForm_Resize(object sender, EventArgs e)
         {
@@ -133,9 +146,11 @@ namespace Kaharman
             nameTournamet.Location = new Point((panel1.Width / 2) - (nameTournamet.Width / 2), 10);
             nameGrid.Location = new Point((panel1.Width / 2) - (nameGrid.Width / 2), 30);
             for (int i = 0; i < Grid.Places.Length; i++)
-                Grid.Places[i].Label.Location = new Point(panel1.Width - Grid.Places[0].Label.Width - 100, 30 + (i*50));
-            for (int i = 0; i < placesText.Length; i++)
-                placesText[i].Location = new Point(panel1.Width - placesText[i].Width - 200, 30 + (i * 50));
+            {
+                int posY = 70 + (i * 35);
+                Grid.Places[i].InitPosition(new Point(panel1.Width - Grid.Places[i].Label.Width - 30, posY));
+                placesText[i].Location = new Point(panel1.Width - placesText[i].Width - 180, posY);
+            }
         }
     }
 }

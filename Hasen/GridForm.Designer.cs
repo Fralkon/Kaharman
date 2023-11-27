@@ -48,7 +48,7 @@
             panel1.Controls.Add(nameGrid);
             panel1.Location = new Point(128, 30);
             panel1.Name = "panel1";
-            panel1.Size = new Size(1153, 425);
+            panel1.Size = new Size(1155, 425);
             panel1.TabIndex = 0;
             // 
             // nameTournamet

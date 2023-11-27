@@ -154,9 +154,6 @@ namespace Kaharman
                     return;
                 }
             }
-            grid.Places = new GridItems[4];
-            for (int i = 0; i < grid.Places.Length; i++)
-                grid.Places[i] = new GridItems();
             grid.FillItems(Participant.GetParticipantsOnAccess(IDPart, AccessSQL));
 
             GridForm tournament = new GridForm(IDGrid, name.Text, nameGrid, grid, AccessSQL);
