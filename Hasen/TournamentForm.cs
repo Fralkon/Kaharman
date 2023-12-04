@@ -1,4 +1,5 @@
 ﻿using Hasen;
+using Org.BouncyCastle.Crypto;
 using System.Data;
 using System.Text.Json;
 
@@ -228,6 +229,27 @@ namespace Kaharman
         private void dataGridView2_MouseDoubleClick(object sender, MouseEventArgs e)
         {
 
+        }
+
+        private void выходToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            this.Close();
+        }
+
+        private void протоколТурнираToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            SampleWord word = new SampleWord();
+            word.CreateFile(name.Text, dateTimePicker1.Value, dateTimePicker2.Value);
+            foreach (DataGridViewRow row in dataGridView1.Rows)
+            {
+                word.FillTable(row.Cells[1].Value.ToString(), AccessSQL.GetDataTableSQL($"SELECT name FROM Participants WHERE id IN ({string.Join(", ", 
+                        AccessSQL.GetDataTableSQL($"SELECT id_participants FROM TournamentGrid WHERE id = {row.Cells[0].Value }").
+                        Rows[0]["id_participants"].ToString().
+                        Split(';').
+                        Select(s => s.Trim('\"')).ToArray())})"));
+            }
+            word.ButtomText();
+            word.SaveFile(Environment.CurrentDirectory + "/Exemple1.docx");
         }
     }
 }

@@ -48,6 +48,8 @@
             удалитьToolStripMenuItem = new ToolStripMenuItem();
             menuStrip1 = new MenuStrip();
             файлToolStripMenuItem = new ToolStripMenuItem();
+            протоколТурнираToolStripMenuItem = new ToolStripMenuItem();
+            выходToolStripMenuItem = new ToolStripMenuItem();
             турнирнаяТаблицаToolStripMenuItem = new ToolStripMenuItem();
             создатьToolStripMenuItem = new ToolStripMenuItem();
             удалитьToolStripMenuItem2 = new ToolStripMenuItem();
@@ -212,9 +214,24 @@
             // 
             // файлToolStripMenuItem
             // 
+            файлToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { протоколТурнираToolStripMenuItem, выходToolStripMenuItem });
             файлToolStripMenuItem.Name = "файлToolStripMenuItem";
             файлToolStripMenuItem.Size = new Size(48, 20);
             файлToolStripMenuItem.Text = "Файл";
+            // 
+            // протоколТурнираToolStripMenuItem
+            // 
+            протоколТурнираToolStripMenuItem.Name = "протоколТурнираToolStripMenuItem";
+            протоколТурнираToolStripMenuItem.Size = new Size(180, 22);
+            протоколТурнираToolStripMenuItem.Text = "Протокол турнира";
+            протоколТурнираToolStripMenuItem.Click += протоколТурнираToolStripMenuItem_Click;
+            // 
+            // выходToolStripMenuItem
+            // 
+            выходToolStripMenuItem.Name = "выходToolStripMenuItem";
+            выходToolStripMenuItem.Size = new Size(180, 22);
+            выходToolStripMenuItem.Text = "Выход";
+            выходToolStripMenuItem.Click += выходToolStripMenuItem_Click;
             // 
             // турнирнаяТаблицаToolStripMenuItem
             // 
@@ -430,5 +447,7 @@
         private ToolStripMenuItem добавитьToolStripMenuItem1;
         private ToolStripMenuItem удалитьToolStripMenuItem3;
         private ToolStripMenuItem очиститьToolStripMenuItem;
+        private ToolStripMenuItem выходToolStripMenuItem;
+        private ToolStripMenuItem протоколТурнираToolStripMenuItem;
     }
 }

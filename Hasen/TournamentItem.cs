@@ -148,13 +148,6 @@ namespace Kaharman
                     outputList.Add(new Participant(row));
             return outputList;
         }
-        public static string GetListID(List<Participant> list)
-        {
-            List<string> strings= new List<string>();
-            foreach(var l in list) 
-                strings.Add(l.ID.ToString());
-            return string.Join(",", strings);
-        }
         public static List<Participant> GetParticipantsOnAccess(List<string> ids,AccessSQL accessSQL)
         {
             List<Participant> list = new List<Participant>();

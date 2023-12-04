@@ -1,11 +1,5 @@
 using Kaharman;
 using System.Data;
-using System.Data.OleDb;
-using System.Globalization;
-using System.Net.Sockets;
-using System.Text.Json;
-using System.Windows.Forms;
-using System.Xml.Linq;
 
 namespace Hasen
 {
