@@ -91,11 +91,6 @@ namespace Hasen
                 Close();
             }
         }
-        private void âåñîâûåÊàòåãîğèèToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            CategoryForm category = new CategoryForm(AccessSQL);
-            category.ShowDialog();
-        }
         private void dataGridView1_DragDrop(object sender, DragEventArgs e)
         {
             string[] files = (string[])e.Data.GetData(DataFormats.FileDrop);

@@ -248,6 +248,7 @@ namespace Kaharman
                 if (toolStrip.Text == item)
                     return;
             ((ToolStripMenuItem)menuStrip.Items.Add(item)).Checked = true;
+            
         }
         public DataRow? GetRowToID(string id)
         {
@@ -300,11 +301,8 @@ namespace Kaharman
 
             AddColunm("Возраст", typeof(int));
 
-            DataTable dataWeigth = AccessSQL.GetDataTableSQL($"SELECT * FROM Catigory");
-            List<string> weigth = new List<string>();
-            foreach (DataRow row in dataWeigth.Rows)
-                weigth.Add(row["cat"].ToString());
-            AddColunm("Вес", typeof(float), new ContextMenuFilterWeigth(weigth));
+            ContextMenuFilter contextMenuWeigth = new ContextMenuFilter();
+            AddColunm("Вес", contextMenuWeigth);
 
             ContextMenuFilter contextMenuQualiti = new ContextMenuFilter();
             ((ToolStripMenuItem)contextMenuQualiti.Items.Add("Пустые")).Checked = true;

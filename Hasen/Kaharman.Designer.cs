@@ -40,8 +40,6 @@
             создатьToolStripMenuItem1 = new ToolStripMenuItem();
             добавитьToolStripMenuItem = new ToolStripMenuItem();
             базаДанныхToolStripMenuItem = new ToolStripMenuItem();
-            настройкиToolStripMenuItem = new ToolStripMenuItem();
-            весовыеКатегорииToolStripMenuItem = new ToolStripMenuItem();
             dataGridView1 = new DataGridView();
             contextMenuStrip1 = new ContextMenuStrip(components);
             создатьТурнирToolStripMenuItem = new ToolStripMenuItem();
@@ -53,7 +51,7 @@
             // 
             // menuStrip1
             // 
-            menuStrip1.Items.AddRange(new ToolStripItem[] { файлToolStripMenuItem, турнирыToolStripMenuItem, участникиToolStripMenuItem, настройкиToolStripMenuItem });
+            menuStrip1.Items.AddRange(new ToolStripItem[] { файлToolStripMenuItem, турнирыToolStripMenuItem, участникиToolStripMenuItem });
             menuStrip1.Location = new Point(0, 0);
             menuStrip1.Name = "menuStrip1";
             menuStrip1.Size = new Size(834, 24);
@@ -70,7 +68,7 @@
             // выходToolStripMenuItem
             // 
             выходToolStripMenuItem.Name = "выходToolStripMenuItem";
-            выходToolStripMenuItem.Size = new Size(109, 22);
+            выходToolStripMenuItem.Size = new Size(180, 22);
             выходToolStripMenuItem.Text = "Выход";
             выходToolStripMenuItem.Click += выходToolStripMenuItem_Click;
             // 
@@ -129,20 +127,6 @@
             базаДанныхToolStripMenuItem.Size = new Size(142, 22);
             базаДанныхToolStripMenuItem.Text = "База данных";
             базаДанныхToolStripMenuItem.Click += базаДанныхToolStripMenuItem_Click_1;
-            // 
-            // настройкиToolStripMenuItem
-            // 
-            настройкиToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { весовыеКатегорииToolStripMenuItem });
-            настройкиToolStripMenuItem.Name = "настройкиToolStripMenuItem";
-            настройкиToolStripMenuItem.Size = new Size(79, 20);
-            настройкиToolStripMenuItem.Text = "Настройки";
-            // 
-            // весовыеКатегорииToolStripMenuItem
-            // 
-            весовыеКатегорииToolStripMenuItem.Name = "весовыеКатегорииToolStripMenuItem";
-            весовыеКатегорииToolStripMenuItem.Size = new Size(180, 22);
-            весовыеКатегорииToolStripMenuItem.Text = "Весовые категории";
-            весовыеКатегорииToolStripMenuItem.Click += весовыеКатегорииToolStripMenuItem_Click;
             // 
             // dataGridView1
             // 
@@ -214,8 +198,6 @@
         private ToolStripMenuItem участникиToolStripMenuItem;
         private DataGridView dataGridView1;
         private ToolStripMenuItem добавитьToolStripMenuItem;
-        private ToolStripMenuItem настройкиToolStripMenuItem;
-        private ToolStripMenuItem весовыеКатегорииToolStripMenuItem;
         private ToolStripMenuItem выходToolStripMenuItem;
         private ToolStripMenuItem историяТурнировToolStripMenuItem;
         private ToolStripMenuItem базаДанныхToolStripMenuItem;
