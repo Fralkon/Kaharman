@@ -223,16 +223,19 @@ namespace Kaharman
             switch (status)
             {
                 case StatusGrid.init:
-                    Label.BackColor = Color.Aqua;
+                    if (Point.Y % 2 == 0)
+                        Label.BackColor = Color.DodgerBlue;
+                    else
+                        Label.BackColor = Color.LightCoral;
                     break;
                 case StatusGrid.close:
                     Label.BackColor = Color.Black;
                     break;
                 case StatusGrid.win:
-                    Label.BackColor = Color.Brown;
+                    Label.BackColor = Color.DarkGreen;
                     break;
                 case StatusGrid.lose:
-                    Label.BackColor = Color.Red;
+                    Label.BackColor = Color.Gray;
                     break;
             }
         }

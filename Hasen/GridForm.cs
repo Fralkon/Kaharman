@@ -31,7 +31,6 @@ namespace Kaharman
                     panel1.Size = new Size(1655, 1400);
                     break;
             }
-            panel1.Location = new Point(this.Width / 2 - panel1.Width / 2, 30);
             graphics = panel1.CreateGraphics();
             panel1.Paint += Panel1_Paint;
             this.ID = id;
@@ -50,14 +49,7 @@ namespace Kaharman
 
             foreach (GridItems item in Grid.Places)
                 panel1.Controls.Add(item.Label);
-
-            nameGrid.Location = new Point((panel1.Width / 2) - (nameGrid.Width / 2), 30);
-            for (int i = 0; i < Grid.Places.Length; i++)
-            {
-                int posY = 70 + (i * 35);
-                Grid.Places[i].InitPosition(new Point(panel1.Width - Grid.Places[i].Label.Width - 30, posY));
-                placesText[i].Location = new Point(panel1.Width - placesText[i].Width - 180, posY);
-            }
+            ResizeElements();
             this.AccessSQL = AccessSQL;
         }
         private void Panel1_Paint(object? sender, PaintEventArgs e)
@@ -141,6 +133,10 @@ namespace Kaharman
                 AccessSQL.SendSQL($"UPDATE TournamentGrid SET grid = '{JsonSerializer.Serialize(Grid)}' WHERE id = {ID}");
         }
         private void GridForm_Resize(object sender, EventArgs e)
+        {
+            ResizeElements();
+        }
+        private void ResizeElements()
         {
             panel1.Location = new Point(this.Width / 2 - panel1.Width / 2, 30);
             nameTournamet.Location = new Point((panel1.Width / 2) - (nameTournamet.Width / 2), 10);
