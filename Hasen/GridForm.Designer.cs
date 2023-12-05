@@ -88,14 +88,14 @@
             // печатьToolStripMenuItem
             // 
             печатьToolStripMenuItem.Name = "печатьToolStripMenuItem";
-            печатьToolStripMenuItem.Size = new Size(113, 22);
+            печатьToolStripMenuItem.Size = new Size(180, 22);
             печатьToolStripMenuItem.Text = "Печать";
             печатьToolStripMenuItem.Click += печатьToolStripMenuItem_Click;
             // 
             // выходToolStripMenuItem
             // 
             выходToolStripMenuItem.Name = "выходToolStripMenuItem";
-            выходToolStripMenuItem.Size = new Size(113, 22);
+            выходToolStripMenuItem.Size = new Size(180, 22);
             выходToolStripMenuItem.Text = "Выход";
             выходToolStripMenuItem.Click += выходToolStripMenuItem_Click;
             // 
@@ -109,7 +109,7 @@
             Controls.Add(menuStrip1);
             MainMenuStrip = menuStrip1;
             Name = "GridForm";
-            Text = "Tournament";
+            Text = "Турнирная сетка";
             FormClosing += TournamentGrid_FormClosing;
             Resize += GridForm_Resize;
             panel1.ResumeLayout(false);

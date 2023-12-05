@@ -207,7 +207,7 @@
             Controls.Add(button1);
             Controls.Add(name);
             Name = "ParticipantForm";
-            Text = "Participants";
+            Text = "Участник";
             ResumeLayout(false);
             PerformLayout();
         }

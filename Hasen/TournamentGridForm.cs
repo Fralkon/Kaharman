@@ -32,6 +32,7 @@ namespace Kaharman
             ParticipantsTable = new ParticipantDataTable(dataGridView1, AccessSQL);
             ParticipantGridTable = new ParticipantDataTable(dataGridView2, AccessSQL);
             ParticipantsTable.FillTable(participantsTable);
+            dataGridView1.Columns[0].Visible = false;
         }
         private void button1_Click(object sender, EventArgs e)
         {
@@ -103,11 +104,11 @@ namespace Kaharman
         }
         private void button3_Click(object sender, EventArgs e)
         {
-            if(dataGridView1.SelectedRows.Count == 0) return;
-            foreach(DataGridViewRow row in dataGridView1.SelectedRows)
+            if (dataGridView1.SelectedRows.Count == 0) return;
+            foreach (DataGridViewRow row in dataGridView1.SelectedRows)
             {
                 DataRow? row1 = ParticipantsTable.GetRowToID(row.Cells["ID"].Value.ToString());
-                if(row1 !=null)
+                if (row1 != null)
                 {
                     ParticipantGridTable.Rows.Add(row1.ItemArray);
                     ParticipantsTable.DeleteRow(row1);

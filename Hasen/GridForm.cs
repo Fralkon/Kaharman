@@ -1,6 +1,5 @@
 ﻿using Hasen;
 using System.Diagnostics;
-using System.Drawing.Printing;
 using System.Text.Json;
 
 namespace Kaharman
@@ -103,12 +102,16 @@ namespace Kaharman
                     }
                 }
             }
-            bitmap.Save(@"C:\ClickMashine\123.png");
-            string commandText = @"C:\ClickMashine\123.png";
-            var proc = new Process();
-            proc.StartInfo.FileName = commandText;
-            proc.StartInfo.UseShellExecute = true;
-            proc.Start();
+            SaveFileDialog saveFileDialog = new SaveFileDialog();
+            saveFileDialog.Filter = "img file (*.jpeg)|*.jpeg";
+            if (saveFileDialog.ShowDialog() == DialogResult.OK)
+            {
+                bitmap.Save(saveFileDialog.FileName);
+                var proc = new Process();
+                proc.StartInfo.FileName = saveFileDialog.FileName;
+                proc.StartInfo.UseShellExecute = true;
+                proc.Start();
+            }
         }
         private void WonPosition(GridItems item)
         {

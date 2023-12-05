@@ -1,6 +1,7 @@
 ﻿using Hasen;
 using Org.BouncyCastle.Crypto;
 using System.Data;
+using System.Diagnostics;
 using System.Text.Json;
 
 namespace Kaharman
@@ -62,6 +63,7 @@ namespace Kaharman
             dataGridView1.Columns.Add("count", "Количество участников");
             dataGridView1.Columns.Add("status", "Статус");
             dataGridView1.Columns[0].Visible = false;
+            dataGridView2.Columns[0].Visible = false;
         }
         private void UpDataGrid()
         {
@@ -228,7 +230,10 @@ namespace Kaharman
         }
         private void dataGridView2_MouseDoubleClick(object sender, MouseEventArgs e)
         {
-
+            ParticipantForm participants = new ParticipantForm(dataGridView2.SelectedRows[0].Cells["ID"].Value.ToString(), AccessSQL);
+            this.Hide();
+            participants.ShowDialog();
+            this.Show();
         }
 
         private void выходToolStripMenuItem_Click(object sender, EventArgs e)
@@ -249,7 +254,16 @@ namespace Kaharman
                         Select(s => s.Trim('\"')).ToArray())})"));
             }
             word.ButtomText();
-            word.SaveFile(Environment.CurrentDirectory + "/Exemple1.docx");
+            SaveFileDialog saveFileDialog = new SaveFileDialog();
+            saveFileDialog.Filter = "docx file (*.docx)|*.docx";
+            if (saveFileDialog.ShowDialog() == DialogResult.OK)
+            {
+                word.SaveFile(saveFileDialog.FileName);
+                var proc = new Process();
+                proc.StartInfo.FileName = saveFileDialog.FileName;
+                proc.StartInfo.UseShellExecute = true;
+                proc.Start();
+            }
         }
     }
 }
