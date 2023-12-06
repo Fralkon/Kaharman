@@ -55,15 +55,24 @@ namespace Kaharman
     }
     public class Participant
     {
-        public int ID { get; private set; }
-        public  string Name { get; }
-        public string Gender { get; }
-        public int Age { get; }
-        public DateTime DayOfBirth {  get; }
-        public float Weight { get; }
-        public string Gualiti { get; }
-        public string City { get; }
-        public string Trainer { get; }
+        public int ID { get; set; }
+        public string Name { get; set; }
+        public string Gender { get; set; }
+        public int Age { get; set; }
+        private DateTime dayOfBirth;
+        public DateTime DayOfBirth
+        {
+            get { return dayOfBirth; }
+            set
+            {
+                Age = (int)((int)(DateTime.Now - value).TotalDays / ParticipantForm.ValyeDayYear);
+                dayOfBirth = value;
+            }
+        }
+        public float Weight { get; set; }
+        public string Gualiti { get; set; }
+        public string City { get; set; }
+        public string Trainer { get; set; }
         public Participant(DataRow row, bool date = false)
         {
             //ID = int.Parse(row["ID"].ToString());
@@ -98,16 +107,9 @@ namespace Kaharman
             City = row.Cells["Город"].Value.ToString();
             Trainer = row.Cells["Тренер"].Value.ToString();
         }
-        public Participant(DataGridViewRow row)
+        public Participant()
         {
-            ID = int.Parse(row.Cells["ID"].Value.ToString());
-            Name = row.Cells["Фамилия и имя"].Value.ToString();
-            Gender = row.Cells["Пол"].Value.ToString();
-            Age = int.Parse(row.Cells["Возраст"].Value.ToString());
-            Weight = float.Parse(row.Cells["Вес"].Value.ToString());
-            Gualiti = row.Cells["Квалификация"].Value.ToString();
-            City = row.Cells["Город"].Value.ToString();
-            Trainer = row.Cells["Тренер"].Value.ToString();
+
         }
         public void SetID(int ID)
         {
@@ -147,6 +149,19 @@ namespace Kaharman
             if (category.Max < Weight)
                 return false;
             return true;
+        }
+        public DataRow GetDataRow(DataTable dt)
+        {
+            DataRow row = dt.NewRow();
+            row[0] = ID;
+            row[1] = Name;
+            row[2] = Gender;
+            row[3] = Age;
+            row[4] = Weight;
+            row[5] = Gualiti;
+            row[6] = City;
+            row[7] = Trainer;
+            return row;
         }
         public static List<Participant> ToList(DataGridView dataGridView)
         {

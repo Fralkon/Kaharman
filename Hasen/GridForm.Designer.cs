@@ -129,6 +129,5 @@
         private ToolStripMenuItem печатьToolStripMenuItem;
         private Label nameGrid;
         private Label nameTournamet;
-        private Panel panel2;
     }
 }

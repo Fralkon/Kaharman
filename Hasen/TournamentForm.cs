@@ -248,7 +248,6 @@ namespace Kaharman
                         Split(';').
                         Select(s => s.Trim('\"')).ToArray())})"));
             }
-            word.ButtomText();
             SaveFileDialog saveFileDialog = new SaveFileDialog();
             saveFileDialog.Filter = "docx file (*.docx)|*.docx";
             if (saveFileDialog.ShowDialog() == DialogResult.OK)

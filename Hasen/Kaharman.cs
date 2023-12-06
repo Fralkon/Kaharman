@@ -1,5 +1,6 @@
 using Kaharman;
 using System.Data;
+using System.Globalization;
 
 namespace Hasen
 {

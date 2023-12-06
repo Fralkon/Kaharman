@@ -99,7 +99,7 @@ namespace Hasen
                 AddParticipant(participant);
             else
             {
-                participant.SetID(ID);
+                participant.ID = ID;
                 SendSQL($"UPDATE Participants SET weight = {participant.Weight}, qualification = '{participant.Gualiti}', city = '{participant.City}', trainer = '{participant.Trainer}' WHERE id = {participant.ID}");
             }
         }
@@ -107,7 +107,7 @@ namespace Hasen
         {
             SendSQL($"INSERT INTO Participants (name,gender,[date_of_birth],weight,qualification,city,trainer) " +
             $"VALUES ('{participant.Name}','{participant.Gender}','{participant.DayOfBirth.ToString("dd.MM.yyyy")}',{participant.Weight},'{participant.Gualiti}','{participant.City}','{participant.Trainer}')");
-            participant.SetID(GetIDInsert());
+            participant.ID = GetIDInsert();
         }
     }
 }

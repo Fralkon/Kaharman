@@ -6,7 +6,6 @@ namespace Hasen
     {
         public static float ValyeDayYear = 365.2425f;
         string? ID;
-        DataRow row;
         AccessSQL AccessSQL;
         ToolTip ToolTip = new ToolTip();
         public ParticipantForm(AccessSQL accessSQL)
