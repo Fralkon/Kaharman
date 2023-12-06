@@ -180,6 +180,7 @@ namespace Hasen
             if (dr == DialogResult.Yes)
             {
                 AccessSQL.SendSQL("DELETE * FROM Tournament WHERE id = " + dataGridView1.SelectedRows[0].Cells["ID"].Value.ToString());
+                AccessSQL.SendSQL("DELETE * FROM TournamentGrid WHERE id_tournament = " + dataGridView1.SelectedRows[0].Cells["ID"].Value.ToString());
                 UpDateTable();
             }
         }

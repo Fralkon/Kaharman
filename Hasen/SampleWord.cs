@@ -45,7 +45,6 @@ namespace Kaharman
             var RowTitle = table.GetRow(0);
             if (RowTitle == null)
                 throw new Exception("Ошибка создания таблицы.");
-            RowTitle.Height = 100;
             //Cell 1
             XWPFTableCell cellTitleID = RowTitle.GetCell(0);
             XWPFParagraph parafraphTitle = cellTitleID.Paragraphs[0];
@@ -87,10 +86,8 @@ namespace Kaharman
                 run.SetText(data.Rows[i - 1]["name"].ToString());
             }
         }
-        public void ButtomText()
+        public void ButtomText(string gls, string secret)
         {
-
-
             //doc.Document.body.sectPr = new CT_SectPr();
             //CT_SectPr secPr = doc.Document.body.sectPr;
 

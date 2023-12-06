@@ -80,6 +80,7 @@
             cancelButton.TabIndex = 1;
             cancelButton.Text = "Отмена";
             cancelButton.UseVisualStyleBackColor = true;
+            cancelButton.Click += cancelButton_Click_1;
             // 
             // label1
             // 
@@ -222,14 +223,14 @@
             // протоколТурнираToolStripMenuItem
             // 
             протоколТурнираToolStripMenuItem.Name = "протоколТурнираToolStripMenuItem";
-            протоколТурнираToolStripMenuItem.Size = new Size(180, 22);
+            протоколТурнираToolStripMenuItem.Size = new Size(177, 22);
             протоколТурнираToolStripMenuItem.Text = "Протокол турнира";
             протоколТурнираToolStripMenuItem.Click += протоколТурнираToolStripMenuItem_Click;
             // 
             // выходToolStripMenuItem
             // 
             выходToolStripMenuItem.Name = "выходToolStripMenuItem";
-            выходToolStripMenuItem.Size = new Size(180, 22);
+            выходToolStripMenuItem.Size = new Size(177, 22);
             выходToolStripMenuItem.Text = "Выход";
             выходToolStripMenuItem.Click += выходToolStripMenuItem_Click;
             // 
