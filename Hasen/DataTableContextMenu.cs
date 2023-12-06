@@ -315,26 +315,6 @@ namespace Kaharman
             ContextMenuFilter contextMenuTrainer = new ContextMenuFilter();
             ((ToolStripMenuItem)contextMenuTrainer.Items.Add("Пустые")).Checked = true;
             AddColunm("Тренер", contextMenuTrainer);
-
-            RowChanged += ParticipantsTable_RowChanged;
-        }
-        private void ParticipantsTable_RowChanged(object sender, DataRowChangeEventArgs e)
-        {
-            if (e.Action == DataRowAction.Add)
-            {
-                DataRow row = e.Row;
-                DataTable data = AccessSQL.GetDataTableSQL($"SELECT id FROM Participants WHERE name = '{row[1]}'");
-                if (data.Rows.Count == 0)
-                {
-                    AccessSQL.SendSQL($"INSERT INTO Participants (name,gender,[date_of_birth],weight,qualification,city,trainer) VALUES ('{row[1]}','{row[2]}','{((DateTime)row["Дата рождения"]).ToString("dd.MM.yyyy")}',{row[4]},'{row[5]}','{row[6]}','{row[7]}')");
-                    row["ID"] = AccessSQL.GetIDInsert();
-                }
-                else
-                {
-                    row["ID"] = data.Rows[0]["id"];
-                    AccessSQL.SendSQL($"UPDATE Participants SET weight = {row[4]}, qualification = '{row[5]}', city = '{row[6]}', trainer = '{row[7]}' WHERE id = {row["ID"]}");
-                }
-            }
         }
         public string GetIDsPartString()
         {
@@ -410,6 +390,7 @@ namespace Kaharman
                                 }
                                 if (cont)
                                     continue;
+                                Participant participant = new Participant();
                                 DataRow newRow = NewRow();
                                 newRow[1] = rowExcel[i][1].ToString();
                                 newRow[2] = rowExcel[i][2].ToString();
@@ -425,6 +406,7 @@ namespace Kaharman
                                 newRow[5] = rowExcel[i][6].ToString().ToLower();
                                 newRow[6] = rowExcel[i][12].ToString();
                                 newRow[7] = rowExcel[i][13].ToString();
+
                                 Rows.Add(newRow);
                             }
                         }

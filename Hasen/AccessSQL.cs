@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Kaharman;
+using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.OleDb;
@@ -83,6 +84,30 @@ namespace Hasen
                 int ID = (int)sqlCom.ExecuteScalar();
                 return ID;
             }
+        }
+        public int CheckParticipant(string Name)
+        {
+            DataTable data = GetDataTableSQL($"SELECT id FROM Participants WHERE name = '{Name}'");
+            if (data.Rows.Count != 0)
+                return int.Parse(data.Rows[0]["id"].ToString());
+            return -1;
+        }
+        public void UpDateParticipant(Participant participant)
+        {
+            int ID = CheckParticipant(participant.Name);
+            if (ID == -1)
+                AddParticipant(participant);
+            else
+            {
+                participant.SetID(ID);
+                SendSQL($"UPDATE Participants SET weight = {participant.Weight}, qualification = '{participant.Gualiti}', city = '{participant.City}', trainer = '{participant.Trainer}' WHERE id = {participant.ID}");
+            }
+        }
+        public void AddParticipant(Participant participant)
+        {
+            SendSQL($"INSERT INTO Participants (name,gender,[date_of_birth],weight,qualification,city,trainer) " +
+            $"VALUES ('{participant.Name}','{participant.Gender}','{participant.DayOfBirth.ToString("dd.MM.yyyy")}',{participant.Weight},'{participant.Gualiti}','{participant.City}','{participant.Trainer}')");
+            participant.SetID(GetIDInsert());
         }
     }
 }

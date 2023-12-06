@@ -55,10 +55,11 @@ namespace Kaharman
     }
     public class Participant
     {
-        public int ID { get; }
+        public int ID { get; private set; }
         public  string Name { get; }
         public string Gender { get; }
         public int Age { get; }
+        public DateTime DayOfBirth {  get; }
         public float Weight { get; }
         public string Gualiti { get; }
         public string City { get; }
@@ -96,6 +97,21 @@ namespace Kaharman
             Gualiti = row.Cells["Квалификация"].Value.ToString();
             City = row.Cells["Город"].Value.ToString();
             Trainer = row.Cells["Тренер"].Value.ToString();
+        }
+        public Participant(DataGridViewRow row)
+        {
+            ID = int.Parse(row.Cells["ID"].Value.ToString());
+            Name = row.Cells["Фамилия и имя"].Value.ToString();
+            Gender = row.Cells["Пол"].Value.ToString();
+            Age = int.Parse(row.Cells["Возраст"].Value.ToString());
+            Weight = float.Parse(row.Cells["Вес"].Value.ToString());
+            Gualiti = row.Cells["Квалификация"].Value.ToString();
+            City = row.Cells["Город"].Value.ToString();
+            Trainer = row.Cells["Тренер"].Value.ToString();
+        }
+        public void SetID(int ID)
+        {
+            this.ID = ID;
         }
         public bool CheckIgeFilter(string min, string max)
         {
