@@ -21,9 +21,12 @@ namespace Kaharman
         string IdTournament;
         string? IdGrid;
         StatusFormTournamentGrid StatusForm;
-        public TournamentGridForm(string idTournament, string nameTournament, DateTime dateTime, ParticipantDataTable participantsTable, StatusFormTournamentGrid statusForm, AccessSQL accessSQL)
+        string Judge, Secret;
+        public TournamentGridForm(string idTournament, string nameTournament, string judge, string secret, DateTime dateTime, ParticipantDataTable participantsTable, StatusFormTournamentGrid statusForm, AccessSQL accessSQL)
         {
             InitializeComponent();
+            Judge = judge;
+            Secret = secret;
             AccessSQL = accessSQL;
             StatusForm = statusForm;
             dateTimePicker1.Value = dateTime;
@@ -88,7 +91,7 @@ namespace Kaharman
                 IdGrid = AccessSQL.GetIDInsert().ToString();
             }
             else if (StatusForm == StatusFormTournamentGrid.Visit) { }
-            GridForm tournament = new GridForm(IdGrid, textBox2.Text, nameTextBox.Text, grid, AccessSQL);
+            GridForm tournament = new GridForm(IdGrid, textBox2.Text, nameTextBox.Text, dateTimePicker1.Value,Secret,Judge, grid, AccessSQL);
             tournament.ShowDialog();
             this.Close();
         }

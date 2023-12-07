@@ -108,7 +108,7 @@ namespace Kaharman
                 AccessSQL.SendSQL($"INSERT INTO Tournament (name,[start_date],[end_date],note_tournament,main_judge,secret,id_participants) VALUES ('{name.Text}','{dateTimePicker1.Value.ToString("dd.MM.yyyy")}','{dateTimePicker2.Value.ToString("dd.MM.yyyy")}','{note.Text}','{mainJudge.Text}','{secret.Text}','{ParticipantsTable.GetIDsPartString()}')");
                 ID = AccessSQL.GetIDInsert().ToString();
             }
-            TournamentGridForm tournamentGrid = new TournamentGridForm(ID, name.Text, dateTimePicker1.Value, ParticipantsTable, StatusFormTournamentGrid.Create, AccessSQL);
+            TournamentGridForm tournamentGrid = new TournamentGridForm(ID, name.Text,mainJudge.Text,secret.Text, dateTimePicker1.Value, ParticipantsTable, StatusFormTournamentGrid.Create, AccessSQL);
             tournamentGrid.ShowDialog();
             UpDataGrid();
         }
@@ -159,7 +159,7 @@ namespace Kaharman
             }
             grid.FillItems(Participant.GetParticipantsOnAccess(IDPart, AccessSQL));
 
-            GridForm tournament = new GridForm(IDGrid, name.Text, nameGrid, grid, AccessSQL);
+            GridForm tournament = new GridForm(IDGrid, name.Text, nameGrid,dateTime,mainJudge.Text,secret.Text, grid, AccessSQL);
             tournament.Show();
         }
         private void dataGridView2_ColumnHeaderMouseClick(object sender, DataGridViewCellMouseEventArgs e)
@@ -240,7 +240,7 @@ namespace Kaharman
         private void протоколТурнираToolStripMenuItem_Click(object sender, EventArgs e)
         {
             SampleWord word = new SampleWord();
-            word.CreateFile(name.Text, dateTimePicker1.Value, dateTimePicker2.Value);
+            word.CreateProtacolTournament(name.Text, dateTimePicker1.Value, dateTimePicker2.Value, mainJudge.Text,secret.Text);
             foreach (DataGridViewRow row in dataGridView1.Rows)
             {
                 word.FillTable(row.Cells[1].Value.ToString(), AccessSQL.GetDataTableSQL($"SELECT name FROM Participants WHERE id IN ({string.Join(", ",
@@ -269,7 +269,6 @@ namespace Kaharman
         {
             panel1.Width = this.Width / 2;
             panel2.Width = this.Width / 2;
-            //panel2.Location = new Point(this.Width / 2, 0);
         }
 
         private void TournamentForm_Resize(object sender, EventArgs e)

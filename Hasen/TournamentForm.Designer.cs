@@ -143,6 +143,7 @@
             // 
             // name
             // 
+            name.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
             name.Location = new Point(118, 16);
             name.Name = "name";
             name.Size = new Size(521, 23);
@@ -164,6 +165,7 @@
             // 
             // note
             // 
+            note.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
             note.Location = new Point(118, 45);
             note.Name = "note";
             note.Size = new Size(521, 23);

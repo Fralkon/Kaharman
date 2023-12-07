@@ -29,11 +29,13 @@
         private void InitializeComponent()
         {
             panel1 = new Panel();
+            dateStart = new Label();
             nameTournamet = new Label();
             nameGrid = new Label();
             menuStrip1 = new MenuStrip();
             файлToolStripMenuItem = new ToolStripMenuItem();
             печатьToolStripMenuItem = new ToolStripMenuItem();
+            протоколСоревнованияToolStripMenuItem = new ToolStripMenuItem();
             выходToolStripMenuItem = new ToolStripMenuItem();
             panel1.SuspendLayout();
             menuStrip1.SuspendLayout();
@@ -44,6 +46,7 @@
             panel1.Anchor = AnchorStyles.Top;
             panel1.AutoScroll = true;
             panel1.BorderStyle = BorderStyle.FixedSingle;
+            panel1.Controls.Add(dateStart);
             panel1.Controls.Add(nameTournamet);
             panel1.Controls.Add(nameGrid);
             panel1.Location = new Point(128, 30);
@@ -51,10 +54,19 @@
             panel1.Size = new Size(1155, 425);
             panel1.TabIndex = 0;
             // 
+            // dateStart
+            // 
+            dateStart.AutoSize = true;
+            dateStart.Location = new Point(550, 40);
+            dateStart.Name = "dateStart";
+            dateStart.Size = new Size(38, 15);
+            dateStart.TabIndex = 5;
+            dateStart.Text = "label2";
+            // 
             // nameTournamet
             // 
             nameTournamet.AutoSize = true;
-            nameTournamet.Location = new Point(550, 15);
+            nameTournamet.Location = new Point(550, 10);
             nameTournamet.Name = "nameTournamet";
             nameTournamet.Size = new Size(38, 15);
             nameTournamet.TabIndex = 4;
@@ -63,7 +75,7 @@
             // nameGrid
             // 
             nameGrid.AutoSize = true;
-            nameGrid.Location = new Point(550, 42);
+            nameGrid.Location = new Point(550, 25);
             nameGrid.Name = "nameGrid";
             nameGrid.Size = new Size(38, 15);
             nameGrid.TabIndex = 3;
@@ -80,7 +92,7 @@
             // 
             // файлToolStripMenuItem
             // 
-            файлToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { печатьToolStripMenuItem, выходToolStripMenuItem });
+            файлToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { печатьToolStripMenuItem, протоколСоревнованияToolStripMenuItem, выходToolStripMenuItem });
             файлToolStripMenuItem.Name = "файлToolStripMenuItem";
             файлToolStripMenuItem.Size = new Size(48, 20);
             файлToolStripMenuItem.Text = "Файл";
@@ -88,14 +100,21 @@
             // печатьToolStripMenuItem
             // 
             печатьToolStripMenuItem.Name = "печатьToolStripMenuItem";
-            печатьToolStripMenuItem.Size = new Size(180, 22);
-            печатьToolStripMenuItem.Text = "Печать";
+            печатьToolStripMenuItem.Size = new Size(210, 22);
+            печатьToolStripMenuItem.Text = "Печать сетки";
             печатьToolStripMenuItem.Click += печатьToolStripMenuItem_Click;
+            // 
+            // протоколСоревнованияToolStripMenuItem
+            // 
+            протоколСоревнованияToolStripMenuItem.Name = "протоколСоревнованияToolStripMenuItem";
+            протоколСоревнованияToolStripMenuItem.Size = new Size(210, 22);
+            протоколСоревнованияToolStripMenuItem.Text = "Протокол соревнования";
+            протоколСоревнованияToolStripMenuItem.Click += протоколСоревнованияToolStripMenuItem_Click;
             // 
             // выходToolStripMenuItem
             // 
             выходToolStripMenuItem.Name = "выходToolStripMenuItem";
-            выходToolStripMenuItem.Size = new Size(180, 22);
+            выходToolStripMenuItem.Size = new Size(210, 22);
             выходToolStripMenuItem.Text = "Выход";
             выходToolStripMenuItem.Click += выходToolStripMenuItem_Click;
             // 
@@ -129,5 +148,7 @@
         private ToolStripMenuItem печатьToolStripMenuItem;
         private Label nameGrid;
         private Label nameTournamet;
+        private ToolStripMenuItem протоколСоревнованияToolStripMenuItem;
+        private Label dateStart;
     }
 }

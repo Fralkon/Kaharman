@@ -75,9 +75,10 @@
             // 
             // dateTimePicker1
             // 
+            dateTimePicker1.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
             dateTimePicker1.Location = new Point(131, 28);
             dateTimePicker1.Name = "dateTimePicker1";
-            dateTimePicker1.Size = new Size(200, 23);
+            dateTimePicker1.Size = new Size(206, 23);
             dateTimePicker1.TabIndex = 2;
             // 
             // menuStrip1
@@ -90,6 +91,7 @@
             // 
             // nameTextBox
             // 
+            nameTextBox.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
             nameTextBox.Location = new Point(113, 57);
             nameTextBox.Name = "nameTextBox";
             nameTextBox.Size = new Size(406, 23);
@@ -115,6 +117,7 @@
             // 
             // textBox2
             // 
+            textBox2.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
             textBox2.Enabled = false;
             textBox2.Location = new Point(113, 28);
             textBox2.Name = "textBox2";

@@ -18,6 +18,9 @@
     <None Update="Database.accdb">
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </None>
+    <None Update="ExempleProtocol.docx">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
 
 </Project>

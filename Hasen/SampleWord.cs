@@ -19,13 +19,26 @@ namespace Kaharman
     }
     internal class SampleWord
     {
-        XWPFDocument doc = new XWPFDocument();
-        public SampleWord() { }
-        public void CreateFile(string Name, DateTime start, DateTime end)
+        XWPFDocument doc;
+        public SampleWord() {
+            using (FileStream file = File.OpenRead(Environment.CurrentDirectory + "/ExempleProtocol.docx"))
+                doc = new XWPFDocument(file);
+        }
+        public void CreateProtacolTournament(string Name, DateTime start, DateTime end, string Judge, string Secret)
         {
             CreateProtocol();
             CreateName(Name);
             CreateDate(start, end);
+            doc.FindAndReplaceText("<judge>", Judge);
+            doc.FindAndReplaceText("<secret>", Secret);
+        }
+        public void CreateProtacolGrid(string Name, DateTime start, string Judge, string Secret)
+        {
+            CreateProtocol();
+            CreateName(Name);
+            CreateDate(start);
+            doc.FindAndReplaceText("<judge>", Judge);
+            doc.FindAndReplaceText("<secret>", Secret);
         }
         public void FillTable(string name, DataTable data)
         {
@@ -41,9 +54,8 @@ namespace Kaharman
             paragraph.Alignment = ParagraphAlignment.CENTER;
 
             int col = 2;
-            XWPFTable table = doc.CreateTable(row -1, col);
+            XWPFTable table = doc.CreateTable(row, col);
             table.Width = 4500;
-
             var RowTitle = table.GetRow(0);
             if (RowTitle == null)
                 throw new Exception("Ошибка создания таблицы.");
@@ -66,8 +78,7 @@ namespace Kaharman
             runTitle.FontSize = 10;
             runTitle.FontFamily = "Times New Roman";
             runTitle.SetText("Данные участника");
-
-            for (int i = 1; i < data.Rows.Count; i++)
+            for (int i = 1; i <= data.Rows.Count; i++)
             {
                 XWPFTableCell cell = table.GetRow(i).GetCell(0);
                 paragraph = cell.Paragraphs[0];
@@ -88,62 +99,15 @@ namespace Kaharman
                 run.SetText(data.Rows[i - 1]["name"].ToString());
             }
         }
-        public void ButtomText(string gls, string secret)
-        {
-            //doc.Document.body.sectPr = new CT_SectPr();
-            //CT_SectPr secPr = doc.Document.body.sectPr;
-
-            ////Create header and set its text
-            //CT_Hdr header = new CT_Hdr();
-            ////header.AddNewP().AddNewR().AddNewT().Value = "FileFormat.com";
-            //var headerParagraph = header.AddNewP();
-            //var paragraphRun = headerParagraph.AddNewR();
-            //var paragraphText = paragraphRun.AddNewT();
-            //paragraphText.Value = "FileFormat.com - An Open-source File Format API Guide For Developers";
-            //CT_PPr headerPPR = headerParagraph.AddNewPPr();
-            //CT_Jc headerAlign = headerPPR.AddNewJc();
-            //headerAlign.val = ST_Jc.center;
-
-            ////Create footer and set its text
-            //CT_Ftr footer = new CT_Ftr();
-            //CT_P footerParagraph = footer.AddNewP();
-            //CT_R ctr = footerParagraph.AddNewR();
-            //CT_Text ctt = ctr.AddNewT();
-            //ctt.Value = "CopyRight (C) 2023 Page &[Page] of &[Pages]";
-            //CT_PPr ppr = footerParagraph.AddNewPPr();
-            //CT_Jc align = ppr.AddNewJc();
-            //align.val = ST_Jc.center;
-
-            ////Create the relation of header
-            //XWPFRelation relation1 = XWPFRelation.HEADER;
-            //XWPFHeader myHeader = (XWPFHeader)doc.CreateRelationship(relation1, XWPFFactory.GetInstance(), doc.HeaderList.Count + 1);
-
-            ////Create the relation of footer
-            //XWPFRelation relation2 = XWPFRelation.FOOTER;
-            //XWPFFooter myFooter = (XWPFFooter)doc.CreateRelationship(relation2, XWPFFactory.GetInstance(), doc.FooterList.Count + 1);
-
-            ////Set the header
-            //myHeader.SetHeaderFooter(header);
-            //CT_HdrFtrRef myHeaderRef = secPr.AddNewHeaderReference();
-            //myHeaderRef.type = ST_HdrFtr.@default;
-            //myHeaderRef.id = myHeader.GetXWPFDocument().GetRelationId(myHeader); // = myHeader.GetPackageRelationship().Id;
-
-            ////Set the footer
-            //myFooter.SetHeaderFooter(footer);
-            //CT_HdrFtrRef myFooterRef = secPr.AddNewFooterReference();
-            //myFooterRef.type = ST_HdrFtr.@default;
-            //myFooterRef.id = myFooter.GetXWPFDocument().GetRelationId(myFooter);//myFooter.GetPackageRelationship().Id;
-
-
-        }
         public void SaveFile(string path)
         {
-            doc.Write(File.Create(path));
+            using (FileStream file = File.Create(path))
+                doc.Write(file);
             doc.Close();
         }
         private void CreateProtocol()
         {
-            XWPFParagraph paragraph = doc.CreateParagraph();
+            XWPFParagraph paragraph = doc.Paragraphs[0];
             XWPFRun run = paragraph.CreateRun();
             run.FontSize = 12;
             run.FontFamily = "Times New Roman";
@@ -163,25 +127,19 @@ namespace Kaharman
         {
             XWPFParagraph paragraph = doc.CreateParagraph();
             XWPFRun run = paragraph.CreateRun();
-            run.FontSize = 12;
+            run.FontSize = 10;
             run.FontFamily = "Times New Roman";
-            run.SetText($"Начало : {start.ToString("dd.MM.yyyy")} Окончание : {end.ToString("dd.MM.yyyy")}");
+            run.SetText($"Проведено с {start.ToString("dd MMMM yyyy")} по {end.ToString("dd MMMM yyyy")}");
             paragraph.Alignment = ParagraphAlignment.CENTER;
         }
-        public void EditFile()
-        {            
-            doc = new XWPFDocument(new FileStream(Environment.CurrentDirectory + "/exemple2.docx",FileMode.Open));
+        private void CreateDate(DateTime start)
+        {
             XWPFParagraph paragraph = doc.CreateParagraph();
             XWPFRun run = paragraph.CreateRun();
-            run.FontSize = 12;
+            run.FontSize = 10;
             run.FontFamily = "Times New Roman";
-            run.SetText("sadasdsad");
-
+            run.SetText($"Дата проведения {start.ToString("dd MM yyyy")}");
             paragraph.Alignment = ParagraphAlignment.CENTER;
-            doc.FindAndReplaceText("<Изменить>","afafasdfsdf");
-            doc.Write(new FileStream(Environment.CurrentDirectory + "/exemple3.docx",FileMode.Create));
-            doc.Close();
-            MessageBox.Show("qeqwe");
         }
     }
 }

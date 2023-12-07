@@ -1,6 +1,8 @@
 ﻿using Hasen;
+using Org.BouncyCastle.Bcpg.OpenPgp;
 using System.Diagnostics;
 using System.Text.Json;
+using System.Windows.Forms;
 
 namespace Kaharman
 {
@@ -11,7 +13,9 @@ namespace Kaharman
         Grid Grid { get; set; }
         string ID;
         Label[] placesText = new Label[4];
-        public GridForm(string id, string nameT, string name, Grid grid, AccessSQL AccessSQL)
+        DateTime DateStart;
+        string Judge, Secret;
+        public GridForm(string id, string nameT,string name, DateTime dateStart,string judge, string secret, Grid grid, AccessSQL AccessSQL)
         {
             InitializeComponent();
             Grid = grid;
@@ -35,6 +39,10 @@ namespace Kaharman
             this.ID = id;
             nameTournamet.Text = nameT;
             nameGrid.Text = name;
+            DateStart = dateStart;
+            Judge = judge;
+            Secret = secret;
+            this.dateStart.Text = "Дата проведения " + dateStart.ToString("dd MMMM yyyy");
             placesText[0] = new Label();
             placesText[0].Text = "Первое место";
             placesText[1] = new Label();
@@ -134,7 +142,7 @@ namespace Kaharman
         {
             if (Grid.Items[item1.Point.X].Length == 1)
                 return;
-            int positionY = item1.Point.Y / 2;            
+            int positionY = item1.Point.Y / 2;
             GridItems item2 = Grid.Items[item1.Point.X + 1][positionY];
             Point point1 = new Point(item1.Label.Right, item1.Label.Location.Y + item1.Label.Height / 2);
             Point point4 = new Point(item2.Label.Left, item2.Label.Location.Y + item2.Label.Height / 2);
@@ -162,11 +170,34 @@ namespace Kaharman
             panel1.Location = new Point(this.Width / 2 - panel1.Width / 2, 30);
             nameTournamet.Location = new Point((panel1.Width / 2) - (nameTournamet.Width / 2), 10);
             nameGrid.Location = new Point((panel1.Width / 2) - (nameGrid.Width / 2), 30);
+            dateStart.Location = new Point((panel1.Width / 2) - (dateStart.Width / 2), 50);
             for (int i = 0; i < Grid.Places.Length; i++)
             {
-                int posY = 70 + (i * 35);
+                int posY = 100 + (i * 35);
                 Grid.Places[i].InitPosition(new Point(panel1.Width - Grid.Places[i].Label.Width - 30, posY));
                 placesText[i].Location = new Point(panel1.Width - placesText[i].Width - 180, posY);
+            }
+        }
+        private void протоколСоревнованияToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            SampleWord word = new SampleWord();
+
+            word.CreateProtacolGrid(nameTournamet.Text, DateStart, Judge, Secret);
+
+            word.FillTable(nameGrid.Text, AccessSQL.GetDataTableSQL($"SELECT name FROM Participants WHERE id IN ({string.Join(", ",
+                    AccessSQL.GetDataTableSQL($"SELECT id_participants FROM TournamentGrid WHERE id = {ID}").
+                    Rows[0]["id_participants"].ToString().
+                    Split(';').
+                    Select(s => s.Trim('\"')).ToArray())})"));
+            SaveFileDialog saveFileDialog = new SaveFileDialog();
+            saveFileDialog.Filter = "docx file (*.docx)|*.docx";
+            if (saveFileDialog.ShowDialog() == DialogResult.OK)
+            {
+                word.SaveFile(saveFileDialog.FileName);
+                var proc = new Process();
+                proc.StartInfo.FileName = saveFileDialog.FileName;
+                proc.StartInfo.UseShellExecute = true;
+                proc.Start();
             }
         }
     }
