@@ -66,18 +66,20 @@
             добавитьToolStripMenuItem = new ToolStripMenuItem();
             удалитьToolStripMenuItem1 = new ToolStripMenuItem();
             panel1 = new Panel();
+            panel2 = new Panel();
             contextMenuStrip1.SuspendLayout();
             menuStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)dataGridView1).BeginInit();
             ((System.ComponentModel.ISupportInitialize)dataGridView2).BeginInit();
             contextMenuStrip2.SuspendLayout();
             panel1.SuspendLayout();
+            panel2.SuspendLayout();
             SuspendLayout();
             // 
             // cancelButton
             // 
             cancelButton.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
-            cancelButton.Location = new Point(1237, 435);
+            cancelButton.Location = new Point(589, 427);
             cancelButton.Name = "cancelButton";
             cancelButton.Size = new Size(75, 23);
             cancelButton.TabIndex = 1;
@@ -96,9 +98,8 @@
             // 
             // label2
             // 
-            label2.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
             label2.AutoSize = true;
-            label2.Location = new Point(694, 47);
+            label2.Location = new Point(25, 19);
             label2.Name = "label2";
             label2.Size = new Size(74, 15);
             label2.TabIndex = 3;
@@ -106,9 +107,8 @@
             // 
             // label3
             // 
-            label3.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
             label3.AutoSize = true;
-            label3.Location = new Point(1017, 47);
+            label3.Location = new Point(346, 19);
             label3.Name = "label3";
             label3.Size = new Size(95, 15);
             label3.TabIndex = 4;
@@ -125,9 +125,8 @@
             // 
             // label5
             // 
-            label5.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
             label5.AutoSize = true;
-            label5.Location = new Point(694, 76);
+            label5.Location = new Point(25, 48);
             label5.Name = "label5";
             label5.Size = new Size(88, 15);
             label5.TabIndex = 6;
@@ -135,9 +134,8 @@
             // 
             // secretLable
             // 
-            secretLable.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
             secretLable.AutoSize = true;
-            secretLable.Location = new Point(1017, 76);
+            secretLable.Location = new Point(346, 48);
             secretLable.Name = "secretLable";
             secretLable.Size = new Size(64, 15);
             secretLable.TabIndex = 7;
@@ -145,48 +143,44 @@
             // 
             // name
             // 
-            name.Location = new Point(94, 16);
+            name.Location = new Point(118, 16);
             name.Name = "name";
             name.Size = new Size(521, 23);
             name.TabIndex = 8;
             // 
             // dateTimePicker1
             // 
-            dateTimePicker1.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
-            dateTimePicker1.Location = new Point(788, 44);
+            dateTimePicker1.Location = new Point(119, 16);
             dateTimePicker1.Name = "dateTimePicker1";
-            dateTimePicker1.Size = new Size(199, 23);
+            dateTimePicker1.Size = new Size(203, 23);
             dateTimePicker1.TabIndex = 9;
             // 
             // dateTimePicker2
             // 
-            dateTimePicker2.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
-            dateTimePicker2.Location = new Point(1118, 44);
+            dateTimePicker2.Location = new Point(447, 16);
             dateTimePicker2.Name = "dateTimePicker2";
-            dateTimePicker2.Size = new Size(194, 23);
+            dateTimePicker2.Size = new Size(200, 23);
             dateTimePicker2.TabIndex = 10;
             // 
             // note
             // 
-            note.Location = new Point(94, 45);
+            note.Location = new Point(118, 45);
             note.Name = "note";
             note.Size = new Size(521, 23);
             note.TabIndex = 11;
             // 
             // mainJudge
             // 
-            mainJudge.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
-            mainJudge.Location = new Point(788, 73);
+            mainJudge.Location = new Point(119, 45);
             mainJudge.Name = "mainJudge";
-            mainJudge.Size = new Size(199, 23);
+            mainJudge.Size = new Size(203, 23);
             mainJudge.TabIndex = 12;
             // 
             // secret
             // 
-            secret.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
-            secret.Location = new Point(1118, 73);
+            secret.Location = new Point(447, 45);
             secret.Name = "secret";
-            secret.Size = new Size(194, 23);
+            secret.Size = new Size(200, 23);
             secret.TabIndex = 13;
             // 
             // contextMenuStrip1
@@ -308,18 +302,19 @@
             dataGridView1.AllowUserToDeleteRows = false;
             dataGridView1.AllowUserToResizeColumns = false;
             dataGridView1.AllowUserToResizeRows = false;
+            dataGridView1.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
             dataGridView1.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
             dataGridView1.BackgroundColor = SystemColors.Window;
             dataGridView1.BorderStyle = BorderStyle.Fixed3D;
             dataGridView1.CellBorderStyle = DataGridViewCellBorderStyle.SingleHorizontal;
             dataGridView1.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            dataGridView1.Location = new Point(11, 100);
+            dataGridView1.Location = new Point(11, 107);
             dataGridView1.Name = "dataGridView1";
             dataGridView1.ReadOnly = true;
             dataGridView1.RowHeadersVisible = false;
             dataGridView1.RowTemplate.Height = 25;
             dataGridView1.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-            dataGridView1.Size = new Size(619, 261);
+            dataGridView1.Size = new Size(630, 301);
             dataGridView1.TabIndex = 14;
             dataGridView1.MouseDoubleClick += dataGridView1_MouseDoubleClick;
             // 
@@ -330,19 +325,19 @@
             dataGridView2.AllowUserToDeleteRows = false;
             dataGridView2.AllowUserToResizeColumns = false;
             dataGridView2.AllowUserToResizeRows = false;
-            dataGridView2.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Right;
+            dataGridView2.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
             dataGridView2.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
             dataGridView2.BackgroundColor = SystemColors.Window;
             dataGridView2.BorderStyle = BorderStyle.Fixed3D;
             dataGridView2.CellBorderStyle = DataGridViewCellBorderStyle.SingleHorizontal;
             dataGridView2.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            dataGridView2.Location = new Point(694, 143);
+            dataGridView2.Location = new Point(25, 107);
             dataGridView2.Name = "dataGridView2";
             dataGridView2.ReadOnly = true;
             dataGridView2.RowHeadersVisible = false;
             dataGridView2.RowTemplate.Height = 25;
             dataGridView2.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-            dataGridView2.Size = new Size(618, 261);
+            dataGridView2.Size = new Size(639, 301);
             dataGridView2.TabIndex = 16;
             dataGridView2.CellMouseClick += dataGridView2_CellClick;
             dataGridView2.ColumnHeaderMouseClick += dataGridView2_ColumnHeaderMouseClick;
@@ -362,9 +357,8 @@
             // 
             // label7
             // 
-            label7.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
             label7.AutoSize = true;
-            label7.Location = new Point(694, 125);
+            label7.Location = new Point(25, 83);
             label7.Name = "label7";
             label7.Size = new Size(65, 15);
             label7.TabIndex = 19;
@@ -392,7 +386,6 @@
             // 
             // panel1
             // 
-            panel1.BorderStyle = BorderStyle.FixedSingle;
             panel1.Controls.Add(dataGridView1);
             panel1.Controls.Add(label6);
             panel1.Controls.Add(label4);
@@ -402,30 +395,41 @@
             panel1.Dock = DockStyle.Left;
             panel1.Location = new Point(0, 24);
             panel1.Name = "panel1";
-            panel1.Size = new Size(688, 461);
+            panel1.Size = new Size(669, 461);
             panel1.TabIndex = 20;
+            // 
+            // panel2
+            // 
+            panel2.AutoScroll = true;
+            panel2.Controls.Add(secret);
+            panel2.Controls.Add(dateTimePicker2);
+            panel2.Controls.Add(label3);
+            panel2.Controls.Add(label7);
+            panel2.Controls.Add(secretLable);
+            panel2.Controls.Add(cancelButton);
+            panel2.Controls.Add(dataGridView2);
+            panel2.Controls.Add(label5);
+            panel2.Controls.Add(label2);
+            panel2.Controls.Add(mainJudge);
+            panel2.Controls.Add(dateTimePicker1);
+            panel2.Dock = DockStyle.Right;
+            panel2.Location = new Point(668, 24);
+            panel2.Name = "panel2";
+            panel2.Size = new Size(675, 461);
+            panel2.TabIndex = 21;
             // 
             // TournamentForm
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(1343, 485);
+            Controls.Add(panel2);
             Controls.Add(panel1);
-            Controls.Add(label7);
-            Controls.Add(dataGridView2);
             Controls.Add(menuStrip1);
-            Controls.Add(secret);
-            Controls.Add(mainJudge);
-            Controls.Add(dateTimePicker2);
-            Controls.Add(dateTimePicker1);
-            Controls.Add(secretLable);
-            Controls.Add(label5);
-            Controls.Add(label3);
-            Controls.Add(label2);
-            Controls.Add(cancelButton);
             MainMenuStrip = menuStrip1;
             Name = "TournamentForm";
             Text = "Турнир";
+            Resize += TournamentForm_Resize;
             contextMenuStrip1.ResumeLayout(false);
             menuStrip1.ResumeLayout(false);
             menuStrip1.PerformLayout();
@@ -434,6 +438,8 @@
             contextMenuStrip2.ResumeLayout(false);
             panel1.ResumeLayout(false);
             panel1.PerformLayout();
+            panel2.ResumeLayout(false);
+            panel2.PerformLayout();
             ResumeLayout(false);
             PerformLayout();
         }
@@ -476,5 +482,6 @@
         private ToolStripMenuItem выходToolStripMenuItem;
         private ToolStripMenuItem протоколТурнираToolStripMenuItem;
         private Panel panel1;
+        private Panel panel2;
     }
 }

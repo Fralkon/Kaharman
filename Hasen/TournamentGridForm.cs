@@ -33,6 +33,7 @@ namespace Kaharman
             ParticipantGridTable = new ParticipantDataTable(dataGridView2, AccessSQL);
             ParticipantsTable.FillTable(participantsTable);
             dataGridView1.Columns[0].Visible = false;
+            TournamentGridForm_Resize(null, null);
         }
         private void button1_Click(object sender, EventArgs e)
         {
@@ -133,6 +134,14 @@ namespace Kaharman
         private void button2_Click(object sender, EventArgs e)
         {
             this.Close();
+        }
+
+        private void TournamentGridForm_Resize(object sender, EventArgs e)
+        {
+            panel1.Width = (this.Width / 2) - 36;
+            panel2.Width = (this.Width / 2) - 36;
+            button3.Location = new Point((this.Width / 2) - 28, (this.Height / 2) - 30);
+            button4.Location = new Point((this.Width / 2) - 28, (this.Height / 2) + 30);
         }
     }
 }

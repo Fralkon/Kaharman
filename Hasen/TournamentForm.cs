@@ -55,6 +55,7 @@ namespace Kaharman
         }
         private void InitializeTable()
         {
+            ResizeForm();
             dataGridView1.ContextMenuStrip = contextMenuStrip1;
             dataGridView1.Columns.Add("ID", "ID");
             dataGridView1.Columns.Add("name", "Наименование сетки");
@@ -159,7 +160,7 @@ namespace Kaharman
             grid.FillItems(Participant.GetParticipantsOnAccess(IDPart, AccessSQL));
 
             GridForm tournament = new GridForm(IDGrid, name.Text, nameGrid, grid, AccessSQL);
-            tournament.ShowDialog();
+            tournament.Show();
         }
         private void dataGridView2_ColumnHeaderMouseClick(object sender, DataGridViewCellMouseEventArgs e)
         {
@@ -263,6 +264,17 @@ namespace Kaharman
         private void cancelButton_Click_1(object sender, EventArgs e)
         {
             this.Close();
+        }
+        private void ResizeForm()
+        {
+            panel1.Width = this.Width / 2;
+            panel2.Width = this.Width / 2;
+            //panel2.Location = new Point(this.Width / 2, 0);
+        }
+
+        private void TournamentForm_Resize(object sender, EventArgs e)
+        {
+            ResizeForm();
         }
     }
 }

@@ -45,7 +45,6 @@ namespace Kaharman
             placesText[3].Text = "Третье место";
             foreach (Label label in placesText)
                 panel1.Controls.Add(label);
-
             foreach (GridItems item in Grid.Places)
                 panel1.Controls.Add(item.Label);
             ResizeElements();
@@ -59,6 +58,7 @@ namespace Kaharman
                 {
                     item.Label.Click += Item_Click;
                     panel1.Controls.Add(item.Label);
+                    DrawDashLines(e.Graphics, item);
                     if (item.Status == StatusGrid.win)
                     {
                         DrawLines(e.Graphics, item);
@@ -118,7 +118,7 @@ namespace Kaharman
             Grid.WinPosition(item);
             DrawLines(graphics, item);
         }
-        public void DrawLines(Graphics graphics, GridItems item1)
+        private void DrawLines(Graphics graphics, GridItems item1)
         {
             int positionY = item1.Point.Y / 2;
             GridItems item2 = Grid.Items[item1.Point.X + 1][positionY];
@@ -129,6 +129,24 @@ namespace Kaharman
             graphics.DrawLine(Pens.Red, point1, point2);
             graphics.DrawLine(Pens.Red, point2, point3);
             graphics.DrawLine(Pens.Red, point3, point4);
+        }
+        private void DrawDashLines(Graphics graphics, GridItems item1)
+        {
+            if (Grid.Items[item1.Point.X].Length == 1)
+                return;
+            int positionY = item1.Point.Y / 2;            
+            GridItems item2 = Grid.Items[item1.Point.X + 1][positionY];
+            Point point1 = new Point(item1.Label.Right, item1.Label.Location.Y + item1.Label.Height / 2);
+            Point point4 = new Point(item2.Label.Left, item2.Label.Location.Y + item2.Label.Height / 2);
+            Point point2 = new Point(point1.X + 30, point1.Y);
+            Point point3 = new Point(point2.X, point4.Y);
+
+            Pen pen = new Pen(Color.Gray);
+            pen.DashStyle = System.Drawing.Drawing2D.DashStyle.Dash;
+
+            graphics.DrawLine(pen, point1, point2);
+            graphics.DrawLine(pen, point2, point3);
+            graphics.DrawLine(pen, point3, point4);
         }
         private void TournamentGrid_FormClosing(object sender, FormClosingEventArgs e)
         {
