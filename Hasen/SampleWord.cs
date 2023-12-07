@@ -1,6 +1,8 @@
 ﻿using NPOI.OpenXmlFormats.Wordprocessing;
+using NPOI.Util;
 using NPOI.XWPF.UserModel;
 using System.Data;
+using System.IO;
 
 namespace Kaharman
 {
@@ -165,6 +167,21 @@ namespace Kaharman
             run.FontFamily = "Times New Roman";
             run.SetText($"Начало : {start.ToString("dd.MM.yyyy")} Окончание : {end.ToString("dd.MM.yyyy")}");
             paragraph.Alignment = ParagraphAlignment.CENTER;
+        }
+        public void EditFile()
+        {            
+            doc = new XWPFDocument(new FileStream(Environment.CurrentDirectory + "/exemple2.docx",FileMode.Open));
+            XWPFParagraph paragraph = doc.CreateParagraph();
+            XWPFRun run = paragraph.CreateRun();
+            run.FontSize = 12;
+            run.FontFamily = "Times New Roman";
+            run.SetText("sadasdsad");
+
+            paragraph.Alignment = ParagraphAlignment.CENTER;
+            doc.FindAndReplaceText("<Изменить>","afafasdfsdf");
+            doc.Write(new FileStream(Environment.CurrentDirectory + "/exemple3.docx",FileMode.Create));
+            doc.Close();
+            MessageBox.Show("qeqwe");
         }
     }
 }

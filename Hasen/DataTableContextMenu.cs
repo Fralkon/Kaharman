@@ -244,10 +244,30 @@ namespace Kaharman
         }
         private void AddItemContextMenu(ContextMenuStrip menuStrip, string item)
         {
-            foreach (ToolStripMenuItem toolStrip in menuStrip.Items)
-                if (toolStrip.Text == item)
-                    return;
-            ((ToolStripMenuItem)menuStrip.Items.Add(item)).Checked = true;            
+            System.Collections.IList list = menuStrip.Items;
+            List<string> text = new List<string>();
+            for (int i = 0; i < list.Count; i++)
+            {
+                ToolStripMenuItem? toolStrip = list[i] as ToolStripMenuItem;
+                if (toolStrip != null)
+                {
+                    if (toolStrip.Text == item)
+                        return;
+                    text.Add(toolStrip.Text);
+                }
+            }
+            text.Add(item);
+            text.Sort();
+            for (int i =0; i < text.Count; ++i)
+            {
+                if (text[i] == item)
+                {
+                    ToolStripMenuItem toolStrip = new ToolStripMenuItem();
+                    toolStrip.Text = item;
+                    toolStrip.Checked = true;
+                    menuStrip.Items.Insert(i, toolStrip);
+                }
+            }      
         }
         public DataRow? GetRowToID(string id)
         {

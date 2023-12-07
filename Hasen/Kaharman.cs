@@ -26,6 +26,8 @@ namespace Hasen
             InitializeDataTournament(DataHistoryTournaments);
             tableVisible = TableVisible.Participants;
             UpDateTable();
+            SampleWord sampleWord = new SampleWord();
+            sampleWord.EditFile();
         }
         private void UpDateTable()
         {
