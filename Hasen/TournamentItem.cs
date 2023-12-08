@@ -235,6 +235,7 @@ namespace Kaharman
             Label.AccessibleRole = AccessibleRole.None;
             Label.BorderStyle = BorderStyle.FixedSingle;
             Label.Size = new Size(150, 20);
+            Status = StatusGrid.close;
         }
         public void InitPosition()
         {
@@ -251,7 +252,11 @@ namespace Kaharman
         public void ChangeStatus(StatusGrid status)
         {
             this.Status = status;
-            switch (status)
+            InitColorItem();
+        }
+        public void InitColorItem()
+        {
+            switch (Status)
             {
                 case StatusGrid.init:
                     if (Point.Y % 2 == 0)
@@ -260,13 +265,13 @@ namespace Kaharman
                         Label.BackColor = Color.LightCoral;
                     break;
                 case StatusGrid.close:
-                    Label.BackColor = Color.Black;
+                    Label.BackColor = SystemColors.Control;
                     break;
                 case StatusGrid.win:
-                    Label.BackColor = Color.DarkGreen;
+                    Label.BackColor = GridForm.ColorWonPosition;
                     break;
                 case StatusGrid.lose:
-                    Label.BackColor = Color.Gray;
+                    Label.BackColor = Color.LightGray;
                     break;
             }
         }
@@ -275,7 +280,7 @@ namespace Kaharman
             ID = participant.ID;
             Participant = participant;
             Label.Text = participant.Name;
-            ChangeStatus(status: Status);
+            InitColorItem();
         }
         public void SetParticipant(Participant participant, StatusGrid statusGrid)
         {
@@ -307,6 +312,7 @@ namespace Kaharman
             {
                 case 2:
                     Places[0].SetParticipant(item.Participant, StatusGrid.win);
+                    Items[point.X + 1][point.Y / 2].SetParticipant(item.Participant, StatusGrid.win);
                     Places[1].SetParticipant(Items[point.X][pos].Participant, StatusGrid.win);
                     break;
                 case 3:

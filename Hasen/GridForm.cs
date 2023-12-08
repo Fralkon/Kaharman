@@ -8,6 +8,8 @@ namespace Kaharman
 {
     public partial class GridForm : Form
     {
+        public static Color ColorWonPosition = Color.PaleGreen;
+        public static Pen PenWonPosition = new Pen(Color.Black);
         AccessSQL AccessSQL;
         Graphics graphics;
         Grid Grid { get; set; }
@@ -15,7 +17,7 @@ namespace Kaharman
         Label[] placesText = new Label[4];
         DateTime DateStart;
         string Judge, Secret;
-        public GridForm(string id, string nameT,string name, DateTime dateStart,string judge, string secret, Grid grid, AccessSQL AccessSQL)
+        public GridForm(string id, string nameT, string name, DateTime dateStart, string judge, string secret, Grid grid, AccessSQL AccessSQL)
         {
             InitializeComponent();
             Grid = grid;
@@ -60,16 +62,18 @@ namespace Kaharman
         }
         private void Panel1_Paint(object? sender, PaintEventArgs e)
         {
+            Pen pen = new Pen(Color.Black);
+            pen.DashStyle = System.Drawing.Drawing2D.DashStyle.Dash;
             foreach (GridItems[] Items in Grid.Items)
             {
                 foreach (GridItems item in Items)
                 {
                     item.Label.Click += Item_Click;
                     panel1.Controls.Add(item.Label);
-                    DrawDashLines(e.Graphics, item);
+                    DrawLines(e.Graphics, item, pen);
                     if (item.Status == StatusGrid.win)
                     {
-                        DrawLines(e.Graphics, item);
+                        DrawLines(e.Graphics, item, PenWonPosition);
                     }
                 }
             }
@@ -98,18 +102,9 @@ namespace Kaharman
         private void печатьToolStripMenuItem_Click(object sender, EventArgs e)
         {
             Bitmap bitmap = new Bitmap(panel1.Width, panel1.Height);
+            ChangeColorForPrint();
             panel1.DrawToBitmap(bitmap, new Rectangle(0, 0, panel1.Width, panel1.Height));
-            Graphics g = Graphics.FromImage(bitmap);
-            foreach (GridItems[] Items in Grid.Items)
-            {
-                foreach (GridItems item in Items)
-                {
-                    if (item.Status == StatusGrid.win)
-                    {
-                        DrawLines(g, item);
-                    }
-                }
-            }
+            ChangeColorForVisible();
             SaveFileDialog saveFileDialog = new SaveFileDialog();
             saveFileDialog.Filter = "img file (*.jpeg)|*.jpeg";
             if (saveFileDialog.ShowDialog() == DialogResult.OK)
@@ -121,24 +116,31 @@ namespace Kaharman
                 proc.Start();
             }
         }
+        private void ChangeColorForPrint()
+        {
+            Color color = Color.White;
+            this.panel1.BackColor = color;
+            foreach (var items in Grid.Items)
+                foreach (var item in items)
+                    item.Label.BackColor = color;
+            foreach (var item in Grid.Places)
+                item.Label.BackColor = color;
+        }
+        private void ChangeColorForVisible()
+        {
+            this.panel1.BackColor = this.BackColor;
+            foreach (var items in Grid.Items)
+                foreach (var item in items)
+                    item.InitColorItem();
+            foreach (var item in Grid.Places)
+                item.InitColorItem();
+        }
         private void WonPosition(GridItems item)
         {
             Grid.WinPosition(item);
-            DrawLines(graphics, item);
+            DrawLines(graphics, item, PenWonPosition);
         }
-        private void DrawLines(Graphics graphics, GridItems item1)
-        {
-            int positionY = item1.Point.Y / 2;
-            GridItems item2 = Grid.Items[item1.Point.X + 1][positionY];
-            Point point1 = new Point(item1.Label.Right, item1.Label.Location.Y + item1.Label.Height / 2);
-            Point point4 = new Point(item2.Label.Left, item2.Label.Location.Y + item2.Label.Height / 2);
-            Point point2 = new Point(point1.X + 30, point1.Y);
-            Point point3 = new Point(point2.X, point4.Y);
-            graphics.DrawLine(Pens.Red, point1, point2);
-            graphics.DrawLine(Pens.Red, point2, point3);
-            graphics.DrawLine(Pens.Red, point3, point4);
-        }
-        private void DrawDashLines(Graphics graphics, GridItems item1)
+        private void DrawLines(Graphics graphics, GridItems item1, Pen pen)
         {
             if (Grid.Items[item1.Point.X].Length == 1)
                 return;
@@ -148,10 +150,6 @@ namespace Kaharman
             Point point4 = new Point(item2.Label.Left, item2.Label.Location.Y + item2.Label.Height / 2);
             Point point2 = new Point(point1.X + 30, point1.Y);
             Point point3 = new Point(point2.X, point4.Y);
-
-            Pen pen = new Pen(Color.Gray);
-            pen.DashStyle = System.Drawing.Drawing2D.DashStyle.Dash;
-
             graphics.DrawLine(pen, point1, point2);
             graphics.DrawLine(pen, point2, point3);
             graphics.DrawLine(pen, point3, point4);
