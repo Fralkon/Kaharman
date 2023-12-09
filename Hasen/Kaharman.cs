@@ -1,6 +1,10 @@
 using Kaharman;
+using PdfSharp.Drawing;
+using PdfSharp.Pdf;
+using PdfSharp;
 using System.Data;
-using System.Globalization;
+using System.Diagnostics;
+using System.Drawing.Imaging;
 
 namespace Hasen
 {
@@ -26,7 +30,6 @@ namespace Hasen
             InitializeDataTournament(DataHistoryTournaments);
             tableVisible = TableVisible.Participants;
             UpDateTable();
-            SampleWord sampleWord = new SampleWord();
         }
         private void UpDateTable()
         {

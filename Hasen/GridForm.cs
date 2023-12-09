@@ -1,8 +1,6 @@
 ﻿using Hasen;
-using Org.BouncyCastle.Bcpg.OpenPgp;
 using System.Diagnostics;
 using System.Text.Json;
-using System.Windows.Forms;
 
 namespace Kaharman
 {
