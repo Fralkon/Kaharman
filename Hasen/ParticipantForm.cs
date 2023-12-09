@@ -6,24 +6,21 @@ namespace Hasen
     {
         public static float ValyeDayYear = 365.2425f;
         string? ID;
-        AccessSQL AccessSQL;
         ToolTip ToolTip = new ToolTip();
-        public ParticipantForm(AccessSQL accessSQL)
+        public ParticipantForm()
         {
             InitializeComponent();
             dateOfBirth.CloseUp += DateOfBirth_CloseUp;
-            AccessSQL = accessSQL;
             gender.Items.Add("муж");
             gender.Items.Add("жен");
         }
-        public ParticipantForm(string iD, AccessSQL accessSQL)
+        public ParticipantForm(string iD)
         {
             InitializeComponent();
             dateOfBirth.CloseUp += DateOfBirth_CloseUp;
             gender.Items.Add("муж");
             gender.Items.Add("жен");
             ID = iD;
-            AccessSQL = accessSQL;
             using (DataTable dt = AccessSQL.GetDataTableSQL("SELECT * FROM Participants WHERE id = " + iD))
             {
                 if (dt.Rows.Count != 1)

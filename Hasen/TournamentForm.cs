@@ -7,29 +7,25 @@ namespace Kaharman
 {
     public partial class TournamentForm : Form
     {
-        AccessSQL AccessSQL;
         string? ID;
         ParticipantDataTable ParticipantsTable;
-        public TournamentForm(DataTableContextMenu participantsTable, AccessSQL accessSQL)
+        public TournamentForm(DataTableContextMenu participantsTable)
         {
             InitializeComponent();
-            AccessSQL = accessSQL;
-            ParticipantsTable = new ParticipantDataTable(dataGridView2, AccessSQL);
+            ParticipantsTable = new ParticipantDataTable(dataGridView2);
             ParticipantsTable.FillTable(participantsTable);
             InitializeTable();
         }
-        public TournamentForm(AccessSQL accessSQL)
+        public TournamentForm()
         {
             InitializeComponent();
-            AccessSQL = accessSQL;
-            ParticipantsTable = new ParticipantDataTable(dataGridView2, AccessSQL);
+            ParticipantsTable = new ParticipantDataTable(dataGridView2);
             InitializeTable();
         }
-        public TournamentForm(string ID, AccessSQL accessSQL)
+        public TournamentForm(string ID)
         {
             InitializeComponent();
-            AccessSQL = accessSQL;
-            ParticipantsTable = new ParticipantDataTable(dataGridView2, AccessSQL);
+            ParticipantsTable = new ParticipantDataTable(dataGridView2);
             using (DataTable data = AccessSQL.GetDataTableSQL("SELECT * FROM Tournament WHERE id = " + ID))
             {
                 if (data.Rows.Count == 1)
@@ -108,7 +104,7 @@ namespace Kaharman
                 AccessSQL.SendSQL($"INSERT INTO Tournament (name,[start_date],[end_date],note_tournament,main_judge,secret,id_participants) VALUES ('{name.Text}','{dateTimePicker1.Value.ToString("dd.MM.yyyy")}','{dateTimePicker2.Value.ToString("dd.MM.yyyy")}','{note.Text}','{mainJudge.Text}','{secret.Text}','{ParticipantsTable.GetIDsPartString()}')");
                 ID = AccessSQL.GetIDInsert().ToString();
             }
-            TournamentGridForm tournamentGrid = new TournamentGridForm(ID, name.Text,mainJudge.Text,secret.Text, dateTimePicker1.Value, ParticipantsTable, StatusFormTournamentGrid.Create, AccessSQL);
+            TournamentGridForm tournamentGrid = new TournamentGridForm(ID, name.Text,mainJudge.Text,secret.Text, dateTimePicker1.Value, ParticipantsTable, StatusFormTournamentGrid.Create);
             tournamentGrid.ShowDialog();
             UpDataGrid();
         }
@@ -157,9 +153,9 @@ namespace Kaharman
                     return;
                 }
             }
-            grid.FillItems(Participant.GetParticipantsOnAccess(IDPart, AccessSQL));
+            grid.FillItems(Participant.GetParticipantsOnAccess(IDPart));
 
-            GridForm tournament = new GridForm(IDGrid, name.Text, nameGrid,dateTime,mainJudge.Text,secret.Text, grid, AccessSQL);
+            GridForm tournament = new GridForm(IDGrid, name.Text, nameGrid,dateTime,mainJudge.Text,secret.Text, grid);
             tournament.Show();
         }
         private void dataGridView2_ColumnHeaderMouseClick(object sender, DataGridViewCellMouseEventArgs e)
@@ -193,7 +189,7 @@ namespace Kaharman
         }
         private void создатьToolStripMenuItem1_Click(object sender, EventArgs e)
         {
-            ParticipantForm participants = new ParticipantForm(AccessSQL);
+            ParticipantForm participants = new ParticipantForm();
             participants.ShowDialog();
         }
         private void добавитьToolStripMenuItem1_Click(object sender, EventArgs e)
@@ -226,7 +222,7 @@ namespace Kaharman
         }
         private void dataGridView2_MouseDoubleClick(object sender, MouseEventArgs e)
         {
-            ParticipantForm participants = new ParticipantForm(dataGridView2.SelectedRows[0].Cells["ID"].Value.ToString(), AccessSQL);
+            ParticipantForm participants = new ParticipantForm(dataGridView2.SelectedRows[0].Cells["ID"].Value.ToString());
             this.Hide();
             participants.ShowDialog();
             this.Show();

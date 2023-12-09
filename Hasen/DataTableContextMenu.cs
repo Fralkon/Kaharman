@@ -326,14 +326,11 @@ namespace Kaharman
         }
     }
     public class ParticipantDataTable : DataTableContextMenu {
-        AccessSQL AccessSQL;
-        public ParticipantDataTable(AccessSQL accessSQL) : base() {
-            AccessSQL = accessSQL;
+        public ParticipantDataTable() : base() {
             Initialize();
         }
-        public ParticipantDataTable(DataGridView dataGridView, AccessSQL accessSQL) : base()
+        public ParticipantDataTable(DataGridView dataGridView) : base()
         {
-            AccessSQL = accessSQL;
             Initialize();
             dataGridView.DataSource = DataView;
             dataGridView.MouseClick += MouseClick;

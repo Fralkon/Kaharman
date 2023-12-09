@@ -1,10 +1,9 @@
 using Kaharman;
-using PdfSharp.Drawing;
-using PdfSharp.Pdf;
-using PdfSharp;
+using System.Collections.Generic;
 using System.Data;
 using System.Diagnostics;
 using System.Drawing.Imaging;
+using System.Windows.Forms.Design;
 
 namespace Hasen
 {
@@ -17,16 +16,14 @@ namespace Hasen
     public partial class Kaharman : Form
     {
         TableVisible tableVisible;
-        AccessSQL AccessSQL { get; set; }
         ParticipantDataTable ParticipantsTable;
         ParticipantDataTable DataParticipantsTable;
         DataTableContextMenu DataHistoryTournaments = new DataTableContextMenu();
         public Kaharman()
         {
             InitializeComponent();
-            AccessSQL = new AccessSQL();
-            ParticipantsTable = new ParticipantDataTable(dataGridView1, AccessSQL);
-            DataParticipantsTable = new ParticipantDataTable(AccessSQL);
+            ParticipantsTable = new ParticipantDataTable(dataGridView1);
+            DataParticipantsTable = new ParticipantDataTable();
             InitializeDataTournament(DataHistoryTournaments);
             tableVisible = TableVisible.Participants;
             UpDateTable();
@@ -137,7 +134,7 @@ namespace Hasen
         }
         private void ñîçäàòüToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            TournamentForm createTournament = new TournamentForm(ParticipantsTable, AccessSQL);
+            TournamentForm createTournament = new TournamentForm(ParticipantsTable);
             createTournament.ShowDialog();
         }
         private void èñòîðèÿÒóðíèðîâToolStripMenuItem_Click(object sender, EventArgs e)
@@ -159,7 +156,7 @@ namespace Hasen
             }
             if (tableVisible == TableVisible.HistoryTournaments)
             {
-                TournamentForm createTournament = new TournamentForm(dataGridView1.SelectedRows[0].Cells["ID"].Value.ToString(), AccessSQL);
+                TournamentForm createTournament = new TournamentForm(dataGridView1.SelectedRows[0].Cells["ID"].Value.ToString());
                 this.Hide();
                 createTournament.ShowDialog();
                 this.Show();
@@ -167,7 +164,7 @@ namespace Hasen
             }
             else if (tableVisible == TableVisible.Participants || tableVisible == TableVisible.DataParticipants)
             {
-                ParticipantForm participants = new ParticipantForm(dataGridView1.SelectedRows[0].Cells["ID"].Value.ToString(), AccessSQL);
+                ParticipantForm participants = new ParticipantForm(dataGridView1.SelectedRows[0].Cells["ID"].Value.ToString());
                 this.Hide();
                 participants.ShowDialog();
                 this.Show();
@@ -199,7 +196,7 @@ namespace Hasen
         }
         private void ñîçäàòüToolStripMenuItem1_Click(object sender, EventArgs e)
         {
-            ParticipantForm participants = new ParticipantForm(AccessSQL);
+            ParticipantForm participants = new ParticipantForm();
             this.Hide();
             participants.ShowDialog();
             this.Show();

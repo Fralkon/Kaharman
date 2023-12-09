@@ -15,25 +15,23 @@ namespace Kaharman
     }
     public partial class TournamentGridForm : Form
     {
-        AccessSQL AccessSQL;
         ParticipantDataTable ParticipantsTable;
         ParticipantDataTable ParticipantGridTable;
         string IdTournament;
         string? IdGrid;
         StatusFormTournamentGrid StatusForm;
         string Judge, Secret;
-        public TournamentGridForm(string idTournament, string nameTournament, string judge, string secret, DateTime dateTime, ParticipantDataTable participantsTable, StatusFormTournamentGrid statusForm, AccessSQL accessSQL)
+        public TournamentGridForm(string idTournament, string nameTournament, string judge, string secret, DateTime dateTime, ParticipantDataTable participantsTable, StatusFormTournamentGrid statusForm)
         {
             InitializeComponent();
             Judge = judge;
             Secret = secret;
-            AccessSQL = accessSQL;
             StatusForm = statusForm;
             dateTimePicker1.Value = dateTime;
             IdTournament = idTournament;
             textBox2.Text = nameTournament;
-            ParticipantsTable = new ParticipantDataTable(dataGridView1, AccessSQL);
-            ParticipantGridTable = new ParticipantDataTable(dataGridView2, AccessSQL);
+            ParticipantsTable = new ParticipantDataTable(dataGridView1);
+            ParticipantGridTable = new ParticipantDataTable(dataGridView2);
             ParticipantsTable.FillTable(participantsTable);
             dataGridView1.Columns[0].Visible = false;
             TournamentGridForm_Resize(null, null);
@@ -91,7 +89,7 @@ namespace Kaharman
                 IdGrid = AccessSQL.GetIDInsert().ToString();
             }
             else if (StatusForm == StatusFormTournamentGrid.Visit) { }
-            GridForm tournament = new GridForm(IdGrid, textBox2.Text, nameTextBox.Text, dateTimePicker1.Value,Secret,Judge, grid, AccessSQL);
+            GridForm tournament = new GridForm(IdGrid, textBox2.Text, nameTextBox.Text, dateTimePicker1.Value,Secret,Judge, grid);
             tournament.ShowDialog();
             this.Close();
         }

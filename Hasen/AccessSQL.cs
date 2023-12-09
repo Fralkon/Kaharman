@@ -17,11 +17,11 @@ namespace Hasen
 
         }
     }
-    public class AccessSQL
+    public static class AccessSQL
     {
-        string ConntectionString; 
-        OleDbConnection connection;
-        public AccessSQL()
+        static string ConntectionString; 
+        static OleDbConnection connection;
+        static AccessSQL()
         {
             try
             {
@@ -35,7 +35,7 @@ namespace Hasen
                 throw new MySQLExeption("Ошибка базы");
             }
         }
-        public DataTable GetDataTableSQL(string SQL)
+        public static DataTable GetDataTableSQL(string SQL)
         {
             lock (connection)
             {
@@ -47,7 +47,7 @@ namespace Hasen
                 return dt;
             }
         }
-        public void FillDataTableSQL(string SQL, DataTable dataTable)
+        public static void FillDataTableSQL(string SQL, DataTable dataTable)
         {
             lock (connection)
             {
@@ -68,7 +68,7 @@ namespace Hasen
                 }
             }
         }
-        public void SendSQL(string SQL)
+        public static void SendSQL(string SQL)
         {
             lock (connection)
             {
@@ -76,7 +76,7 @@ namespace Hasen
                 sqlCom.ExecuteNonQuery();
             }
         }
-        public int GetIDInsert()
+        public static int GetIDInsert()
         {
             lock (connection)
             {
@@ -85,14 +85,14 @@ namespace Hasen
                 return ID;
             }
         }
-        public int CheckParticipant(string Name)
+        public static int CheckParticipant(string Name)
         {
             DataTable data = GetDataTableSQL($"SELECT id FROM Participants WHERE name = '{Name}'");
             if (data.Rows.Count != 0)
                 return int.Parse(data.Rows[0]["id"].ToString());
             return -1;
         }
-        public void UpDateParticipant(Participant participant)
+        public static void UpDateParticipant(Participant participant)
         {
             int ID = CheckParticipant(participant.Name);
             if (ID == -1)
@@ -103,7 +103,7 @@ namespace Hasen
                 SendSQL($"UPDATE Participants SET weight = '{participant.Weight}', qualification = '{participant.Gualiti}', city = '{participant.City}', trainer = '{participant.Trainer}' WHERE id = {participant.ID}");
             }
         }
-        public void AddParticipant(Participant participant)
+        public static void AddParticipant(Participant participant)
         {
             SendSQL($"INSERT INTO Participants (name,gender,[date_of_birth],weight,qualification,city,trainer) " +
             $"VALUES ('{participant.Name}','{participant.Gender}','{participant.DayOfBirth.ToString("dd.MM.yyyy")}','{participant.Weight}','{participant.Gualiti}','{participant.City}','{participant.Trainer}')");

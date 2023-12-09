@@ -4,22 +4,79 @@ using System.Collections.Generic;
 using System.Data;
 using System.Drawing;
 using System.Globalization;
+using System.Linq;
 using System.Text.Json.Serialization;
 using System.Windows.Forms;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 
 namespace Kaharman
 {
-    public class Test
+    public class FillRandomParticipant
     {
-        public string name { get; }
-        public int z { get; set; }
-        public Test(string name,int z)
+        class CountTrainerPart : IComparable<CountTrainerPart>
         {
-            this.name = name;
-            this.z = z;
+            public List<Participant> Participants = new List<Participant>();
+            public string NameTrainer;
+            public CountTrainerPart(string nameTrainer, Participant id)
+            {
+                NameTrainer = nameTrainer;
+                Participants.Add(id);
+            }
+            public int CompareTo(CountTrainerPart? other)
+            {
+                if(other == null) return 0;
+                if(other.Participants.Count == this.Participants.Count) return 0;
+                else return other.Participants.Count - this.Participants.Count;
+            }
         }
-  
+        List<CountTrainerPart> countTrainerPart = new List<CountTrainerPart> ();
+        public FillRandomParticipant(List<Participant> Participants)
+        {
+            foreach (Participant participant in Participants)
+            {
+                CountTrainerPart? i = countTrainerPart.Find(item => participant.Trainer == item.NameTrainer);
+                if (i != null)
+                    i.Participants.Add(participant);
+                else
+                    countTrainerPart.Add(new CountTrainerPart(participant.Trainer, participant));
+            }
+            countTrainerPart.Sort();
+            foreach (CountTrainerPart participant in countTrainerPart)
+                MessageBox.Show(participant.Participants.Count.ToString());
+        }
+        public (Participant?, Participant?) GetPairParticipants()
+        {
+            Random random = new Random(DateTime.Now.Microsecond);
+
+            if (countTrainerPart.Count == 0)
+                return (null, null);
+            
+            CountTrainerPart cTP = countTrainerPart.First();
+            Participant item1 = cTP.Participants[random.Next(0, cTP.Participants.Count)];
+            cTP.Participants.Remove(item1);
+            if (cTP.Participants.Count == 0)
+                countTrainerPart.Remove(cTP);
+
+            CountTrainerPart cTP2 = countTrainerPart.Last();
+            Participant item2 = cTP2.Participants[random.Next(0, cTP2.Participants.Count)];
+            cTP2.Participants.Remove(item2);
+            if (cTP2.Participants.Count == 0)
+                countTrainerPart.Remove(cTP2);
+
+            return (item1, item2);
+        }
+        public Participant GetParticipant()
+        {
+            Random random = new Random(DateTime.Now.Microsecond);
+
+            CountTrainerPart cTP = countTrainerPart.First();
+            Participant item1 = cTP.Participants[random.Next(0, cTP.Participants.Count)];
+            cTP.Participants.Remove(item1);
+            if (cTP.Participants.Count == 0)
+                countTrainerPart.Remove(cTP);
+
+            return item1;
+        }
     }
     public enum StatusGrid { 
         init,
@@ -179,32 +236,18 @@ namespace Kaharman
                     outputList.Add(new Participant(row));
             return outputList;
         }
-        public static List<Participant> GetParticipantsOnAccess(List<string> ids,AccessSQL accessSQL)
+        public static List<Participant> GetParticipantsOnAccess(List<string> ids)
         {
             List<Participant> list = new List<Participant>();
             if (ids.Count > 0)
             {
-                using (DataTable data = accessSQL.GetDataTableSQL($"SELECT * FROM Participants WHERE id IN ({string.Join(", ", ids)})"))
+                using (DataTable data = AccessSQL.GetDataTableSQL($"SELECT * FROM Participants WHERE id IN ({string.Join(", ", ids)})"))
                 {
                     foreach (DataRow row in data.Rows)
                         list.Add(new Participant(row,true));
                 }
             }
             return list;
-        }
-        public static (Participant,Participant) GetPairParticipants(List<Participant> list)
-        {
-            Participant item1 = list[0];
-            Participant item2 = list[1];
-            list.Remove(item1);
-            list.Remove(item2);
-            return (item1, item2);
-        }
-        public static Participant GetParticipants(List<Participant> list)
-        {
-            Participant item1 = list[0];
-            list.Remove(item1);
-            return item1;
         }
     }
     public class GridItems
@@ -241,7 +284,7 @@ namespace Kaharman
         {
             if (Point != null)
             {
-                Label.Location = new Point(40 + (Point.X * 225), 50 + 10 * ((int)Math.Pow(2, Point.X + 1)) + (10 * ((int)Math.Pow(2, Point.X + 2))) * Point.Y);
+                Label.Location = new Point(40 + (Point.X * 225), 100 + 10 * ((int)Math.Pow(2, Point.X + 1)) + (10 * ((int)Math.Pow(2, Point.X + 2))) * Point.Y);
                 Label.Tag = Point;
             }
         }
@@ -259,10 +302,13 @@ namespace Kaharman
             switch (Status)
             {
                 case StatusGrid.init:
-                    if (Point.Y % 2 == 0)
-                        Label.BackColor = Color.DodgerBlue;
+                    if (Point != null)
+                        if (Point.Y % 2 == 0)
+                            Label.BackColor = Color.DodgerBlue;
+                        else
+                            Label.BackColor = Color.LightCoral;
                     else
-                        Label.BackColor = Color.LightCoral;
+                        Label.BackColor = Color.LightGray;
                     break;
                 case StatusGrid.close:
                     Label.BackColor = SystemColors.Control;
@@ -316,7 +362,7 @@ namespace Kaharman
                     Places[1].SetParticipant(Items[point.X][pos].Participant, StatusGrid.win);
                     break;
                 case 3:
-                    if (Places[2].Status == StatusGrid.init)
+                    if (Places[2].Status == StatusGrid.close || Places[2].Status == StatusGrid.init)
                         Places[2].SetParticipant(item.Participant, StatusGrid.win);
                     else
                         Places[3].SetParticipant(item.Participant, StatusGrid.win);
@@ -349,143 +395,21 @@ namespace Kaharman
         }
         public void FillNewGridItems(List<Participant> participants)
         {
+            FillRandomParticipant fillRandomParticipant = new FillRandomParticipant(participants);
             int colPart = participants.Count;
             int firstLap = (colPart - (Type / 2)) * 2;
             int secondLap = colPart - firstLap;
             for (int i = 0; i < firstLap; i += 2)
             {
-                var pair = Participant.GetPairParticipants(participants);
+                var pair = fillRandomParticipant.GetPairParticipants();
                 Items[0][i].SetParticipant(pair.Item1, StatusGrid.init);
                 Items[0][i + 1].SetParticipant(pair.Item2, StatusGrid.init);
             }
             int secondLapCount = Items[1].Length;
             for (int i = 1; i <= secondLap; i++)
             {
-                Items[1][secondLapCount - i].SetParticipant(Participant.GetParticipants(participants), StatusGrid.init);
+                Items[1][secondLapCount - i].SetParticipant(fillRandomParticipant.GetParticipant(), StatusGrid.init);
             }
         }
     }
-    //public class GridItemText : Label
-    //{
-    //    public Participant? Participant { get; set; }
-    //    public Point TablePoint { get; }
-    //    public StatusGrid Status { get; private set; }
-    //    public GridItemText(Participant? participan, Point point, StatusGrid status = StatusGrid.close)
-    //    {
-    //        this.Location = new Point(40 + (point.X * 225),50 + 10 * ((int)Math.Pow(2, point.X + 1)) + (10 * ((int)Math.Pow(2, point.X + 2))) * point.Y);
-    //        this.Participant = participan;
-    //        this.TablePoint = point;
-    //        ChangeStatus(status);
-    //        this.Name = point.ToString();
-    //        this.AccessibleRole = AccessibleRole.None;
-    //        this.BorderStyle = BorderStyle.FixedSingle;
-    //        this.Size = new Size(150, 20);
-    //        if (participan != null)
-    //            this.Text = participan.Name;
-    //        else
-    //            this.Text = "";
-    //        this.TabStop = false;
-    //    }
-    //    public void ChangeStatus(StatusGrid status)
-    //    {
-    //        this.Status = status;
-    //        switch(status)
-    //        {
-    //            case StatusGrid.win:
-    //                {
-    //                    this.BackColor = Color.Green;
-    //                    return;
-    //                }
-    //            case StatusGrid.lose:
-    //                {
-    //                    this.BackColor = Color.Red; 
-    //                    return;
-    //                }
-    //        }
-    //    }
-    //}
-    //public class GridItems
-    //{
-    //    public Point Point { get; set; }
-    //    public int ID { get;set; }
-    //    public StatusGrid Status { get; set; }
-    //    public GridItems(Point point, int iD = -1, StatusGrid status = StatusGrid.close)
-    //    {
-    //        this.Point = point;
-    //        ID = iD;
-    //        Status = status;
-    //    }
-    //    public GridItems()
-    //    {
-    //    }
-    //    [JsonIgnore]
-    //    public GridItemText? ItemText { get; set; }
-    //    public void CreateItemTextBox()
-    //    {
-    //        ItemText = new GridItemText(null, Point);
-    //    }
-    //    public void CreateItemTextBox(Participant participant, StatusGrid status)
-    //    {
-    //        ItemText = new GridItemText(participant, Point, status);
-    //    }
-    //    public void ChangeStatus(StatusGrid status)
-    //    {
-    //        this.Status = status;
-    //        if(ItemText != null)
-    //        {
-    //            ItemText.ChangeStatus(status);
-    //        }
-    //    }
-    //    public void SetParticipant(Participant participant)
-    //    {
-    //        ChangeStatus(StatusGrid.init);
-    //        ID = participant.ID;
-    //        ItemText.Participant = participant;
-    //        this.ItemText.Text = participant.Name;
-    //    }
-    //}
-    //public class Grid
-    //{
-    //    public int Type { get; set; }
-    //    public List<List<GridItems>> Items { get; set; } = new List<List<GridItems>>();
-    //    public GridItems First { get; set; } = new GridItems();
-    //    public GridItems Second { get; set; } = new GridItems();
-    //    public GridItems[] Thirt { get; set; } = new GridItems[2];
-    //    public Grid()
-    //    {
-
-    //    }
-    //    public void FillItems(List<Participant> participants)
-    //    {
-    //        foreach(List<GridItems> gridItems in Items) {
-    //            foreach (GridItems gridItem in gridItems)
-    //            {
-    //                if (gridItem.ID == -1)
-    //                    gridItem.CreateItemTextBox();
-    //                else
-    //                    gridItem.CreateItemTextBox(participants.Find(item => item.ID == gridItem.ID),gridItem.Status);
-    //            }
-    //        }
-    //    }
-    //    public void FillNewGridItems(List<Participant> participants)
-    //    {
-    //        foreach (List<GridItems> gridItems in Items)
-    //            foreach (GridItems gridItem in gridItems)
-    //                    gridItem.CreateItemTextBox();
-    //        int colPart = participants.Count;
-    //        int firstLap = (colPart - (Type / 2)) * 2;
-    //        int secondLap = colPart - firstLap;
-    //        for (int i = 0; i < firstLap; i+=2) 
-    //        {
-    //            var pair = Participant.GetPairParticipants(participants);
-    //            Items[0][i].SetParticipant(pair.Item1);
-    //            Items[0][i+1].SetParticipant(pair.Item2);
-    //        }
-    //        int secondLapCount = Items[1].Count;
-    //        for(int i = 1; i <= secondLap; i++)
-    //        {
-    //            Items[1][secondLapCount - i].SetParticipant(Participant.GetParticipants(participants));
-    //        }
-    //    }
-    //}
 }

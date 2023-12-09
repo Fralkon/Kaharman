@@ -57,27 +57,30 @@
             // dateStart
             // 
             dateStart.AutoSize = true;
-            dateStart.Location = new Point(550, 40);
+            dateStart.Font = new Font("Segoe UI", 9.75F, FontStyle.Regular, GraphicsUnit.Point);
+            dateStart.Location = new Point(550, 60);
             dateStart.Name = "dateStart";
-            dateStart.Size = new Size(38, 15);
+            dateStart.Size = new Size(43, 17);
             dateStart.TabIndex = 5;
             dateStart.Text = "label2";
             // 
             // nameTournamet
             // 
             nameTournamet.AutoSize = true;
+            nameTournamet.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point);
             nameTournamet.Location = new Point(550, 10);
             nameTournamet.Name = "nameTournamet";
-            nameTournamet.Size = new Size(38, 15);
+            nameTournamet.Size = new Size(52, 21);
             nameTournamet.TabIndex = 4;
             nameTournamet.Text = "label2";
             // 
             // nameGrid
             // 
             nameGrid.AutoSize = true;
-            nameGrid.Location = new Point(550, 25);
+            nameGrid.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point);
+            nameGrid.Location = new Point(550, 34);
             nameGrid.Name = "nameGrid";
-            nameGrid.Size = new Size(38, 15);
+            nameGrid.Size = new Size(52, 21);
             nameGrid.TabIndex = 3;
             nameGrid.Text = "label2";
             // 

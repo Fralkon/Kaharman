@@ -8,14 +8,13 @@ namespace Kaharman
     {
         public static Color ColorWonPosition = Color.PaleGreen;
         public static Pen PenWonPosition = new Pen(Color.Black);
-        AccessSQL AccessSQL;
         Graphics graphics;
         Grid Grid { get; set; }
         string ID;
         Label[] placesText = new Label[4];
         DateTime DateStart;
         string Judge, Secret;
-        public GridForm(string id, string nameT, string name, DateTime dateStart, string judge, string secret, Grid grid, AccessSQL AccessSQL)
+        public GridForm(string id, string nameT, string name, DateTime dateStart, string judge, string secret, Grid grid)
         {
             InitializeComponent();
             Grid = grid;
@@ -28,7 +27,7 @@ namespace Kaharman
                     panel1.Size = new Size(1150, 500);
                     break;
                 case 16:
-                    panel1.Size = new Size(1500, 750);
+                    panel1.Size = new Size(1500, 800);
                     break;
                 case 32:
                     panel1.Size = new Size(1655, 1400);
@@ -55,8 +54,7 @@ namespace Kaharman
                 panel1.Controls.Add(label);
             foreach (GridItems item in Grid.Places)
                 panel1.Controls.Add(item.Label);
-            ResizeElements();
-            this.AccessSQL = AccessSQL;
+            ElementsLocation();
         }
         private void Panel1_Paint(object? sender, PaintEventArgs e)
         {
@@ -159,9 +157,8 @@ namespace Kaharman
         }
         private void GridForm_Resize(object sender, EventArgs e)
         {
-            ResizeElements();
         }
-        private void ResizeElements()
+        private void ElementsLocation()
         {
             panel1.Location = new Point(this.Width / 2 - panel1.Width / 2, 30);
             nameTournamet.Location = new Point((panel1.Width / 2) - (nameTournamet.Width / 2), 10);
@@ -169,7 +166,7 @@ namespace Kaharman
             dateStart.Location = new Point((panel1.Width / 2) - (dateStart.Width / 2), 50);
             for (int i = 0; i < Grid.Places.Length; i++)
             {
-                int posY = 100 + (i * 35);
+                int posY = 120 + (i * 35);
                 Grid.Places[i].InitPosition(new Point(panel1.Width - Grid.Places[i].Label.Width - 30, posY));
                 placesText[i].Location = new Point(panel1.Width - placesText[i].Width - 180, posY);
             }
