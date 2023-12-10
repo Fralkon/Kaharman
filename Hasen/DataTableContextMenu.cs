@@ -205,7 +205,7 @@ namespace Kaharman
             foreach (DataRow row in table.Rows)
             {
                 var objects = row.ItemArray;
-                objects[3] = (int)((int)(DateTime.Now - DateTime.Parse(row["date_of_birth"].ToString())).TotalDays / ParticipantForm.ValyeDayYear);
+                objects[3] = (int)((int)(DateTime.Now - DateTime.Parse(row["date_of_birth"].ToString())).TotalDays / Participant.ValyeDayYear);
                 AddRow(objects);
             }
         }

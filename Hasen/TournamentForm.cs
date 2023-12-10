@@ -135,7 +135,7 @@ namespace Kaharman
             DateTime dateTime;
             string nameGrid;
             List<string> IDPart = new List<string>();
-            StatusGrid statusGrid;
+            StatusGridItem statusGrid;
             using (DataTable data = AccessSQL.GetDataTableSQL($"SELECT * FROM TournamentGrid WHERE id = {IDGrid}"))
             {
                 if (data.Rows.Count == 1)
@@ -145,7 +145,7 @@ namespace Kaharman
                     nameGrid = row["name"].ToString();
                     IDPart.AddRange(row["id_participants"].ToString().Split(";").Select(item => item.Trim('"')));
                     grid = JsonSerializer.Deserialize<Grid>(row["grid"].ToString());
-                    statusGrid = (StatusGrid)int.Parse(row["status"].ToString());
+                    statusGrid = (StatusGridItem)int.Parse(row["status"].ToString());
                 }
                 else
                 {

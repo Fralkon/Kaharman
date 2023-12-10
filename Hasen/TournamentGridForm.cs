@@ -48,21 +48,25 @@ namespace Kaharman
             {
                 grid.Type = 4;
                 grid.Items = new GridItems[3][];
+                grid.StatusGrid = "1/4";
             }
             else if (dataGridView2.RowCount <= 8)
             {
                 grid.Type = 8;
                 grid.Items = new GridItems[4][];
+                grid.StatusGrid = "1/8";
             }
             else if (dataGridView2.RowCount <= 16)
             {
                 grid.Type = 16;
                 grid.Items = new GridItems[5][];
+                grid.StatusGrid = "1/16";
             }
             else if (dataGridView2.RowCount <= 32)
             {
                 grid.Type = 32;
                 grid.Items = new GridItems[6][];
+                grid.StatusGrid = "1/32";
             }
             else
                 throw new Exception("Больше 32 участников не предусмотрено");

@@ -67,7 +67,7 @@ namespace Kaharman
                     item.Label.Click += Item_Click;
                     panel1.Controls.Add(item.Label);
                     DrawLines(e.Graphics, item, pen);
-                    if (item.Status == StatusGrid.win)
+                    if (item.Status == StatusGridItem.win)
                     {
                         DrawLines(e.Graphics, item, PenWonPosition);
                     }
@@ -85,7 +85,7 @@ namespace Kaharman
             if (point.X != Grid.Items.Length - 1)
             {
                 int pos = (point.Y / 2) * 2;
-                if (Grid.Items[point.X][pos].Status == StatusGrid.init && Grid.Items[point.X][pos + 1].Status == StatusGrid.init)
+                if (Grid.Items[point.X][pos].Status == StatusGridItem.init && Grid.Items[point.X][pos + 1].Status == StatusGridItem.init)
                 {
                     WonPosition(Grid.Items[point.X][point.Y]);
                 }
@@ -135,6 +135,7 @@ namespace Kaharman
         {
             Grid.WinPosition(item);
             DrawLines(graphics, item, PenWonPosition);
+            Grid.CheckStatus();
         }
         private void DrawLines(Graphics graphics, GridItems item1, Pen pen)
         {

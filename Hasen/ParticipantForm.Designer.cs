@@ -44,12 +44,18 @@
             trainer = new TextBox();
             gender = new ComboBox();
             dateOfBirth = new DateTimePicker();
+            menuStrip1 = new MenuStrip();
+            файлToolStripMenuItem = new ToolStripMenuItem();
+            действиеToolStripMenuItem = new ToolStripMenuItem();
+            изменитьToolStripMenuItem = new ToolStripMenuItem();
+            удаоитьToolStripMenuItem = new ToolStripMenuItem();
+            menuStrip1.SuspendLayout();
             SuspendLayout();
             // 
             // name
             // 
             name.AllowDrop = true;
-            name.Location = new Point(156, 66);
+            name.Location = new Point(157, 61);
             name.Name = "name";
             name.Size = new Size(329, 23);
             name.TabIndex = 0;
@@ -77,7 +83,7 @@
             // label1
             // 
             label1.AutoSize = true;
-            label1.Location = new Point(44, 69);
+            label1.Location = new Point(45, 64);
             label1.Name = "label1";
             label1.Size = new Size(93, 15);
             label1.TabIndex = 3;
@@ -86,7 +92,7 @@
             // label2
             // 
             label2.AutoSize = true;
-            label2.Location = new Point(44, 98);
+            label2.Location = new Point(45, 93);
             label2.Name = "label2";
             label2.Size = new Size(30, 15);
             label2.TabIndex = 5;
@@ -95,7 +101,7 @@
             // label3
             // 
             label3.AutoSize = true;
-            label3.Location = new Point(44, 127);
+            label3.Location = new Point(45, 122);
             label3.Name = "label3";
             label3.Size = new Size(90, 15);
             label3.TabIndex = 7;
@@ -104,7 +110,7 @@
             // label5
             // 
             label5.AutoSize = true;
-            label5.Location = new Point(44, 157);
+            label5.Location = new Point(45, 152);
             label5.Name = "label5";
             label5.Size = new Size(26, 15);
             label5.TabIndex = 11;
@@ -113,7 +119,7 @@
             // weigth
             // 
             weigth.AllowDrop = true;
-            weigth.Location = new Point(156, 154);
+            weigth.Location = new Point(157, 149);
             weigth.Name = "weigth";
             weigth.Size = new Size(329, 23);
             weigth.TabIndex = 10;
@@ -121,7 +127,7 @@
             // label6
             // 
             label6.AutoSize = true;
-            label6.Location = new Point(44, 186);
+            label6.Location = new Point(45, 181);
             label6.Name = "label6";
             label6.Size = new Size(88, 15);
             label6.TabIndex = 13;
@@ -130,7 +136,7 @@
             // qualification
             // 
             qualification.AllowDrop = true;
-            qualification.Location = new Point(156, 183);
+            qualification.Location = new Point(157, 178);
             qualification.Name = "qualification";
             qualification.Size = new Size(329, 23);
             qualification.TabIndex = 12;
@@ -138,7 +144,7 @@
             // label7
             // 
             label7.AutoSize = true;
-            label7.Location = new Point(44, 215);
+            label7.Location = new Point(45, 210);
             label7.Name = "label7";
             label7.Size = new Size(40, 15);
             label7.TabIndex = 15;
@@ -147,7 +153,7 @@
             // city
             // 
             city.AllowDrop = true;
-            city.Location = new Point(156, 212);
+            city.Location = new Point(157, 207);
             city.Name = "city";
             city.Size = new Size(329, 23);
             city.TabIndex = 14;
@@ -155,7 +161,7 @@
             // label8
             // 
             label8.AutoSize = true;
-            label8.Location = new Point(44, 244);
+            label8.Location = new Point(45, 239);
             label8.Name = "label8";
             label8.Size = new Size(46, 15);
             label8.TabIndex = 17;
@@ -164,7 +170,7 @@
             // trainer
             // 
             trainer.AllowDrop = true;
-            trainer.Location = new Point(156, 241);
+            trainer.Location = new Point(157, 236);
             trainer.Name = "trainer";
             trainer.Size = new Size(329, 23);
             trainer.TabIndex = 16;
@@ -172,17 +178,52 @@
             // gender
             // 
             gender.FormattingEnabled = true;
-            gender.Location = new Point(156, 95);
+            gender.Location = new Point(157, 90);
             gender.Name = "gender";
             gender.Size = new Size(329, 23);
             gender.TabIndex = 18;
             // 
             // dateOfBirth
             // 
-            dateOfBirth.Location = new Point(156, 124);
+            dateOfBirth.Location = new Point(157, 119);
             dateOfBirth.Name = "dateOfBirth";
             dateOfBirth.Size = new Size(329, 23);
             dateOfBirth.TabIndex = 19;
+            // 
+            // menuStrip1
+            // 
+            menuStrip1.Items.AddRange(new ToolStripItem[] { файлToolStripMenuItem, действиеToolStripMenuItem });
+            menuStrip1.Location = new Point(0, 0);
+            menuStrip1.Name = "menuStrip1";
+            menuStrip1.Size = new Size(515, 24);
+            menuStrip1.TabIndex = 20;
+            menuStrip1.Text = "menuStrip1";
+            // 
+            // файлToolStripMenuItem
+            // 
+            файлToolStripMenuItem.Name = "файлToolStripMenuItem";
+            файлToolStripMenuItem.Size = new Size(48, 20);
+            файлToolStripMenuItem.Text = "Файл";
+            // 
+            // действиеToolStripMenuItem
+            // 
+            действиеToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { изменитьToolStripMenuItem, удаоитьToolStripMenuItem });
+            действиеToolStripMenuItem.Name = "действиеToolStripMenuItem";
+            действиеToolStripMenuItem.Size = new Size(70, 20);
+            действиеToolStripMenuItem.Text = "Действие";
+            // 
+            // изменитьToolStripMenuItem
+            // 
+            изменитьToolStripMenuItem.Name = "изменитьToolStripMenuItem";
+            изменитьToolStripMenuItem.Size = new Size(180, 22);
+            изменитьToolStripMenuItem.Text = "Изменить";
+            изменитьToolStripMenuItem.Click += изменитьToolStripMenuItem_Click;
+            // 
+            // удаоитьToolStripMenuItem
+            // 
+            удаоитьToolStripMenuItem.Name = "удаоитьToolStripMenuItem";
+            удаоитьToolStripMenuItem.Size = new Size(180, 22);
+            удаоитьToolStripMenuItem.Text = "Удалить";
             // 
             // ParticipantForm
             // 
@@ -206,8 +247,12 @@
             Controls.Add(button2);
             Controls.Add(button1);
             Controls.Add(name);
+            Controls.Add(menuStrip1);
+            MainMenuStrip = menuStrip1;
             Name = "ParticipantForm";
             Text = "Участник";
+            menuStrip1.ResumeLayout(false);
+            menuStrip1.PerformLayout();
             ResumeLayout(false);
             PerformLayout();
         }
@@ -230,5 +275,10 @@
         private TextBox trainer;
         private ComboBox gender;
         private DateTimePicker dateOfBirth;
+        private MenuStrip menuStrip1;
+        private ToolStripMenuItem файлToolStripMenuItem;
+        private ToolStripMenuItem действиеToolStripMenuItem;
+        private ToolStripMenuItem изменитьToolStripMenuItem;
+        private ToolStripMenuItem удаоитьToolStripMenuItem;
     }
 }

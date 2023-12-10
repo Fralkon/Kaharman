@@ -22,6 +22,9 @@ namespace Hasen
         public Kaharman()
         {
             InitializeComponent();
+            StartForm startForm = new StartForm();
+            //if (startForm.ShowDialog() == DialogResult.Cancel)
+            //    this.Close();
             ParticipantsTable = new ParticipantDataTable(dataGridView1);
             DataParticipantsTable = new ParticipantDataTable();
             InitializeDataTournament(DataHistoryTournaments);

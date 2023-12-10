@@ -1,16 +1,17 @@
 ﻿using Hasen;
-using System;
-using System.Collections.Generic;
 using System.Data;
-using System.Drawing;
 using System.Globalization;
-using System.Linq;
 using System.Text.Json.Serialization;
-using System.Windows.Forms;
-using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 
 namespace Kaharman
 {
+    public enum StatusGridItem
+    {
+        init,
+        close,
+        lose,
+        win
+    }
     public class FillRandomParticipant
     {
         class CountTrainerPart : IComparable<CountTrainerPart>
@@ -41,8 +42,6 @@ namespace Kaharman
                     countTrainerPart.Add(new CountTrainerPart(participant.Trainer, participant));
             }
             countTrainerPart.Sort();
-            foreach (CountTrainerPart participant in countTrainerPart)
-                MessageBox.Show(participant.Participants.Count.ToString());
         }
         public (Participant?, Participant?) GetPairParticipants()
         {
@@ -78,12 +77,6 @@ namespace Kaharman
             return item1;
         }
     }
-    public enum StatusGrid { 
-        init,
-        close,
-        lose,
-        win
-    }
     public class Category
     {
         public float Min { get; set; }
@@ -112,6 +105,7 @@ namespace Kaharman
     }
     public class Participant
     {
+        public static float ValyeDayYear = 365.2425f;
         public int ID { get; set; }
         public string Name { get; set; }
         public string Gender { get; set; }
@@ -122,7 +116,7 @@ namespace Kaharman
             get { return dayOfBirth; }
             set
             {
-                Age = (int)((int)(DateTime.Now - value).TotalDays / ParticipantForm.ValyeDayYear);
+                Age = (int)((int)(DateTime.Now - value).TotalDays / ValyeDayYear);
                 dayOfBirth = value;
             }
         }
@@ -145,7 +139,7 @@ namespace Kaharman
             Name = row[1].ToString();
             Gender = row[2].ToString();
             if(date)
-                Age = (int)((DateTime.Now - DateTime.Parse(row[3].ToString())).TotalDays/ParticipantForm.ValyeDayYear);
+                Age = (int)((DateTime.Now - DateTime.Parse(row[3].ToString())).TotalDays/ValyeDayYear);
             else
                 Age = int.Parse(row[3].ToString());
             Weight = float.Parse(row[4].ToString());
@@ -254,12 +248,12 @@ namespace Kaharman
     {
         public PointItem? Point { get; set; }
         public int ID { get; set; }
-        public StatusGrid Status { get; set; }
+        public StatusGridItem Status { get; set; }
         [JsonIgnore]
         public Participant? Participant { get; set; }
         [JsonIgnore]
         public Label Label { get; set; }
-        public GridItems(PointItem point, int iD = -1, StatusGrid status = StatusGrid.close)
+        public GridItems(PointItem point, int iD = -1, StatusGridItem status = StatusGridItem.close)
         {
             this.Point = point;
             ID = iD;
@@ -278,7 +272,7 @@ namespace Kaharman
             Label.AccessibleRole = AccessibleRole.None;
             Label.BorderStyle = BorderStyle.FixedSingle;
             Label.Size = new Size(150, 20);
-            Status = StatusGrid.close;
+            Status = StatusGridItem.close;
         }
         public void InitPosition()
         {
@@ -292,7 +286,7 @@ namespace Kaharman
         {
             Label.Location = point;
         }
-        public void ChangeStatus(StatusGrid status)
+        public void ChangeStatus(StatusGridItem status)
         {
             this.Status = status;
             InitColorItem();
@@ -301,7 +295,7 @@ namespace Kaharman
         {
             switch (Status)
             {
-                case StatusGrid.init:
+                case StatusGridItem.init:
                     if (Point != null)
                         if (Point.Y % 2 == 0)
                             Label.BackColor = Color.DodgerBlue;
@@ -310,13 +304,13 @@ namespace Kaharman
                     else
                         Label.BackColor = Color.LightGray;
                     break;
-                case StatusGrid.close:
+                case StatusGridItem.close:
                     Label.BackColor = SystemColors.Control;
                     break;
-                case StatusGrid.win:
+                case StatusGridItem.win:
                     Label.BackColor = GridForm.ColorWonPosition;
                     break;
-                case StatusGrid.lose:
+                case StatusGridItem.lose:
                     Label.BackColor = Color.LightGray;
                     break;
             }
@@ -328,7 +322,7 @@ namespace Kaharman
             Label.Text = participant.Name;
             InitColorItem();
         }
-        public void SetParticipant(Participant participant, StatusGrid statusGrid)
+        public void SetParticipant(Participant participant, StatusGridItem statusGrid)
         {
             ID = participant.ID;
             Participant = participant;
@@ -345,28 +339,70 @@ namespace Kaharman
         {
 
         }
+        public string StatusGrid { get; set; }
         public void WinPosition(GridItems item)
         {
             PointItem point = item.Point;
             int pos = (point.Y / 2) * 2;
-            Items[point.X][point.Y].ChangeStatus(StatusGrid.win);
-            Items[point.X+1][point.Y/2].SetParticipant(item.Participant, StatusGrid.init);
+            Items[point.X][point.Y].ChangeStatus(StatusGridItem.win);
+            Items[point.X+1][point.Y/2].SetParticipant(item.Participant, StatusGridItem.init);
             if (pos == point.Y)
                 pos = point.Y + 1;
-            Items[point.X][pos].ChangeStatus(StatusGrid.lose);
+            Items[point.X][pos].ChangeStatus(StatusGridItem.lose);
             switch (Items.Length - item.Point.X)
             {
                 case 2:
-                    Places[0].SetParticipant(item.Participant, StatusGrid.win);
-                    Items[point.X + 1][point.Y / 2].SetParticipant(item.Participant, StatusGrid.win);
-                    Places[1].SetParticipant(Items[point.X][pos].Participant, StatusGrid.win);
+                    Places[0].SetParticipant(item.Participant, StatusGridItem.win);
+                    Items[point.X + 1][point.Y / 2].SetParticipant(item.Participant, StatusGridItem.win);
+                    Places[1].SetParticipant(Items[point.X][pos].Participant, StatusGridItem.win);
                     break;
                 case 3:
-                    if (Places[2].Status == StatusGrid.close || Places[2].Status == StatusGrid.init)
-                        Places[2].SetParticipant(item.Participant, StatusGrid.win);
+                    if (Places[2].Status == StatusGridItem.close || Places[2].Status == StatusGridItem.init)
+                        Places[2].SetParticipant(item.Participant, StatusGridItem.win);
                     else
-                        Places[3].SetParticipant(item.Participant, StatusGrid.win);
+                        Places[3].SetParticipant(item.Participant, StatusGridItem.win);
                     break;
+            }
+
+        }
+        public void CheckStatus()
+        {
+            for (int i = Items.Length - 1; i == 0; i--)
+            {
+                bool statusBool = true;
+                foreach (GridItems items in Items[i])
+                {
+                    if (items.Status == StatusGridItem.close)
+                    {
+                        statusBool = false;
+                        break;
+                    }
+                }
+                if (statusBool)
+                {
+                    int type = Items.Length - i - 1;
+                    switch (type)
+                    {
+                        case 0:
+                            StatusGrid = "Финал";
+                            return;
+                        case 1:
+                            StatusGrid = "1/2";
+                            return;
+                        case 2:
+                            StatusGrid = "1/4"; 
+                            return;
+                        case 3:
+                            StatusGrid = "1/8";
+                            return;
+                        case 4:
+                            StatusGrid = "1/16";
+                            return;
+                        case 5:
+                            StatusGrid = "1/32";
+                            return;
+                    }
+                }
             }
         }
         public void FillItems(List<Participant> participants)
@@ -402,13 +438,13 @@ namespace Kaharman
             for (int i = 0; i < firstLap; i += 2)
             {
                 var pair = fillRandomParticipant.GetPairParticipants();
-                Items[0][i].SetParticipant(pair.Item1, StatusGrid.init);
-                Items[0][i + 1].SetParticipant(pair.Item2, StatusGrid.init);
+                Items[0][i].SetParticipant(pair.Item1, StatusGridItem.init);
+                Items[0][i + 1].SetParticipant(pair.Item2, StatusGridItem.init);
             }
             int secondLapCount = Items[1].Length;
             for (int i = 1; i <= secondLap; i++)
             {
-                Items[1][secondLapCount - i].SetParticipant(fillRandomParticipant.GetParticipant(), StatusGrid.init);
+                Items[1][secondLapCount - i].SetParticipant(fillRandomParticipant.GetParticipant(), StatusGridItem.init);
             }
         }
     }
