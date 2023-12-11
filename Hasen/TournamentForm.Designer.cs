@@ -53,6 +53,7 @@
             турнирнаяТаблицаToolStripMenuItem = new ToolStripMenuItem();
             создатьToolStripMenuItem = new ToolStripMenuItem();
             удалитьToolStripMenuItem2 = new ToolStripMenuItem();
+            обновитьToolStripMenuItem = new ToolStripMenuItem();
             участникиToolStripMenuItem = new ToolStripMenuItem();
             создатьToolStripMenuItem1 = new ToolStripMenuItem();
             добавитьToolStripMenuItem1 = new ToolStripMenuItem();
@@ -243,7 +244,7 @@
             // 
             // турнирнаяТаблицаToolStripMenuItem
             // 
-            турнирнаяТаблицаToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { создатьToolStripMenuItem, удалитьToolStripMenuItem2 });
+            турнирнаяТаблицаToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { создатьToolStripMenuItem, удалитьToolStripMenuItem2, обновитьToolStripMenuItem });
             турнирнаяТаблицаToolStripMenuItem.Name = "турнирнаяТаблицаToolStripMenuItem";
             турнирнаяТаблицаToolStripMenuItem.Size = new Size(126, 20);
             турнирнаяТаблицаToolStripMenuItem.Text = "Турнирная таблица";
@@ -251,16 +252,23 @@
             // создатьToolStripMenuItem
             // 
             создатьToolStripMenuItem.Name = "создатьToolStripMenuItem";
-            создатьToolStripMenuItem.Size = new Size(118, 22);
+            создатьToolStripMenuItem.Size = new Size(180, 22);
             создатьToolStripMenuItem.Text = "Создать";
             создатьToolStripMenuItem.Click += создатьТурнирнуюТаблицуToolStripMenuItem_Click;
             // 
             // удалитьToolStripMenuItem2
             // 
             удалитьToolStripMenuItem2.Name = "удалитьToolStripMenuItem2";
-            удалитьToolStripMenuItem2.Size = new Size(118, 22);
+            удалитьToolStripMenuItem2.Size = new Size(180, 22);
             удалитьToolStripMenuItem2.Text = "Удалить";
             удалитьToolStripMenuItem2.Click += удалитьToolStripMenuItem_Click;
+            // 
+            // обновитьToolStripMenuItem
+            // 
+            обновитьToolStripMenuItem.Name = "обновитьToolStripMenuItem";
+            обновитьToolStripMenuItem.Size = new Size(180, 22);
+            обновитьToolStripMenuItem.Text = "Обновить";
+            обновитьToolStripMenuItem.Click += обновитьToolStripMenuItem_Click;
             // 
             // участникиToolStripMenuItem
             // 
@@ -431,6 +439,7 @@
             MainMenuStrip = menuStrip1;
             Name = "TournamentForm";
             Text = "Турнир";
+            Activated += TournamentForm_Activated;
             Resize += TournamentForm_Resize;
             contextMenuStrip1.ResumeLayout(false);
             menuStrip1.ResumeLayout(false);
@@ -485,5 +494,6 @@
         private ToolStripMenuItem протоколТурнираToolStripMenuItem;
         private Panel panel1;
         private Panel panel2;
+        private ToolStripMenuItem обновитьToolStripMenuItem;
     }
 }

@@ -1,4 +1,5 @@
 ﻿using Hasen;
+using Microsoft.VisualBasic.ApplicationServices;
 using System.Data;
 using System.Globalization;
 using System.Net.Sockets;
@@ -39,6 +40,7 @@ namespace Kaharman
         private void button1_Click(object sender, EventArgs e)
         {
             Grid grid = new Grid();
+            string StatusGrid = "";
             if (dataGridView2.RowCount == 0)
             {
                 MessageBox.Show("Отсутствуют участники в таблице.");
@@ -48,28 +50,30 @@ namespace Kaharman
             {
                 grid.Type = 4;
                 grid.Items = new GridItems[3][];
-                grid.StatusGrid = "1/4";
+                StatusGrid = "1/4";
             }
             else if (dataGridView2.RowCount <= 8)
             {
                 grid.Type = 8;
                 grid.Items = new GridItems[4][];
-                grid.StatusGrid = "1/8";
+                StatusGrid = "1/8";
             }
             else if (dataGridView2.RowCount <= 16)
             {
                 grid.Type = 16;
                 grid.Items = new GridItems[5][];
-                grid.StatusGrid = "1/16";
+                StatusGrid = "1/16";
             }
             else if (dataGridView2.RowCount <= 32)
             {
                 grid.Type = 32;
                 grid.Items = new GridItems[6][];
-                grid.StatusGrid = "1/32";
+                StatusGrid = "1/32";
             }
             else
-                throw new Exception("Больше 32 участников не предусмотрено");
+            {
+                MessageBox.Show("Больше 32 участников не предусмотрено");
+            }
             int type = grid.Type;
             int step = 0;
             while (true)
@@ -89,17 +93,18 @@ namespace Kaharman
 
             if (StatusForm == StatusFormTournamentGrid.Create)
             {
-                Save(IdTournament, dateTimePicker1.Value, nameTextBox.Text, GetListStringID(), JsonSerializer.Serialize(grid));
+                Save(IdTournament, dateTimePicker1.Value, nameTextBox.Text, GetListStringID(), grid, StatusGrid);
                 IdGrid = AccessSQL.GetIDInsert().ToString();
             }
             else if (StatusForm == StatusFormTournamentGrid.Visit) { }
             GridForm tournament = new GridForm(IdGrid, textBox2.Text, nameTextBox.Text, dateTimePicker1.Value,Secret,Judge, grid);
-            tournament.ShowDialog();
+            tournament.Show();
             this.Close();
         }
-        private void Save(string id_tournament, DateTime date, string name, string id_participants, string grid)
+        private void Save(string id_tournament, DateTime date, string name, string id_participants, Grid grid, string StatusGrid)
         {
-            AccessSQL.SendSQL($"INSERT INTO TournamentGrid (id_tournament,[date],name,id_participants,grid) VALUES ({id_tournament},'{date.ToString("dd,MM.yyyy")}','{name}','{id_participants}','{grid}')");
+            AccessSQL.SendSQL($"INSERT INTO TournamentGrid (id_tournament,[date],name,id_participants,grid,status) " +
+                $"VALUES ({id_tournament},'{date.ToString("dd,MM.yyyy")}','{name}','{id_participants}','{JsonSerializer.Serialize(grid)}','{StatusGrid}')");
         }
         private string GetListStringID()
         {

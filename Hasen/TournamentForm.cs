@@ -63,6 +63,8 @@ namespace Kaharman
         }
         private void UpDataGrid()
         {
+            if (ID == null)
+                return;
             dataGridView1.Rows.Clear();
             using (DataTable data = AccessSQL.GetDataTableSQL("SELECT * FROM TournamentGrid WHERE id_tournament = " + ID))
             {
@@ -104,7 +106,7 @@ namespace Kaharman
                 AccessSQL.SendSQL($"INSERT INTO Tournament (name,[start_date],[end_date],note_tournament,main_judge,secret,id_participants) VALUES ('{name.Text}','{dateTimePicker1.Value.ToString("dd.MM.yyyy")}','{dateTimePicker2.Value.ToString("dd.MM.yyyy")}','{note.Text}','{mainJudge.Text}','{secret.Text}','{ParticipantsTable.GetIDsPartString()}')");
                 ID = AccessSQL.GetIDInsert().ToString();
             }
-            TournamentGridForm tournamentGrid = new TournamentGridForm(ID, name.Text,mainJudge.Text,secret.Text, dateTimePicker1.Value, ParticipantsTable, StatusFormTournamentGrid.Create);
+            TournamentGridForm tournamentGrid = new TournamentGridForm(ID, name.Text, mainJudge.Text, secret.Text, dateTimePicker1.Value, ParticipantsTable, StatusFormTournamentGrid.Create);
             tournamentGrid.ShowDialog();
             UpDataGrid();
         }
@@ -135,7 +137,6 @@ namespace Kaharman
             DateTime dateTime;
             string nameGrid;
             List<string> IDPart = new List<string>();
-            StatusGridItem statusGrid;
             using (DataTable data = AccessSQL.GetDataTableSQL($"SELECT * FROM TournamentGrid WHERE id = {IDGrid}"))
             {
                 if (data.Rows.Count == 1)
@@ -145,7 +146,6 @@ namespace Kaharman
                     nameGrid = row["name"].ToString();
                     IDPart.AddRange(row["id_participants"].ToString().Split(";").Select(item => item.Trim('"')));
                     grid = JsonSerializer.Deserialize<Grid>(row["grid"].ToString());
-                    statusGrid = (StatusGridItem)int.Parse(row["status"].ToString());
                 }
                 else
                 {
@@ -155,8 +155,9 @@ namespace Kaharman
             }
             grid.FillItems(Participant.GetParticipantsOnAccess(IDPart));
 
-            GridForm tournament = new GridForm(IDGrid, name.Text, nameGrid,dateTime,mainJudge.Text,secret.Text, grid);
+            GridForm tournament = new GridForm(IDGrid, name.Text, nameGrid, dateTime, mainJudge.Text, secret.Text, grid);
             tournament.Show();
+            UpDataGrid();
         }
         private void dataGridView2_ColumnHeaderMouseClick(object sender, DataGridViewCellMouseEventArgs e)
         {
@@ -227,16 +228,14 @@ namespace Kaharman
             participants.ShowDialog();
             this.Show();
         }
-
         private void выходToolStripMenuItem_Click(object sender, EventArgs e)
         {
             this.Close();
         }
-
         private void протоколТурнираToolStripMenuItem_Click(object sender, EventArgs e)
         {
             SampleWord word = new SampleWord();
-            word.CreateProtacolTournament(name.Text, dateTimePicker1.Value, dateTimePicker2.Value, mainJudge.Text,secret.Text);
+            word.CreateProtacolTournament(name.Text, dateTimePicker1.Value, dateTimePicker2.Value, mainJudge.Text, secret.Text);
             foreach (DataGridViewRow row in dataGridView1.Rows)
             {
                 word.FillTable(row.Cells[1].Value.ToString(), AccessSQL.GetDataTableSQL($"SELECT name FROM Participants WHERE id IN ({string.Join(", ",
@@ -256,7 +255,6 @@ namespace Kaharman
                 proc.Start();
             }
         }
-
         private void cancelButton_Click_1(object sender, EventArgs e)
         {
             this.Close();
@@ -266,10 +264,17 @@ namespace Kaharman
             panel1.Width = this.Width / 2;
             panel2.Width = this.Width / 2;
         }
-
         private void TournamentForm_Resize(object sender, EventArgs e)
         {
             ResizeForm();
+        }
+        private void обновитьToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            UpDataGrid();
+        }
+        private void TournamentForm_Activated(object sender, EventArgs e)
+        {
+            UpDataGrid();
         }
     }
 }

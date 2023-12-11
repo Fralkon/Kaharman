@@ -135,7 +135,46 @@ namespace Kaharman
         {
             Grid.WinPosition(item);
             DrawLines(graphics, item, PenWonPosition);
-            Grid.CheckStatus();
+            string StatusGrid = "";
+            for (int i = Grid.Items.Length - 1; i > 0; i--)
+            {
+                bool statusBool = true;
+                foreach (GridItems items in Grid.Items[i])
+                {
+                    if (items.Status == StatusGridItem.close)
+                    {
+                        statusBool = false;
+                        break;
+                    }
+                }
+                if (statusBool)
+                {
+                    int type = Grid.Items.Length - i - 1;
+                    switch (type)
+                    {
+                        case 0:
+                            StatusGrid = "Завершено";
+                            break;
+                        case 1:
+                            StatusGrid = "Финал";
+                            break;
+                        case 2:
+                            StatusGrid = "1/4";
+                            break;
+                        case 3:
+                            StatusGrid = "1/8";
+                            break;
+                        case 4:
+                            StatusGrid = "1/16";
+                            break;
+                        case 5:
+                            StatusGrid = "1/32";
+                            break;
+                    }
+                    break;
+                }
+            }
+            AccessSQL.SendSQL($"UPDATE TournamentGrid SET status = '{StatusGrid}' WHERE id = {ID}");
         }
         private void DrawLines(Graphics graphics, GridItems item1, Pen pen)
         {

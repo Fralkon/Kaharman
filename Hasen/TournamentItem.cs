@@ -339,7 +339,6 @@ namespace Kaharman
         {
 
         }
-        public string StatusGrid { get; set; }
         public void WinPosition(GridItems item)
         {
             PointItem point = item.Point;
@@ -364,46 +363,6 @@ namespace Kaharman
                     break;
             }
 
-        }
-        public void CheckStatus()
-        {
-            for (int i = Items.Length - 1; i == 0; i--)
-            {
-                bool statusBool = true;
-                foreach (GridItems items in Items[i])
-                {
-                    if (items.Status == StatusGridItem.close)
-                    {
-                        statusBool = false;
-                        break;
-                    }
-                }
-                if (statusBool)
-                {
-                    int type = Items.Length - i - 1;
-                    switch (type)
-                    {
-                        case 0:
-                            StatusGrid = "Финал";
-                            return;
-                        case 1:
-                            StatusGrid = "1/2";
-                            return;
-                        case 2:
-                            StatusGrid = "1/4"; 
-                            return;
-                        case 3:
-                            StatusGrid = "1/8";
-                            return;
-                        case 4:
-                            StatusGrid = "1/16";
-                            return;
-                        case 5:
-                            StatusGrid = "1/32";
-                            return;
-                    }
-                }
-            }
         }
         public void FillItems(List<Participant> participants)
         {

@@ -138,7 +138,9 @@ namespace Hasen
         private void ñîçäàòüToolStripMenuItem_Click(object sender, EventArgs e)
         {
             TournamentForm createTournament = new TournamentForm(ParticipantsTable);
+            this.Hide();
             createTournament.ShowDialog();
+            this.Show();
         }
         private void èñòîğèÿÒóğíèğîâToolStripMenuItem_Click(object sender, EventArgs e)
         {
