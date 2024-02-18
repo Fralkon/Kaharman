@@ -1,9 +1,7 @@
 ﻿using Hasen;
-using System.ComponentModel;
 using System.Data;
 using System.Data.OleDb;
 using System.Globalization;
-using System.Windows.Forms;
 
 namespace Kaharman
 {
@@ -19,7 +17,9 @@ namespace Kaharman
                 if (item.Checked == false)
                 {
                     bf = true;
-                    if (item.Text != "Пустые")
+                    if (item.Text == " Выделить всё")
+                        continue;
+                    else if (item.Text != " Пустые")
                         filter += $"'{item.Text}',";
                     else filter += "'',";
                 }
@@ -39,44 +39,14 @@ namespace Kaharman
             TextBox.TextChanged += TextBox_TextChanged;
             Items.Add(TextBox);
         }
-
         private void TextBox_TextChanged(object? sender, EventArgs e)
         {
             OnItemClicked(null);
         }
-
         public override string? GetFilter()
         {
             if (TextBox.Text.Length != 0)
                 return $"[{Name}] LIKE '%{TextBox.Text}%'";
-            return null;
-        }
-    }
-    public class ContextMenuFilterWeigth: ContextMenuFilter
-    {
-        public ContextMenuFilterWeigth(List<string> values) : base()
-        {
-            AddAutoItems = false;
-            foreach (string value in values)
-                ((ToolStripMenuItem)Items.Add(value)).Checked = true;
-        }
-        public override string? GetFilter()
-        {
-            List<string> filters = new List<string>();
-            bool bf = false;
-            foreach (ToolStripMenuItem item in Items)
-            {
-                if (item.Checked == false)
-                {
-                    bf = true;
-                    string[] filter = item.Text.Split('-');
-                    if (filter.Length != 2)
-                        continue;
-                    filters.Add($"{Name} < {filter[0]} AND {Name} > {filter[1]}");
-                }
-            }
-            if (bf)
-                return string.Join(" AND ", filters);
             return null;
         }
     }
@@ -145,9 +115,21 @@ namespace Kaharman
                 ToolStripMenuItem? toolStrip = e.ClickedItem as ToolStripMenuItem;
                 if (toolStrip != null)
                 {
-                    if (toolStrip.Checked)
-                        toolStrip.Checked = false;
-                    else toolStrip.Checked = true;
+                    if (toolStrip.Text == " Выделить всё")
+                    {
+                        bool value;
+                        if (toolStrip.Checked)
+                            value = false;
+                        else value = true;
+                        toolStrip.Checked = value;
+                        for (int i = 0; i < contextMenuStrip.Items.Count; i++)
+                            ((ToolStripMenuItem)contextMenuStrip.Items[i]).Checked = value; 
+                    }
+                    else {
+                        if (toolStrip.Checked)
+                            toolStrip.Checked = false;
+                        else toolStrip.Checked = true;
+                    }
                     FilterContent();
                 }
             }            
@@ -162,7 +144,10 @@ namespace Kaharman
                     filters.Add(filter);
                 }
             }
-            DataView.RowFilter = string.Join(" AND ", filters);
+            if (filters.Count > 0)
+                DataView.RowFilter = string.Join(" AND ", filters);
+            else
+                DataView.RowFilter = String.Empty;
         }      
         private void DataTableContextMenu_RowChanged(object sender, DataRowChangeEventArgs e)
         {
@@ -258,6 +243,7 @@ namespace Kaharman
             }
             text.Add(item);
             text.Sort();
+            
             for (int i =0; i < text.Count; ++i)
             {
                 if (text[i] == item)
@@ -346,21 +332,27 @@ namespace Kaharman
 
             AddColunm("Пол");
 
-            AddColunm("Возраст", typeof(int));
+            ContextMenuFilter contextMenuAge = new ContextMenuFilter();
+            ((ToolStripMenuItem)contextMenuAge.Items.Add(" Выделить всё")).Checked = true;
+            AddColunm("Возраст", typeof(int), contextMenuAge);
 
             ContextMenuFilter contextMenuWeigth = new ContextMenuFilter();
+            ((ToolStripMenuItem)contextMenuWeigth.Items.Add(" Выделить всё")).Checked = true;
             AddColunm("Вес",typeof(float), contextMenuWeigth);
 
             ContextMenuFilter contextMenuQualiti = new ContextMenuFilter();
-            ((ToolStripMenuItem)contextMenuQualiti.Items.Add("Пустые")).Checked = true;
+            ((ToolStripMenuItem)contextMenuQualiti.Items.Add(" Выделить всё")).Checked = true;
+            ((ToolStripMenuItem)contextMenuQualiti.Items.Add(" Пустые")).Checked = true;
             AddColunm("Квалификация", contextMenuQualiti);
 
             ContextMenuFilter contextMenuCity = new ContextMenuFilter();
-            ((ToolStripMenuItem)contextMenuCity.Items.Add("Пустые")).Checked = true;
+            ((ToolStripMenuItem)contextMenuCity.Items.Add(" Выделить всё")).Checked = true;
+            ((ToolStripMenuItem)contextMenuCity.Items.Add(" Пустые")).Checked = true;
             AddColunm("Город", contextMenuCity);
 
             ContextMenuFilter contextMenuTrainer = new ContextMenuFilter();
-            ((ToolStripMenuItem)contextMenuTrainer.Items.Add("Пустые")).Checked = true;
+            ((ToolStripMenuItem)contextMenuTrainer.Items.Add(" Выделить всё")).Checked = true;
+            ((ToolStripMenuItem)contextMenuTrainer.Items.Add(" Пустые")).Checked = true;
             AddColunm("Тренер", contextMenuTrainer);
         }
         public string GetIDsPartString()
