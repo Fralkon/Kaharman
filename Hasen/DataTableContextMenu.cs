@@ -439,11 +439,18 @@ namespace Kaharman
                                     continue;
                                 Participant participant = new Participant();
                                 participant.Name = rowExcel[i][1].ToString();
-                                participant.Gender = rowExcel[i][2].ToString();
+                                participant.Gender = rowExcel[i][2].ToString().ToLower();
                                 if (DateTime.TryParse(rowExcel[i][3].ToString(), out DateTime time))
                                     participant.DayOfBirth = time;
-                                if (float.TryParse(rowExcel[i][5].ToString().Replace(',', '.'), new NumberFormatInfo { NumberDecimalSeparator = "." }, out float wight))
-                                    participant.Weight = wight;
+                                try
+                                {
+                                    if (float.TryParse(rowExcel[i][5].ToString().Replace(',', '.'), new NumberFormatInfo { NumberDecimalSeparator = "." }, out float wight))
+                                        participant.Weight = wight;
+                                }
+                                catch
+                                {
+                                    participant.Weight = 0;
+                                }
                                 participant.Gualiti = rowExcel[i][6].ToString().ToLower();
                                 participant.City = rowExcel[i][12].ToString();
                                 participant.Trainer = rowExcel[i][13].ToString();

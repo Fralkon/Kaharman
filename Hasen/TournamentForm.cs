@@ -156,6 +156,7 @@ namespace Kaharman
             grid.FillItems(Participant.GetParticipantsOnAccess(IDPart));
 
             GridForm tournament = new GridForm(IDGrid, name.Text, nameGrid, dateTime, mainJudge.Text, secret.Text, grid);
+
             tournament.Show();
             UpDataGrid();
         }

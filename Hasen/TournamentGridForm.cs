@@ -1,10 +1,12 @@
 ﻿using Hasen;
 using Microsoft.VisualBasic.ApplicationServices;
+using NPOI.SS.Formula.Functions;
 using System.Data;
 using System.Globalization;
 using System.Net.Sockets;
 using System.Text.Json;
 using System.Windows.Forms;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 
 namespace Kaharman
 {

@@ -1,6 +1,11 @@
 ﻿using Hasen;
+using Kaharman;
+using NPOI.SS.UserModel;
+using System.Data;
 using System.Diagnostics;
+using System.Drawing;
 using System.Text.Json;
+using System.Windows.Forms;
 
 namespace Kaharman
 {
@@ -9,11 +14,13 @@ namespace Kaharman
         public static Color ColorWonPosition = Color.PaleGreen;
         public static Pen PenWonPosition = new Pen(Color.Black);
         Graphics graphics;
-        Grid Grid { get; set; }
+        Grid Grid;
         string ID;
         Label[] placesText = new Label[4];
         DateTime DateStart;
         string Judge, Secret;
+        bool selectLable = false;
+        bool oneLoad = false;
         public GridForm(string id, string nameT, string name, DateTime dateStart, string judge, string secret, Grid grid)
         {
             InitializeComponent();
@@ -50,12 +57,57 @@ namespace Kaharman
             placesText[2].Text = "Третье место";
             placesText[3] = new Label();
             placesText[3].Text = "Третье место";
+            ElementsLocation();
             foreach (Label label in placesText)
                 panel1.Controls.Add(label);
-            foreach (GridItems item in Grid.Places)
-                panel1.Controls.Add(item.Label);
-            ElementsLocation();
         }
+        #region SwapItem
+        private void Label_MouseMove(object? sender, MouseEventArgs e)
+        {
+            if (selectLable)
+            {
+                var label = sender as Label;
+                if (label == null)
+                    return;
+                PointItem? point = label.Tag as PointItem;
+                if (point == null)
+                    return;
+                label.DoDragDrop(point, DragDropEffects.Move);
+                selectLable = false;
+            }
+        }
+        private void Label_MouseUp(object? sender, MouseEventArgs e)
+        {
+            if(selectLable)
+                selectLable = false;
+        }
+        private void Label_MouseDown(object? sender, MouseEventArgs e)
+        {
+            selectLable = true;
+        }
+        private void Label_DragOver(object? sender, DragEventArgs e)
+        {
+            if (!e.Data.GetDataPresent(typeof(PointItem)))
+                return;
+            e.Effect = e.AllowedEffect;
+        }
+
+        private void Label_DragDrop(object? sender, DragEventArgs e)
+        {
+            if (!e.Data.GetDataPresent(typeof(PointItem)))
+                return;
+            var draggedItem = (PointItem)e.Data.GetData(typeof(PointItem));
+            if (draggedItem == null)
+                return;
+            var pt = panel1.PointToClient(new Point(e.X, e.Y));
+            var label = (Label)panel1.GetChildAtPoint(pt);
+            PointItem? point = label.Tag as PointItem;
+            if (point == null)
+                return;
+            Grid.SwapItems(draggedItem, point);
+        }
+
+        #endregion
         private void Panel1_Paint(object? sender, PaintEventArgs e)
         {
             Pen pen = new Pen(Color.Black);
@@ -64,8 +116,16 @@ namespace Kaharman
             {
                 foreach (GridItems item in Items)
                 {
-                    item.Label.Click += Item_Click;
-                    panel1.Controls.Add(item.Label);
+                    if (!oneLoad)
+                    {
+                        panel1.Controls.Add(item.Label);
+                        item.Label.Click += Item_Click;
+                        item.Label.MouseDown += Label_MouseDown;
+                        item.Label.MouseUp += Label_MouseUp;
+                        item.Label.MouseMove += Label_MouseMove;
+                        item.Label.DragOver += Label_DragOver;
+                        item.Label.DragDrop += Label_DragDrop;
+                    }
                     DrawLines(e.Graphics, item, pen);
                     if (item.Status == StatusGridItem.win)
                     {
@@ -73,6 +133,8 @@ namespace Kaharman
                     }
                 }
             }
+            if (!oneLoad)
+                oneLoad = true;
         }
         private void Item_Click(object? sender, EventArgs e)
         {

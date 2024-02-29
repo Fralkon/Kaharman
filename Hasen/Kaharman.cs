@@ -30,6 +30,8 @@ namespace Hasen
             InitializeDataTournament(DataHistoryTournaments);
             tableVisible = TableVisible.Participants;
             UpDateTable();
+            Form1 form1 = new Form1();
+            form1.ShowDialog();
         }
         private void UpDateTable()
         {

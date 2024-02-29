@@ -1,7 +1,9 @@
 ﻿using Hasen;
+using NPOI.Util;
 using System.Data;
 using System.Globalization;
 using System.Text.Json.Serialization;
+using ToolTip = System.Windows.Forms.ToolTip;
 
 namespace Kaharman
 {
@@ -45,7 +47,7 @@ namespace Kaharman
         }
         public (Participant?, Participant?) GetPairParticipants()
         {
-            Random random = new Random(DateTime.Now.Microsecond);
+            Random random = new Random(DateTime.Now.Millisecond);
 
             if (countTrainerPart.Count == 0)
                 return (null, null);
@@ -66,7 +68,7 @@ namespace Kaharman
         }
         public Participant GetParticipant()
         {
-            Random random = new Random(DateTime.Now.Microsecond);
+            Random random = new Random(DateTime.Now.Millisecond);
 
             CountTrainerPart cTP = countTrainerPart.First();
             Participant item1 = cTP.Participants[random.Next(0, cTP.Participants.Count)];
@@ -101,6 +103,10 @@ namespace Kaharman
         {
             X = x;
             Y = y;
+        }
+        public override string ToString()
+        {
+            return X + " " + Y;
         }
     }
     public class Participant
@@ -253,6 +259,8 @@ namespace Kaharman
         public Participant? Participant { get; set; }
         [JsonIgnore]
         public Label Label { get; set; }
+        [JsonIgnore]
+        ToolTip t = new ToolTip();
         public GridItems(PointItem point, int iD = -1, StatusGridItem status = StatusGridItem.close)
         {
             this.Point = point;
@@ -263,15 +271,17 @@ namespace Kaharman
             Label.BorderStyle = BorderStyle.FixedSingle;
             Label.Size = new Size(150, 20);
             Label.Text = "";
-            Label.TabStop = false;
-            InitPosition();
+            Label.TabStop = false; 
+            Label.AllowDrop = true;
+            InitPosition(); 
         }
         public GridItems()
         {
             Label = new Label();
             Label.AccessibleRole = AccessibleRole.None;
             Label.BorderStyle = BorderStyle.FixedSingle;
-            Label.Size = new Size(150, 20);
+            Label.Size = new Size(150, 20); 
+            Label.AllowDrop = true;
             Status = StatusGridItem.close;
         }
         public void InitPosition()
@@ -321,13 +331,22 @@ namespace Kaharman
             Participant = participant;
             Label.Text = participant.Name;
             InitColorItem();
+            t.SetToolTip(Label, participant.Name);
         }
         public void SetParticipant(Participant participant, StatusGridItem statusGrid)
         {
-            ID = participant.ID;
-            Participant = participant;
-            Label.Text = participant.Name;
-            ChangeStatus(statusGrid);
+            this.Status = statusGrid;
+            SetParticipant(participant);
+        }
+        public Participant? GetParticipant()
+        {
+            return Participant;
+        }
+        public void Clear()
+        {
+            Label.Text = "";
+            Status = StatusGridItem.close;
+            InitColorItem();
         }
     }
     public class Grid
@@ -362,7 +381,6 @@ namespace Kaharman
                         Places[3].SetParticipant(item.Participant, StatusGridItem.win);
                     break;
             }
-
         }
         public void FillItems(List<Participant> participants)
         {
@@ -405,6 +423,20 @@ namespace Kaharman
             {
                 Items[1][secondLapCount - i].SetParticipant(fillRandomParticipant.GetParticipant(), StatusGridItem.init);
             }
+        }
+        public void SwapItems(PointItem point1, PointItem point2)
+        {
+            Participant? participant1 = Items[point1.X][point1.Y].GetParticipant();
+            if (participant1 == null)
+                return;
+            Participant? participant2 = Items[point2.X][point2.Y].GetParticipant();
+            if (participant2 == null)
+                return;
+            Console.WriteLine(point2.ToString() + " " + point1.ToString());
+            Items[point1.X][point1.Y].Clear();
+            Items[point2.X][point2.Y].Clear();
+            Items[point1.X][point1.Y].SetParticipant(participant2, StatusGridItem.init);
+            Items[point2.X][point2.Y].SetParticipant(participant1, StatusGridItem.init);
         }
     }
 }

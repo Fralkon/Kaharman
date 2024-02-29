@@ -43,6 +43,7 @@
             // 
             // panel1
             // 
+            panel1.AllowDrop = true;
             panel1.Anchor = AnchorStyles.Top;
             panel1.AutoScroll = true;
             panel1.BorderStyle = BorderStyle.FixedSingle;
