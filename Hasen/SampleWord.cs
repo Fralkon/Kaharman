@@ -77,7 +77,7 @@ namespace Kaharman
             runTitle.IsBold = true;
             runTitle.FontSize = 10;
             runTitle.FontFamily = "Times New Roman";
-            runTitle.SetText("Данные участника");
+            runTitle.SetText("Данные участников");
             for (int i = 1; i <= data.Rows.Count; i++)
             {
                 XWPFTableCell cell = table.GetRow(i).GetCell(0);

@@ -430,8 +430,8 @@ namespace Kaharman
                                 if (cont)
                                     continue;
                                 Participant participant = new Participant();
-                                participant.Name = rowExcel[i][1].ToString();
-                                participant.Gender = rowExcel[i][2].ToString().ToLower();
+                                participant.Name = rowExcel[i][1].ToString().Trim();
+                                participant.Gender = rowExcel[i][2].ToString().ToLower().Trim();
                                 if (DateTime.TryParse(rowExcel[i][3].ToString(), out DateTime time))
                                     participant.DayOfBirth = time;
                                 try
@@ -443,9 +443,9 @@ namespace Kaharman
                                 {
                                     participant.Weight = 0;
                                 }
-                                participant.Gualiti = rowExcel[i][6].ToString().ToLower();
-                                participant.City = rowExcel[i][12].ToString();
-                                participant.Trainer = rowExcel[i][13].ToString();
+                                participant.Gualiti = rowExcel[i][6].ToString().ToLower().Trim();
+                                participant.City = rowExcel[i][12].ToString().Trim();
+                                participant.Trainer = rowExcel[i][13].ToString().Trim();
                                 AccessSQL.UpDateParticipant(participant);
                                 Rows.Add(participant.GetDataRow(this));
                             }

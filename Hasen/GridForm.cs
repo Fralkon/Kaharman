@@ -134,7 +134,11 @@ namespace Kaharman
                 }
             }
             if (!oneLoad)
+            {
+                foreach (GridItems item in Grid.Places)
+                    panel1.Controls.Add(item.Label);
                 oneLoad = true;
+            }
         }
         private void Item_Click(object? sender, EventArgs e)
         {

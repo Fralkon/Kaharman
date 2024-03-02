@@ -1,8 +1,11 @@
 ﻿using Hasen;
 using NPOI.Util;
+using System.CodeDom;
 using System.Data;
+using System.Drawing.Drawing2D;
 using System.Globalization;
 using System.Text.Json.Serialization;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 using ToolTip = System.Windows.Forms.ToolTip;
 
 namespace Kaharman
@@ -331,7 +334,8 @@ namespace Kaharman
             Participant = participant;
             Label.Text = participant.Name;
             InitColorItem();
-            t.SetToolTip(Label, participant.Name);
+            string capction = $"Пол: {participant.Gender}\nВозраст: {participant.Age}\nВес: {participant.Weight}\nКвалификация: {participant.Gualiti}\nГород: {participant.City}\nТренер: {participant.Trainer}";
+            t.SetToolTip(Label, capction);
         }
         public void SetParticipant(Participant participant, StatusGridItem statusGrid)
         {
@@ -424,15 +428,43 @@ namespace Kaharman
                 Items[1][secondLapCount - i].SetParticipant(fillRandomParticipant.GetParticipant(), StatusGridItem.init);
             }
         }
+        private void IsPossibleSwap(PointItem point)
+        {
+            if (point.X == 1)
+            {
+                int y = point.Y * 2;
+                if (Items[0][y].Status != StatusGridItem.close || Items[0][y + 1].Status != StatusGridItem.close)
+                    throw new Exception("Невозможно перенести участников, т.к. предыдущий матч уже состоялся.");
+                if (Items[point.X][point.Y].Status != StatusGridItem.init || Items[point.X][point.Y].Status != StatusGridItem.init)
+                    throw new Exception("Невозможно перенести участников, т.к. предыдущий матч уже состоялся, или пустая ячейка.");
+            }
+            else if (point.X == 0)
+            {
+                if (Items[point.X][point.Y].Status != StatusGridItem.init)
+                    throw new Exception("Невозможно перенести участников, т.к. предыдущий матч уже состоялся, или пустая ячейка.");
+            }
+            else
+                throw new Exception("Возможность перенести участников только первых матчей.");
+        }
         public void SwapItems(PointItem point1, PointItem point2)
         {
             Participant? participant1 = Items[point1.X][point1.Y].GetParticipant();
-            if (participant1 == null)
-                return;
             Participant? participant2 = Items[point2.X][point2.Y].GetParticipant();
-            if (participant2 == null)
+            if (participant1 == null || participant2 == null)
+            {
+                MessageBox.Show("Нельзя перенести пустую ячейку");
                 return;
-            Console.WriteLine(point2.ToString() + " " + point1.ToString());
+            }
+            try
+            {
+                IsPossibleSwap(point1);
+                IsPossibleSwap(point2);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+                return;
+            }
             Items[point1.X][point1.Y].Clear();
             Items[point2.X][point2.Y].Clear();
             Items[point1.X][point1.Y].SetParticipant(participant2, StatusGridItem.init);

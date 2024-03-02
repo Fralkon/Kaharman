@@ -23,15 +23,13 @@ namespace Hasen
         {
             InitializeComponent();
             StartForm startForm = new StartForm();
-            //if (startForm.ShowDialog() == DialogResult.Cancel)
-            //    this.Close();
+            if (startForm.ShowDialog() == DialogResult.Cancel)
+                this.Close();
             ParticipantsTable = new ParticipantDataTable(dataGridView1);
             DataParticipantsTable = new ParticipantDataTable();
             InitializeDataTournament(DataHistoryTournaments);
             tableVisible = TableVisible.Participants;
             UpDateTable();
-            Form1 form1 = new Form1();
-            form1.ShowDialog();
         }
         private void UpDateTable()
         {
