@@ -183,12 +183,28 @@ namespace Hasen
                 MessageBox.Show("Выберите строку");
                 return;
             }
-            DialogResult dr = MessageBox.Show($"Удалить турнир {dataGridView1.SelectedRows[0].Cells["Наименование"].Value}?", "Удаление турнира", MessageBoxButtons.YesNo);
-            if (dr == DialogResult.Yes)
+            else if (dataGridView1.SelectedRows.Count == 1)
             {
-                AccessSQL.SendSQL("DELETE * FROM Tournament WHERE id = " + dataGridView1.SelectedRows[0].Cells["ID"].Value.ToString());
-                AccessSQL.SendSQL("DELETE * FROM TournamentGrid WHERE id_tournament = " + dataGridView1.SelectedRows[0].Cells["ID"].Value.ToString());
-                UpDateTable();
+                DialogResult dr = MessageBox.Show($"Удалить турнир {dataGridView1.SelectedRows[0].Cells["Наименование"].Value}?", "Удаление турнира", MessageBoxButtons.YesNo);
+                if (dr == DialogResult.Yes)
+                {
+                    AccessSQL.SendSQL("DELETE * FROM Tournament WHERE id = " + dataGridView1.SelectedRows[0].Cells["ID"].Value.ToString());
+                    AccessSQL.SendSQL("DELETE * FROM TournamentGrid WHERE id_tournament = " + dataGridView1.SelectedRows[0].Cells["ID"].Value.ToString());
+                    UpDateTable();
+                }
+            }
+            else
+            {
+                DialogResult dr = MessageBox.Show($"Удалить турниры ({dataGridView1.SelectedRows.Count} шт.)?", "Удаление турнира", MessageBoxButtons.YesNo);
+                if (dr == DialogResult.Yes)
+                {
+                    foreach (DataGridViewRow row in dataGridView1.SelectedRows)
+                    {
+                        AccessSQL.SendSQL("DELETE * FROM Tournament WHERE id = " + row.Cells["ID"].Value.ToString());
+                        AccessSQL.SendSQL("DELETE * FROM TournamentGrid WHERE id_tournament = " + row.Cells["ID"].Value.ToString());
+                    }
+                    UpDateTable();
+                }
             }
         }
         private void добавитьToolStripMenuItem_Click_1(object sender, EventArgs e)

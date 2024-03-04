@@ -216,10 +216,7 @@ namespace Kaharman
             }
             foreach (DataGridViewRow row in dataGridView2.SelectedRows)
             {
-                if (MessageBox.Show($"Удалить участника {row.Cells[1].Value}?", "Удаление участника", MessageBoxButtons.YesNo) == DialogResult.Yes)
-                {
-                    ParticipantsTable.DeleteRow(row.Cells["ID"].Value.ToString());
-                }
+                ParticipantsTable.DeleteRow(row.Cells["ID"].Value.ToString());
             }
         }
         private void dataGridView2_MouseDoubleClick(object sender, MouseEventArgs e)
