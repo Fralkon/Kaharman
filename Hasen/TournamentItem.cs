@@ -171,6 +171,19 @@ namespace Kaharman
         {
 
         }
+        public Participant(int iD, string name, string gender, DateTime dayOfBirth, float weight, string gualiti, string city, string trainer)
+        {
+            ID = iD;
+            Name = name;
+            Gender = gender;
+            DayOfBirth = dayOfBirth;
+            Age = (int)((DateTime.Now - dayOfBirth).TotalDays / ValyeDayYear);
+            Weight = weight;
+            Gualiti = gualiti;
+            City = city;
+            Trainer = trainer;
+        }
+
         public void SetID(int ID)
         {
             this.ID = ID;

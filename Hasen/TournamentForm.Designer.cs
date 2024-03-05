@@ -44,7 +44,6 @@
             secret = new TextBox();
             contextMenuStrip1 = new ContextMenuStrip(components);
             создатьТурнирнуюТаблицуToolStripMenuItem = new ToolStripMenuItem();
-            изменитьToolStripMenuItem = new ToolStripMenuItem();
             удалитьToolStripMenuItem = new ToolStripMenuItem();
             menuStrip1 = new MenuStrip();
             файлToolStripMenuItem = new ToolStripMenuItem();
@@ -188,27 +187,21 @@
             // 
             // contextMenuStrip1
             // 
-            contextMenuStrip1.Items.AddRange(new ToolStripItem[] { создатьТурнирнуюТаблицуToolStripMenuItem, изменитьToolStripMenuItem, удалитьToolStripMenuItem });
+            contextMenuStrip1.Items.AddRange(new ToolStripItem[] { создатьТурнирнуюТаблицуToolStripMenuItem, удалитьToolStripMenuItem });
             contextMenuStrip1.Name = "contextMenuStrip1";
-            contextMenuStrip1.Size = new Size(129, 70);
+            contextMenuStrip1.Size = new Size(119, 48);
             // 
             // создатьТурнирнуюТаблицуToolStripMenuItem
             // 
             создатьТурнирнуюТаблицуToolStripMenuItem.Name = "создатьТурнирнуюТаблицуToolStripMenuItem";
-            создатьТурнирнуюТаблицуToolStripMenuItem.Size = new Size(128, 22);
+            создатьТурнирнуюТаблицуToolStripMenuItem.Size = new Size(118, 22);
             создатьТурнирнуюТаблицуToolStripMenuItem.Text = "Создать";
             создатьТурнирнуюТаблицуToolStripMenuItem.Click += создатьТурнирнуюТаблицуToolStripMenuItem_Click;
-            // 
-            // изменитьToolStripMenuItem
-            // 
-            изменитьToolStripMenuItem.Name = "изменитьToolStripMenuItem";
-            изменитьToolStripMenuItem.Size = new Size(128, 22);
-            изменитьToolStripMenuItem.Text = "Изменить";
             // 
             // удалитьToolStripMenuItem
             // 
             удалитьToolStripMenuItem.Name = "удалитьToolStripMenuItem";
-            удалитьToolStripMenuItem.Size = new Size(128, 22);
+            удалитьToolStripMenuItem.Size = new Size(118, 22);
             удалитьToolStripMenuItem.Text = "Удалить";
             удалитьToolStripMenuItem.Click += удалитьToolStripMenuItem_Click;
             // 
@@ -252,21 +245,21 @@
             // создатьToolStripMenuItem
             // 
             создатьToolStripMenuItem.Name = "создатьToolStripMenuItem";
-            создатьToolStripMenuItem.Size = new Size(180, 22);
+            создатьToolStripMenuItem.Size = new Size(128, 22);
             создатьToolStripMenuItem.Text = "Создать";
             создатьToolStripMenuItem.Click += создатьТурнирнуюТаблицуToolStripMenuItem_Click;
             // 
             // удалитьToolStripMenuItem2
             // 
             удалитьToolStripMenuItem2.Name = "удалитьToolStripMenuItem2";
-            удалитьToolStripMenuItem2.Size = new Size(180, 22);
+            удалитьToolStripMenuItem2.Size = new Size(128, 22);
             удалитьToolStripMenuItem2.Text = "Удалить";
             удалитьToolStripMenuItem2.Click += удалитьToolStripMenuItem_Click;
             // 
             // обновитьToolStripMenuItem
             // 
             обновитьToolStripMenuItem.Name = "обновитьToolStripMenuItem";
-            обновитьToolStripMenuItem.Size = new Size(180, 22);
+            обновитьToolStripMenuItem.Size = new Size(128, 22);
             обновитьToolStripMenuItem.Text = "Обновить";
             обновитьToolStripMenuItem.Click += обновитьToolStripMenuItem_Click;
             // 
@@ -471,7 +464,6 @@
         private TextBox secret;
         private ContextMenuStrip contextMenuStrip1;
         private ToolStripMenuItem создатьТурнирнуюТаблицуToolStripMenuItem;
-        private ToolStripMenuItem изменитьToolStripMenuItem;
         private ToolStripMenuItem удалитьToolStripMenuItem;
         private MenuStrip menuStrip1;
         private ToolStripMenuItem файлToolStripMenuItem;

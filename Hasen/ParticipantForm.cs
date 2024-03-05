@@ -5,7 +5,7 @@ namespace Hasen
 {
     public partial class ParticipantForm : Form
     {
-        Participant Participant { get; set; }
+        public Participant? Participant { get; set; }
         int? ID;
         ToolTip ToolTip = new ToolTip();
         public ParticipantForm()
@@ -87,10 +87,19 @@ namespace Hasen
         }
         private void button1_Click(object sender, EventArgs e)
         {
-            AccessSQL.SendSQL($"INSERT INTO Participants (name,gender,[date_of_birth],weight,qualification,city,trainer) VALUES ('{name.Text}','{gender.Text}','{dateOfBirth.Value.ToString("dd.MM.yyyy")}',{weigth.Text},'{qualification.Text}','{city.Text}','{trainer.Text}')");
-            ID = AccessSQL.GetIDInsert();
-            DialogResult = DialogResult.OK;
-            this.Close();
+            if (float.TryParse(weigth.Text, out float weight))
+            {
+                AccessSQL.SendSQL($"INSERT INTO Participants (name,gender,[date_of_birth],weight,qualification,city,trainer) VALUES ('{name.Text}','{gender.Text}','{dateOfBirth.Value.ToString("dd.MM.yyyy")}',{weight},'{qualification.Text}','{city.Text}','{trainer.Text}')");
+                int id = AccessSQL.GetIDInsert();
+                ID = id;
+                DialogResult = DialogResult.OK;
+                Participant = new Participant(id, name.Text, gender.Text, dateOfBirth.Value, weight, qualification.Text, city.Text, trainer.Text);
+                this.Close();
+            }
+            else
+            {
+                MessageBox.Show("Неправильно введены данные.");
+            }
         }
         private void button2_Click(object sender, EventArgs e)
         {
