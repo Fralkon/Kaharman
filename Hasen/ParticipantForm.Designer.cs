@@ -177,6 +177,7 @@
             // 
             // gender
             // 
+            gender.DropDownStyle = ComboBoxStyle.DropDownList;
             gender.FormattingEnabled = true;
             gender.Location = new Point(157, 90);
             gender.Name = "gender";
@@ -215,14 +216,14 @@
             // изменитьToolStripMenuItem
             // 
             изменитьToolStripMenuItem.Name = "изменитьToolStripMenuItem";
-            изменитьToolStripMenuItem.Size = new Size(180, 22);
+            изменитьToolStripMenuItem.Size = new Size(128, 22);
             изменитьToolStripMenuItem.Text = "Изменить";
             изменитьToolStripMenuItem.Click += изменитьToolStripMenuItem_Click;
             // 
             // удаоитьToolStripMenuItem
             // 
             удаоитьToolStripMenuItem.Name = "удаоитьToolStripMenuItem";
-            удаоитьToolStripMenuItem.Size = new Size(180, 22);
+            удаоитьToolStripMenuItem.Size = new Size(128, 22);
             удаоитьToolStripMenuItem.Text = "Удалить";
             // 
             // ParticipantForm

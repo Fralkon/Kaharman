@@ -61,6 +61,31 @@ namespace Kaharman
             dataGridView1.Columns[0].Visible = false;
             dataGridView2.Columns[0].Visible = false;
         }
+        private void SaveChangeTournament()
+        {
+            if (ID == null)
+            {
+                if (name.Text.Length == 0)
+                {
+                    MessageBox.Show("Введите наименование соревнования.");
+                    return;
+                }
+                if (dateTimePicker1.Value > dateTimePicker2.Value)
+                {
+                    MessageBox.Show("Дата начала должна быть меньше дате окончания соревнования.");
+                    return;
+                }
+                if (mainJudge.Text.Length == 0)
+                {
+                    MessageBox.Show("Введите главного судью.");
+                    return;
+                }
+                AccessSQL.SendSQL($"INSERT INTO Tournament (name,[start_date],[end_date],note_tournament,main_judge,secret,id_participants) VALUES ('{name.Text}','{dateTimePicker1.Value.ToString("dd.MM.yyyy")}','{dateTimePicker2.Value.ToString("dd.MM.yyyy")}','{note.Text}','{mainJudge.Text}','{secret.Text}','{ParticipantsTable.GetIDsPartString()}')");
+                ID = AccessSQL.GetIDInsert().ToString();
+            }
+            else
+                AccessSQL.SendSQL($"UPDATE Tournament SET name = '{name.Text}', [start_date] = '{dateTimePicker1.Value.ToString("dd.MM.yyyy")}',[end_date] = '{dateTimePicker2.Value.ToString("dd.MM.yyyy")}',note_tournament = '{note.Text}',main_judge = '{mainJudge.Text}',secret = '{secret.Text}',id_participants = '{ParticipantsTable.GetIDsPartString()}' WHERE id = {ID};");
+        }
         private void UpDataGrid()
         {
             if (ID == null)
@@ -119,6 +144,7 @@ namespace Kaharman
                 return;
             }
             ParticipantsTable.LoadDataOnFiles(files);
+            SaveChangeTournament();
         }
         private void dataGridView_DragEnter(object sender, DragEventArgs e)
         {
@@ -192,7 +218,14 @@ namespace Kaharman
         private void создатьToolStripMenuItem1_Click(object sender, EventArgs e)
         {
             ParticipantForm participants = new ParticipantForm();
-            participants.ShowDialog();
+            if (participants.ShowDialog() == DialogResult.OK)
+            {
+                using (DataTable data = AccessSQL.GetDataTableSQL($"SELECT * FROM Participants WHERE id = " + participants.ID))
+                {
+                    ParticipantsTable.FillTableOnAccess(data);
+                }
+                SaveChangeTournament();
+            }
         }
         private void добавитьToolStripMenuItem1_Click(object sender, EventArgs e)
         {
@@ -218,6 +251,7 @@ namespace Kaharman
             {
                 ParticipantsTable.DeleteRow(row.Cells["ID"].Value.ToString());
             }
+            SaveChangeTournament();
         }
         private void dataGridView2_MouseDoubleClick(object sender, MouseEventArgs e)
         {
@@ -253,10 +287,6 @@ namespace Kaharman
                 proc.Start();
             }
         }
-        private void cancelButton_Click_1(object sender, EventArgs e)
-        {
-            this.Close();
-        }
         private void ResizeForm()
         {
             panel1.Width = this.Width / 2;
@@ -273,6 +303,11 @@ namespace Kaharman
         private void TournamentForm_Activated(object sender, EventArgs e)
         {
             UpDataGrid();
+        }
+
+        private void сохранитьToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            SaveChangeTournament();
         }
     }
 }

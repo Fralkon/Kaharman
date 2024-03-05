@@ -29,7 +29,6 @@
         private void InitializeComponent()
         {
             components = new System.ComponentModel.Container();
-            cancelButton = new Button();
             label1 = new Label();
             label2 = new Label();
             label3 = new Label();
@@ -47,6 +46,7 @@
             удалитьToolStripMenuItem = new ToolStripMenuItem();
             menuStrip1 = new MenuStrip();
             файлToolStripMenuItem = new ToolStripMenuItem();
+            сохранитьToolStripMenuItem = new ToolStripMenuItem();
             протоколТурнираToolStripMenuItem = new ToolStripMenuItem();
             выходToolStripMenuItem = new ToolStripMenuItem();
             турнирнаяТаблицаToolStripMenuItem = new ToolStripMenuItem();
@@ -67,6 +67,7 @@
             удалитьToolStripMenuItem1 = new ToolStripMenuItem();
             panel1 = new Panel();
             panel2 = new Panel();
+            создатьToolStripMenuItem2 = new ToolStripMenuItem();
             contextMenuStrip1.SuspendLayout();
             menuStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)dataGridView1).BeginInit();
@@ -75,17 +76,6 @@
             panel1.SuspendLayout();
             panel2.SuspendLayout();
             SuspendLayout();
-            // 
-            // cancelButton
-            // 
-            cancelButton.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
-            cancelButton.Location = new Point(589, 427);
-            cancelButton.Name = "cancelButton";
-            cancelButton.Size = new Size(75, 23);
-            cancelButton.TabIndex = 1;
-            cancelButton.Text = "Отмена";
-            cancelButton.UseVisualStyleBackColor = true;
-            cancelButton.Click += cancelButton_Click_1;
             // 
             // label1
             // 
@@ -216,22 +206,29 @@
             // 
             // файлToolStripMenuItem
             // 
-            файлToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { протоколТурнираToolStripMenuItem, выходToolStripMenuItem });
+            файлToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { сохранитьToolStripMenuItem, протоколТурнираToolStripMenuItem, выходToolStripMenuItem });
             файлToolStripMenuItem.Name = "файлToolStripMenuItem";
             файлToolStripMenuItem.Size = new Size(48, 20);
             файлToolStripMenuItem.Text = "Файл";
             // 
+            // сохранитьToolStripMenuItem
+            // 
+            сохранитьToolStripMenuItem.Name = "сохранитьToolStripMenuItem";
+            сохранитьToolStripMenuItem.Size = new Size(180, 22);
+            сохранитьToolStripMenuItem.Text = "Сохранить";
+            сохранитьToolStripMenuItem.Click += сохранитьToolStripMenuItem_Click;
+            // 
             // протоколТурнираToolStripMenuItem
             // 
             протоколТурнираToolStripMenuItem.Name = "протоколТурнираToolStripMenuItem";
-            протоколТурнираToolStripMenuItem.Size = new Size(177, 22);
+            протоколТурнираToolStripMenuItem.Size = new Size(180, 22);
             протоколТурнираToolStripMenuItem.Text = "Протокол турнира";
             протоколТурнираToolStripMenuItem.Click += протоколТурнираToolStripMenuItem_Click;
             // 
             // выходToolStripMenuItem
             // 
             выходToolStripMenuItem.Name = "выходToolStripMenuItem";
-            выходToolStripMenuItem.Size = new Size(177, 22);
+            выходToolStripMenuItem.Size = new Size(180, 22);
             выходToolStripMenuItem.Text = "Выход";
             выходToolStripMenuItem.Click += выходToolStripMenuItem_Click;
             // 
@@ -317,7 +314,7 @@
             dataGridView1.RowHeadersVisible = false;
             dataGridView1.RowTemplate.Height = 25;
             dataGridView1.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-            dataGridView1.Size = new Size(630, 301);
+            dataGridView1.Size = new Size(630, 342);
             dataGridView1.TabIndex = 14;
             dataGridView1.MouseDoubleClick += dataGridView1_MouseDoubleClick;
             // 
@@ -340,7 +337,7 @@
             dataGridView2.RowHeadersVisible = false;
             dataGridView2.RowTemplate.Height = 25;
             dataGridView2.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-            dataGridView2.Size = new Size(639, 301);
+            dataGridView2.Size = new Size(639, 342);
             dataGridView2.TabIndex = 16;
             dataGridView2.CellMouseClick += dataGridView2_CellClick;
             dataGridView2.ColumnHeaderMouseClick += dataGridView2_ColumnHeaderMouseClick;
@@ -369,21 +366,21 @@
             // 
             // contextMenuStrip2
             // 
-            contextMenuStrip2.Items.AddRange(new ToolStripItem[] { добавитьToolStripMenuItem, удалитьToolStripMenuItem1 });
+            contextMenuStrip2.Items.AddRange(new ToolStripItem[] { создатьToolStripMenuItem2, добавитьToolStripMenuItem, удалитьToolStripMenuItem1 });
             contextMenuStrip2.Name = "contextMenuStrip2";
-            contextMenuStrip2.Size = new Size(127, 48);
+            contextMenuStrip2.Size = new Size(181, 92);
             // 
             // добавитьToolStripMenuItem
             // 
             добавитьToolStripMenuItem.Name = "добавитьToolStripMenuItem";
-            добавитьToolStripMenuItem.Size = new Size(126, 22);
+            добавитьToolStripMenuItem.Size = new Size(180, 22);
             добавитьToolStripMenuItem.Text = "Добавить";
             добавитьToolStripMenuItem.Click += добавитьToolStripMenuItem1_Click;
             // 
             // удалитьToolStripMenuItem1
             // 
             удалитьToolStripMenuItem1.Name = "удалитьToolStripMenuItem1";
-            удалитьToolStripMenuItem1.Size = new Size(126, 22);
+            удалитьToolStripMenuItem1.Size = new Size(180, 22);
             удалитьToolStripMenuItem1.Text = "Удалить";
             удалитьToolStripMenuItem1.Click += удалитьToolStripMenuItem3_Click;
             // 
@@ -409,7 +406,6 @@
             panel2.Controls.Add(label3);
             panel2.Controls.Add(label7);
             panel2.Controls.Add(secretLable);
-            panel2.Controls.Add(cancelButton);
             panel2.Controls.Add(dataGridView2);
             panel2.Controls.Add(label5);
             panel2.Controls.Add(label2);
@@ -420,6 +416,13 @@
             panel2.Name = "panel2";
             panel2.Size = new Size(675, 461);
             panel2.TabIndex = 21;
+            // 
+            // создатьToolStripMenuItem2
+            // 
+            создатьToolStripMenuItem2.Name = "создатьToolStripMenuItem2";
+            создатьToolStripMenuItem2.Size = new Size(180, 22);
+            создатьToolStripMenuItem2.Text = "Создать";
+            создатьToolStripMenuItem2.Click += создатьToolStripMenuItem1_Click;
             // 
             // TournamentForm
             // 
@@ -449,7 +452,6 @@
         }
 
         #endregion
-        private Button cancelButton;
         private Label label1;
         private Label label2;
         private Label label3;
@@ -487,5 +489,7 @@
         private Panel panel1;
         private Panel panel2;
         private ToolStripMenuItem обновитьToolStripMenuItem;
+        private ToolStripMenuItem сохранитьToolStripMenuItem;
+        private ToolStripMenuItem создатьToolStripMenuItem2;
     }
 }

@@ -431,7 +431,7 @@ namespace Kaharman
                                     continue;
                                 Participant participant = new Participant();
                                 participant.Name = rowExcel[i][1].ToString().Trim();
-                                participant.Gender = rowExcel[i][2].ToString().ToLower().Trim();
+                                participant.Gender = ValidateGender(rowExcel[i][2].ToString().ToLower().Trim());
                                 if (DateTime.TryParse(rowExcel[i][3].ToString(), out DateTime time))
                                     participant.DayOfBirth = time;
                                 try
@@ -458,6 +458,15 @@ namespace Kaharman
                 }
                 MessageBox.Show("Загрузка завершена");
             }
+        }
+        private string ValidateGender(string gender)
+        {
+            if (gender == "муж")
+                return "м";
+            else if (gender == "жен")
+                return "ж";
+            else
+                return gender;
         }
         public void ColumnHeaderMouseClick(object sender, DataGridViewCellMouseEventArgs e)
         {

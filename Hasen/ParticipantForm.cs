@@ -6,22 +6,22 @@ namespace Hasen
     public partial class ParticipantForm : Form
     {
         public Participant? Participant { get; set; }
-        int? ID;
+        public int? ID;
         ToolTip ToolTip = new ToolTip();
         public ParticipantForm()
         {
             InitializeComponent();
             Participant = new Participant();
             dateOfBirth.CloseUp += DateOfBirth_CloseUp;
-            gender.Items.Add("муж");
-            gender.Items.Add("жен");
+            gender.Items.Add("м");
+            gender.Items.Add("ж");
         }
         public ParticipantForm(string iD)
         {
             InitializeComponent();
             dateOfBirth.CloseUp += DateOfBirth_CloseUp;
-            gender.Items.Add("муж");
-            gender.Items.Add("жен");
+            gender.Items.Add("м");
+            gender.Items.Add("ж");
             ID = int.Parse(iD);
             using (DataTable dt = AccessSQL.GetDataTableSQL("SELECT * FROM Participants WHERE id = " + iD))
             {
@@ -47,8 +47,8 @@ namespace Hasen
             InitializeComponent();
             Participant = participant;
             dateOfBirth.CloseUp += DateOfBirth_CloseUp;
-            gender.Items.Add("муж");
-            gender.Items.Add("жен");
+            gender.Items.Add("м");
+            gender.Items.Add("ж");
             ID = participant.ID;
             name.Text = participant.Name;
             gender.Text = participant.Gender;
