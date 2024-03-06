@@ -37,6 +37,8 @@
             печатьToolStripMenuItem = new ToolStripMenuItem();
             протоколСоревнованияToolStripMenuItem = new ToolStripMenuItem();
             выходToolStripMenuItem = new ToolStripMenuItem();
+            labelJudge = new Label();
+            labelSecret = new Label();
             panel1.SuspendLayout();
             menuStrip1.SuspendLayout();
             SuspendLayout();
@@ -47,6 +49,8 @@
             panel1.Anchor = AnchorStyles.Top;
             panel1.AutoScroll = true;
             panel1.BorderStyle = BorderStyle.FixedSingle;
+            panel1.Controls.Add(labelSecret);
+            panel1.Controls.Add(labelJudge);
             panel1.Controls.Add(dateStart);
             panel1.Controls.Add(nameTournamet);
             panel1.Controls.Add(nameGrid);
@@ -122,6 +126,24 @@
             выходToolStripMenuItem.Text = "Выход";
             выходToolStripMenuItem.Click += выходToolStripMenuItem_Click;
             // 
+            // labelJudge
+            // 
+            labelJudge.AutoSize = true;
+            labelJudge.Location = new Point(1000, 343);
+            labelJudge.Name = "labelJudge";
+            labelJudge.Size = new Size(38, 15);
+            labelJudge.TabIndex = 6;
+            labelJudge.Text = "label1";
+            // 
+            // labelSecret
+            // 
+            labelSecret.AutoSize = true;
+            labelSecret.Location = new Point(1000, 370);
+            labelSecret.Name = "labelSecret";
+            labelSecret.Size = new Size(38, 15);
+            labelSecret.TabIndex = 7;
+            labelSecret.Text = "label1";
+            // 
             // GridForm
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
@@ -154,5 +176,7 @@
         private Label nameTournamet;
         private ToolStripMenuItem протоколСоревнованияToolStripMenuItem;
         private Label dateStart;
+        private Label labelJudge;
+        private Label labelSecret;
     }
 }

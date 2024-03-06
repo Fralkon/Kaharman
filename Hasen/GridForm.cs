@@ -60,6 +60,8 @@ namespace Kaharman
             placesText[2].Text = "Третье место";
             placesText[3] = new Label();
             placesText[3].Text = "Третье место";
+            labelJudge.Text = "Главный судья ___________________ " + judge;
+            labelSecret.Text = "Секретарь ________________________ " + secret; 
             ElementsLocation();
             foreach (Label label in placesText)
                 panel1.Controls.Add(label);
@@ -291,6 +293,9 @@ namespace Kaharman
                 Grid.Places[i].InitPosition(new Point(panel1.Width - Grid.Places[i].Label.Width - 30, posY));
                 placesText[i].Location = new Point(panel1.Width - placesText[i].Width - 200, posY);
             }
+            int lableX = placesText[0].Location.X - 50;
+            labelJudge.Location = new Point(lableX, panel1.Height - 100);
+            labelSecret.Location = new Point(lableX, panel1.Height - 70);
         }
         private void протоколСоревнованияToolStripMenuItem_Click(object sender, EventArgs e)
         {
