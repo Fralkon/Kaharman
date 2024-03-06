@@ -1,9 +1,12 @@
 ﻿using Hasen;
+using iTextSharp.text;
+using iTextSharp.text.pdf;
 using Kaharman;
 using NPOI.SS.UserModel;
 using System.Data;
 using System.Diagnostics;
 using System.Drawing;
+using System.Drawing.Imaging;
 using System.Text.Json;
 using System.Windows.Forms;
 
@@ -91,7 +94,6 @@ namespace Kaharman
                 return;
             e.Effect = e.AllowedEffect;
         }
-
         private void Label_DragDrop(object? sender, DragEventArgs e)
         {
             if (!e.Data.GetDataPresent(typeof(PointItem)))
@@ -106,7 +108,6 @@ namespace Kaharman
                 return;
             Grid.SwapItems(draggedItem, point);
         }
-
         #endregion
         private void Panel1_Paint(object? sender, PaintEventArgs e)
         {
@@ -165,13 +166,27 @@ namespace Kaharman
         {
             Bitmap bitmap = new Bitmap(panel1.Width, panel1.Height);
             ChangeColorForPrint();
-            panel1.DrawToBitmap(bitmap, new Rectangle(0, 0, panel1.Width, panel1.Height));
+            panel1.DrawToBitmap(bitmap, new System.Drawing.Rectangle(0, 0, panel1.Width, panel1.Height));
             ChangeColorForVisible();
             SaveFileDialog saveFileDialog = new SaveFileDialog();
-            saveFileDialog.Filter = "img file (*.jpeg)|*.jpeg";
+            saveFileDialog.Filter = "PDF file (*.pdf)|*.pdf";
             if (saveFileDialog.ShowDialog() == DialogResult.OK)
             {
-                bitmap.Save(saveFileDialog.FileName);
+                iTextSharp.text.Rectangle pageSize = new iTextSharp.text.Rectangle(0, 0, bitmap.Width, bitmap.Height);
+                
+
+                using (var ms = new MemoryStream())
+                {
+                    var document = new Document(pageSize, 0, 0, 0, 0);
+                    PdfWriter.GetInstance(document, ms).SetFullCompression();
+                    document.Open();
+                    MemoryStream bitmapMS = new MemoryStream();
+                    bitmap.Save(bitmapMS, ImageFormat.Bmp);
+                    var image = iTextSharp.text.Image.GetInstance(bitmapMS.ToArray());
+                    document.Add(image);
+                    document.Close();
+                    File.WriteAllBytes(saveFileDialog.FileName, ms.ToArray());
+                }
                 var proc = new Process();
                 proc.StartInfo.FileName = saveFileDialog.FileName;
                 proc.StartInfo.UseShellExecute = true;
@@ -274,7 +289,7 @@ namespace Kaharman
             {
                 int posY = 120 + (i * 35);
                 Grid.Places[i].InitPosition(new Point(panel1.Width - Grid.Places[i].Label.Width - 30, posY));
-                placesText[i].Location = new Point(panel1.Width - placesText[i].Width - 180, posY);
+                placesText[i].Location = new Point(panel1.Width - placesText[i].Width - 200, posY);
             }
         }
         private void протоколСоревнованияToolStripMenuItem_Click(object sender, EventArgs e)

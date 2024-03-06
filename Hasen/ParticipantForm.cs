@@ -8,20 +8,17 @@ namespace Hasen
         public Participant? Participant { get; set; }
         public int? ID;
         ToolTip ToolTip = new ToolTip();
+        AutoCompleteStringCollection AutoCompleteCity = new AutoCompleteStringCollection();
         public ParticipantForm()
         {
             InitializeComponent();
             Participant = new Participant();
-            dateOfBirth.CloseUp += DateOfBirth_CloseUp;
-            gender.Items.Add("м");
-            gender.Items.Add("ж");
+            InitForm();
         }
         public ParticipantForm(string iD)
         {
             InitializeComponent();
-            dateOfBirth.CloseUp += DateOfBirth_CloseUp;
-            gender.Items.Add("м");
-            gender.Items.Add("ж");
+            InitForm();
             ID = int.Parse(iD);
             using (DataTable dt = AccessSQL.GetDataTableSQL("SELECT * FROM Participants WHERE id = " + iD))
             {
@@ -46,9 +43,7 @@ namespace Hasen
         {
             InitializeComponent();
             Participant = participant;
-            dateOfBirth.CloseUp += DateOfBirth_CloseUp;
-            gender.Items.Add("м");
-            gender.Items.Add("ж");
+            InitForm();
             ID = participant.ID;
             name.Text = participant.Name;
             gender.Text = participant.Gender;
@@ -66,9 +61,29 @@ namespace Hasen
             dateOfBirth.Enabled = true;
             weigth.Enabled = true;
             qualification.Enabled = true;
-            city.Enabled = true; 
+            city.Enabled = true;
             trainer.Enabled = true;
             изменитьToolStripMenuItem.Visible = false;
+        }
+        private void InitForm()
+        {
+            dateOfBirth.CloseUp += DateOfBirth_CloseUp;
+            gender.Items.Add("м");
+            gender.Items.Add("ж");
+            //using (DataTable dt = AccessSQL.GetDataTableSQL("SELECT DISTINCT city FROM Participants;"))
+            //{
+            //    foreach (DataRow dr in dt.Rows)
+            //    {
+            //        comboBox1.Items.Add(dr[0].ToString());
+            //        AutoCompleteCity.Add(dr[0].ToString());
+            //    }
+            //}
+            //textBox1.AutoCompleteCustomSource = AutoCompleteCity;
+            //textBox1.AutoCompleteMode = AutoCompleteMode.SuggestAppend;
+            //textBox1.AutoCompleteSource = AutoCompleteSource.CustomSource;
+
+            //comboBox1.AutoCompleteSource = AutoCompleteSource.ListItems;
+            //comboBox1.AutoCompleteMode = AutoCompleteMode.SuggestAppend;
         }
         private void EditFalse()
         {

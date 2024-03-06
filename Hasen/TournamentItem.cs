@@ -285,7 +285,7 @@ namespace Kaharman
             Label = new Label();
             Label.AccessibleRole = AccessibleRole.None;
             Label.BorderStyle = BorderStyle.FixedSingle;
-            Label.Size = new Size(150, 20);
+            Label.Size = new Size(170, 20);
             Label.Text = "";
             Label.TabStop = false; 
             Label.AllowDrop = true;
@@ -296,7 +296,7 @@ namespace Kaharman
             Label = new Label();
             Label.AccessibleRole = AccessibleRole.None;
             Label.BorderStyle = BorderStyle.FixedSingle;
-            Label.Size = new Size(150, 20); 
+            Label.Size = new Size(170, 20); 
             Label.AllowDrop = true;
             Status = StatusGridItem.close;
         }
@@ -345,7 +345,7 @@ namespace Kaharman
         {
             ID = participant.ID;
             Participant = participant;
-            Label.Text = participant.Name;
+            Label.Text = participant.Name + "( "+ participant.City.Substring(0,3) +" )";
             InitColorItem();
             string capction = $"Пол: {participant.Gender}\nВозраст: {participant.Age}\nВес: {participant.Weight}\nКвалификация: {participant.Gualiti}\nГород: {participant.City}\nТренер: {participant.Trainer}";
             t.SetToolTip(Label, capction);

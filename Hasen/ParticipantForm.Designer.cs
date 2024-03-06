@@ -62,7 +62,7 @@
             // 
             // button1
             // 
-            button1.Location = new Point(411, 291);
+            button1.Location = new Point(411, 281);
             button1.Name = "button1";
             button1.Size = new Size(75, 23);
             button1.TabIndex = 1;
@@ -72,7 +72,7 @@
             // 
             // button2
             // 
-            button2.Location = new Point(319, 291);
+            button2.Location = new Point(319, 281);
             button2.Name = "button2";
             button2.Size = new Size(75, 23);
             button2.TabIndex = 2;
@@ -231,7 +231,7 @@
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = SystemColors.Control;
-            ClientSize = new Size(515, 343);
+            ClientSize = new Size(515, 330);
             Controls.Add(dateOfBirth);
             Controls.Add(gender);
             Controls.Add(label8);
@@ -281,5 +281,7 @@
         private ToolStripMenuItem действиеToolStripMenuItem;
         private ToolStripMenuItem изменитьToolStripMenuItem;
         private ToolStripMenuItem удаоитьToolStripMenuItem;
+        private ComboBox comboBox1;
+        private TextBox textBox1;
     }
 }
