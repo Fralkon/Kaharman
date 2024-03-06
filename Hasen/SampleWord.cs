@@ -71,13 +71,19 @@ namespace Kaharman
             for (int i = 0; i < data.Rows.Count; i++)
             {
                 int rowTableExel = i + 1;
-                FillCell(table.GetRow(rowTableExel).GetCell(0), (i+1).ToString());
-                FillCell(table.GetRow(rowTableExel).GetCell(1), data.Rows[i]["name"].ToString());
-                FillCell(table.GetRow(rowTableExel).GetCell(2), data.Rows[i]["gender"].ToString());
-                FillCell(table.GetRow(rowTableExel).GetCell(3), data.Rows[i]["weight"].ToString());
-                FillCell(table.GetRow(rowTableExel).GetCell(4), DateTime.Parse(data.Rows[i]["date_of_birth"].ToString()).ToString("dd.MM.yyyy"));
-                FillCell(table.GetRow(rowTableExel).GetCell(5), data.Rows[i]["city"].ToString());
-                FillCell(table.GetRow(rowTableExel).GetCell(6), data.Rows[i]["trainer"].ToString());
+                try
+                {
+                    FillCell(table.GetRow(rowTableExel).GetCell(0), (i + 1).ToString());
+                    FillCell(table.GetRow(rowTableExel).GetCell(1), data.Rows[i]["name"].ToString());
+                    FillCell(table.GetRow(rowTableExel).GetCell(2), data.Rows[i]["gender"].ToString());
+                    FillCell(table.GetRow(rowTableExel).GetCell(3), data.Rows[i]["weight"].ToString());
+                    FillCell(table.GetRow(rowTableExel).GetCell(4), DateTime.Parse(data.Rows[i]["date_of_birth"].ToString()).ToString("dd.MM.yyyy"));
+                    FillCell(table.GetRow(rowTableExel).GetCell(5), data.Rows[i]["city"].ToString());
+                    FillCell(table.GetRow(rowTableExel).GetCell(6), data.Rows[i]["trainer"].ToString());
+                }
+                catch (Exception ex){
+                    MessageBox.Show(data.Rows[i].ItemArray.ToString());
+                }
             }
         }
         private void FillCell(XWPFTableCell cell, string value)

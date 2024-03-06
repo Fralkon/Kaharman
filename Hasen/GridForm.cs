@@ -298,7 +298,7 @@ namespace Kaharman
 
             word.CreateProtacolGrid(nameTournamet.Text, DateStart, Judge, Secret);
 
-            word.FillTable(nameGrid.Text, AccessSQL.GetDataTableSQL($"SELECT name FROM Participants WHERE id IN ({string.Join(", ",
+            word.FillTable(nameGrid.Text, AccessSQL.GetDataTableSQL($"SELECT * FROM Participants WHERE id IN ({string.Join(", ",
                     AccessSQL.GetDataTableSQL($"SELECT id_participants FROM TournamentGrid WHERE id = {ID}").
                     Rows[0]["id_participants"].ToString().
                     Split(';').
