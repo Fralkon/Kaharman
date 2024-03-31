@@ -102,7 +102,6 @@ namespace Kaharman
             GridForm tournament = new GridForm(IdGrid, textBox2.Text, nameTextBox.Text, dateTimePicker1.Value,Secret,Judge, grid);
             tournament.Show();
             this.Close();
-            MessageBox.Show("sdas");
         }
         private void Save(string id_tournament, DateTime date, string name, string id_participants, Grid grid, string StatusGrid)
         {

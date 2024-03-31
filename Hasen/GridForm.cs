@@ -31,7 +31,7 @@ namespace Kaharman
             switch (Grid.Type)
             {
                 case 4:
-                    panel1.Size = new Size(1000, 300);
+                    panel1.Size = new Size(1000, 500);
                     break;
                 case 8:
                     panel1.Size = new Size(1150, 500);
@@ -195,6 +195,26 @@ namespace Kaharman
                 proc.Start();
             }
         }
+        public void SaveGrid(string pathFolder)
+        {
+            Bitmap bitmap = new Bitmap(panel1.Width, panel1.Height);
+            ChangeColorForPrint();
+            panel1.DrawToBitmap(bitmap, new System.Drawing.Rectangle(0, 0, panel1.Width, panel1.Height));
+            ChangeColorForVisible();
+            iTextSharp.text.Rectangle pageSize = new iTextSharp.text.Rectangle(0, 0, bitmap.Width, bitmap.Height);
+            using (var ms = new MemoryStream())
+            {
+                var document = new Document(pageSize, 0, 0, 0, 0);
+                PdfWriter.GetInstance(document, ms).SetFullCompression();
+                document.Open();
+                MemoryStream bitmapMS = new MemoryStream();
+                bitmap.Save(bitmapMS, ImageFormat.Bmp);
+                var image = iTextSharp.text.Image.GetInstance(bitmapMS.ToArray());
+                document.Add(image);
+                document.Close();
+                File.WriteAllBytes(pathFolder+"/"+nameGrid.Text+".pdf", ms.ToArray());
+            }
+        }
         private void ChangeColorForPrint()
         {
             Color color = Color.White;
@@ -275,7 +295,7 @@ namespace Kaharman
         }
         private void TournamentGrid_FormClosing(object sender, FormClosingEventArgs e)
         {
-            if (MessageBox.Show("Сохранить изменения?", "Сохрание.", MessageBoxButtons.OKCancel) == DialogResult.OK)
+            //if (MessageBox.Show("Сохранить изменения?", "Сохрание.", MessageBoxButtons.OKCancel) == DialogResult.OK)
                 AccessSQL.SendSQL($"UPDATE TournamentGrid SET grid = '{JsonSerializer.Serialize(Grid)}' WHERE id = {ID}");
         }
         private void GridForm_Resize(object sender, EventArgs e)

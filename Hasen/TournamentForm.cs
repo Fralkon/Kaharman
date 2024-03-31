@@ -2,6 +2,7 @@
 using System.Data;
 using System.Diagnostics;
 using System.Text.Json;
+using System.Windows.Forms;
 
 namespace Kaharman
 {
@@ -308,6 +309,53 @@ namespace Kaharman
         private void сохранитьToolStripMenuItem_Click(object sender, EventArgs e)
         {
             SaveChangeTournament();
+        }
+
+        private void сеткаТурнираToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            FolderBrowserDialog folderBrowserDialog = new FolderBrowserDialog();
+            if (folderBrowserDialog.ShowDialog() != DialogResult.OK)
+            {
+                return;
+            }
+            foreach (DataGridViewRow gridRow in dataGridView1.Rows)
+            {
+                Grid grid = new Grid();
+                if (dataGridView1.RowCount == 0)
+                {
+                    MessageBox.Show("Выделите строку.");
+                    return;
+                }
+                string IDGrid = gridRow.Cells["ID"].Value.ToString();
+                DateTime dateTime;
+                string nameGrid;
+                List<string> IDPart = new List<string>();
+                using (DataTable data = AccessSQL.GetDataTableSQL($"SELECT * FROM TournamentGrid WHERE id = {IDGrid}"))
+                {
+                    if (data.Rows.Count == 1)
+                    {
+                        DataRow row = data.Rows[0];
+                        dateTime = DateTime.Parse(row["date"].ToString());
+                        nameGrid = row["name"].ToString();
+                        IDPart.AddRange(row["id_participants"].ToString().Split(";").Select(item => item.Trim('"')));
+                        grid = JsonSerializer.Deserialize<Grid>(row["grid"].ToString());
+                    }
+                    else
+                    {
+                        MessageBox.Show("Ошибка базы данных");
+                        return;
+                    }
+                }
+                grid.FillItems(Participant.GetParticipantsOnAccess(IDPart));
+
+                GridForm tournament = new GridForm(IDGrid, name.Text, nameGrid, dateTime, mainJudge.Text, secret.Text, grid);
+                tournament.Show();
+                tournament.Location = new Point(2000, 2000);
+                SaveFileDialog saveFileDialog = new SaveFileDialog();
+                saveFileDialog.Filter = "PDF file (*.pdf)|*.pdf";
+                tournament.SaveGrid(folderBrowserDialog.SelectedPath);
+                tournament.Close();
+            }
         }
     }
 }
