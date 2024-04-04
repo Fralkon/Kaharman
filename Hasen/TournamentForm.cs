@@ -258,7 +258,19 @@ namespace Kaharman
         {
             ParticipantForm participants = new ParticipantForm(dataGridView2.SelectedRows[0].Cells["ID"].Value.ToString());
             this.Hide();
-            participants.ShowDialog();
+            if (participants.ShowDialog() == DialogResult.OK)
+            {
+                if (participants.Participant != null)
+                {
+                    dataGridView2.SelectedRows[0].Cells[1].Value = participants.Participant.Name;
+                    dataGridView2.SelectedRows[0].Cells[2].Value = participants.Participant.Gender;
+                    dataGridView2.SelectedRows[0].Cells[3].Value = participants.Participant.Age;
+                    dataGridView2.SelectedRows[0].Cells[4].Value = participants.Participant.Weight;
+                    dataGridView2.SelectedRows[0].Cells[5].Value = participants.Participant.Gualiti;
+                    dataGridView2.SelectedRows[0].Cells[6].Value = participants.Participant.City;
+                    dataGridView2.SelectedRows[0].Cells[7].Value = participants.Participant.Trainer;
+                }
+            }
             this.Show();
         }
         private void выходToolStripMenuItem_Click(object sender, EventArgs e)
