@@ -29,6 +29,8 @@
         private void InitializeComponent()
         {
             panel1 = new Panel();
+            labelSecret = new Label();
+            labelJudge = new Label();
             dateStart = new Label();
             nameTournamet = new Label();
             nameGrid = new Label();
@@ -37,8 +39,9 @@
             печатьToolStripMenuItem = new ToolStripMenuItem();
             протоколСоревнованияToolStripMenuItem = new ToolStripMenuItem();
             выходToolStripMenuItem = new ToolStripMenuItem();
-            labelJudge = new Label();
-            labelSecret = new Label();
+            сеткаToolStripMenuItem = new ToolStripMenuItem();
+            сбросToolStripMenuItem = new ToolStripMenuItem();
+            сохранитьToolStripMenuItem = new ToolStripMenuItem();
             panel1.SuspendLayout();
             menuStrip1.SuspendLayout();
             SuspendLayout();
@@ -58,6 +61,24 @@
             panel1.Name = "panel1";
             panel1.Size = new Size(1155, 425);
             panel1.TabIndex = 0;
+            // 
+            // labelSecret
+            // 
+            labelSecret.AutoSize = true;
+            labelSecret.Location = new Point(1000, 370);
+            labelSecret.Name = "labelSecret";
+            labelSecret.Size = new Size(38, 15);
+            labelSecret.TabIndex = 7;
+            labelSecret.Text = "label1";
+            // 
+            // labelJudge
+            // 
+            labelJudge.AutoSize = true;
+            labelJudge.Location = new Point(1000, 343);
+            labelJudge.Name = "labelJudge";
+            labelJudge.Size = new Size(38, 15);
+            labelJudge.TabIndex = 6;
+            labelJudge.Text = "label1";
             // 
             // dateStart
             // 
@@ -91,7 +112,7 @@
             // 
             // menuStrip1
             // 
-            menuStrip1.Items.AddRange(new ToolStripItem[] { файлToolStripMenuItem });
+            menuStrip1.Items.AddRange(new ToolStripItem[] { файлToolStripMenuItem, сеткаToolStripMenuItem });
             menuStrip1.Location = new Point(0, 0);
             menuStrip1.Name = "menuStrip1";
             menuStrip1.Size = new Size(1408, 24);
@@ -126,23 +147,26 @@
             выходToolStripMenuItem.Text = "Выход";
             выходToolStripMenuItem.Click += выходToolStripMenuItem_Click;
             // 
-            // labelJudge
+            // сеткаToolStripMenuItem
             // 
-            labelJudge.AutoSize = true;
-            labelJudge.Location = new Point(1000, 343);
-            labelJudge.Name = "labelJudge";
-            labelJudge.Size = new Size(38, 15);
-            labelJudge.TabIndex = 6;
-            labelJudge.Text = "label1";
+            сеткаToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { сбросToolStripMenuItem, сохранитьToolStripMenuItem });
+            сеткаToolStripMenuItem.Name = "сеткаToolStripMenuItem";
+            сеткаToolStripMenuItem.Size = new Size(50, 20);
+            сеткаToolStripMenuItem.Text = "Сетка";
             // 
-            // labelSecret
+            // сбросToolStripMenuItem
             // 
-            labelSecret.AutoSize = true;
-            labelSecret.Location = new Point(1000, 370);
-            labelSecret.Name = "labelSecret";
-            labelSecret.Size = new Size(38, 15);
-            labelSecret.TabIndex = 7;
-            labelSecret.Text = "label1";
+            сбросToolStripMenuItem.Name = "сбросToolStripMenuItem";
+            сбросToolStripMenuItem.Size = new Size(180, 22);
+            сбросToolStripMenuItem.Text = "Сброс";
+            сбросToolStripMenuItem.Click += сбросToolStripMenuItem_Click;
+            // 
+            // сохранитьToolStripMenuItem
+            // 
+            сохранитьToolStripMenuItem.Name = "сохранитьToolStripMenuItem";
+            сохранитьToolStripMenuItem.Size = new Size(180, 22);
+            сохранитьToolStripMenuItem.Text = "Сохранить";
+            сохранитьToolStripMenuItem.Click += сохранитьToolStripMenuItem_Click;
             // 
             // GridForm
             // 
@@ -178,5 +202,8 @@
         private Label dateStart;
         private Label labelJudge;
         private Label labelSecret;
+        private ToolStripMenuItem сеткаToolStripMenuItem;
+        private ToolStripMenuItem сбросToolStripMenuItem;
+        private ToolStripMenuItem сохранитьToolStripMenuItem;
     }
 }

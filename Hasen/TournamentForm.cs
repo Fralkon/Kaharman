@@ -171,6 +171,7 @@ namespace Kaharman
             DateTime dateTime;
             string nameGrid;
             List<string> IDPart = new List<string>();
+            string numProt;
             using (DataTable data = AccessSQL.GetDataTableSQL($"SELECT * FROM TournamentGrid WHERE id = {IDGrid}"))
             {
                 if (data.Rows.Count == 1)
@@ -178,6 +179,7 @@ namespace Kaharman
                     DataRow row = data.Rows[0];
                     dateTime = DateTime.Parse(row["date"].ToString());
                     nameGrid = row["name"].ToString();
+                    numProt = row["number"].ToString();
                     IDPart.AddRange(row["id_participants"].ToString().Split(";").Select(item => item.Trim('"')));
                     grid = JsonSerializer.Deserialize<Grid>(row["grid"].ToString());
                 }
@@ -189,7 +191,7 @@ namespace Kaharman
             }
             grid.FillItems(Participant.GetParticipantsOnAccess(IDPart));
 
-            GridForm tournament = new GridForm(IDGrid, name.Text, nameGrid, dateTime, mainJudge.Text, secret.Text, grid);
+            GridForm tournament = new GridForm(IDGrid, name.Text, numProt, nameGrid, dateTime, mainJudge.Text, secret.Text, grid);
 
             tournament.Show();
             UpDataGrid();
@@ -349,6 +351,7 @@ namespace Kaharman
                 DateTime dateTime;
                 string nameGrid;
                 List<string> IDPart = new List<string>();
+                string numProt;
                 using (DataTable data = AccessSQL.GetDataTableSQL($"SELECT * FROM TournamentGrid WHERE id = {IDGrid}"))
                 {
                     if (data.Rows.Count == 1)
@@ -356,6 +359,7 @@ namespace Kaharman
                         DataRow row = data.Rows[0];
                         dateTime = DateTime.Parse(row["date"].ToString());
                         nameGrid = row["name"].ToString();
+                        numProt = row["number"].ToString();
                         IDPart.AddRange(row["id_participants"].ToString().Split(";").Select(item => item.Trim('"')));
                         grid = JsonSerializer.Deserialize<Grid>(row["grid"].ToString());
                     }
@@ -367,7 +371,7 @@ namespace Kaharman
                 }
                 grid.FillItems(Participant.GetParticipantsOnAccess(IDPart));
 
-                GridForm tournament = new GridForm(IDGrid, name.Text, nameGrid, dateTime, mainJudge.Text, secret.Text, grid);
+                GridForm tournament = new GridForm(IDGrid, name.Text, nameGrid,numProt, dateTime, mainJudge.Text, secret.Text, grid);
                 tournament.Show();
                 tournament.Location = new Point(2000, 2000);
                 tournament.SaveGrid(folderBrowserDialog.SelectedPath);
@@ -409,6 +413,39 @@ namespace Kaharman
         private void TournamentForm_Load(object sender, EventArgs e)
         {
             ParticipantsTable.LoadPartOnIDs(IDParticipant, this, progressBar1);
+        }
+
+        private void изменитьToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (dataGridView1.SelectedRows.Count == 1)
+            {
+                string IDGrid = dataGridView1.SelectedRows[0].Cells["ID"].Value.ToString();
+                DateTime dateTime;
+                string nameGrid;
+                string id_tournt;
+                string num_prot;
+                using (DataTable data = AccessSQL.GetDataTableSQL($"SELECT * FROM TournamentGrid WHERE id = {IDGrid}"))
+                {
+                    if (data.Rows.Count == 1)
+                    {
+                        DataRow row = data.Rows[0];
+                        dateTime = DateTime.Parse(row["date"].ToString());
+                        nameGrid = row["name"].ToString();
+                        id_tournt = row["id_tournament"].ToString();
+                        num_prot = row["number"].ToString();
+                    }
+                    else
+                    {
+                        MessageBox.Show("Ошибка базы данных");
+                        return;
+                    }
+                }
+                TournamentGridForm tournamentGrid = new TournamentGridForm(id_tournt, name.Text, mainJudge.Text, secret.Text, dateTime, ParticipantsTable, StatusFormTournamentGrid.Edit, nameGrid, num_prot);
+                tournamentGrid.ShowDialog();
+                UpDataGrid();
+            }
+            else
+                MessageBox.Show("Выделите объект.");
         }
     }
 }

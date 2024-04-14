@@ -191,36 +191,48 @@ namespace Kaharman
         {
             progressBar.Visible = true;
             progressBar.Maximum = table.Rows.Count;
-            await Task.Run(() =>
+            try
             {
-                for (int i = 0; i < table.Rows.Count; i++)
+                await Task.Run(() =>
                 {
-                    DataRow row = table.Rows[i];
-                    form.Invoke(() => {
-                        this.AddRow(row);
-                    });
-                    progressBar.Value = i;
-                }
-            });
+                    for (int i = 0; i < table.Rows.Count; i++)
+                    {
+                        DataRow row = table.Rows[i];
+                        form.Invoke(() =>
+                        {
+                            this.AddRow(row);
+                        });
+                        progressBar.Value = i;
+                    }
+                });
+            }
+            catch
+            {  }
             progressBar.Visible = false;
         }
-        public async void FillTableOnAccess(DataTable table,Form form, ProgressBar progressBar)
+        public async void FillTableOnAccess(DataTable table, Form form, ProgressBar progressBar)
         {
             progressBar.Visible = true;
             progressBar.Maximum = table.Rows.Count;
-            await Task.Run(() =>
+            try
             {
-                for (int i = 0; i < table.Rows.Count; i++)
+                await Task.Run(() =>
                 {
-                    DataRow row = table.Rows[i];
-                    var objects = row.ItemArray;
-                    objects[3] = (int)((int)(DateTime.Now - DateTime.Parse(row["date_of_birth"].ToString())).TotalDays / Participant.ValyeDayYear);
-                    form.Invoke(() => {
-                        AddRow(objects);
-                    });
-                    progressBar.Value = i;
-                }
-            });
+                    for (int i = 0; i < table.Rows.Count; i++)
+                    {
+                        DataRow row = table.Rows[i];
+                        var objects = row.ItemArray;
+                        objects[3] = (int)((int)(DateTime.Now - DateTime.Parse(row["date_of_birth"].ToString())).TotalDays / Participant.ValyeDayYear);
+                        form.Invoke(() =>
+                        {
+                            AddRow(objects);
+                        });
+                        progressBar.Value = i;
+                    }
+                });
+            }
+            catch
+            { }
             progressBar.Visible = false;
         }
         public void AddRow(DataRow Row)

@@ -364,6 +364,9 @@ namespace Kaharman
             Label.Text = "";
             Status = StatusGridItem.close;
             InitColorItem();
+            Participant = null;
+            ID = -1;
+            t.RemoveAll();
         }
     }
     public class Grid

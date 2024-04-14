@@ -25,7 +25,7 @@ namespace Kaharman
         string Judge, Secret;
         bool selectLable = false;
         bool oneLoad = false;
-        public GridForm(string id, string nameT, string name, DateTime dateStart, string judge, string secret, Grid grid)
+        public GridForm(string id, string nameT, string name,string numProt, DateTime dateStart, string judge, string secret, Grid grid)
         {
             InitializeComponent();
             Grid = grid;
@@ -48,7 +48,7 @@ namespace Kaharman
             panel1.Paint += Panel1_Paint;
             this.ID = id;
             nameTournamet.Text = nameT;
-            nameGrid.Text = name;
+            nameGrid.Text = "Протокол № " + numProt + " | " + name;
             DateStart = dateStart;
             Judge = judge;
             Secret = secret;
@@ -62,7 +62,7 @@ namespace Kaharman
             placesText[3] = new Label();
             placesText[3].Text = "Третье место";
             labelJudge.Text = "Главный судья ___________________ " + judge;
-            labelSecret.Text = "Секретарь ________________________ " + secret; 
+            labelSecret.Text = "Секретарь ________________________ " + secret;
             ElementsLocation();
             foreach (Label label in placesText)
                 panel1.Controls.Add(label);
@@ -84,7 +84,7 @@ namespace Kaharman
         }
         private void Label_MouseUp(object? sender, MouseEventArgs e)
         {
-            if(selectLable)
+            if (selectLable)
                 selectLable = false;
         }
         private void Label_MouseDown(object? sender, MouseEventArgs e)
@@ -176,7 +176,7 @@ namespace Kaharman
             if (saveFileDialog.ShowDialog() == DialogResult.OK)
             {
                 iTextSharp.text.Rectangle pageSize = new iTextSharp.text.Rectangle(0, 0, bitmap.Width, bitmap.Height);
-                
+
 
                 using (var ms = new MemoryStream())
                 {
@@ -301,8 +301,7 @@ namespace Kaharman
         }
         private void TournamentGrid_FormClosing(object sender, FormClosingEventArgs e)
         {
-            //if (MessageBox.Show("Сохранить изменения?", "Сохрание.", MessageBoxButtons.OKCancel) == DialogResult.OK)
-                AccessSQL.SendSQL($"UPDATE TournamentGrid SET grid = '{JsonSerializer.Serialize(Grid)}' WHERE id = {ID}");
+            AccessSQL.SendSQL($"UPDATE TournamentGrid SET grid = '{JsonSerializer.Serialize(Grid)}' WHERE id = {ID}");
         }
         private void GridForm_Resize(object sender, EventArgs e)
         {
@@ -344,6 +343,35 @@ namespace Kaharman
                 proc.StartInfo.UseShellExecute = true;
                 proc.Start();
             }
+        }
+
+        private void сбросToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            foreach (GridItems item in Grid.Places)
+                item.Clear();
+            for (int i = 2; i < Grid.Items.Length; i++)
+                foreach (GridItems item in Grid.Items[i])
+                    item.Clear();
+
+            for (int i = 0; i < Grid.Items[1].Length; i++)
+            {
+                GridItems item = Grid.Items[1][i];
+                if (Grid.Items[0][i * 2].Status != StatusGridItem.close)
+                    item.Clear();
+                else
+                    item.ChangeStatus(StatusGridItem.init);
+            }
+            for (int i = 0; i < Grid.Items[0].Length; i++)
+            {
+                GridItems item = Grid.Items[0][i];
+                if (item.Status != StatusGridItem.close)
+                    item.ChangeStatus(StatusGridItem.init);
+            }
+        }
+
+        private void сохранитьToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            AccessSQL.SendSQL($"UPDATE TournamentGrid SET grid = '{JsonSerializer.Serialize(Grid)}' WHERE id = {ID}");
         }
     }
 }
