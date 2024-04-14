@@ -44,9 +44,11 @@
             contextMenuStrip1 = new ContextMenuStrip(components);
             создатьТурнирнуюТаблицуToolStripMenuItem = new ToolStripMenuItem();
             удалитьToolStripMenuItem = new ToolStripMenuItem();
+            копToolStripMenuItem = new ToolStripMenuItem();
             menuStrip1 = new MenuStrip();
             файлToolStripMenuItem = new ToolStripMenuItem();
             сохранитьToolStripMenuItem = new ToolStripMenuItem();
+            сеткаТурнираToolStripMenuItem = new ToolStripMenuItem();
             протоколТурнираToolStripMenuItem = new ToolStripMenuItem();
             выходToolStripMenuItem = new ToolStripMenuItem();
             турнирнаяТаблицаToolStripMenuItem = new ToolStripMenuItem();
@@ -68,7 +70,7 @@
             удалитьToolStripMenuItem1 = new ToolStripMenuItem();
             panel1 = new Panel();
             panel2 = new Panel();
-            сеткаТурнираToolStripMenuItem = new ToolStripMenuItem();
+            progressBar1 = new ProgressBar();
             contextMenuStrip1.SuspendLayout();
             menuStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)dataGridView1).BeginInit();
@@ -178,23 +180,30 @@
             // 
             // contextMenuStrip1
             // 
-            contextMenuStrip1.Items.AddRange(new ToolStripItem[] { создатьТурнирнуюТаблицуToolStripMenuItem, удалитьToolStripMenuItem });
+            contextMenuStrip1.Items.AddRange(new ToolStripItem[] { создатьТурнирнуюТаблицуToolStripMenuItem, удалитьToolStripMenuItem, копToolStripMenuItem });
             contextMenuStrip1.Name = "contextMenuStrip1";
-            contextMenuStrip1.Size = new Size(119, 48);
+            contextMenuStrip1.Size = new Size(140, 70);
             // 
             // создатьТурнирнуюТаблицуToolStripMenuItem
             // 
             создатьТурнирнуюТаблицуToolStripMenuItem.Name = "создатьТурнирнуюТаблицуToolStripMenuItem";
-            создатьТурнирнуюТаблицуToolStripMenuItem.Size = new Size(118, 22);
+            создатьТурнирнуюТаблицуToolStripMenuItem.Size = new Size(139, 22);
             создатьТурнирнуюТаблицуToolStripMenuItem.Text = "Создать";
             создатьТурнирнуюТаблицуToolStripMenuItem.Click += создатьТурнирнуюТаблицуToolStripMenuItem_Click;
             // 
             // удалитьToolStripMenuItem
             // 
             удалитьToolStripMenuItem.Name = "удалитьToolStripMenuItem";
-            удалитьToolStripMenuItem.Size = new Size(118, 22);
+            удалитьToolStripMenuItem.Size = new Size(139, 22);
             удалитьToolStripMenuItem.Text = "Удалить";
             удалитьToolStripMenuItem.Click += удалитьToolStripMenuItem_Click;
+            // 
+            // копToolStripMenuItem
+            // 
+            копToolStripMenuItem.Name = "копToolStripMenuItem";
+            копToolStripMenuItem.Size = new Size(139, 22);
+            копToolStripMenuItem.Text = "Копировать";
+            копToolStripMenuItem.Click += копToolStripMenuItem_Click;
             // 
             // menuStrip1
             // 
@@ -215,21 +224,28 @@
             // сохранитьToolStripMenuItem
             // 
             сохранитьToolStripMenuItem.Name = "сохранитьToolStripMenuItem";
-            сохранитьToolStripMenuItem.Size = new Size(180, 22);
+            сохранитьToolStripMenuItem.Size = new Size(177, 22);
             сохранитьToolStripMenuItem.Text = "Сохранить";
             сохранитьToolStripMenuItem.Click += сохранитьToolStripMenuItem_Click;
+            // 
+            // сеткаТурнираToolStripMenuItem
+            // 
+            сеткаТурнираToolStripMenuItem.Name = "сеткаТурнираToolStripMenuItem";
+            сеткаТурнираToolStripMenuItem.Size = new Size(177, 22);
+            сеткаТурнираToolStripMenuItem.Text = "Сетка турнира";
+            сеткаТурнираToolStripMenuItem.Click += сеткаТурнираToolStripMenuItem_Click;
             // 
             // протоколТурнираToolStripMenuItem
             // 
             протоколТурнираToolStripMenuItem.Name = "протоколТурнираToolStripMenuItem";
-            протоколТурнираToolStripMenuItem.Size = new Size(180, 22);
+            протоколТурнираToolStripMenuItem.Size = new Size(177, 22);
             протоколТурнираToolStripMenuItem.Text = "Протокол турнира";
             протоколТурнираToolStripMenuItem.Click += протоколТурнираToolStripMenuItem_Click;
             // 
             // выходToolStripMenuItem
             // 
             выходToolStripMenuItem.Name = "выходToolStripMenuItem";
-            выходToolStripMenuItem.Size = new Size(180, 22);
+            выходToolStripMenuItem.Size = new Size(177, 22);
             выходToolStripMenuItem.Text = "Выход";
             выходToolStripMenuItem.Click += выходToolStripMenuItem_Click;
             // 
@@ -243,21 +259,21 @@
             // создатьToolStripMenuItem
             // 
             создатьToolStripMenuItem.Name = "создатьToolStripMenuItem";
-            создатьToolStripMenuItem.Size = new Size(180, 22);
+            создатьToolStripMenuItem.Size = new Size(128, 22);
             создатьToolStripMenuItem.Text = "Создать";
             создатьToolStripMenuItem.Click += создатьТурнирнуюТаблицуToolStripMenuItem_Click;
             // 
             // удалитьToolStripMenuItem2
             // 
             удалитьToolStripMenuItem2.Name = "удалитьToolStripMenuItem2";
-            удалитьToolStripMenuItem2.Size = new Size(180, 22);
+            удалитьToolStripMenuItem2.Size = new Size(128, 22);
             удалитьToolStripMenuItem2.Text = "Удалить";
             удалитьToolStripMenuItem2.Click += удалитьToolStripMenuItem_Click;
             // 
             // обновитьToolStripMenuItem
             // 
             обновитьToolStripMenuItem.Name = "обновитьToolStripMenuItem";
-            обновитьToolStripMenuItem.Size = new Size(180, 22);
+            обновитьToolStripMenuItem.Size = new Size(128, 22);
             обновитьToolStripMenuItem.Text = "Обновить";
             обновитьToolStripMenuItem.Click += обновитьToolStripMenuItem_Click;
             // 
@@ -315,7 +331,7 @@
             dataGridView1.RowHeadersVisible = false;
             dataGridView1.RowTemplate.Height = 25;
             dataGridView1.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-            dataGridView1.Size = new Size(630, 342);
+            dataGridView1.Size = new Size(630, 383);
             dataGridView1.TabIndex = 14;
             dataGridView1.MouseDoubleClick += dataGridView1_MouseDoubleClick;
             // 
@@ -338,7 +354,7 @@
             dataGridView2.RowHeadersVisible = false;
             dataGridView2.RowTemplate.Height = 25;
             dataGridView2.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-            dataGridView2.Size = new Size(639, 342);
+            dataGridView2.Size = new Size(638, 383);
             dataGridView2.TabIndex = 16;
             dataGridView2.CellMouseClick += dataGridView2_CellClick;
             dataGridView2.ColumnHeaderMouseClick += dataGridView2_ColumnHeaderMouseClick;
@@ -403,12 +419,13 @@
             panel1.Dock = DockStyle.Left;
             panel1.Location = new Point(0, 24);
             panel1.Name = "panel1";
-            panel1.Size = new Size(669, 461);
+            panel1.Size = new Size(669, 502);
             panel1.TabIndex = 20;
             // 
             // panel2
             // 
             panel2.AutoScroll = true;
+            panel2.Controls.Add(progressBar1);
             panel2.Controls.Add(secret);
             panel2.Controls.Add(dateTimePicker2);
             panel2.Controls.Add(label3);
@@ -422,21 +439,23 @@
             panel2.Dock = DockStyle.Right;
             panel2.Location = new Point(668, 24);
             panel2.Name = "panel2";
-            panel2.Size = new Size(675, 461);
+            panel2.Size = new Size(675, 502);
             panel2.TabIndex = 21;
             // 
-            // сеткаТурнираToolStripMenuItem
+            // progressBar1
             // 
-            сеткаТурнираToolStripMenuItem.Name = "сеткаТурнираToolStripMenuItem";
-            сеткаТурнираToolStripMenuItem.Size = new Size(180, 22);
-            сеткаТурнираToolStripMenuItem.Text = "Сетка турнира";
-            сеткаТурнираToolStripMenuItem.Click += сеткаТурнираToolStripMenuItem_Click;
+            progressBar1.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+            progressBar1.Location = new Point(425, 74);
+            progressBar1.Name = "progressBar1";
+            progressBar1.Size = new Size(238, 23);
+            progressBar1.TabIndex = 20;
+            progressBar1.Visible = false;
             // 
             // TournamentForm
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(1343, 485);
+            ClientSize = new Size(1343, 526);
             Controls.Add(panel2);
             Controls.Add(panel1);
             Controls.Add(menuStrip1);
@@ -444,6 +463,7 @@
             Name = "TournamentForm";
             Text = "Турнир";
             Activated += TournamentForm_Activated;
+            Load += TournamentForm_Load;
             Resize += TournamentForm_Resize;
             contextMenuStrip1.ResumeLayout(false);
             menuStrip1.ResumeLayout(false);
@@ -500,5 +520,7 @@
         private ToolStripMenuItem сохранитьToolStripMenuItem;
         private ToolStripMenuItem создатьToolStripMenuItem2;
         private ToolStripMenuItem сеткаТурнираToolStripMenuItem;
+        private ToolStripMenuItem копToolStripMenuItem;
+        private ProgressBar progressBar1;
     }
 }

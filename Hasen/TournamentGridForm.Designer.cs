@@ -44,7 +44,10 @@
             button3 = new Button();
             button4 = new Button();
             panel1 = new Panel();
+            progressBar1 = new ProgressBar();
             panel2 = new Panel();
+            label6 = new Label();
+            numberProtocol = new TextBox();
             ((System.ComponentModel.ISupportInitialize)dataGridView1).BeginInit();
             ((System.ComponentModel.ISupportInitialize)dataGridView2).BeginInit();
             panel1.SuspendLayout();
@@ -76,7 +79,7 @@
             // dateTimePicker1
             // 
             dateTimePicker1.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
-            dateTimePicker1.Location = new Point(131, 28);
+            dateTimePicker1.Location = new Point(130, 57);
             dateTimePicker1.Name = "dateTimePicker1";
             dateTimePicker1.Size = new Size(206, 23);
             dateTimePicker1.TabIndex = 2;
@@ -127,7 +130,7 @@
             // label3
             // 
             label3.AutoSize = true;
-            label3.Location = new Point(15, 31);
+            label3.Location = new Point(15, 60);
             label3.Name = "label3";
             label3.Size = new Size(100, 15);
             label3.TabIndex = 8;
@@ -152,6 +155,7 @@
             dataGridView1.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
             dataGridView1.Size = new Size(504, 369);
             dataGridView1.TabIndex = 15;
+            dataGridView1.CellDoubleClick += dataGridView1_CellDoubleClick;
             // 
             // dataGridView2
             // 
@@ -174,6 +178,7 @@
             dataGridView2.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
             dataGridView2.Size = new Size(484, 369);
             dataGridView2.TabIndex = 19;
+            dataGridView2.CellDoubleClick += dataGridView2_CellDoubleClick;
             // 
             // label4
             // 
@@ -215,6 +220,7 @@
             // 
             // panel1
             // 
+            panel1.Controls.Add(progressBar1);
             panel1.Controls.Add(label2);
             panel1.Controls.Add(nameTextBox);
             panel1.Controls.Add(label1);
@@ -227,9 +233,20 @@
             panel1.Size = new Size(534, 557);
             panel1.TabIndex = 24;
             // 
+            // progressBar1
+            // 
+            progressBar1.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+            progressBar1.Location = new Point(282, 90);
+            progressBar1.Name = "progressBar1";
+            progressBar1.Size = new Size(239, 23);
+            progressBar1.TabIndex = 22;
+            progressBar1.Visible = false;
+            // 
             // panel2
             // 
             panel2.AutoScroll = true;
+            panel2.Controls.Add(numberProtocol);
+            panel2.Controls.Add(label6);
             panel2.Controls.Add(label3);
             panel2.Controls.Add(dateTimePicker1);
             panel2.Controls.Add(button2);
@@ -241,6 +258,23 @@
             panel2.Name = "panel2";
             panel2.Size = new Size(515, 557);
             panel2.TabIndex = 25;
+            // 
+            // label6
+            // 
+            label6.AutoSize = true;
+            label6.Location = new Point(15, 31);
+            label6.Name = "label6";
+            label6.Size = new Size(107, 15);
+            label6.TabIndex = 21;
+            label6.Text = "Номер протокола";
+            // 
+            // numberProtocol
+            // 
+            numberProtocol.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
+            numberProtocol.Location = new Point(130, 28);
+            numberProtocol.Name = "numberProtocol";
+            numberProtocol.Size = new Size(206, 23);
+            numberProtocol.TabIndex = 23;
             // 
             // TournamentGridForm
             // 
@@ -255,6 +289,7 @@
             MainMenuStrip = menuStrip1;
             Name = "TournamentGridForm";
             Text = "Создание сетки";
+            Load += TournamentGridForm_Load;
             Resize += TournamentGridForm_Resize;
             ((System.ComponentModel.ISupportInitialize)dataGridView1).EndInit();
             ((System.ComponentModel.ISupportInitialize)dataGridView2).EndInit();
@@ -285,5 +320,8 @@
         private Button button4;
         private Panel panel1;
         private Panel panel2;
+        private ProgressBar progressBar1;
+        private Label label6;
+        private TextBox numberProtocol;
     }
 }

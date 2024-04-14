@@ -1,4 +1,5 @@
 ﻿using Hasen;
+using ICSharpCode.SharpZipLib.Core;
 using iTextSharp.text;
 using iTextSharp.text.pdf;
 using Kaharman;
@@ -212,7 +213,12 @@ namespace Kaharman
                 var image = iTextSharp.text.Image.GetInstance(bitmapMS.ToArray());
                 document.Add(image);
                 document.Close();
-                File.WriteAllBytes(pathFolder+"/"+nameGrid.Text+".pdf", ms.ToArray());
+                string nameFile = nameGrid.Text;
+                foreach (Char invalid_char in Path.GetInvalidFileNameChars())
+                {
+                    nameFile = nameFile.Replace(oldValue: invalid_char.ToString(), newValue: "");
+                }
+                File.WriteAllBytes(pathFolder + "/" + nameFile + ".pdf", ms.ToArray());
             }
         }
         private void ChangeColorForPrint()

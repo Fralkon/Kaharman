@@ -1,4 +1,6 @@
 ﻿using Hasen;
+using NPOI.SS.Formula.Functions;
+using System;
 using System.Data;
 using System.Data.OleDb;
 using System.Globalization;
@@ -185,14 +187,41 @@ namespace Kaharman
                 this.AddRow(row);
             }
         }
-        public void FillTableOnAccess(DataTable table)
+        public async void FillTable(DataTable table, Form form, ProgressBar progressBar)
         {
-            foreach (DataRow row in table.Rows)
+            progressBar.Visible = true;
+            progressBar.Maximum = table.Rows.Count;
+            await Task.Run(() =>
             {
-                var objects = row.ItemArray;
-                objects[3] = (int)((int)(DateTime.Now - DateTime.Parse(row["date_of_birth"].ToString())).TotalDays / Participant.ValyeDayYear);
-                AddRow(objects);
-            }
+                for (int i = 0; i < table.Rows.Count; i++)
+                {
+                    DataRow row = table.Rows[i];
+                    form.Invoke(() => {
+                        this.AddRow(row);
+                    });
+                    progressBar.Value = i;
+                }
+            });
+            progressBar.Visible = false;
+        }
+        public async void FillTableOnAccess(DataTable table,Form form, ProgressBar progressBar)
+        {
+            progressBar.Visible = true;
+            progressBar.Maximum = table.Rows.Count;
+            await Task.Run(() =>
+            {
+                for (int i = 0; i < table.Rows.Count; i++)
+                {
+                    DataRow row = table.Rows[i];
+                    var objects = row.ItemArray;
+                    objects[3] = (int)((int)(DateTime.Now - DateTime.Parse(row["date_of_birth"].ToString())).TotalDays / Participant.ValyeDayYear);
+                    form.Invoke(() => {
+                        AddRow(objects);
+                    });
+                    progressBar.Value = i;
+                }
+            });
+            progressBar.Visible = false;
         }
         public void AddRow(DataRow Row)
         {
@@ -362,7 +391,7 @@ namespace Kaharman
                 strings[i] = $"\"{Rows[i]["ID"]}\"";
             return string.Join(";",strings);
         }
-        public void LoadPartOnIDs(string ids)
+        public void LoadPartOnIDs(string ids, Form form, ProgressBar progressBar)
         {
             string[] strings = ids.Split(';');
             for(int i = 0; i < strings.Length; i++)
@@ -371,7 +400,7 @@ namespace Kaharman
             {
                 using (DataTable data = AccessSQL.GetDataTableSQL($"SELECT * FROM Participants WHERE id IN ({string.Join(", ", strings)})"))
                 {
-                    this.FillTableOnAccess(data);
+                    this.FillTableOnAccess(data, form, progressBar);
                 }
             }
         }
