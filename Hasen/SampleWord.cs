@@ -41,7 +41,7 @@ namespace Kaharman
             doc.FindAndReplaceText("<judge>", Judge);
             doc.FindAndReplaceText("<secret>", Secret);
         }
-        public void FillTable(string name, DataTable data)
+        public void FillTable(string number_t,string name, DataTable data)
         {
             int row = data.Rows.Count;
             //if (row == 0)
@@ -49,10 +49,17 @@ namespace Kaharman
             doc.CreateParagraph();
             XWPFParagraph paragraph = doc.CreateParagraph();
             XWPFRun run = paragraph.CreateRun();
+            paragraph.Alignment = ParagraphAlignment.CENTER;
+            run.FontSize = 12;
+            run.FontFamily = "Times New Roman";
+            run.SetText($"Протокол № "+ number_t);
+
+            paragraph = doc.CreateParagraph();
+            run = paragraph.CreateRun();
+            paragraph.Alignment = ParagraphAlignment.CENTER;
             run.FontSize = 12;
             run.FontFamily = "Times New Roman";
             run.SetText(name);
-            paragraph.Alignment = ParagraphAlignment.CENTER;
 
             int col = 7;
             XWPFTable table = doc.CreateTable(row + 1, col);

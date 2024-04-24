@@ -25,6 +25,8 @@ namespace Kaharman
         string Judge, Secret;
         bool selectLable = false;
         bool oneLoad = false;
+        string number_t;
+        string name_g;
         public GridForm(string id, string nameT, string name,string numProt, DateTime dateStart, string judge, string secret, Grid grid)
         {
             InitializeComponent();
@@ -48,6 +50,8 @@ namespace Kaharman
             panel1.Paint += Panel1_Paint;
             this.ID = id;
             nameTournamet.Text = nameT;
+            number_t = numProt;
+            name_g = name;
             nameGrid.Text = "Протокол № " + numProt + " | " + name;
             DateStart = dateStart;
             Judge = judge;
@@ -328,7 +332,7 @@ namespace Kaharman
 
             word.CreateProtacolGrid(nameTournamet.Text, DateStart, Judge, Secret);
 
-            word.FillTable(nameGrid.Text, AccessSQL.GetDataTableSQL($"SELECT * FROM Participants WHERE id IN ({string.Join(", ",
+            word.FillTable(number_t,name_g, AccessSQL.GetDataTableSQL($"SELECT * FROM Participants WHERE id IN ({string.Join(", ",
                     AccessSQL.GetDataTableSQL($"SELECT id_participants FROM TournamentGrid WHERE id = {ID}").
                     Rows[0]["id_participants"].ToString().
                     Split(';').

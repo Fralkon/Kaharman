@@ -2,12 +2,13 @@
 using MathNet.Numerics.RootFinding;
 using Microsoft.VisualBasic.ApplicationServices;
 using NPOI.SS.Formula.Functions;
+using NPOI.SS.UserModel;
 using System.Data;
 using System.Globalization;
 using System.Net.Sockets;
 using System.Text.Json;
 using System.Windows.Forms;
-using static System.Windows.Forms.VisualStyles.VisualStyleElement;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace Kaharman
 {
@@ -23,7 +24,7 @@ namespace Kaharman
         ParticipantDataTable ParticipantsTable;
         ParticipantDataTable ParticipantGridTable;
         string IdTournament;
-        string? IdGrid;
+        public string? IdGrid { get;set; }
         StatusFormTournamentGrid StatusForm;
         string Judge, Secret;
         ParticipantDataTable participantsTable;
@@ -42,15 +43,46 @@ namespace Kaharman
             ParticipantGridTable = new ParticipantDataTable(dataGridView2);
             nameTextBox.Text = nameGrid;
             dataGridView1.Columns[0].Visible = false;
-            if(numberProtocol != null)
+            if (numberProtocol != null)
                 this.numberProtocol.Text = numberProtocol;
-            if(number_grid != null)
-                IdGrid = number_grid;
+            if (number_grid != null)
+            {
+                IdGrid = number_grid;                
+            }
+            if (statusForm == StatusFormTournamentGrid.Edit)
+                button1.Text = "Изменить";
             TournamentGridForm_Resize(null, null);
         }
         private void button1_Click(object sender, EventArgs e)
         {
-            if(StatusForm == StatusFormTournamentGrid.Edit && notChange)
+            if (int.TryParse(numberProtocol.Text, out int nProtocol))
+            {
+                using (DataTable data = AccessSQL.GetDataTableSQL($"SELECT id FROM TournamentGrid WHERE number_t = {nProtocol}"))
+                {
+                    if (data.Rows.Count != 0)
+                    {
+                        if (StatusForm != StatusFormTournamentGrid.Create)
+                        {
+                            if (data.Rows[0]["id"].ToString() != IdGrid)
+                            {
+                                MessageBox.Show("Номер протокола уже существует.");
+                                return;
+                            }
+                        }
+                        else
+                        {
+                            MessageBox.Show("Номер протокола уже существует.");
+                            return;
+                        }
+                    }
+                }
+            }
+            else
+            {
+                MessageBox.Show("Введите номер протокола в числовом формате.");
+                return;
+            }
+            if (StatusForm == StatusFormTournamentGrid.Edit && notChange)
             {
                 Grid grid = new Grid();
                 if (dataGridView1.RowCount == 0)
@@ -58,17 +90,19 @@ namespace Kaharman
                     MessageBox.Show("Выделите строку.");
                     return;
                 }
-                string IDGrid = dataGridView1.SelectedRows[0].Cells["ID"].Value.ToString();
+
+                AccessSQL.SendSQL($"UPDATE TournamentGrid SET number_t = '{numberProtocol.Text}', [date] = '{dateTimePicker1.Value.ToString("dd.MM.yyyy")}' , name = '{nameTextBox.Text}' WHERE id = {IdGrid}");
+
                 DateTime dateTime;
                 string nameGrid;
                 List<string> IDPart = new List<string>();
-                using (DataTable data = AccessSQL.GetDataTableSQL($"SELECT * FROM TournamentGrid WHERE id = {IDGrid}"))
+                using (DataTable data = AccessSQL.GetDataTableSQL($"SELECT * FROM TournamentGrid WHERE id = {IdGrid}"))
                 {
                     if (data.Rows.Count == 1)
                     {
                         DataRow row = data.Rows[0];
                         dateTime = DateTime.Parse(row["date"].ToString());
-                        nameGrid = row["name"].ToString();                        
+                        nameGrid = row["name"].ToString();
                         IDPart.AddRange(row["id_participants"].ToString().Split(";").Select(item => item.Trim('"')));
                         grid = JsonSerializer.Deserialize<Grid>(row["grid"].ToString());
                     }
@@ -80,91 +114,88 @@ namespace Kaharman
                 }
                 grid.FillItems(Participant.GetParticipantsOnAccess(IDPart));
 
-                GridForm tournament = new GridForm(IDGrid, textBox2.Text, nameGrid,numberProtocol.Text, dateTime, Judge, Secret, grid);
+                GridForm tournament = new GridForm(IdGrid, textBox2.Text, nameGrid, numberProtocol.Text, dateTime, Judge, Secret, grid);
 
                 tournament.Show();
-            }
-            else {
-                if (int.TryParse(numberProtocol.Text, out int nProtocol))
-                {
-                    using (DataTable data = AccessSQL.GetDataTableSQL($"SELECT id FROM TournamentGrid WHERE number = {nProtocol}"))
-                    {
-                        if (data.Rows.Count != 0)
-                        {
-                            MessageBox.Show("Номер протокола уже существует.");
-                            return;
-                        }
-                    }
-                    string StatusGrid = "";
-                    Grid grid = new Grid();
-                    if (dataGridView2.RowCount == 0)
-                    {
-                        MessageBox.Show("Отсутствуют участники в таблице.");
-                        return;
-                    }
-                    if (dataGridView2.RowCount <= 4)
-                    {
-                        grid.Type = 4;
-                        grid.Items = new GridItems[3][];
-                        StatusGrid = "1/4";
-                    }
-                    else if (dataGridView2.RowCount <= 8)
-                    {
-                        grid.Type = 8;
-                        grid.Items = new GridItems[4][];
-                        StatusGrid = "1/8";
-                    }
-                    else if (dataGridView2.RowCount <= 16)
-                    {
-                        grid.Type = 16;
-                        grid.Items = new GridItems[5][];
-                        StatusGrid = "1/16";
-                    }
-                    else if (dataGridView2.RowCount <= 32)
-                    {
-                        grid.Type = 32;
-                        grid.Items = new GridItems[6][];
-                        StatusGrid = "1/32";
-                    }
-                    else
-                    {
-                        MessageBox.Show("Больше 32 участников не предусмотрено");
-                    }
-                    int type = grid.Type;
-                    int step = 0;
-                    while (true)
-                    {
-                        grid.Items[step] = new GridItems[type];
-                        for (int i = 0; i < type; i++)
-                            grid.Items[step][i] = new GridItems(new PointItem(step, i));
-                        step++;
-                        if (type == 1)
-                            break;
-                        type /= 2;
-                    }
-                    grid.Places = new GridItems[4];
-                    for (int i = 0; i < grid.Places.Length; i++)
-                        grid.Places[i] = new GridItems();
-                    grid.FillNewGridItems(Participant.GetListToID(ParticipantGridTable));
-
-                    if (StatusForm == StatusFormTournamentGrid.Create)
-                    {
-                        Save(IdTournament, nProtocol, dateTimePicker1.Value, nameTextBox.Text, GetListStringID(), grid, StatusGrid);
-                        IdGrid = AccessSQL.GetIDInsert().ToString();
-                    }
-                    else if (StatusForm == StatusFormTournamentGrid.Visit) { }
-                    GridForm tournament = new GridForm(IdGrid, textBox2.Text, nameTextBox.Text, numberProtocol.Text, dateTimePicker1.Value,Judge, Secret, grid);
-                    tournament.Show();
-                }
                 this.Close();
                 return;
-            }            
-            MessageBox.Show("Введите номер протокола в числовом формате.");
+            }
+            else
+            {
+                string StatusGrid = "";
+                Grid grid = new Grid();
+                if (dataGridView2.RowCount == 0)
+                {
+                    MessageBox.Show("Отсутствуют участники в таблице.");
+                    return;
+                }
+                if (dataGridView2.RowCount <= 4)
+                {
+                    grid.Type = 4;
+                    grid.Items = new GridItems[3][];
+                    StatusGrid = "1/4";
+                }
+                else if (dataGridView2.RowCount <= 8)
+                {
+                    grid.Type = 8;
+                    grid.Items = new GridItems[4][];
+                    StatusGrid = "1/8";
+                }
+                else if (dataGridView2.RowCount <= 16)
+                {
+                    grid.Type = 16;
+                    grid.Items = new GridItems[5][];
+                    StatusGrid = "1/16";
+                }
+                else if (dataGridView2.RowCount <= 32)
+                {
+                    grid.Type = 32;
+                    grid.Items = new GridItems[6][];
+                    StatusGrid = "1/32";
+                }
+                else
+                {
+                    MessageBox.Show("Больше 32 участников не предусмотрено");
+                }
+                int type = grid.Type;
+                int step = 0;
+                while (true)
+                {
+                    grid.Items[step] = new GridItems[type];
+                    for (int i = 0; i < type; i++)
+                        grid.Items[step][i] = new GridItems(new PointItem(step, i));
+                    step++;
+                    if (type == 1)
+                        break;
+                    type /= 2;
+                }
+                grid.Places = new GridItems[4];
+                for (int i = 0; i < grid.Places.Length; i++)
+                    grid.Places[i] = new GridItems();
+                grid.FillNewGridItems(Participant.GetListToID(ParticipantGridTable));
+
+                if (StatusForm == StatusFormTournamentGrid.Create)
+                {
+                    Save(IdTournament, nProtocol, dateTimePicker1.Value, nameTextBox.Text, GetListStringID(), grid, StatusGrid);
+                    IdGrid = AccessSQL.GetIDInsert().ToString();
+                }
+                else if (StatusForm == StatusFormTournamentGrid.Edit)
+                {
+                    AccessSQL.SendSQL($"UPDATE TournamentGrid SET number_t = '{numberProtocol.Text}', [date] = '{dateTimePicker1.Value.ToString("dd.MM.yyyy")}' , name = '{nameTextBox.Text}' , id_participants = '{GetListStringID()}' , grid = '{JsonSerializer.Serialize(grid)}' , status = '{StatusGrid}' WHERE id = {IdGrid}");
+
+                }
+                else if (StatusForm == StatusFormTournamentGrid.Visit) { }
+                GridForm tournament = new GridForm(IdGrid, textBox2.Text, nameTextBox.Text, numberProtocol.Text, dateTimePicker1.Value, Judge, Secret, grid);
+                tournament.Show();
+                this.Close();
+                return;
+
+            }
         }
         private void Save(string id_tournament, int nProtocol, DateTime date, string name, string id_participants, Grid grid, string StatusGrid)
         {
             AccessSQL.SendSQL($"INSERT INTO TournamentGrid (id_tournament,number,[date],name,id_participants,grid,status) " +
-            $"VALUES ({id_tournament},{nProtocol},'{date.ToString("dd,MM.yyyy")}','{name}','{id_participants}','{JsonSerializer.Serialize(grid)}','{StatusGrid}')");
+            $"VALUES ({id_tournament},{nProtocol},'{date.ToString("dd.MM.yyyy")}','{name}','{id_participants}','{JsonSerializer.Serialize(grid)}','{StatusGrid}')");
         }
         private string GetListStringID()
         {
@@ -227,6 +258,40 @@ namespace Kaharman
         private void TournamentGridForm_Load(object sender, EventArgs e)
         {
             ParticipantsTable.FillTable(participantsTable, this, progressBar1);
+        }
+
+        private void progressBar1_VisibleChanged(object sender, EventArgs e)
+        {
+            ProgressBar? bar = sender as ProgressBar;
+            if (bar.Visible == false)
+            {
+                if (StatusForm == StatusFormTournamentGrid.Edit)
+                {
+                    List<string> IDPart = new List<string>();
+                    using (DataTable data = AccessSQL.GetDataTableSQL($"SELECT * FROM TournamentGrid WHERE id = {IdGrid}"))
+                    {
+                        if (data.Rows.Count == 1)
+                        {
+                            IDPart.AddRange(data.Rows[0]["id_participants"].ToString().Split(";").Select(item => item.Trim('"')));
+                        }
+                        else
+                        {
+                            MessageBox.Show("Ошибка базы данных");
+                            return;
+                        }
+                    }
+                    foreach (string participant in IDPart)
+                    {
+                        DataRow? row1 = ParticipantsTable.GetRowToID(participant);
+                        if (row1 != null)
+                        {
+                            ParticipantGridTable.Rows.Add(row1.ItemArray);
+                            ParticipantsTable.DeleteRow(row1);
+                        }
+                        else MessageBox.Show("error");
+                    }
+                }
+            }
         }
     }
 }

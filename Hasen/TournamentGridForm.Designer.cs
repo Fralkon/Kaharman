@@ -46,8 +46,8 @@
             panel1 = new Panel();
             progressBar1 = new ProgressBar();
             panel2 = new Panel();
-            label6 = new Label();
             numberProtocol = new TextBox();
+            label6 = new Label();
             ((System.ComponentModel.ISupportInitialize)dataGridView1).BeginInit();
             ((System.ComponentModel.ISupportInitialize)dataGridView2).BeginInit();
             panel1.SuspendLayout();
@@ -241,6 +241,7 @@
             progressBar1.Size = new Size(239, 23);
             progressBar1.TabIndex = 22;
             progressBar1.Visible = false;
+            progressBar1.VisibleChanged += progressBar1_VisibleChanged;
             // 
             // panel2
             // 
@@ -259,6 +260,14 @@
             panel2.Size = new Size(515, 557);
             panel2.TabIndex = 25;
             // 
+            // numberProtocol
+            // 
+            numberProtocol.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
+            numberProtocol.Location = new Point(130, 28);
+            numberProtocol.Name = "numberProtocol";
+            numberProtocol.Size = new Size(206, 23);
+            numberProtocol.TabIndex = 23;
+            // 
             // label6
             // 
             label6.AutoSize = true;
@@ -267,14 +276,6 @@
             label6.Size = new Size(107, 15);
             label6.TabIndex = 21;
             label6.Text = "Номер протокола";
-            // 
-            // numberProtocol
-            // 
-            numberProtocol.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
-            numberProtocol.Location = new Point(130, 28);
-            numberProtocol.Name = "numberProtocol";
-            numberProtocol.Size = new Size(206, 23);
-            numberProtocol.TabIndex = 23;
             // 
             // TournamentGridForm
             // 

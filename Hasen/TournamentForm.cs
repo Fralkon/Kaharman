@@ -1,4 +1,5 @@
 ﻿using Hasen;
+using System.ComponentModel;
 using System.Data;
 using System.Diagnostics;
 using System.Text.Json;
@@ -56,7 +57,7 @@ namespace Kaharman
             ResizeForm();
             dataGridView1.ContextMenuStrip = contextMenuStrip1;
             dataGridView1.Columns.Add("ID", "ID");
-            dataGridView1.Columns.Add("number", "Протокол");
+            dataGridView1.Columns.Add("number_t", "Протокол");
             dataGridView1.Columns.Add("name", "Наименование сетки");
             dataGridView1.Columns.Add("date", "Дата");
             dataGridView1.Columns.Add("count", "Количество участников");
@@ -102,7 +103,7 @@ namespace Kaharman
                     dataGridView1.Rows[idRows].Cells["ID"].Value = row["ID"].ToString();
                     try
                     {
-                        dataGridView1.Rows[idRows].Cells["number"].Value = int.Parse(row["number"].ToString());
+                        dataGridView1.Rows[idRows].Cells["number_t"].Value = int.Parse(row["number_t"].ToString());
                     }
                     catch { }
                     dataGridView1.Rows[idRows].Cells["name"].Value = row["name"].ToString();
@@ -179,7 +180,7 @@ namespace Kaharman
                     DataRow row = data.Rows[0];
                     dateTime = DateTime.Parse(row["date"].ToString());
                     nameGrid = row["name"].ToString();
-                    numProt = row["number"].ToString();
+                    numProt = row["number_t"].ToString();
                     IDPart.AddRange(row["id_participants"].ToString().Split(";").Select(item => item.Trim('"')));
                     grid = JsonSerializer.Deserialize<Grid>(row["grid"].ToString());
                 }
@@ -191,7 +192,7 @@ namespace Kaharman
             }
             grid.FillItems(Participant.GetParticipantsOnAccess(IDPart));
 
-            GridForm tournament = new GridForm(IDGrid, name.Text, numProt, nameGrid, dateTime, mainJudge.Text, secret.Text, grid);
+            GridForm tournament = new GridForm(IDGrid, name.Text,nameGrid, numProt, dateTime, mainJudge.Text, secret.Text, grid);
 
             tournament.Show();
             UpDataGrid();
@@ -289,10 +290,12 @@ namespace Kaharman
         private void протоколТурнираToolStripMenuItem_Click(object sender, EventArgs e)
         {
             SampleWord word = new SampleWord();
+            dataGridView1.Sort(dataGridView1.Columns[1], ListSortDirection.Ascending);
             word.CreateProtacolTournament(name.Text, dateTimePicker1.Value, dateTimePicker2.Value, mainJudge.Text, secret.Text);
+            
             foreach (DataGridViewRow row in dataGridView1.Rows)
             {
-                word.FillTable(row.Cells[1].Value.ToString(), AccessSQL.GetDataTableSQL($"SELECT * FROM Participants WHERE id IN ({string.Join(", ",
+                word.FillTable(row.Cells[1].Value.ToString(),row.Cells[2].Value.ToString(), AccessSQL.GetDataTableSQL($"SELECT * FROM Participants WHERE id IN ({string.Join(", ",
                         AccessSQL.GetDataTableSQL($"SELECT id_participants FROM TournamentGrid WHERE id = {row.Cells[0].Value}").
                         Rows[0]["id_participants"].ToString().
                         Split(';').
@@ -359,7 +362,7 @@ namespace Kaharman
                         DataRow row = data.Rows[0];
                         dateTime = DateTime.Parse(row["date"].ToString());
                         nameGrid = row["name"].ToString();
-                        numProt = row["number"].ToString();
+                        numProt = row["number_t"].ToString();
                         IDPart.AddRange(row["id_participants"].ToString().Split(";").Select(item => item.Trim('"')));
                         grid = JsonSerializer.Deserialize<Grid>(row["grid"].ToString());
                     }
@@ -432,7 +435,7 @@ namespace Kaharman
                         dateTime = DateTime.Parse(row["date"].ToString());
                         nameGrid = row["name"].ToString();
                         id_tournt = row["id_tournament"].ToString();
-                        num_prot = row["number"].ToString();
+                        num_prot = row["number_t"].ToString();
                     }
                     else
                     {
@@ -440,7 +443,7 @@ namespace Kaharman
                         return;
                     }
                 }
-                TournamentGridForm tournamentGrid = new TournamentGridForm(id_tournt, name.Text, mainJudge.Text, secret.Text, dateTime, ParticipantsTable, StatusFormTournamentGrid.Edit, nameGrid, num_prot);
+                TournamentGridForm tournamentGrid = new TournamentGridForm(id_tournt, name.Text, mainJudge.Text, secret.Text, dateTime, ParticipantsTable, StatusFormTournamentGrid.Edit, nameGrid, num_prot, IDGrid);
                 tournamentGrid.ShowDialog();
                 UpDataGrid();
             }
