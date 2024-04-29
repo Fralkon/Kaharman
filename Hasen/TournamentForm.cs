@@ -111,6 +111,7 @@ namespace Kaharman
                     string[] ids = row["id_participants"].ToString().Split(";");
                     dataGridView1.Rows[idRows].Cells["count"].Value = ids.Length;
                     dataGridView1.Rows[idRows].Cells["status"].Value = row["status"].ToString();
+
                 }
             }
         }

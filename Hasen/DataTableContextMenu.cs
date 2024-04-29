@@ -1,9 +1,12 @@
 ﻿using Hasen;
+using Microsoft.EntityFrameworkCore;
 using NPOI.SS.Formula.Functions;
 using System;
+using System.ComponentModel;
 using System.Data;
 using System.Data.OleDb;
 using System.Globalization;
+using System.Windows.Forms;
 
 namespace Kaharman
 {
@@ -50,6 +53,329 @@ namespace Kaharman
             if (TextBox.Text.Length != 0)
                 return $"[{Name}] LIKE '%{TextBox.Text}%'";
             return null;
+        }
+    }
+    public abstract class TableContextMenu<T>
+    {
+        protected BindingList<T> bindingList = new BindingList<T>();
+        protected BindingSource pSource = new BindingSource();
+        protected List<ContextMenuStrip> listContextMenu = new List<ContextMenuStrip>();
+        DataGridView GridView;
+        public TableContextMenu(DataGridView dataGridView)
+        {
+            bindingList.AllowEdit = true;
+            bindingList.AllowNew = true;
+            pSource.DataSource = bindingList;
+            pSource.AllowNew = true;
+            GridView = dataGridView;
+            dataGridView.DataSource = pSource;
+        }
+        public void AddColunm(string name)
+        {
+            GridView.Columns.Add(name, name);
+            ContextMenuFilter contextMenu = new ContextMenuFilter()
+            {
+                Name = name,
+                AutoClose = false,
+                ShowCheckMargin = true
+            };
+            contextMenu.ItemClicked += ContextMenuStrip_ItemClicked;
+            listContextMenu.Add(contextMenu);
+        }
+        public void AddColunm(string name, ContextMenuFilter contextMenu)
+        {
+            GridView.Columns.Add(name, name);
+            contextMenu.Name = name;
+            contextMenu.AutoClose = false;
+            contextMenu.ShowCheckMargin = true;
+            contextMenu.ItemClicked += ContextMenuStrip_ItemClicked;
+            listContextMenu.Add(contextMenu);
+        }
+        public void AddColunm(string name, Type type)
+        {
+            GridView.Columns.Add(name, name);
+            ContextMenuFilter contextMenuStrip = new ContextMenuFilter()
+            {
+                AutoClose = false,
+                Name = name,
+                ShowCheckMargin = true
+            };
+            contextMenuStrip.ItemClicked += ContextMenuStrip_ItemClicked;
+            listContextMenu.Add(contextMenuStrip);
+        }
+        public void AddColunm(string name, Type type, ContextMenuFilter contextMenu)
+        {
+            GridView.Columns.Add(name, name);
+            contextMenu.Name = name;
+            contextMenu.AutoClose = false;
+            contextMenu.ShowCheckMargin = true;
+            contextMenu.ItemClicked += ContextMenuStrip_ItemClicked;
+            listContextMenu.Add(contextMenu);
+        }
+        private void ContextMenuStrip_ItemClicked(object? sender, ToolStripItemClickedEventArgs e)
+        {
+            ContextMenuFilterName? contextMenu = sender as ContextMenuFilterName;
+            if (contextMenu != null)
+            {
+                FilterContent();
+                return;
+            }
+            ContextMenuStrip? contextMenuStrip = sender as ContextMenuStrip;
+            if (contextMenuStrip != null)
+            {
+                ToolStripMenuItem? toolStrip = e.ClickedItem as ToolStripMenuItem;
+                if (toolStrip != null)
+                {
+                    if (toolStrip.Text == " Выделить всё")
+                    {
+                        bool value;
+                        if (toolStrip.Checked)
+                            value = false;
+                        else value = true;
+                        toolStrip.Checked = value;
+                        for (int i = 0; i < contextMenuStrip.Items.Count; i++)
+                            ((ToolStripMenuItem)contextMenuStrip.Items[i]).Checked = value;
+                    }
+                    else
+                    {
+                        if (toolStrip.Checked)
+                            toolStrip.Checked = false;
+                        else toolStrip.Checked = true;
+                    }
+                    FilterContent();
+                }
+            }
+        }
+        private void FilterContent()
+        {
+            List<string> filters = new List<string>();
+            foreach (ContextMenuFilter contextMenuStrip in listContextMenu)
+            {
+                string? filter = contextMenuStrip.GetFilter();
+                if (filter != null)
+                {
+                    filters.Add(filter);
+                }
+            }
+
+            if (filters.Count > 0)
+            {
+                pSource.Filter = string.Join(" AND ", filters);
+                MessageBox.Show(string.Join(" AND ", filters));
+            }
+        }
+        private void DataTableContextMenu_RowChanged(object sender, DataRowChangeEventArgs e)
+        {
+            if (e.Action == DataRowAction.Add)
+            {
+                object[]? cells = e.Row.ItemArray;
+                if (cells != null && cells.Length == listContextMenu.Count)
+                {
+                    for (int i = 0; i < cells.Length; i++)
+                    {
+                        if (((ContextMenuFilter)listContextMenu[i]).AddAutoItems)
+                        {
+                            string? item = cells[i].ToString();
+                            if (item != null && item.Length != 0)
+                                AddItemContextMenu(listContextMenu[i], item);
+                        }
+                    }
+                }
+            }
+        }
+        public void ShowContextMenu(int IdColumn, Point Position)
+        {
+            CloseContextMenu();
+            listContextMenu[IdColumn].Show(Position, ToolStripDropDownDirection.Default);
+        }
+        public void CloseContextMenu()
+        {
+            foreach (ContextMenuStrip c in listContextMenu)
+                c.Close();
+        }
+        private void AddItemContextMenu(ContextMenuStrip menuStrip, string item)
+        {
+            System.Collections.IList list = menuStrip.Items;
+            List<string> text = new List<string>();
+            for (int i = 0; i < list.Count; i++)
+            {
+                ToolStripMenuItem? toolStrip = list[i] as ToolStripMenuItem;
+                if (toolStrip != null)
+                {
+                    if (toolStrip.Text == item)
+                        return;
+                    text.Add(toolStrip.Text);
+                }
+            }
+            text.Add(item);
+            text.Sort();
+
+            for (int i = 0; i < text.Count; ++i)
+            {
+                if (text[i] == item)
+                {
+                    ToolStripMenuItem toolStrip = new ToolStripMenuItem();
+                    toolStrip.Text = item;
+                    toolStrip.Checked = true;
+                    menuStrip.Items.Insert(i, toolStrip);
+                }
+            }
+        }
+       
+
+        public void FillTable(DataTable table)
+        {
+            foreach (DataRow row in table.Rows)
+            {
+                this.AddRow(row);
+            }
+        }
+        public async void FillTable(DataTable table, Form form, ProgressBar progressBar)
+        {
+            progressBar.Visible = true;
+            progressBar.Maximum = table.Rows.Count;
+            try
+            {
+                await Task.Run(() =>
+                {
+                    for (int i = 0; i < table.Rows.Count; i++)
+                    {
+                        DataRow row = table.Rows[i];
+                        form.Invoke(() =>
+                        {
+                            this.AddRow(row);
+                        });
+                        progressBar.Value = i;
+                    }
+                });
+            }
+            catch
+            { }
+            progressBar.Visible = false;
+        }
+        public async void FillTableOnAccess(DataTable table, Form form, ProgressBar progressBar)
+        {
+            progressBar.Visible = true;
+            progressBar.Maximum = table.Rows.Count;
+            try
+            {
+                await Task.Run(() =>
+                {
+                    for (int i = 0; i < table.Rows.Count; i++)
+                    {
+                        DataRow row = table.Rows[i];
+                        var objects = row.ItemArray;
+                        objects[3] = (int)((int)(DateTime.Now - DateTime.Parse(row["date_of_birth"].ToString())).TotalDays / Participant.ValyeDayYear);
+                        form.Invoke(() =>
+                        {
+                            AddRow(objects);
+                        });
+                        progressBar.Value = i;
+                    }
+                });
+            }
+            catch
+            { }
+            progressBar.Visible = false;
+        }
+        public void AddRow(DataRow Row)
+        {
+            object[]? cells = Row.ItemArray;
+            if (cells != null && cells.Length == listContextMenu.Count)
+            {
+                for (int i = 0; i < cells.Length; i++)
+                {
+                    if (((ContextMenuFilter)listContextMenu[i]).AddAutoItems)
+                    {
+                        string? item = cells[i].ToString();
+                        if (item != null && item.Length != 0)
+                            AddItemContextMenu(listContextMenu[i], item);
+                    }
+                }
+            }
+            //this.Rows.Add(cells);
+        }
+        public void AddRow(object[]? cells)
+        {
+            if (cells != null && cells.Length == listContextMenu.Count)
+            {
+                for (int i = 0; i < cells.Length; i++)
+                {
+                    if (((ContextMenuFilter)listContextMenu[i]).AddAutoItems)
+                    {
+                        string? item = cells[i].ToString();
+                        if (item != null && item.Length != 0)
+                            AddItemContextMenu(listContextMenu[i], item);
+                    }
+                }
+            }
+            //this.Rows.Add(cells);
+        }
+        //public DataRow? GetRowToID(string id)
+        //{
+        //    foreach (DataRow row in Rows)
+        //    {
+        //        if (row["ID"].ToString() == id)
+        //            return row;
+        //    }
+        //    return null;
+        //}
+        //public void DeleteRow(DataRow row)
+        //{
+        //    for (int j = 0; j < Columns.Count; j++)
+        //    {
+        //        if (row[j].ToString() == "" || !((ContextMenuFilter)listContextMenu[j]).AddAutoItems)
+        //            continue;
+        //        DeleteItemContextMenu(j, row[j].ToString(), (ContextMenuFilter)listContextMenu[j]);
+        //    }
+        //    Rows.Remove(row);
+        //}
+        //private void DeleteItemContextMenu(int index, string item, ContextMenuFilter contextMenu)
+        //{
+        //    int c = 0;
+        //    for (int i = 0; i < Rows.Count; i++)
+        //    {
+        //        if (Rows[i][index].ToString() == item)
+        //            c++;
+        //        if (c == 2)
+        //            return;
+        //    }
+        //    for (int i = 0; i < contextMenu.Items.Count; i++)
+        //    {
+        //        if (contextMenu.Items[i].Text == item)
+        //        {
+        //            contextMenu.Items.RemoveAt(i);
+        //            return;
+        //        }
+        //    }
+        //}
+        //public void DeleteRow(string id)
+        //{
+        //    foreach (DataRow row in Rows)
+        //    {
+        //        if (row["ID"].ToString() == id)
+        //        {
+        //            for (int j = 0; j < Columns.Count; j++)
+        //            {
+        //                if (row[j].ToString() == "" || !((ContextMenuFilter)listContextMenu[j]).AddAutoItems)
+        //                    continue;
+        //                DeleteItemContextMenu(j, row[j].ToString(), (ContextMenuFilter)listContextMenu[j]);
+        //            }
+        //            Rows.Remove(row);
+        //            return;
+        //        }
+        //    }
+        //}
+    }
+    public class TournamentDataGrid : TableContextMenu<Tournament>
+    {
+        public TournamentDataGrid(DataGridView dataGridView, DbSet<Tournament> tournaments) : base(dataGridView)
+        {
+            dataGridView.Columns[0].Visible = false;
+            foreach (Tournament t in tournaments.ToList())
+            {
+                bindingList.Add(t);
+            }
         }
     }
     public class DataTableContextMenu : DataTable
@@ -180,6 +506,35 @@ namespace Kaharman
             foreach (ContextMenuStrip c in listContextMenu)
                 c.Close();
         }
+        private void AddItemContextMenu(ContextMenuStrip menuStrip, string item)
+        {
+            System.Collections.IList list = menuStrip.Items;
+            List<string> text = new List<string>();
+            for (int i = 0; i < list.Count; i++)
+            {
+                ToolStripMenuItem? toolStrip = list[i] as ToolStripMenuItem;
+                if (toolStrip != null)
+                {
+                    if (toolStrip.Text == item)
+                        return;
+                    text.Add(toolStrip.Text);
+                }
+            }
+            text.Add(item);
+            text.Sort();
+
+            for (int i = 0; i < text.Count; ++i)
+            {
+                if (text[i] == item)
+                {
+                    ToolStripMenuItem toolStrip = new ToolStripMenuItem();
+                    toolStrip.Text = item;
+                    toolStrip.Checked = true;
+                    menuStrip.Items.Insert(i, toolStrip);
+                }
+            }
+        }
+        
         public void FillTable(DataTable table)
         {
             foreach(DataRow row in table.Rows)
@@ -267,34 +622,6 @@ namespace Kaharman
                 }
             }
             this.Rows.Add(cells);
-        }
-        private void AddItemContextMenu(ContextMenuStrip menuStrip, string item)
-        {
-            System.Collections.IList list = menuStrip.Items;
-            List<string> text = new List<string>();
-            for (int i = 0; i < list.Count; i++)
-            {
-                ToolStripMenuItem? toolStrip = list[i] as ToolStripMenuItem;
-                if (toolStrip != null)
-                {
-                    if (toolStrip.Text == item)
-                        return;
-                    text.Add(toolStrip.Text);
-                }
-            }
-            text.Add(item);
-            text.Sort();
-            
-            for (int i =0; i < text.Count; ++i)
-            {
-                if (text[i] == item)
-                {
-                    ToolStripMenuItem toolStrip = new ToolStripMenuItem();
-                    toolStrip.Text = item;
-                    toolStrip.Checked = true;
-                    menuStrip.Items.Insert(i, toolStrip);
-                }
-            }      
         }
         public DataRow? GetRowToID(string id)
         {

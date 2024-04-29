@@ -1,9 +1,7 @@
 using Kaharman;
-using System.Collections.Generic;
+using Microsoft.EntityFrameworkCore;
+using System.ComponentModel;
 using System.Data;
-using System.Diagnostics;
-using System.Drawing.Imaging;
-using System.Windows.Forms.Design;
 
 namespace Hasen
 {
@@ -18,18 +16,33 @@ namespace Hasen
         TableVisible tableVisible;
         ParticipantDataTable ParticipantsTable;
         ParticipantDataTable DataParticipantsTable;
-        DataTableContextMenu DataHistoryTournaments = new DataTableContextMenu();
+        TournamentDataGrid DataHistoryTournaments;
+
+        private BindingList<Tournament> tournaments;
+        private BindingSource pSource = new BindingSource();
         public Kaharman()
         {
             InitializeComponent();
+            KaharmanDataContext dbContext = new KaharmanDataContext();
+            //dbContext.Catigory.Load();
             StartForm startForm = new StartForm();
             //if (startForm.ShowDialog() == DialogResult.Cancel)
             //    this.Close();
-            ParticipantsTable = new ParticipantDataTable(dataGridView1);
+            //ParticipantsTable = new ParticipantDataTable(dataGridView1);
+            tournaments = new BindingList<Tournament>(dbContext.Tournament.ToList()); //getting bindinglist
+            tournaments.AllowEdit = true;
+            tournaments.AllowNew = true;
+
+            pSource.DataSource = tournaments;
+            pSource.AllowNew = true;
+
+            dataGridView1.DataSource = pSource;
+            ParticipantsTable = new ParticipantDataTable();
             DataParticipantsTable = new ParticipantDataTable();
-            InitializeDataTournament(DataHistoryTournaments);
+            DataHistoryTournaments = new TournamentDataGrid(dataGridView1, dbContext.Tournament);
+           // InitializeDataTournament(DataHistoryTournaments);
             tableVisible = TableVisible.Participants;
-            UpDateTable();
+           // UpDateTable();
         }
         private void UpDateTable()
         {
@@ -48,22 +61,22 @@ namespace Hasen
                     }
                 case TableVisible.HistoryTournaments:
                     {
-                        èñòîðèÿÒóðíèðîâToolStripMenuItem.Checked = true;
-                        DataHistoryTournaments.Rows.Clear();
-                        dataGridView1.ContextMenuStrip = contextMenuStrip1;
-                        using (DataTable data = AccessSQL.GetDataTableSQL("SELECT * FROM Tournament"))
-                        {
-                            foreach (DataRow row in data.Rows)
-                            {
-                                DataRow newRow = DataHistoryTournaments.NewRow();
-                                for (int i = 0; i < 5; i++)
-                                {
-                                    newRow[i] = row[i];
-                                }
-                                DataHistoryTournaments.Rows.Add(newRow);
-                            }
-                        }
-                        dataGridView1.DataSource = DataHistoryTournaments.DataView;
+                        //èñòîðèÿÒóðíèðîâToolStripMenuItem.Checked = true;
+                        //DataHistoryTournaments.Rows.Clear();
+                        //dataGridView1.ContextMenuStrip = contextMenuStrip1;
+                        //using (DataTable data = AccessSQL.GetDataTableSQL("SELECT * FROM Tournament"))
+                        //{
+                        //    foreach (DataRow row in data.Rows)
+                        //    {
+                        //        DataRow newRow = DataHistoryTournaments.NewRow();
+                        //        for (int i = 0; i < 5; i++)
+                        //        {
+                        //            newRow[i] = row[i];
+                        //        }
+                        //        DataHistoryTournaments.Rows.Add(newRow);
+                        //    }
+                        //}
+                        //dataGridView1.DataSource = DataHistoryTournaments.DataView;
                         return;
                     }
                 case TableVisible.Participants:
@@ -75,7 +88,7 @@ namespace Hasen
                     }
             }
         }
-        private void InitializeDataTournament(DataTableContextMenu dataTable)
+        private void InitializeDataTournament(TournamentDataGrid dataTable)
         {
             dataTable.AddColunm("ID", typeof(int));
 
