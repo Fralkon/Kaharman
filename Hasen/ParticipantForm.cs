@@ -5,14 +5,14 @@ namespace Hasen
 {
     public partial class ParticipantForm : Form
     {
-        public Participant? Participant { get; set; }
+        public ParticipantX? Participant { get; set; }
         public int? ID;
         ToolTip ToolTip = new ToolTip();
         AutoCompleteStringCollection AutoCompleteCity = new AutoCompleteStringCollection();
         public ParticipantForm()
         {
             InitializeComponent();
-            Participant = new Participant();
+            Participant = new ParticipantX();
             InitForm();
         }
         public ParticipantForm(string iD)
@@ -35,11 +35,11 @@ namespace Hasen
                 qualification.Text = row["qualification"].ToString();
                 city.Text = row["city"].ToString();
                 trainer.Text = row["trainer"].ToString();
-                Participant = new Participant(row, true);
+                Participant = new ParticipantX(row, true);
             }
             EditFalse();
         }
-        public ParticipantForm(Participant participant)
+        public ParticipantForm(ParticipantX participant)
         {
             InitializeComponent();
             Participant = participant;
@@ -98,7 +98,7 @@ namespace Hasen
         }
         private void DateOfBirth_CloseUp(object? sender, EventArgs e)
         {
-            ToolTip.SetToolTip(dateOfBirth, "Количество лет: " + (int)((DateTime.Now - dateOfBirth.Value).TotalDays / Participant.ValyeDayYear));
+            ToolTip.SetToolTip(dateOfBirth, "Количество лет: " + (int)((DateTime.Now - dateOfBirth.Value).TotalDays / ParticipantX.ValyeDayYear));
         }
         private void button1_Click(object sender, EventArgs e)
         {
@@ -110,7 +110,7 @@ namespace Hasen
                     int id = AccessSQL.GetIDInsert();
                     ID = id;
                     DialogResult = DialogResult.OK;
-                    Participant = new Participant(id, name.Text, gender.Text, dateOfBirth.Value, weight, qualification.Text, city.Text, trainer.Text);
+                    Participant = new ParticipantX(id, name.Text, gender.Text, dateOfBirth.Value, weight, qualification.Text, city.Text, trainer.Text);
                     this.Close();
                 }
                 else
@@ -124,7 +124,7 @@ namespace Hasen
                 {
                     AccessSQL.SendSQL($"UPDATE Participants SET name = '{name.Text}', gender = '{gender.Text}', [date_of_birth] = '{dateOfBirth.Value.ToString("dd.MM.yyyy")}', weight = {weight},qualification = '{qualification.Text}',city = '{city.Text}',trainer = '{trainer.Text}' WHERE id = {ID}");
                     DialogResult = DialogResult.OK;
-                    Participant = new Participant((int)ID, name.Text, gender.Text, dateOfBirth.Value, weight, qualification.Text, city.Text, trainer.Text);
+                    Participant = new ParticipantX((int)ID, name.Text, gender.Text, dateOfBirth.Value, weight, qualification.Text, city.Text, trainer.Text);
                     this.Close();
                 }
                 else

@@ -3,6 +3,7 @@ using ICSharpCode.SharpZipLib.Core;
 using iTextSharp.text;
 using iTextSharp.text.pdf;
 using Kaharman;
+using NPOI.SS.Formula.Functions;
 using NPOI.SS.UserModel;
 using System.Data;
 using System.Diagnostics;
@@ -27,6 +28,7 @@ namespace Kaharman
         bool oneLoad = false;
         string number_t;
         string name_g;
+        TournamentGrid TournamentGrid;
         public GridForm(string id, string nameT, string name,string numProt, DateTime dateStart, string judge, string secret, Grid grid)
         {
             InitializeComponent();
@@ -67,6 +69,45 @@ namespace Kaharman
             placesText[3].Text = "Третье место";
             labelJudge.Text = "Главный судья ___________________ " + judge;
             labelSecret.Text = "Секретарь ________________________ " + secret;
+            foreach (Label label in placesText)
+                panel1.Controls.Add(label);
+            ElementsLocation();
+        }
+        public GridForm(KaharmanDataContext dataContext, TournamentGrid tournamentGrid)
+        {
+            InitializeComponent();
+            TournamentGrid = tournamentGrid;
+            switch (tournamentGrid.Type)
+            {
+                case 4:
+                    panel1.Size = new Size(1000, 500);
+                    break;
+                case 8:
+                    panel1.Size = new Size(1150, 500);
+                    break;
+                case 16:
+                    panel1.Size = new Size(1500, 800);
+                    break;
+                case 32:
+                    panel1.Size = new Size(1655, 1400);
+                    break;
+            }
+            graphics = panel1.CreateGraphics();
+            panel1.Paint += Panel1_Paint;
+            nameGrid.Text = "Протокол № " + tournamentGrid.Number.ToString() + " | " + tournamentGrid.Tournament.NameTournament;
+            DateStart = tournamentGrid.DataStart;
+            this.dateStart.Text = "Дата проведения " + DateStart.ToString("dd MMMM yyyy");
+            placesText[0] = new Label();
+            placesText[0].Text = "Первое место";
+            placesText[1] = new Label();
+            placesText[1].Text = "Второе место";
+            placesText[2] = new Label();
+            placesText[2].Text = "Третье место";
+            placesText[3] = new Label();
+            placesText[3].Text = "Третье место";
+            labelJudge.Text = "Главный судья ___________________ " + tournamentGrid.Tournament.Judge;
+            labelSecret.Text = "Секретарь ________________________ " + tournamentGrid.Tournament.Secret;
+            tournamentGrid.InitLable(panel1);
             ElementsLocation();
             foreach (Label label in placesText)
                 panel1.Controls.Add(label);
@@ -118,35 +159,35 @@ namespace Kaharman
         #endregion
         private void Panel1_Paint(object? sender, PaintEventArgs e)
         {
-            Pen pen = new Pen(Color.Black);
-            pen.DashStyle = System.Drawing.Drawing2D.DashStyle.Dash;
-            foreach (GridItems[] Items in Grid.Items)
-            {
-                foreach (GridItems item in Items)
-                {
-                    if (!oneLoad)
-                    {
-                        panel1.Controls.Add(item.Label);
-                        item.Label.Click += Item_Click;
-                        item.Label.MouseDown += Label_MouseDown;
-                        item.Label.MouseUp += Label_MouseUp;
-                        item.Label.MouseMove += Label_MouseMove;
-                        item.Label.DragOver += Label_DragOver;
-                        item.Label.DragDrop += Label_DragDrop;
-                    }
-                    DrawLines(e.Graphics, item, pen);
-                    if (item.Status == StatusGridItem.win)
-                    {
-                        DrawLines(e.Graphics, item, PenWonPosition);
-                    }
-                }
-            }
-            if (!oneLoad)
-            {
-                foreach (GridItems item in Grid.Places)
-                    panel1.Controls.Add(item.Label);
-                oneLoad = true;
-            }
+            //Pen pen = new Pen(Color.Black);
+            //pen.DashStyle = System.Drawing.Drawing2D.DashStyle.Dash;
+            //foreach (GridItems[] Items in Grid.Items)
+            //{
+            //    foreach (GridItems item in Items)
+            //    {
+            //        if (!oneLoad)
+            //        {
+            //            panel1.Controls.Add(item.Label);
+            //            item.Label.Click += Item_Click;
+            //            item.Label.MouseDown += Label_MouseDown;
+            //            item.Label.MouseUp += Label_MouseUp;
+            //            item.Label.MouseMove += Label_MouseMove;
+            //            item.Label.DragOver += Label_DragOver;
+            //            item.Label.DragDrop += Label_DragDrop;
+            //        }
+            //        DrawLines(e.Graphics, item, pen);
+            //        if (item.Status == StatusGridItem.win)
+            //        {
+            //            DrawLines(e.Graphics, item, PenWonPosition);
+            //        }
+            //    }
+            //}
+            //if (!oneLoad)
+            //{
+            //    foreach (GridItems item in Grid.Places)
+            //        panel1.Controls.Add(item.Label);
+            //    oneLoad = true;
+            //}
         }
         private void Item_Click(object? sender, EventArgs e)
         {
@@ -305,7 +346,7 @@ namespace Kaharman
         }
         private void TournamentGrid_FormClosing(object sender, FormClosingEventArgs e)
         {
-            AccessSQL.SendSQL($"UPDATE TournamentGrid SET grid = '{JsonSerializer.Serialize(Grid)}' WHERE id = {ID}");
+            //AccessSQL.SendSQL($"UPDATE TournamentGrid SET grid = '{JsonSerializer.Serialize(Grid)}' WHERE id = {ID}");
         }
         private void GridForm_Resize(object sender, EventArgs e)
         {
@@ -316,10 +357,11 @@ namespace Kaharman
             nameTournamet.Location = new Point((panel1.Width / 2) - (nameTournamet.Width / 2), 10);
             nameGrid.Location = new Point((panel1.Width / 2) - (nameGrid.Width / 2), 30);
             dateStart.Location = new Point((panel1.Width / 2) - (dateStart.Width / 2), 50);
-            for (int i = 0; i < Grid.Places.Length; i++)
+            for (int i = 0; i < TournamentGrid.LabelPlaces.Length; i++)
             {
                 int posY = 120 + (i * 35);
-                Grid.Places[i].InitPosition(new Point(panel1.Width - Grid.Places[i].Label.Width - 30, posY));
+                TournamentGrid.LabelPlaces[i].Label.Location = new Point(panel1.Width - TournamentGrid.LabelPlaces[i].Label.Width - 30, posY);
+               // Grid.Places[i].InitPosition(new Point(panel1.Width - Grid.Places[i].Label.Width - 30, posY));
                 placesText[i].Location = new Point(panel1.Width - placesText[i].Width - 200, posY);
             }
             int lableX = placesText[0].Location.X - 50;
@@ -375,7 +417,7 @@ namespace Kaharman
 
         private void сохранитьToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            AccessSQL.SendSQL($"UPDATE TournamentGrid SET grid = '{JsonSerializer.Serialize(Grid)}' WHERE id = {ID}");
+            //AccessSQL.SendSQL($"UPDATE TournamentGrid SET grid = '{JsonSerializer.Serialize(Grid)}' WHERE id = {ID}");
         }
     }
 }

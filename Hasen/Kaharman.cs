@@ -1,5 +1,6 @@
 using Kaharman;
 using Microsoft.EntityFrameworkCore;
+using NPOI.SS.Formula.Functions;
 using System.ComponentModel;
 using System.Data;
 
@@ -14,93 +15,114 @@ namespace Hasen
     public partial class Kaharman : Form
     {
         TableVisible tableVisible;
-        ParticipantDataTable ParticipantsTable;
-        ParticipantDataTable DataParticipantsTable;
         TournamentDataGrid DataHistoryTournaments;
-
-        private BindingList<Tournament> tournaments;
-        private BindingSource pSource = new BindingSource();
+        ParticipantDataGrid ParticipantDataGrid;
+        KaharmanDataContext dbContext = new KaharmanDataContext();
         public Kaharman()
         {
             InitializeComponent();
-            KaharmanDataContext dbContext = new KaharmanDataContext();
-            //dbContext.Catigory.Load();
-            StartForm startForm = new StartForm();
+            //MessageBox.Show(Math.Log(8,2).ToString());
+            //MessageBox.Show(Math.Log(16, 2).ToString());
+            //MessageBox.Show(Math.Log(32, 2).ToString());
+            // dbContext.Database.EnsureDeleted();
+            //  dbContext.Database.EnsureCreated();
+            //StartForm startForm = new StartForm();
             //if (startForm.ShowDialog() == DialogResult.Cancel)
             //    this.Close();
             //ParticipantsTable = new ParticipantDataTable(dataGridView1);
-            tournaments = new BindingList<Tournament>(dbContext.Tournament.ToList()); //getting bindinglist
-            tournaments.AllowEdit = true;
-            tournaments.AllowNew = true;
+            //Participant participant = new Participant()
+            //{
+            //    FIO = "ÑÀÐÑÅÍÎÂÀ ÌÈËÀÍÀ",
+            //    Gender = "Æ",
+            //    DateOfBirth = DateTime.Now,
+            //    Weight = 123,
+            //    Qualification = "asdasd",
+            //    City = "as312123",
+            //    Trainer = "3cvvfg"
+            //};
+            //Participant participant1 = new Participant()
+            //{
+            //    FIO = "ÑÀÐÑÅÍÎÂÀ ÌÈËÀÍÀsd",
+            //    Gender = "Æf",
+            //    DateOfBirth = DateTime.Now,
+            //    Weight = 1235,
+            //    Qualification = "asdasd123",
+            //    City = "as312123123",
+            //    Trainer = "3cvvfg12"
+            ////};
+            //dbContext.Participant.Add(participant);
+            //MessageBox.Show(participant.Id.ToString());
+            //dbContext.SaveChanges();
+            //MessageBox.Show(participant.Id.ToString());
+            //dbContext.Participant.Add(participant1);
+            //dbContext.SaveChanges();
 
-            pSource.DataSource = tournaments;
-            pSource.AllowNew = true;
+            //Tournament tournament = new Tournament()
+            //{
+            //    NameTournament = "123123123123",
+            //    StartDate = DateTime.Now,
+            //    EndDate = DateTime.Now,
+            //    NoteTournament = "123123123",
+            //    Judge = "xzczxcxzc",
+            //    Secret = "123123123",
+            //    Participants = new List<Participant>() { participant, participant1 }
+            //};
 
-            dataGridView1.DataSource = pSource;
-            ParticipantsTable = new ParticipantDataTable();
-            DataParticipantsTable = new ParticipantDataTable();
-            DataHistoryTournaments = new TournamentDataGrid(dataGridView1, dbContext.Tournament);
-           // InitializeDataTournament(DataHistoryTournaments);
-            tableVisible = TableVisible.Participants;
-           // UpDateTable();
+            //TournamentGrid grid = new TournamentGrid()
+            //{
+            //    Number = 1,
+            //    DataStart = DateTime.Now,
+            //    NameGrid = "asdsda",
+            //    Type = 4,
+            //    Status = "1/4",
+            //    Participants = new List<Participant> { participant, participant1 },
+            //    Tournament = tournament,
+            //    Matchs = new List<Match>()
+            //};
+            //grid.Matchs.Add(new Match()
+            //{
+            //    RoundNumber = 1,
+            //    MatchNumber = 2,
+            //    IdParticipant1 = 1,
+            //    IdParticipant2 = 2,
+            //    Status = StatusMatch.WinPar2,
+            //    TournamentGrid = grid
+            //});
+            //grid.Matchs.Add(new Match()
+            //{
+            //    RoundNumber = 1,
+            //    MatchNumber = 2,
+            //    IdParticipant1 = 1,
+            //    IdParticipant2 = 2,
+            //    Status = StatusMatch.WinPar2,
+            //    TournamentGrid = grid
+            //});
+            //grid.Tournament = tournament;
+
+
+            //dbContext.TournamentGrid.Add(grid);
+            //dbContext.Tournament.Add(tournament);
+
+            //dbContext.SaveChanges();
+
+            ParticipantView.VisibleChanged += ParticipantView_VisibleChanged;
+            ParticipantView.MouseClick += ParticipantView_MouseClick;
+            DataHistoryTournaments = new TournamentDataGrid(TournamentView);
+
+            ParticipantDataGrid = new ParticipantDataGrid(ParticipantView, contextMenuStrip1);
+            tableVisible = TableVisible.HistoryTournaments;
+
+            èñòîðèÿÒóðíèðîâToolStripMenuItem.Checked = true;
+            ParticipantView.Visible = false;
+            TournamentView.Visible = true;
         }
-        private void UpDateTable()
+
+        private void ParticipantView_MouseClick(object? sender, MouseEventArgs e)
         {
-            ïîêàçàòüÓ÷àñòíèêîâToolStripMenuItem.Checked = false;
-            áàçàÄàííûõToolStripMenuItem.Checked = false;
-            èñòîðèÿÒóðíèðîâToolStripMenuItem.Checked = false;
-            switch (tableVisible)
-            {
-                case TableVisible.DataParticipants:
-                    {
-                        áàçàÄàííûõToolStripMenuItem.Checked = true;
-                        dataGridView1.ContextMenuStrip = null;
-                        AccessSQL.FillDataTableSQL("SELECT * FROM Participants", DataParticipantsTable);
-                        dataGridView1.DataSource = DataParticipantsTable.DataView;
-                        return;
-                    }
-                case TableVisible.HistoryTournaments:
-                    {
-                        //èñòîðèÿÒóðíèðîâToolStripMenuItem.Checked = true;
-                        //DataHistoryTournaments.Rows.Clear();
-                        //dataGridView1.ContextMenuStrip = contextMenuStrip1;
-                        //using (DataTable data = AccessSQL.GetDataTableSQL("SELECT * FROM Tournament"))
-                        //{
-                        //    foreach (DataRow row in data.Rows)
-                        //    {
-                        //        DataRow newRow = DataHistoryTournaments.NewRow();
-                        //        for (int i = 0; i < 5; i++)
-                        //        {
-                        //            newRow[i] = row[i];
-                        //        }
-                        //        DataHistoryTournaments.Rows.Add(newRow);
-                        //    }
-                        //}
-                        //dataGridView1.DataSource = DataHistoryTournaments.DataView;
-                        return;
-                    }
-                case TableVisible.Participants:
-                    {
-                        dataGridView1.ContextMenuStrip = null;
-                        ïîêàçàòüÓ÷àñòíèêîâToolStripMenuItem.Checked = true;
-                        dataGridView1.DataSource = ParticipantsTable.DataView;
-                        return;
-                    }
-            }
+            if (e.Button == MouseButtons.Right)
+                contextMenuStrip1.Show(MousePosition);
         }
-        private void InitializeDataTournament(TournamentDataGrid dataTable)
-        {
-            dataTable.AddColunm("ID", typeof(int));
 
-            ContextMenuFilterName contextMenuName = new ContextMenuFilterName();
-            dataTable.AddColunm("Íàèìåíîâàíèå", contextMenuName);
-
-            dataTable.AddColunm("Äàòà íà÷àëà", typeof(DateTime));
-
-            dataTable.AddColunm("Äàòà çàâåðøåíèÿ", typeof(DateTime));
-
-            dataTable.AddColunm("Ïðèìå÷àíèå");
-        }
         private void Form1_Load(object sender, EventArgs e)
         {
             if (!File.Exists(Environment.CurrentDirectory + "/Database.accdb"))
@@ -108,16 +130,6 @@ namespace Hasen
                 MessageBox.Show($"Ôàéë áàçû äàííûõ íå íàéäåí\n{Environment.CurrentDirectory}Database.accdb");
                 Close();
             }
-        }
-        private void dataGridView1_DragDrop(object sender, DragEventArgs e)
-        {
-            string[] files = (string[])e.Data.GetData(DataFormats.FileDrop);
-            if (files.Length == 0)
-            {
-                MessageBox.Show("Ïåðåòàùèòå ôàéëû");
-                return;
-            }
-            ParticipantsTable.LoadDataOnFiles(files);
         }
         private void dataGridView1_DragEnter(object sender, DragEventArgs e)
         {
@@ -128,29 +140,9 @@ namespace Hasen
         {
             this.Close();
         }
-        private void dataGridView1_ColumnHeaderMouseClick(object sender, DataGridViewCellMouseEventArgs e)
-        {
-            if (e.Button == MouseButtons.Right)
-            {
-                ParticipantsTable.ShowContextMenu(e.ColumnIndex, MousePosition);
-            }
-        }
-        private void dataGridView1_MouseClick(object sender, MouseEventArgs e)
-        {
-            ParticipantsTable.CloseContextMenu();
-        }
-        private void dataGridView1_CellClick(object sender, DataGridViewCellEventArgs e)
-        {
-            contextMenuStrip1.Show();
-        }
-        private void ïîêàçàòüÓ÷àñòíèêîâToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            tableVisible = TableVisible.Participants;
-            UpDateTable();
-        }
         private void ñîçäàòüToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            TournamentForm createTournament = new TournamentForm(ParticipantsTable);
+            TournamentForm createTournament = new TournamentForm(dbContext);
             this.Hide();
             createTournament.ShowDialog();
             this.Show();
@@ -158,23 +150,29 @@ namespace Hasen
         private void èñòîðèÿÒóðíèðîâToolStripMenuItem_Click(object sender, EventArgs e)
         {
             tableVisible = TableVisible.HistoryTournaments;
-            UpDateTable();
+            áàçàÄàííûõToolStripMenuItem.Checked = false;
+            èñòîðèÿÒóðíèðîâToolStripMenuItem.Checked = true;
+            ParticipantView.Visible = false;
+            TournamentView.Visible = true;
         }
         private void áàçàÄàííûõToolStripMenuItem_Click_1(object sender, EventArgs e)
         {
             tableVisible = TableVisible.DataParticipants;
-            UpDateTable();
+            áàçàÄàííûõToolStripMenuItem.Checked = true;
+            èñòîðèÿÒóðíèðîâToolStripMenuItem.Checked = false;
+            ParticipantView.Visible = true;
+            TournamentView.Visible = false;
         }
         private void dataGridView1_MouseDoubleClick(object sender, MouseEventArgs e)
         {
-            if (dataGridView1.SelectedRows.Count == 0)
+            if (ParticipantView.SelectedRows.Count == 0)
             {
                 MessageBox.Show("Âûáåðèòå ñòðîêó");
                 return;
             }
             if (tableVisible == TableVisible.HistoryTournaments)
             {
-                TournamentForm createTournament = new TournamentForm(dataGridView1.SelectedRows[0].Cells["ID"].Value.ToString());
+                TournamentForm createTournament = new TournamentForm(ParticipantView.SelectedRows[0].Cells["ID"].Value.ToString(), dbContext);
                 this.Hide();
                 createTournament.ShowDialog();
                 this.Show();
@@ -182,7 +180,7 @@ namespace Hasen
             }
             else if (tableVisible == TableVisible.Participants || tableVisible == TableVisible.DataParticipants)
             {
-                ParticipantForm participants = new ParticipantForm(dataGridView1.SelectedRows[0].Cells["ID"].Value.ToString());
+                ParticipantForm participants = new ParticipantForm(ParticipantView.SelectedRows[0].Cells["ID"].Value.ToString());
                 this.Hide();
                 participants.ShowDialog();
                 this.Show();
@@ -191,42 +189,44 @@ namespace Hasen
         }
         private void óäàëèòüToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (dataGridView1.SelectedRows.Count == 0)
+            if (ParticipantView.SelectedRows.Count == 0)
             {
                 MessageBox.Show("Âûáåðèòå ñòðîêó");
                 return;
             }
-            else if (dataGridView1.SelectedRows.Count == 1)
+            else if (ParticipantView.SelectedRows.Count == 1)
             {
-                DialogResult dr = MessageBox.Show($"Óäàëèòü òóðíèð {dataGridView1.SelectedRows[0].Cells["Íàèìåíîâàíèå"].Value}?", "Óäàëåíèå òóðíèðà", MessageBoxButtons.YesNo);
-                if (dr == DialogResult.Yes)
+                Participant? participant = ParticipantDataGrid.GetParticipant((int)ParticipantView.SelectedRows[0].Cells[0].Value);
+                if (participant != null)
                 {
-                    AccessSQL.SendSQL("DELETE * FROM Tournament WHERE id = " + dataGridView1.SelectedRows[0].Cells["ID"].Value.ToString());
-                    AccessSQL.SendSQL("DELETE * FROM TournamentGrid WHERE id_tournament = " + dataGridView1.SelectedRows[0].Cells["ID"].Value.ToString());
-                    UpDateTable();
+                    dbContext.Participant.Remove(participant);
                 }
             }
             else
             {
-                DialogResult dr = MessageBox.Show($"Óäàëèòü òóðíèðû ({dataGridView1.SelectedRows.Count} øò.)?", "Óäàëåíèå òóðíèðà", MessageBoxButtons.YesNo);
+                DialogResult dr = MessageBox.Show($"Óäàëèòü òóðíèðû ({ParticipantView.SelectedRows.Count} øò.)?", "Óäàëåíèå òóðíèðà", MessageBoxButtons.YesNo);
                 if (dr == DialogResult.Yes)
                 {
-                    foreach (DataGridViewRow row in dataGridView1.SelectedRows)
+                    foreach (DataGridViewRow row in ParticipantView.SelectedRows)
                     {
-                        AccessSQL.SendSQL("DELETE * FROM Tournament WHERE id = " + row.Cells["ID"].Value.ToString());
-                        AccessSQL.SendSQL("DELETE * FROM TournamentGrid WHERE id_tournament = " + row.Cells["ID"].Value.ToString());
+                        Participant? participant = ParticipantDataGrid.GetParticipant((int)row.Cells[0].Value);
+                        if (participant != null)
+                        {
+                            dbContext.Participant.Remove(participant);
+                        }
                     }
-                    UpDateTable();
                 }
             }
+            dbContext.SaveChanges();
+            ParticipantDataGrid.LoadData(dbContext.Participant.ToList());
         }
         private void äîáàâèòüToolStripMenuItem_Click_1(object sender, EventArgs e)
         {
-            OpenFileDialog openFile = new OpenFileDialog();
-            openFile.Multiselect = true;
-            openFile.Filter = "Exel Files(*.xlsx)|*.xlsx|Exel Files(*.xls)|*.xls";
-            if (openFile.ShowDialog() == DialogResult.Cancel) { return; }
-            ParticipantsTable.LoadDataOnFiles(openFile.FileNames);
+            // OpenFileDialog openFile = new OpenFileDialog();
+            // openFile.Multiselect = true;
+            // openFile.Filter = "Exel Files(*.xlsx)|*.xlsx|Exel Files(*.xls)|*.xls";
+            // if (openFile.ShowDialog() == DialogResult.Cancel) { return; }
+            //ParticipantsTable.LoadDataOnFiles(openFile.FileNames);
         }
         private void ñîçäàòüToolStripMenuItem1_Click(object sender, EventArgs e)
         {
@@ -234,6 +234,71 @@ namespace Hasen
             this.Hide();
             participants.ShowDialog();
             this.Show();
+        }
+
+        private void TournamentView_CellMouseDoubleClick(object sender, DataGridViewCellMouseEventArgs e)
+        {
+            TournamentForm tournamentForm = new TournamentForm(TournamentView.SelectedRows[0].Cells["Id"].Value.ToString(), dbContext);
+            this.Hide();
+            tournamentForm.ShowDialog();
+            this.Show();
+            return;
+        }
+
+        private void Kaharman_Activated(object sender, EventArgs e)
+        {
+            if (tableVisible == TableVisible.HistoryTournaments)
+                DataHistoryTournaments.LoadData(dbContext.Tournament.ToList());
+            else
+                ParticipantDataGrid.LoadData(dbContext.Participant.ToList());
+        }
+        private void TournamentView_VisibleChanged(object sender, EventArgs e)
+        {
+            DataGridView? dataGridView = sender as DataGridView;
+            if (dataGridView != null)
+                if (dataGridView.Visible == true)
+                    DataHistoryTournaments.LoadData(dbContext.Tournament.ToList());
+        }
+        private void ParticipantView_VisibleChanged(object? sender, EventArgs e)
+        {
+            DataGridView? dataGridView = sender as DataGridView;
+            if (dataGridView != null)
+                if (dataGridView.Visible == true)
+                    ParticipantDataGrid.LoadData(dbContext.Participant.ToList());
+        }
+
+        private void óäàëèòüToolStripMenuItem1_Click(object sender, EventArgs e)
+        {
+            if (TournamentView.SelectedRows.Count == 0)
+            {
+                MessageBox.Show("Âûáåðèòå ñòðîêó");
+                return;
+            }
+            else if (TournamentView.SelectedRows.Count == 1)
+            {
+                Tournament? tournament = DataHistoryTournaments.GetParticipant((int)TournamentView.SelectedRows[0].Cells[0].Value);
+                if (tournament != null)
+                {
+                    dbContext.Tournament.Remove(tournament);
+                }
+            }
+            else
+            {
+                DialogResult dr = MessageBox.Show($"Óäàëèòü òóðíèðû ({TournamentView.SelectedRows.Count} øò.)?", "Óäàëåíèå òóðíèðà", MessageBoxButtons.YesNo);
+                if (dr == DialogResult.Yes)
+                {
+                    foreach (DataGridViewRow row in TournamentView.SelectedRows)
+                    {
+                        Tournament? tournamnet = DataHistoryTournaments.GetParticipant((int)row.Cells[0].Value);
+                        if (tournamnet != null)
+                        {
+                            dbContext.Tournament.Remove(tournamnet);
+                        }
+                    }
+                }
+            }
+            dbContext.SaveChanges();
+            DataHistoryTournaments.LoadData(dbContext.Tournament.ToList());
         }
     }
 }

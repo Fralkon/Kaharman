@@ -1,4 +1,5 @@
 ﻿using Hasen;
+using NPOI.POIFS.Crypt.Agile;
 using NPOI.Util;
 using System.CodeDom;
 using System.Data;
@@ -15,7 +16,8 @@ namespace Kaharman
         init,
         close,
         lose,
-        win
+        win,
+        block
     }
     public class FillRandomParticipant
     {
@@ -82,6 +84,60 @@ namespace Kaharman
             return item1;
         }
     }
+    public static class FillRandomMatch
+    {
+        public static void FillMatchs(List<Match> matches, List<Participant> participants, int TypeGrid)
+        {
+            var listPart = new List<Participant>(participants);
+            int firstLab = (listPart.Count - (TypeGrid / 2));
+            for (int numberMatch = 0; numberMatch < firstLab; numberMatch ++)
+            {
+                var parts = GetPair(listPart);               
+                Match? match = matches.Find(match => match.RoundNumber == 0 && match.MatchNumber == numberMatch);
+                if (match == null)
+                    throw new Exception("Ошибка FillRandom"); 
+                if (parts.Item2 == null)
+                    throw new Exception("Ошибка FillRandom");
+                match.SetParticipants(parts);
+                listPart.Remove(parts.Item1);
+                listPart.Remove(parts.Item2);
+            }
+            if (listPart.Count > 0)
+            {
+                for (int numberMatch = (TypeGrid / 4)-1; numberMatch >= 0; numberMatch--)
+                {
+                    var parts = GetPair(listPart);
+                    Match? match = matches.Find(match => match.RoundNumber == 1 && match.MatchNumber == numberMatch);
+                    if (match == null)
+                        throw new Exception("Ошибка FillRandom");
+                    match.SetParticipant2(parts.Item1);
+                    if (parts.Item2 == null)
+                        return;
+                    match.SetParticipant1(parts.Item2);
+                    listPart.Remove(parts.Item1);
+                    listPart.Remove(parts.Item2);
+                    if (listPart.Count == 0)
+                        return;
+                }
+            }
+        }
+        public static (Participant, Participant?) GetPair(List<Participant> participants)
+        {
+            Participant participant1 = participants.First();
+            if (participants.Count == 1)
+                return (participant1, null);
+            Participant? participant2 = participants.Find(part => part.City != participant1.City);
+            if (participant2 == null)
+            {
+                participant2 = participants.Find(part => part.Trainer != participant1.Trainer);
+                if (participant2 == null)
+                {
+                    participant2 = participants.LastOrDefault();
+                }
+            }
+            return (participant1, participant2);
+        }
+    }
     public class Category
     {
         public float Min { get; set; }
@@ -112,7 +168,7 @@ namespace Kaharman
             return X + " " + Y;
         }
     }
-    public class Participant
+    public class ParticipantX
     {
         public static float ValyeDayYear = 365.2425f;
         public int ID { get; set; }
@@ -133,7 +189,7 @@ namespace Kaharman
         public string Gualiti { get; set; }
         public string City { get; set; }
         public string Trainer { get; set; }
-        public Participant(DataRow row, bool date = false)
+        public ParticipantX(DataRow row, bool date = false)
         {
             //ID = int.Parse(row["ID"].ToString());
             //Name = row["Фамилия и имя"].ToString();
@@ -156,7 +212,7 @@ namespace Kaharman
             City = row[6].ToString();
             Trainer = row[7].ToString();
         }
-        public Participant(DataGridViewRow row)
+        public ParticipantX(DataGridViewRow row)
         {
             ID = int.Parse(row.Cells["ID"].Value.ToString());
             Name = row.Cells["Фамилия и имя"].Value.ToString();
@@ -167,11 +223,11 @@ namespace Kaharman
             City = row.Cells["Город"].Value.ToString();
             Trainer = row.Cells["Тренер"].Value.ToString();
         }
-        public Participant()
+        public ParticipantX()
         {
 
         }
-        public Participant(int iD, string name, string gender, DateTime dayOfBirth, float weight, string gualiti, string city, string trainer)
+        public ParticipantX(int iD, string name, string gender, DateTime dayOfBirth, float weight, string gualiti, string city, string trainer)
         {
             ID = iD;
             Name = name;
@@ -236,31 +292,31 @@ namespace Kaharman
             row[7] = Trainer;
             return row;
         }
-        public static List<Participant> ToList(DataGridView dataGridView)
+        public static List<ParticipantX> ToList(DataGridView dataGridView)
         {
-            List<Participant > list = new List<Participant>();
+            List<ParticipantX > list = new List<ParticipantX>();
             foreach (DataGridViewRow row in dataGridView.Rows)
             {
-                list.Add(new Participant(row));
+                list.Add(new ParticipantX(row));
             }
             return list;
         }
-        public static List<Participant> GetListToID(ParticipantDataTable table)
+        public static List<ParticipantX> GetListToID(ParticipantDataTable table)
         {
-            List<Participant> outputList = new List<Participant>();
+            List<ParticipantX> outputList = new List<ParticipantX>();
             foreach(DataRow row in table.Rows)
-                    outputList.Add(new Participant(row));
+                    outputList.Add(new ParticipantX(row));
             return outputList;
         }
-        public static List<Participant> GetParticipantsOnAccess(List<string> ids)
+        public static List<ParticipantX> GetParticipantsOnAccess(List<string> ids)
         {
-            List<Participant> list = new List<Participant>();
+            List<ParticipantX> list = new List<ParticipantX>();
             if (ids.Count > 0)
             {
                 using (DataTable data = AccessSQL.GetDataTableSQL($"SELECT * FROM Participants WHERE id IN ({string.Join(", ", ids)})"))
                 {
                     foreach (DataRow row in data.Rows)
-                        list.Add(new Participant(row,true));
+                        list.Add(new ParticipantX(row,true));
                 }
             }
             return list;
@@ -272,7 +328,7 @@ namespace Kaharman
         public int ID { get; set; }
         public StatusGridItem Status { get; set; }
         [JsonIgnore]
-        public Participant? Participant { get; set; }
+        public ParticipantX? Participant { get; set; }
         [JsonIgnore]
         public Label Label { get; set; }
         [JsonIgnore]
@@ -341,7 +397,7 @@ namespace Kaharman
                     break;
             }
         }
-        public void SetParticipant(Participant participant)
+        public void SetParticipant(ParticipantX participant)
         {
             ID = participant.ID;
             Participant = participant;
@@ -350,12 +406,12 @@ namespace Kaharman
             string capction = $"Пол: {participant.Gender}\nВозраст: {participant.Age}\nВес: {participant.Weight}\nКвалификация: {participant.Gualiti}\nГород: {participant.City}\nТренер: {participant.Trainer}";
             t.SetToolTip(Label, capction);
         }
-        public void SetParticipant(Participant participant, StatusGridItem statusGrid)
+        public void SetParticipant(ParticipantX participant, StatusGridItem statusGrid)
         {
             this.Status = statusGrid;
             SetParticipant(participant);
         }
-        public Participant? GetParticipant()
+        public ParticipantX? GetParticipant()
         {
             return Participant;
         }
@@ -402,11 +458,11 @@ namespace Kaharman
                     break;
             }
         }
-        public void FillItems(List<Participant> participants)
+        public void FillItems(List<ParticipantX> participants)
         {
             foreach (GridItems items in Places)
             {
-                Participant? participant = participants.Find(item => item.ID == items.ID);
+                ParticipantX? participant = participants.Find(item => item.ID == items.ID);
                 if (participant == null)
                     continue;
                 items.SetParticipant(participant);
@@ -418,7 +474,7 @@ namespace Kaharman
                     gridItem.InitPosition();
                     if (gridItem.ID != -1)
                     {
-                        Participant? participant = participants.Find(item => item.ID == gridItem.ID);
+                        ParticipantX? participant = participants.Find(item => item.ID == gridItem.ID);
                         if (participant == null)
                             continue;
                         gridItem.SetParticipant(participant);
@@ -426,23 +482,23 @@ namespace Kaharman
                 }
             }
         }
-        public void FillNewGridItems(List<Participant> participants)
+        public void FillNewGridItems(List<ParticipantX> participants)
         {
-            FillRandomParticipant fillRandomParticipant = new FillRandomParticipant(participants);
-            int colPart = participants.Count;
-            int firstLap = (colPart - (Type / 2)) * 2;
-            int secondLap = colPart - firstLap;
-            for (int i = 0; i < firstLap; i += 2)
-            {
-                var pair = fillRandomParticipant.GetPairParticipants();
-                Items[0][i].SetParticipant(pair.Item1, StatusGridItem.init);
-                Items[0][i + 1].SetParticipant(pair.Item2, StatusGridItem.init);
-            }
-            int secondLapCount = Items[1].Length;
-            for (int i = 1; i <= secondLap; i++)
-            {
-                Items[1][secondLapCount - i].SetParticipant(fillRandomParticipant.GetParticipant(), StatusGridItem.init);
-            }
+            //FillRandomParticipant fillRandomParticipant = new FillRandomParticipant(participants);
+            //int colPart = participants.Count;
+            //int firstLap = (colPart - (Type / 2)) * 2;
+            //int secondLap = colPart - firstLap;
+            //for (int i = 0; i < firstLap; i += 2)
+            //{
+            //    var pair = fillRandomParticipant.GetPairParticipants();
+            //    Items[0][i].SetParticipant(pair.Item1, StatusGridItem.init);
+            //    Items[0][i + 1].SetParticipant(pair.Item2, StatusGridItem.init);
+            //}
+            //int secondLapCount = Items[1].Length;
+            //for (int i = 1; i <= secondLap; i++)
+            //{
+            //    Items[1][secondLapCount - i].SetParticipant(fillRandomParticipant.GetParticipant(), StatusGridItem.init);
+            //}
         }
         private void IsPossibleSwap(PointItem point)
         {
@@ -464,8 +520,8 @@ namespace Kaharman
         }
         public void SwapItems(PointItem point1, PointItem point2)
         {
-            Participant? participant1 = Items[point1.X][point1.Y].GetParticipant();
-            Participant? participant2 = Items[point2.X][point2.Y].GetParticipant();
+            ParticipantX? participant1 = Items[point1.X][point1.Y].GetParticipant();
+            ParticipantX? participant2 = Items[point2.X][point2.Y].GetParticipant();
             if (participant1 == null || participant2 == null)
             {
                 MessageBox.Show("Нельзя перенести пустую ячейку");

@@ -35,19 +35,24 @@
             выходToolStripMenuItem = new ToolStripMenuItem();
             турнирыToolStripMenuItem = new ToolStripMenuItem();
             создатьToolStripMenuItem = new ToolStripMenuItem();
-            показатьУчастниковToolStripMenuItem = new ToolStripMenuItem();
             историяТурнировToolStripMenuItem = new ToolStripMenuItem();
             участникиToolStripMenuItem = new ToolStripMenuItem();
             создатьToolStripMenuItem1 = new ToolStripMenuItem();
             добавитьToolStripMenuItem = new ToolStripMenuItem();
             базаДанныхToolStripMenuItem = new ToolStripMenuItem();
-            dataGridView1 = new DataGridView();
+            ParticipantView = new DataGridView();
             contextMenuStrip1 = new ContextMenuStrip(components);
             создатьТурнирToolStripMenuItem = new ToolStripMenuItem();
             удалитьToolStripMenuItem = new ToolStripMenuItem();
+            TournamentView = new DataGridView();
+            contextMenuStrip2 = new ContextMenuStrip(components);
+            создатьToolStripMenuItem2 = new ToolStripMenuItem();
+            удалитьToolStripMenuItem1 = new ToolStripMenuItem();
             menuStrip1.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)dataGridView1).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)ParticipantView).BeginInit();
             contextMenuStrip1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)TournamentView).BeginInit();
+            contextMenuStrip2.SuspendLayout();
             SuspendLayout();
             // 
             // menuStrip1
@@ -75,7 +80,7 @@
             // 
             // турнирыToolStripMenuItem
             // 
-            турнирыToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { создатьToolStripMenuItem, показатьУчастниковToolStripMenuItem, историяТурнировToolStripMenuItem });
+            турнирыToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { создатьToolStripMenuItem, историяТурнировToolStripMenuItem });
             турнирыToolStripMenuItem.Name = "турнирыToolStripMenuItem";
             турнирыToolStripMenuItem.Size = new Size(59, 20);
             турнирыToolStripMenuItem.Text = "Турнир";
@@ -83,21 +88,14 @@
             // создатьToolStripMenuItem
             // 
             создатьToolStripMenuItem.Name = "создатьToolStripMenuItem";
-            создатьToolStripMenuItem.Size = new Size(190, 22);
+            создатьToolStripMenuItem.Size = new Size(176, 22);
             создатьToolStripMenuItem.Text = "Создать";
             создатьToolStripMenuItem.Click += создатьToolStripMenuItem_Click;
-            // 
-            // показатьУчастниковToolStripMenuItem
-            // 
-            показатьУчастниковToolStripMenuItem.Name = "показатьУчастниковToolStripMenuItem";
-            показатьУчастниковToolStripMenuItem.Size = new Size(190, 22);
-            показатьУчастниковToolStripMenuItem.Text = "Показать участников";
-            показатьУчастниковToolStripMenuItem.Click += показатьУчастниковToolStripMenuItem_Click;
             // 
             // историяТурнировToolStripMenuItem
             // 
             историяТурнировToolStripMenuItem.Name = "историяТурнировToolStripMenuItem";
-            историяТурнировToolStripMenuItem.Size = new Size(190, 22);
+            историяТурнировToolStripMenuItem.Size = new Size(176, 22);
             историяТурнировToolStripMenuItem.Text = "История турниров";
             историяТурнировToolStripMenuItem.Click += историяТурнировToolStripMenuItem_Click;
             // 
@@ -129,29 +127,27 @@
             базаДанныхToolStripMenuItem.Text = "База данных";
             базаДанныхToolStripMenuItem.Click += базаДанныхToolStripMenuItem_Click_1;
             // 
-            // dataGridView1
+            // ParticipantView
             // 
-            dataGridView1.AllowDrop = true;
-            dataGridView1.AllowUserToAddRows = false;
-            dataGridView1.AllowUserToDeleteRows = false;
-            dataGridView1.AllowUserToResizeColumns = false;
-            dataGridView1.AllowUserToResizeRows = false;
-            dataGridView1.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
-            dataGridView1.BackgroundColor = SystemColors.Window;
-            dataGridView1.BorderStyle = BorderStyle.Fixed3D;
-            dataGridView1.CellBorderStyle = DataGridViewCellBorderStyle.SingleHorizontal;
-            dataGridView1.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            dataGridView1.Dock = DockStyle.Fill;
-            dataGridView1.Location = new Point(0, 24);
-            dataGridView1.Name = "dataGridView1";
-            dataGridView1.ReadOnly = true;
-            dataGridView1.RowHeadersVisible = false;
-            dataGridView1.RowTemplate.Height = 25;
-            dataGridView1.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-            dataGridView1.Size = new Size(834, 494);
-            dataGridView1.TabIndex = 1;
-            dataGridView1.MouseClick += dataGridView1_MouseClick;
-            dataGridView1.MouseDoubleClick += dataGridView1_MouseDoubleClick;
+            ParticipantView.AllowDrop = true;
+            ParticipantView.AllowUserToAddRows = false;
+            ParticipantView.AllowUserToDeleteRows = false;
+            ParticipantView.AllowUserToResizeColumns = false;
+            ParticipantView.AllowUserToResizeRows = false;
+            ParticipantView.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
+            ParticipantView.BackgroundColor = SystemColors.Window;
+            ParticipantView.BorderStyle = BorderStyle.Fixed3D;
+            ParticipantView.CellBorderStyle = DataGridViewCellBorderStyle.SingleHorizontal;
+            ParticipantView.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            ParticipantView.Dock = DockStyle.Fill;
+            ParticipantView.Location = new Point(0, 24);
+            ParticipantView.Name = "ParticipantView";
+            ParticipantView.ReadOnly = true;
+            ParticipantView.RowHeadersVisible = false;
+            ParticipantView.RowTemplate.Height = 25;
+            ParticipantView.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
+            ParticipantView.Size = new Size(834, 494);
+            ParticipantView.TabIndex = 1;
             // 
             // contextMenuStrip1
             // 
@@ -173,42 +169,93 @@
             удалитьToolStripMenuItem.Text = "Удалить";
             удалитьToolStripMenuItem.Click += удалитьToolStripMenuItem_Click;
             // 
+            // TournamentView
+            // 
+            TournamentView.AllowDrop = true;
+            TournamentView.AllowUserToAddRows = false;
+            TournamentView.AllowUserToDeleteRows = false;
+            TournamentView.AllowUserToResizeColumns = false;
+            TournamentView.AllowUserToResizeRows = false;
+            TournamentView.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
+            TournamentView.BackgroundColor = SystemColors.Window;
+            TournamentView.BorderStyle = BorderStyle.Fixed3D;
+            TournamentView.CellBorderStyle = DataGridViewCellBorderStyle.SingleHorizontal;
+            TournamentView.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            TournamentView.ContextMenuStrip = contextMenuStrip2;
+            TournamentView.Dock = DockStyle.Fill;
+            TournamentView.Location = new Point(0, 24);
+            TournamentView.Name = "TournamentView";
+            TournamentView.ReadOnly = true;
+            TournamentView.RowHeadersVisible = false;
+            TournamentView.RowTemplate.Height = 25;
+            TournamentView.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
+            TournamentView.Size = new Size(834, 494);
+            TournamentView.TabIndex = 2;
+            TournamentView.CellMouseDoubleClick += TournamentView_CellMouseDoubleClick;
+            TournamentView.VisibleChanged += TournamentView_VisibleChanged;
+            // 
+            // contextMenuStrip2
+            // 
+            contextMenuStrip2.Items.AddRange(new ToolStripItem[] { создатьToolStripMenuItem2, удалитьToolStripMenuItem1 });
+            contextMenuStrip2.Name = "contextMenuStrip2";
+            contextMenuStrip2.Size = new Size(119, 48);
+            // 
+            // создатьToolStripMenuItem2
+            // 
+            создатьToolStripMenuItem2.Name = "создатьToolStripMenuItem2";
+            создатьToolStripMenuItem2.Size = new Size(118, 22);
+            создатьToolStripMenuItem2.Text = "Создать";
+            создатьToolStripMenuItem2.Click += создатьToolStripMenuItem_Click;
+            // 
+            // удалитьToolStripMenuItem1
+            // 
+            удалитьToolStripMenuItem1.Name = "удалитьToolStripMenuItem1";
+            удалитьToolStripMenuItem1.Size = new Size(118, 22);
+            удалитьToolStripMenuItem1.Text = "Удалить";
+            удалитьToolStripMenuItem1.Click += удалитьToolStripMenuItem1_Click;
+            // 
             // Kaharman
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(834, 518);
-            Controls.Add(dataGridView1);
+            Controls.Add(TournamentView);
+            Controls.Add(ParticipantView);
             Controls.Add(menuStrip1);
             Icon = (Icon)resources.GetObject("$this.Icon");
             MainMenuStrip = menuStrip1;
             Name = "Kaharman";
             Text = "Kaharman";
+            Activated += Kaharman_Activated;
             Load += Form1_Load;
             menuStrip1.ResumeLayout(false);
             menuStrip1.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)dataGridView1).EndInit();
+            ((System.ComponentModel.ISupportInitialize)ParticipantView).EndInit();
             contextMenuStrip1.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)TournamentView).EndInit();
+            contextMenuStrip2.ResumeLayout(false);
             ResumeLayout(false);
             PerformLayout();
         }
-
         #endregion
 
         private MenuStrip menuStrip1;
         private ToolStripMenuItem файлToolStripMenuItem;
         private ToolStripMenuItem турнирыToolStripMenuItem;
         private ToolStripMenuItem участникиToolStripMenuItem;
-        private DataGridView dataGridView1;
+        private DataGridView ParticipantView;
         private ToolStripMenuItem добавитьToolStripMenuItem;
         private ToolStripMenuItem выходToolStripMenuItem;
         private ToolStripMenuItem историяТурнировToolStripMenuItem;
         private ToolStripMenuItem базаДанныхToolStripMenuItem;
         private ContextMenuStrip contextMenuStrip1;
         private ToolStripMenuItem создатьТурнирToolStripMenuItem;
-        private ToolStripMenuItem показатьУчастниковToolStripMenuItem;
         private ToolStripMenuItem удалитьToolStripMenuItem;
         private ToolStripMenuItem создатьToolStripMenuItem1;
         private ToolStripMenuItem создатьToolStripMenuItem;
+        private DataGridView TournamentView;
+        private ContextMenuStrip contextMenuStrip2;
+        private ToolStripMenuItem создатьToolStripMenuItem2;
+        private ToolStripMenuItem удалитьToolStripMenuItem1;
     }
 }

@@ -34,22 +34,29 @@
             menuStrip1 = new MenuStrip();
             nameTextBox = new TextBox();
             label1 = new Label();
-            label2 = new Label();
-            textBox2 = new TextBox();
             label3 = new Label();
-            dataGridView1 = new DataGridView();
-            dataGridView2 = new DataGridView();
+            allParticipant = new DataGridView();
+            gridParticipant = new DataGridView();
             label4 = new Label();
             label5 = new Label();
             button3 = new Button();
             button4 = new Button();
             panel1 = new Panel();
-            progressBar1 = new ProgressBar();
+            programmText = new Label();
+            programm = new TextBox();
+            gender = new TextBox();
+            genderFilterText = new Label();
             panel2 = new Panel();
-            numberProtocol = new TextBox();
+            label7 = new Label();
             label6 = new Label();
-            ((System.ComponentModel.ISupportInitialize)dataGridView1).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)dataGridView2).BeginInit();
+            textBox5 = new TextBox();
+            textBox4 = new TextBox();
+            ageRange = new Label();
+            textBox3 = new TextBox();
+            numberProtocol = new TextBox();
+            label2 = new Label();
+            ((System.ComponentModel.ISupportInitialize)allParticipant).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)gridParticipant).BeginInit();
             panel1.SuspendLayout();
             panel2.SuspendLayout();
             SuspendLayout();
@@ -79,9 +86,9 @@
             // dateTimePicker1
             // 
             dateTimePicker1.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
-            dateTimePicker1.Location = new Point(130, 57);
+            dateTimePicker1.Location = new Point(144, 39);
             dateTimePicker1.Name = "dateTimePicker1";
-            dateTimePicker1.Size = new Size(206, 23);
+            dateTimePicker1.Size = new Size(339, 23);
             dateTimePicker1.TabIndex = 2;
             // 
             // menuStrip1
@@ -95,95 +102,77 @@
             // nameTextBox
             // 
             nameTextBox.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
-            nameTextBox.Location = new Point(113, 57);
+            nameTextBox.Location = new Point(129, 39);
             nameTextBox.Name = "nameTextBox";
-            nameTextBox.Size = new Size(406, 23);
+            nameTextBox.Size = new Size(375, 23);
             nameTextBox.TabIndex = 4;
             // 
             // label1
             // 
             label1.AutoSize = true;
-            label1.Location = new Point(14, 60);
+            label1.Location = new Point(17, 42);
             label1.Name = "label1";
             label1.Size = new Size(90, 15);
             label1.TabIndex = 5;
             label1.Text = "Наименование";
             // 
-            // label2
-            // 
-            label2.AutoSize = true;
-            label2.Location = new Point(14, 31);
-            label2.Name = "label2";
-            label2.Size = new Size(87, 15);
-            label2.TabIndex = 7;
-            label2.Text = "Соревнование";
-            // 
-            // textBox2
-            // 
-            textBox2.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
-            textBox2.Enabled = false;
-            textBox2.Location = new Point(113, 28);
-            textBox2.Name = "textBox2";
-            textBox2.Size = new Size(406, 23);
-            textBox2.TabIndex = 6;
-            // 
             // label3
             // 
             label3.AutoSize = true;
-            label3.Location = new Point(15, 60);
+            label3.Location = new Point(25, 42);
             label3.Name = "label3";
             label3.Size = new Size(100, 15);
             label3.TabIndex = 8;
             label3.Text = "Дата проведения";
             // 
-            // dataGridView1
+            // allParticipant
             // 
-            dataGridView1.AllowUserToAddRows = false;
-            dataGridView1.AllowUserToDeleteRows = false;
-            dataGridView1.AllowUserToResizeColumns = false;
-            dataGridView1.AllowUserToResizeRows = false;
-            dataGridView1.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
-            dataGridView1.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.AllCells;
-            dataGridView1.BackgroundColor = SystemColors.Window;
-            dataGridView1.BorderStyle = BorderStyle.Fixed3D;
-            dataGridView1.CellBorderStyle = DataGridViewCellBorderStyle.SingleHorizontal;
-            dataGridView1.Location = new Point(17, 119);
-            dataGridView1.Name = "dataGridView1";
-            dataGridView1.ReadOnly = true;
-            dataGridView1.RowHeadersVisible = false;
-            dataGridView1.RowTemplate.Height = 25;
-            dataGridView1.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-            dataGridView1.Size = new Size(504, 369);
-            dataGridView1.TabIndex = 15;
-            dataGridView1.CellDoubleClick += dataGridView1_CellDoubleClick;
+            allParticipant.AllowUserToAddRows = false;
+            allParticipant.AllowUserToDeleteRows = false;
+            allParticipant.AllowUserToResizeColumns = false;
+            allParticipant.AllowUserToResizeRows = false;
+            allParticipant.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
+            allParticipant.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.AllCells;
+            allParticipant.BackgroundColor = SystemColors.Window;
+            allParticipant.BorderStyle = BorderStyle.Fixed3D;
+            allParticipant.CellBorderStyle = DataGridViewCellBorderStyle.SingleHorizontal;
+            allParticipant.Location = new Point(17, 167);
+            allParticipant.Name = "allParticipant";
+            allParticipant.ReadOnly = true;
+            allParticipant.RowHeadersVisible = false;
+            allParticipant.RowTemplate.Height = 25;
+            allParticipant.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
+            allParticipant.Size = new Size(504, 321);
+            allParticipant.TabIndex = 15;
+            allParticipant.CellDoubleClick += dataGridView1_CellDoubleClick;
             // 
-            // dataGridView2
+            // gridParticipant
             // 
-            dataGridView2.AllowDrop = true;
-            dataGridView2.AllowUserToAddRows = false;
-            dataGridView2.AllowUserToDeleteRows = false;
-            dataGridView2.AllowUserToResizeColumns = false;
-            dataGridView2.AllowUserToResizeRows = false;
-            dataGridView2.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
-            dataGridView2.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.AllCells;
-            dataGridView2.BackgroundColor = SystemColors.Window;
-            dataGridView2.BorderStyle = BorderStyle.Fixed3D;
-            dataGridView2.CellBorderStyle = DataGridViewCellBorderStyle.SingleHorizontal;
-            dataGridView2.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            dataGridView2.Location = new Point(15, 119);
-            dataGridView2.Name = "dataGridView2";
-            dataGridView2.ReadOnly = true;
-            dataGridView2.RowHeadersVisible = false;
-            dataGridView2.RowTemplate.Height = 25;
-            dataGridView2.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-            dataGridView2.Size = new Size(484, 369);
-            dataGridView2.TabIndex = 19;
-            dataGridView2.CellDoubleClick += dataGridView2_CellDoubleClick;
+            gridParticipant.AllowDrop = true;
+            gridParticipant.AllowUserToAddRows = false;
+            gridParticipant.AllowUserToDeleteRows = false;
+            gridParticipant.AllowUserToResizeColumns = false;
+            gridParticipant.AllowUserToResizeRows = false;
+            gridParticipant.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
+            gridParticipant.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.AllCells;
+            gridParticipant.BackgroundColor = SystemColors.Window;
+            gridParticipant.BorderStyle = BorderStyle.Fixed3D;
+            gridParticipant.CellBorderStyle = DataGridViewCellBorderStyle.SingleHorizontal;
+            gridParticipant.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            gridParticipant.Location = new Point(15, 167);
+            gridParticipant.Name = "gridParticipant";
+            gridParticipant.ReadOnly = true;
+            gridParticipant.RowHeadersVisible = false;
+            gridParticipant.RowTemplate.Height = 25;
+            gridParticipant.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
+            gridParticipant.Size = new Size(484, 321);
+            gridParticipant.TabIndex = 19;
+            gridParticipant.CellDoubleClick += dataGridView2_CellDoubleClick;
             // 
             // label4
             // 
             label4.AutoSize = true;
-            label4.Location = new Point(15, 101);
+            label4.Location = new Point(15, 149);
             label4.Name = "label4";
             label4.Size = new Size(98, 15);
             label4.TabIndex = 20;
@@ -192,7 +181,7 @@
             // label5
             // 
             label5.AutoSize = true;
-            label5.Location = new Point(14, 101);
+            label5.Location = new Point(12, 149);
             label5.Name = "label5";
             label5.Size = new Size(86, 15);
             label5.TabIndex = 21;
@@ -220,39 +209,70 @@
             // 
             // panel1
             // 
-            panel1.Controls.Add(progressBar1);
+            panel1.Controls.Add(numberProtocol);
             panel1.Controls.Add(label2);
+            panel1.Controls.Add(programmText);
+            panel1.Controls.Add(programm);
+            panel1.Controls.Add(gender);
+            panel1.Controls.Add(genderFilterText);
             panel1.Controls.Add(nameTextBox);
             panel1.Controls.Add(label1);
             panel1.Controls.Add(label5);
-            panel1.Controls.Add(textBox2);
-            panel1.Controls.Add(dataGridView1);
+            panel1.Controls.Add(allParticipant);
             panel1.Dock = DockStyle.Left;
             panel1.Location = new Point(0, 24);
             panel1.Name = "panel1";
             panel1.Size = new Size(534, 557);
             panel1.TabIndex = 24;
             // 
-            // progressBar1
+            // programmText
             // 
-            progressBar1.Anchor = AnchorStyles.Top | AnchorStyles.Right;
-            progressBar1.Location = new Point(282, 90);
-            progressBar1.Name = "progressBar1";
-            progressBar1.Size = new Size(239, 23);
-            progressBar1.TabIndex = 22;
-            progressBar1.Visible = false;
-            progressBar1.VisibleChanged += progressBar1_VisibleChanged;
+            programmText.AutoSize = true;
+            programmText.Location = new Point(17, 100);
+            programmText.Name = "programmText";
+            programmText.Size = new Size(72, 15);
+            programmText.TabIndex = 25;
+            programmText.Text = "Программа";
+            // 
+            // programm
+            // 
+            programm.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
+            programm.Location = new Point(129, 97);
+            programm.Name = "programm";
+            programm.Size = new Size(375, 23);
+            programm.TabIndex = 24;
+            // 
+            // gender
+            // 
+            gender.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
+            gender.Location = new Point(129, 68);
+            gender.Name = "gender";
+            gender.Size = new Size(375, 23);
+            gender.TabIndex = 23;
+            // 
+            // genderFilterText
+            // 
+            genderFilterText.AutoSize = true;
+            genderFilterText.Location = new Point(17, 71);
+            genderFilterText.Name = "genderFilterText";
+            genderFilterText.Size = new Size(30, 15);
+            genderFilterText.TabIndex = 21;
+            genderFilterText.Text = "Пол";
             // 
             // panel2
             // 
             panel2.AutoScroll = true;
-            panel2.Controls.Add(numberProtocol);
+            panel2.Controls.Add(label7);
             panel2.Controls.Add(label6);
+            panel2.Controls.Add(textBox5);
+            panel2.Controls.Add(textBox4);
+            panel2.Controls.Add(ageRange);
             panel2.Controls.Add(label3);
+            panel2.Controls.Add(textBox3);
             panel2.Controls.Add(dateTimePicker1);
             panel2.Controls.Add(button2);
             panel2.Controls.Add(button1);
-            panel2.Controls.Add(dataGridView2);
+            panel2.Controls.Add(gridParticipant);
             panel2.Controls.Add(label4);
             panel2.Dock = DockStyle.Right;
             panel2.Location = new Point(589, 24);
@@ -260,22 +280,71 @@
             panel2.Size = new Size(515, 557);
             panel2.TabIndex = 25;
             // 
-            // numberProtocol
+            // label7
             // 
-            numberProtocol.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
-            numberProtocol.Location = new Point(130, 28);
-            numberProtocol.Name = "numberProtocol";
-            numberProtocol.Size = new Size(206, 23);
-            numberProtocol.TabIndex = 23;
+            label7.AutoSize = true;
+            label7.Location = new Point(25, 100);
+            label7.Name = "label7";
+            label7.Size = new Size(88, 15);
+            label7.TabIndex = 27;
+            label7.Text = "Квалификация";
             // 
             // label6
             // 
             label6.AutoSize = true;
-            label6.Location = new Point(15, 31);
+            label6.Location = new Point(267, 71);
             label6.Name = "label6";
-            label6.Size = new Size(107, 15);
-            label6.TabIndex = 21;
-            label6.Text = "Номер протокола";
+            label6.Size = new Size(12, 15);
+            label6.TabIndex = 29;
+            label6.Text = "-";
+            // 
+            // textBox5
+            // 
+            textBox5.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
+            textBox5.Location = new Point(144, 97);
+            textBox5.Name = "textBox5";
+            textBox5.Size = new Size(339, 23);
+            textBox5.TabIndex = 26;
+            // 
+            // textBox4
+            // 
+            textBox4.Location = new Point(298, 68);
+            textBox4.Name = "textBox4";
+            textBox4.Size = new Size(101, 23);
+            textBox4.TabIndex = 28;
+            // 
+            // ageRange
+            // 
+            ageRange.AutoSize = true;
+            ageRange.Location = new Point(25, 71);
+            ageRange.Name = "ageRange";
+            ageRange.Size = new Size(50, 15);
+            ageRange.TabIndex = 27;
+            ageRange.Text = "Возраст";
+            // 
+            // textBox3
+            // 
+            textBox3.Location = new Point(144, 68);
+            textBox3.Name = "textBox3";
+            textBox3.Size = new Size(101, 23);
+            textBox3.TabIndex = 26;
+            // 
+            // numberProtocol
+            // 
+            numberProtocol.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
+            numberProtocol.Location = new Point(129, 10);
+            numberProtocol.Name = "numberProtocol";
+            numberProtocol.Size = new Size(375, 23);
+            numberProtocol.TabIndex = 27;
+            // 
+            // label2
+            // 
+            label2.AutoSize = true;
+            label2.Location = new Point(17, 13);
+            label2.Name = "label2";
+            label2.Size = new Size(107, 15);
+            label2.TabIndex = 26;
+            label2.Text = "Номер протокола";
             // 
             // TournamentGridForm
             // 
@@ -292,8 +361,8 @@
             Text = "Создание сетки";
             Load += TournamentGridForm_Load;
             Resize += TournamentGridForm_Resize;
-            ((System.ComponentModel.ISupportInitialize)dataGridView1).EndInit();
-            ((System.ComponentModel.ISupportInitialize)dataGridView2).EndInit();
+            ((System.ComponentModel.ISupportInitialize)allParticipant).EndInit();
+            ((System.ComponentModel.ISupportInitialize)gridParticipant).EndInit();
             panel1.ResumeLayout(false);
             panel1.PerformLayout();
             panel2.ResumeLayout(false);
@@ -310,19 +379,26 @@
         private MenuStrip menuStrip1;
         private TextBox nameTextBox;
         private Label label1;
-        private Label label2;
-        private TextBox textBox2;
         private Label label3;
-        private DataGridView dataGridView1;
-        private DataGridView dataGridView2;
+        private DataGridView allParticipant;
+        private DataGridView gridParticipant;
         private Label label4;
         private Label label5;
         private Button button3;
         private Button button4;
         private Panel panel1;
         private Panel panel2;
-        private ProgressBar progressBar1;
+        private Label genderFilterText;
+        private TextBox gender;
+        private Label programmText;
+        private TextBox programm;
+        private Label ageRange;
+        private TextBox textBox3;
         private Label label6;
+        private TextBox textBox4;
+        private Label label7;
+        private TextBox textBox5;
         private TextBox numberProtocol;
+        private Label label2;
     }
 }

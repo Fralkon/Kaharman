@@ -61,7 +61,7 @@ namespace Hasen
                     foreach (DataRow row in table.Rows)
                     {
                         var objects = row.ItemArray;
-                        objects[3] = (int)(DateTime.Now - DateTime.Parse(row["date_of_birth"].ToString())).TotalDays / Participant.ValyeDayYear;
+                        objects[3] = (int)(DateTime.Now - DateTime.Parse(row["date_of_birth"].ToString())).TotalDays / ParticipantX.ValyeDayYear;
                         dataTable.Rows.Add(objects);
                         
                     }
@@ -92,7 +92,7 @@ namespace Hasen
                 return int.Parse(data.Rows[0]["id"].ToString());
             return -1;
         }
-        public static void UpDateParticipant(Participant participant)
+        public static void UpDateParticipant(ParticipantX participant)
         {
             int ID = CheckParticipant(participant.Name);
             if (ID == -1)
@@ -103,7 +103,7 @@ namespace Hasen
                 SendSQL($"UPDATE Participants SET weight = '{participant.Weight}', qualification = '{participant.Gualiti}', city = '{participant.City}', trainer = '{participant.Trainer}' WHERE id = {participant.ID}");
             }
         }
-        public static void AddParticipant(Participant participant)
+        public static void AddParticipant(ParticipantX participant)
         {
             SendSQL($"INSERT INTO Participants (name,gender,[date_of_birth],weight,qualification,city,trainer) " +
             $"VALUES ('{participant.Name}','{participant.Gender}','{participant.DayOfBirth.ToString("dd.MM.yyyy")}','{participant.Weight}','{participant.Gualiti}','{participant.City}','{participant.Trainer}')");

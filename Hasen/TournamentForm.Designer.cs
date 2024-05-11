@@ -45,6 +45,7 @@
             создатьТурнирнуюТаблицуToolStripMenuItem = new ToolStripMenuItem();
             удалитьToolStripMenuItem = new ToolStripMenuItem();
             копToolStripMenuItem = new ToolStripMenuItem();
+            изменитьToolStripMenuItem = new ToolStripMenuItem();
             menuStrip1 = new MenuStrip();
             файлToolStripMenuItem = new ToolStripMenuItem();
             сохранитьToolStripMenuItem = new ToolStripMenuItem();
@@ -60,8 +61,8 @@
             добавитьToolStripMenuItem1 = new ToolStripMenuItem();
             удалитьToolStripMenuItem3 = new ToolStripMenuItem();
             очиститьToolStripMenuItem = new ToolStripMenuItem();
-            dataGridView1 = new DataGridView();
-            dataGridView2 = new DataGridView();
+            gridDataGridView = new DataGridView();
+            participantGrid = new DataGridView();
             label6 = new Label();
             label7 = new Label();
             contextMenuStrip2 = new ContextMenuStrip(components);
@@ -71,14 +72,16 @@
             panel1 = new Panel();
             panel2 = new Panel();
             progressBar1 = new ProgressBar();
-            изменитьToolStripMenuItem = new ToolStripMenuItem();
+            contextMenuStrip3 = new ContextMenuStrip(components);
+            toolStripTextBox1 = new ToolStripTextBox();
             contextMenuStrip1.SuspendLayout();
             menuStrip1.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)dataGridView1).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)dataGridView2).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)gridDataGridView).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)participantGrid).BeginInit();
             contextMenuStrip2.SuspendLayout();
             panel1.SuspendLayout();
             panel2.SuspendLayout();
+            contextMenuStrip3.SuspendLayout();
             SuspendLayout();
             // 
             // label1
@@ -183,28 +186,35 @@
             // 
             contextMenuStrip1.Items.AddRange(new ToolStripItem[] { создатьТурнирнуюТаблицуToolStripMenuItem, удалитьToolStripMenuItem, копToolStripMenuItem, изменитьToolStripMenuItem });
             contextMenuStrip1.Name = "contextMenuStrip1";
-            contextMenuStrip1.Size = new Size(181, 114);
+            contextMenuStrip1.Size = new Size(140, 92);
             // 
             // создатьТурнирнуюТаблицуToolStripMenuItem
             // 
             создатьТурнирнуюТаблицуToolStripMenuItem.Name = "создатьТурнирнуюТаблицуToolStripMenuItem";
-            создатьТурнирнуюТаблицуToolStripMenuItem.Size = new Size(180, 22);
+            создатьТурнирнуюТаблицуToolStripMenuItem.Size = new Size(139, 22);
             создатьТурнирнуюТаблицуToolStripMenuItem.Text = "Создать";
             создатьТурнирнуюТаблицуToolStripMenuItem.Click += создатьТурнирнуюТаблицуToolStripMenuItem_Click;
             // 
             // удалитьToolStripMenuItem
             // 
             удалитьToolStripMenuItem.Name = "удалитьToolStripMenuItem";
-            удалитьToolStripMenuItem.Size = new Size(180, 22);
+            удалитьToolStripMenuItem.Size = new Size(139, 22);
             удалитьToolStripMenuItem.Text = "Удалить";
             удалитьToolStripMenuItem.Click += удалитьToolStripMenuItem_Click;
             // 
             // копToolStripMenuItem
             // 
             копToolStripMenuItem.Name = "копToolStripMenuItem";
-            копToolStripMenuItem.Size = new Size(180, 22);
+            копToolStripMenuItem.Size = new Size(139, 22);
             копToolStripMenuItem.Text = "Копировать";
             копToolStripMenuItem.Click += копToolStripMenuItem_Click;
+            // 
+            // изменитьToolStripMenuItem
+            // 
+            изменитьToolStripMenuItem.Name = "изменитьToolStripMenuItem";
+            изменитьToolStripMenuItem.Size = new Size(139, 22);
+            изменитьToolStripMenuItem.Text = "Изменить";
+            изменитьToolStripMenuItem.Click += изменитьToolStripMenuItem_Click;
             // 
             // menuStrip1
             // 
@@ -260,21 +270,21 @@
             // создатьToolStripMenuItem
             // 
             создатьToolStripMenuItem.Name = "создатьToolStripMenuItem";
-            создатьToolStripMenuItem.Size = new Size(180, 22);
+            создатьToolStripMenuItem.Size = new Size(128, 22);
             создатьToolStripMenuItem.Text = "Создать";
             создатьToolStripMenuItem.Click += создатьТурнирнуюТаблицуToolStripMenuItem_Click;
             // 
             // удалитьToolStripMenuItem2
             // 
             удалитьToolStripMenuItem2.Name = "удалитьToolStripMenuItem2";
-            удалитьToolStripMenuItem2.Size = new Size(180, 22);
+            удалитьToolStripMenuItem2.Size = new Size(128, 22);
             удалитьToolStripMenuItem2.Text = "Удалить";
             удалитьToolStripMenuItem2.Click += удалитьToolStripMenuItem_Click;
             // 
             // обновитьToolStripMenuItem
             // 
             обновитьToolStripMenuItem.Name = "обновитьToolStripMenuItem";
-            обновитьToolStripMenuItem.Size = new Size(180, 22);
+            обновитьToolStripMenuItem.Size = new Size(128, 22);
             обновитьToolStripMenuItem.Text = "Обновить";
             обновитьToolStripMenuItem.Click += обновитьToolStripMenuItem_Click;
             // 
@@ -313,56 +323,54 @@
             очиститьToolStripMenuItem.Text = "Очистить";
             очиститьToolStripMenuItem.Click += очиститьToolStripMenuItem_Click;
             // 
-            // dataGridView1
+            // gridDataGridView
             // 
-            dataGridView1.AllowDrop = true;
-            dataGridView1.AllowUserToAddRows = false;
-            dataGridView1.AllowUserToDeleteRows = false;
-            dataGridView1.AllowUserToResizeColumns = false;
-            dataGridView1.AllowUserToResizeRows = false;
-            dataGridView1.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
-            dataGridView1.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.AllCells;
-            dataGridView1.BackgroundColor = SystemColors.Window;
-            dataGridView1.BorderStyle = BorderStyle.Fixed3D;
-            dataGridView1.CellBorderStyle = DataGridViewCellBorderStyle.SingleHorizontal;
-            dataGridView1.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            dataGridView1.Location = new Point(11, 107);
-            dataGridView1.Name = "dataGridView1";
-            dataGridView1.ReadOnly = true;
-            dataGridView1.RowHeadersVisible = false;
-            dataGridView1.RowTemplate.Height = 25;
-            dataGridView1.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-            dataGridView1.Size = new Size(630, 383);
-            dataGridView1.TabIndex = 14;
-            dataGridView1.MouseDoubleClick += dataGridView1_MouseDoubleClick;
+            gridDataGridView.AllowDrop = true;
+            gridDataGridView.AllowUserToAddRows = false;
+            gridDataGridView.AllowUserToDeleteRows = false;
+            gridDataGridView.AllowUserToResizeColumns = false;
+            gridDataGridView.AllowUserToResizeRows = false;
+            gridDataGridView.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
+            gridDataGridView.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.AllCells;
+            gridDataGridView.BackgroundColor = SystemColors.Window;
+            gridDataGridView.BorderStyle = BorderStyle.Fixed3D;
+            gridDataGridView.CellBorderStyle = DataGridViewCellBorderStyle.SingleHorizontal;
+            gridDataGridView.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            gridDataGridView.Location = new Point(11, 107);
+            gridDataGridView.Name = "gridDataGridView";
+            gridDataGridView.ReadOnly = true;
+            gridDataGridView.RowHeadersVisible = false;
+            gridDataGridView.RowTemplate.Height = 25;
+            gridDataGridView.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
+            gridDataGridView.Size = new Size(630, 383);
+            gridDataGridView.TabIndex = 14;
+            gridDataGridView.MouseDoubleClick += dataGridView1_MouseDoubleClick;
             // 
-            // dataGridView2
+            // participantGrid
             // 
-            dataGridView2.AllowDrop = true;
-            dataGridView2.AllowUserToAddRows = false;
-            dataGridView2.AllowUserToDeleteRows = false;
-            dataGridView2.AllowUserToResizeColumns = false;
-            dataGridView2.AllowUserToResizeRows = false;
-            dataGridView2.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
-            dataGridView2.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.AllCells;
-            dataGridView2.BackgroundColor = SystemColors.Window;
-            dataGridView2.BorderStyle = BorderStyle.Fixed3D;
-            dataGridView2.CellBorderStyle = DataGridViewCellBorderStyle.SingleHorizontal;
-            dataGridView2.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            dataGridView2.Location = new Point(25, 107);
-            dataGridView2.Name = "dataGridView2";
-            dataGridView2.ReadOnly = true;
-            dataGridView2.RowHeadersVisible = false;
-            dataGridView2.RowTemplate.Height = 25;
-            dataGridView2.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-            dataGridView2.Size = new Size(638, 383);
-            dataGridView2.TabIndex = 16;
-            dataGridView2.CellMouseClick += dataGridView2_CellClick;
-            dataGridView2.ColumnHeaderMouseClick += dataGridView2_ColumnHeaderMouseClick;
-            dataGridView2.DragDrop += dataGridView_DragDrop;
-            dataGridView2.DragEnter += dataGridView_DragEnter;
-            dataGridView2.MouseDoubleClick += dataGridView2_MouseDoubleClick;
-            dataGridView2.MouseDown += dataGridView2_MouseClick;
+            participantGrid.AllowDrop = true;
+            participantGrid.AllowUserToAddRows = false;
+            participantGrid.AllowUserToDeleteRows = false;
+            participantGrid.AllowUserToResizeColumns = false;
+            participantGrid.AllowUserToResizeRows = false;
+            participantGrid.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
+            participantGrid.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.AllCells;
+            participantGrid.BackgroundColor = SystemColors.Window;
+            participantGrid.BorderStyle = BorderStyle.Fixed3D;
+            participantGrid.CellBorderStyle = DataGridViewCellBorderStyle.SingleHorizontal;
+            participantGrid.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            participantGrid.Location = new Point(25, 107);
+            participantGrid.Name = "participantGrid";
+            participantGrid.ReadOnly = true;
+            participantGrid.RowHeadersVisible = false;
+            participantGrid.RowTemplate.Height = 25;
+            participantGrid.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
+            participantGrid.Size = new Size(638, 383);
+            participantGrid.TabIndex = 16;
+            participantGrid.CellMouseClick += dataGridView2_CellClick;
+            participantGrid.DragDrop += dataGridView_DragDrop;
+            participantGrid.DragEnter += dataGridView_DragEnter;
+            participantGrid.MouseDoubleClick += dataGridView2_MouseDoubleClick;
             // 
             // label6
             // 
@@ -411,7 +419,7 @@
             // 
             // panel1
             // 
-            panel1.Controls.Add(dataGridView1);
+            panel1.Controls.Add(gridDataGridView);
             panel1.Controls.Add(label6);
             panel1.Controls.Add(label4);
             panel1.Controls.Add(note);
@@ -432,7 +440,7 @@
             panel2.Controls.Add(label3);
             panel2.Controls.Add(label7);
             panel2.Controls.Add(secretLable);
-            panel2.Controls.Add(dataGridView2);
+            panel2.Controls.Add(participantGrid);
             panel2.Controls.Add(label5);
             panel2.Controls.Add(label2);
             panel2.Controls.Add(mainJudge);
@@ -452,12 +460,16 @@
             progressBar1.TabIndex = 20;
             progressBar1.Visible = false;
             // 
-            // изменитьToolStripMenuItem
+            // contextMenuStrip3
             // 
-            изменитьToolStripMenuItem.Name = "изменитьToolStripMenuItem";
-            изменитьToolStripMenuItem.Size = new Size(180, 22);
-            изменитьToolStripMenuItem.Text = "Изменить";
-            изменитьToolStripMenuItem.Click += изменитьToolStripMenuItem_Click;
+            contextMenuStrip3.Items.AddRange(new ToolStripItem[] { toolStripTextBox1 });
+            contextMenuStrip3.Name = "contextMenuStrip3";
+            contextMenuStrip3.Size = new Size(161, 29);
+            // 
+            // toolStripTextBox1
+            // 
+            toolStripTextBox1.Name = "toolStripTextBox1";
+            toolStripTextBox1.Size = new Size(100, 23);
             // 
             // TournamentForm
             // 
@@ -476,13 +488,15 @@
             contextMenuStrip1.ResumeLayout(false);
             menuStrip1.ResumeLayout(false);
             menuStrip1.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)dataGridView1).EndInit();
-            ((System.ComponentModel.ISupportInitialize)dataGridView2).EndInit();
+            ((System.ComponentModel.ISupportInitialize)gridDataGridView).EndInit();
+            ((System.ComponentModel.ISupportInitialize)participantGrid).EndInit();
             contextMenuStrip2.ResumeLayout(false);
             panel1.ResumeLayout(false);
             panel1.PerformLayout();
             panel2.ResumeLayout(false);
             panel2.PerformLayout();
+            contextMenuStrip3.ResumeLayout(false);
+            contextMenuStrip3.PerformLayout();
             ResumeLayout(false);
             PerformLayout();
         }
@@ -507,8 +521,8 @@
         private ToolStripMenuItem файлToolStripMenuItem;
         private ToolStripMenuItem турнирнаяТаблицаToolStripMenuItem;
         private ToolStripMenuItem создатьToolStripMenuItem;
-        private DataGridView dataGridView1;
-        private DataGridView dataGridView2;
+        private DataGridView gridDataGridView;
+        private DataGridView participantGrid;
         private Label label6;
         private Label label7;
         private ContextMenuStrip contextMenuStrip2;
@@ -531,5 +545,7 @@
         private ToolStripMenuItem копToolStripMenuItem;
         private ProgressBar progressBar1;
         private ToolStripMenuItem изменитьToolStripMenuItem;
+        private ContextMenuStrip contextMenuStrip3;
+        private ToolStripTextBox toolStripTextBox1;
     }
 }
