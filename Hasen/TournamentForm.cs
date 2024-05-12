@@ -71,7 +71,6 @@ namespace Kaharman
             Tournament.NoteTournament = note.Text;
             Tournament.Judge = mainJudge.Text;
             Tournament.Secret = secret.Text;
-            db.Tournament.Add(Tournament);
             db.SaveChanges();
         }
         private void UpDataGrid()
@@ -99,8 +98,10 @@ namespace Kaharman
                 MessageBox.Show("Введите главного судью.");
                 return;
             }
+
             TournamentGridForm tournamentGrid = new TournamentGridForm(db,Tournament,StatusFormTournamentGrid.Create);
             tournamentGrid.ShowDialog();
+            SaveChangeTournament();
             UpDataGrid();
         }
         private void dataGridView_DragDrop(object sender, DragEventArgs e)
@@ -161,6 +162,7 @@ namespace Kaharman
                                     participant.City = rowExcel[i][12].ToString().Trim().ToUpper();
                                     participant.Trainer = rowExcel[i][13].ToString().Trim().ToUpper();
                                     Tournament.Participants.Add(participant);
+                                    db.SaveChanges();
                                 }
                             }
                             catch (Exception ex)
@@ -176,7 +178,6 @@ namespace Kaharman
 
                 }
                 MessageBox.Show("Загрузка завершена");
-                SaveChangeTournament();
                 UpDataGrid();
             }
         }
@@ -355,12 +356,34 @@ namespace Kaharman
         }
         private void TournamentForm_Activated(object sender, EventArgs e)
         {
-            UpDataGrid();
+            //UpDataGrid();
         }
 
         private void сохранитьToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            SaveChangeTournament();
+            if (name.Text.Length == 0)
+            {
+                MessageBox.Show("Введите наименование соревнования.");
+                return;
+            }
+            if (dateTimePicker1.Value > dateTimePicker2.Value)
+            {
+                MessageBox.Show("Дата начала должна быть меньше дате окончания соревнования.");
+                return;
+            }
+            if (mainJudge.Text.Length == 0)
+            {
+                MessageBox.Show("Введите главного судью.");
+                return;
+            }
+            Tournament.NameTournament = name.Text;
+            Tournament.StartDate = dateTimePicker1.Value;
+            Tournament.EndDate = dateTimePicker2.Value;
+            Tournament.NoteTournament = note.Text;
+            Tournament.Judge = mainJudge.Text;
+            Tournament.Secret = secret.Text;
+            db.Tournament.Add(Tournament);
+            db.SaveChanges();
         }
 
         private void сеткаТурнираToolStripMenuItem_Click(object sender, EventArgs e)

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations.Schema;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 
 namespace Kaharman
 {
@@ -15,13 +16,14 @@ namespace Kaharman
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             optionsBuilder.UseJet("Provider=Microsoft.ACE.OLEDB.12.0;Data Source=Database.accdb");
+            optionsBuilder.UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking);
         }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<Tournament>().HasMany(t => t.Participants).WithMany(t => t.Tournaments);
             modelBuilder.Entity<TournamentGrid>().HasMany(t => t.Participants).WithMany(t => t.TournamentGrids);
             modelBuilder.Entity<TournamentGrid>().HasOne(t => t.Tournament).WithMany(t => t.TournamentGrids);
-            modelBuilder.Entity<TournamentGrid>().HasMany(t => t.Matchs).WithOne();
+            modelBuilder.Entity<TournamentGrid>().HasMany(t => t.Matchs).WithOne(m => m.TournamentGrid);
             base.OnModelCreating(modelBuilder);
         }
     }
@@ -113,91 +115,74 @@ namespace Kaharman
             Participants = new List<Participant>();
             Matchs = new List<Match>();
         }
-        public void InitLable(Control control)
-        {
-            foreach(Match match in Matchs)
-            {
-                control.Controls.Add(match.Pos1.Label);
-                control.Controls.Add(match.Pos2.Label);
-            }
-            for(int i = 0; i < 4; i++)
-            {
-                LabelPlaces[i] = new LabelParticipant();
-                control.Controls.Add(LabelPlaces[i].Label);
-            }
-            Winner = new LabelParticipant();
-            control.Controls.Add(Winner.Label);
-            Winner.Label.Location = new Point(40 + ((int)Math.Log(Type, 2) * 225), 100 + 10 * ((int)Math.Pow(2, (int)Math.Log(Type, 2) + 1)));
-        }
-        private void Label1_MouseClick(object? sender, MouseEventArgs e)
-        {
-            Label? label = sender as Label;
-            if (label == null)
-                return;
-            if (e.Button == MouseButtons.Left)
-            {
-                LabelParticipant? labelParticipant = label.Tag as LabelParticipant;
-                if (labelParticipant == null)
-                    return;
-                if (labelParticipant.Status != StatusGridItem.init)
-                    return;       
-                
-            }
-        }
         public void CreateMatchs()
         {
             int colMatch = (int)Math.Log(Type, 2);
-            for(int i = 0, colRount = Type/2; i < colMatch; i++, colRount/=2)
+            for (int i = 0, colRount = Type / 2; i < colMatch; i++, colRount /= 2)
             {
-                for(int j = 0; j < colRount; j++)
+                for (int j = 0; j < colRount; j++)
                 {
                     Match match = new Match(j, i);
-                    match.Pos1 = new LabelParticipant(match, EPosMatch.UP);
-                    match.Pos2 = new LabelParticipant(match, EPosMatch.DOWN);
-                    match.Pos1.Label.MouseClick += Label1_MouseClick;
-                    match.Pos2.Label.MouseClick += Label1_MouseClick;
                     Matchs.Add(match);
                 }
             }
-            FillRandomMatch.FillMatchs(Matchs, Participants, Type);
-            //FillRandomParticipant fillRandomParticipant = new FillRandomParticipant(Participants);
-            //int colPart = Participants.Count;
-            //int firstLap = (colPart - (Type / 2)) * 2;
-            //int secondLap = colPart - firstLap;
-
-            //for (int i = 0; i <= firstLap; i += 2)
-            //{
-            //    var pair = fillRandomParticipant.GetPairParticipants();
-            //    Match match = GetMatch(i, 0);
-            //    match.SetParticipant1(pair.Item1, StatusGridItem.init);
-            //    match.SetParticipant2(pair.Item2, StatusGridItem.init);
-            //}
-            //int secondLapCount = Type / 2;
-            //for (int i = 1; i <= secondLap; i += 2)
-            //{
-            //    Match match = GetMatch(i, 1);
-            //    match.SetParticipant1(fillRandomParticipant.GetParticipant(), StatusGridItem.init);
-            //    match.SetParticipant2(fillRandomParticipant.GetParticipant(), StatusGridItem.init);
-            //}
-            //int secondLapCount = Items[1].Length;
-            //for (int i = 1; i <= secondLap; i++)
-            //{
-            //    Items[1][secondLapCount - i].SetParticipant(fillRandomParticipant.GetParticipant(), StatusGridItem.init);
-            //}
+            FillMatchs();
         }
-        public Match GetMatch(int round, int match)
+        private void FillMatchs()
         {
-            return Matchs.Find(m => m.MatchNumber == match && m.RoundNumber == round);
+            var listPart = new List<Participant>(Participants);
+            int firstLab = (listPart.Count - (Type / 2));
+            for (int numberMatch = 0; numberMatch < firstLab; numberMatch++)
+            {
+                var parts = GetPair(listPart);
+                Match? match = Matchs.Find(match => match.RoundNumber == 0 && match.MatchNumber == numberMatch);
+                if (match == null)
+                    throw new Exception("Ошибка FillRandom");
+                if (parts.Item2 == null)
+                    throw new Exception("Ошибка FillRandom");
+                match.SetParticipants(parts);
+                listPart.Remove(parts.Item1);
+                listPart.Remove(parts.Item2);
+            }
+            if (listPart.Count > 0)
+            {
+                for (int numberMatch = (Type / 4) - 1; numberMatch >= 0; numberMatch--)
+                {
+                    var parts = GetPair(listPart);
+                    Match? match = Matchs.Find(match => match.RoundNumber == 1 && match.MatchNumber == numberMatch);
+                    if (match == null)
+                        throw new Exception("Ошибка FillRandom");
+                    match.SetParticipant(parts.Item1, EPosMatch.DOWN);
+                    if (parts.Item2 == null)
+                        return;
+                    match.SetParticipant(parts.Item2, EPosMatch.UP);
+                    listPart.Remove(parts.Item1);
+                    listPart.Remove(parts.Item2);
+                    if (listPart.Count == 0)
+                        return;
+                }
+            }
         }
-        [Browsable(false)]
-        [NotMapped]
-        public LabelParticipant[] LabelPlaces { get; set; } = new LabelParticipant[4];
-        [Browsable(false)]
-        [NotMapped]
-        public LabelParticipant Winner { get; set; }
+        private (Participant, Participant?) GetPair(List<Participant> participants)
+        {
+            Participant participant1 = participants.First();
+            if (participants.Count == 1)
+                return (participant1, null);
+            Participant? participant2 = participants.Find(part => part.City != participant1.City);
+            if (participant2 == null)
+            {
+                participant2 = participants.Find(part => part.Trainer != participant1.Trainer);
+                if (participant2 == null)
+                {
+                    participant2 = participants.LastOrDefault();
+                }
+            }
+            return (participant1, participant2);
+        }
     }
     public enum StatusMatch {
-        Win,
+        Win1,
+        Win2,
         Init,
         Close,
         None
@@ -208,131 +193,36 @@ namespace Kaharman
         DOWN,
         Place
     }
-    public class LabelParticipant
-    {
-        [NotMapped]
-        public Label Label = new Label();
-        [NotMapped]
-        ToolTip t = new ToolTip();
-        Participant? Participant { get;set; }
-        public StatusGridItem Status { get; set; }
-        public EPosMatch PosMatch { get; set; }
-        public LabelParticipant(Match match, EPosMatch posMatch) : base() {
-            Match = match;
-            PosMatch = posMatch;
-            Label.Location = new Point(40 + (match.RoundNumber * 225), 100 + 10 * ((int)Math.Pow(2, match.RoundNumber + 1)) + (10 * ((int)Math.Pow(2, match.RoundNumber + 2))) * ((match.MatchNumber * 2) + (int)PosMatch));
-            Label.AccessibleRole = AccessibleRole.None;
-            Label.BorderStyle = BorderStyle.FixedSingle;
-            Label.Size = new Size(170, 20);
-            Label.Text = "";
-            Label.TabStop = false;
-            Label.AllowDrop = true;
-            Label.Tag = this;
-        }
-        public LabelParticipant(EPosMatch posMatch = EPosMatch.Place) : base()
-        {
-            PosMatch = posMatch;
-            Label.AccessibleRole = AccessibleRole.None;
-            Label.BorderStyle = BorderStyle.FixedSingle;
-            Label.Size = new Size(170, 20);
-            Label.Text = "";
-            Label.TabStop = false;
-            Label.AllowDrop = true;
-        }
-        public LabelParticipant() { }
-        public void SetParticipant(Participant? participant, StatusGridItem statusGridItem)
-        {
-            if (participant != null)
-            {
-                Participant = participant;
-                Status = statusGridItem;
-                Label.Text = participant.FIO + "( " + participant.City.Substring(0, 3) + " )";
-                string capction = $"Пол: {participant.Gender}\nВозраст: {participant.Age}\nВес: {participant.Weight}\nКвалификация: {participant.Qualification}\nГород: {participant.City}\nТренер: {participant.Trainer}";
-                t.SetToolTip(Label, capction);
-                InitColorItem();
-            }
-        }
-        public void SetStatus(StatusGridItem statusGridItem)
-        {
-            Status = statusGridItem;
-            InitColorItem();
-        }
-        public void InitColorItem()
-        {
-            switch (Status)
-            {
-                case StatusGridItem.init:
-                    if (PosMatch == EPosMatch.UP)
-                        Label.BackColor = Color.DodgerBlue;
-                    else
-                        Label.BackColor = Color.LightCoral;
-                    break;
-                case StatusGridItem.block:
-                    Label.BackColor = Color.LightGray;
-                    break;
-                case StatusGridItem.close:
-                    Label.BackColor = SystemColors.Control;
-                    break;
-                case StatusGridItem.win:
-                    Label.BackColor = GridForm.ColorWonPosition;
-                    break;
-                case StatusGridItem.lose:
-                    Label.BackColor = Color.LightGray;
-                    break;
-            }
-        }
-        public void Clear()
-        {
-            Label.Text = "";
-            Status = StatusGridItem.close;
-            Participant = null;
-            InitColorItem();
-            t.RemoveAll();
-        }
-        public Match Match { get; set; }
-    }
     public class Match
     {
+        public int Id { get; set; }
         public Match()
         {
-
         }
         public Match(int match, int round)
         {
             RoundNumber = round;
             MatchNumber = match;
         }
-        public int Id { get; set; }
         public int RoundNumber { get; set; }
         public int MatchNumber { get; set; }
-        public LabelParticipant Pos1 { get; set; }
-        public LabelParticipant Pos2 { get; set; }
-        public void WinPart(EPosMatch posMatch)
-        {
-
-        }
-        public void SetParticipant1(Participant participant, StatusGridItem status = StatusGridItem.init)
-        {
-            Pos1.SetParticipant(participant, status);
-        }
-        public void SetParticipant2(Participant participant, StatusGridItem status = StatusGridItem.init)
-        {
-            Pos2.SetParticipant(participant, status);
-        }
-        public void SetParticipant(Participant participant, EPosMatch posMatch, StatusGridItem status = StatusGridItem.init)
+        public int IdPos1 { get; set; } = -1;
+        public int IdPos2 { get; set; } = -1;
+        public StatusPos StatusPos1 { get; set; }
+        public StatusPos StatusPos2 { get; set; }
+        public TournamentGrid TournamentGrid { get; set; }
+        public void SetParticipant(Participant participant, EPosMatch posMatch, StatusPos status = StatusPos.init)
         {
             switch (posMatch)
             {
-                case EPosMatch.UP: Pos1.SetParticipant(participant, status); break;
-                case EPosMatch.DOWN: Pos2.SetParticipant(participant, status); break;
+                case EPosMatch.UP: IdPos1 = participant.Id; StatusPos1 = status; break;
+                case EPosMatch.DOWN: IdPos2 = participant.Id; StatusPos2 = status; break;
             }
-
-            Pos2.SetParticipant(participant, status);
         }
         public void SetParticipants((Participant, Participant?) participants)
         {
-            Pos1.SetParticipant(participants.Item1, StatusGridItem.init);
-            Pos2.SetParticipant(participants.Item2, StatusGridItem.init);
+            IdPos1 = participants.Item1.Id; StatusPos1 = StatusPos.init;
+            IdPos2 = participants.Item2.Id; StatusPos2 = StatusPos.init;
         }
     }
 }

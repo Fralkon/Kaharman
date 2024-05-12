@@ -29,6 +29,7 @@ namespace Kaharman
         string number_t;
         string name_g;
         TournamentGrid TournamentGrid;
+        GridLabel GridLabel;
         public GridForm(string id, string nameT, string name,string numProt, DateTime dateStart, string judge, string secret, Grid grid)
         {
             InitializeComponent();
@@ -77,6 +78,7 @@ namespace Kaharman
         {
             InitializeComponent();
             TournamentGrid = tournamentGrid;
+            GridLabel = new GridLabel(TournamentGrid);
             switch (tournamentGrid.Type)
             {
                 case 4:
@@ -107,7 +109,7 @@ namespace Kaharman
             placesText[3].Text = "Третье место";
             labelJudge.Text = "Главный судья ___________________ " + tournamentGrid.Tournament.Judge;
             labelSecret.Text = "Секретарь ________________________ " + tournamentGrid.Tournament.Secret;
-            tournamentGrid.InitLable(panel1);
+            GridLabel.InitLabel(panel1);
             ElementsLocation();
             foreach (Label label in placesText)
                 panel1.Controls.Add(label);
@@ -200,7 +202,7 @@ namespace Kaharman
             if (point.X != Grid.Items.Length - 1)
             {
                 int pos = (point.Y / 2) * 2;
-                if (Grid.Items[point.X][pos].Status == StatusGridItem.init && Grid.Items[point.X][pos + 1].Status == StatusGridItem.init)
+                if (Grid.Items[point.X][pos].Status == StatusPos.init && Grid.Items[point.X][pos + 1].Status == StatusPos.init)
                 {
                     WonPosition(Grid.Items[point.X][point.Y]);
                 }
@@ -295,7 +297,7 @@ namespace Kaharman
                 bool statusBool = true;
                 foreach (GridItems items in Grid.Items[i])
                 {
-                    if (items.Status == StatusGridItem.close)
+                    if (items.Status == StatusPos.close)
                     {
                         statusBool = false;
                         break;
@@ -357,11 +359,11 @@ namespace Kaharman
             nameTournamet.Location = new Point((panel1.Width / 2) - (nameTournamet.Width / 2), 10);
             nameGrid.Location = new Point((panel1.Width / 2) - (nameGrid.Width / 2), 30);
             dateStart.Location = new Point((panel1.Width / 2) - (dateStart.Width / 2), 50);
-            for (int i = 0; i < TournamentGrid.LabelPlaces.Length; i++)
+            for (int i = 0; i < GridLabel.LabelPlaces.Length; i++)
             {
                 int posY = 120 + (i * 35);
-                TournamentGrid.LabelPlaces[i].Label.Location = new Point(panel1.Width - TournamentGrid.LabelPlaces[i].Label.Width - 30, posY);
-               // Grid.Places[i].InitPosition(new Point(panel1.Width - Grid.Places[i].Label.Width - 30, posY));
+                GridLabel.LabelPlaces[i].Location = new Point(panel1.Width - GridLabel.LabelPlaces[i].Width - 30, posY);
+                // Grid.Places[i].InitPosition(new Point(panel1.Width - Grid.Places[i].Label.Width - 30, posY));
                 placesText[i].Location = new Point(panel1.Width - placesText[i].Width - 200, posY);
             }
             int lableX = placesText[0].Location.X - 50;
@@ -402,16 +404,16 @@ namespace Kaharman
             for (int i = 0; i < Grid.Items[1].Length; i++)
             {
                 GridItems item = Grid.Items[1][i];
-                if (Grid.Items[0][i * 2].Status != StatusGridItem.close)
+                if (Grid.Items[0][i * 2].Status != StatusPos.close)
                     item.Clear();
                 else
-                    item.ChangeStatus(StatusGridItem.init);
+                    item.ChangeStatus(StatusPos.init);
             }
             for (int i = 0; i < Grid.Items[0].Length; i++)
             {
                 GridItems item = Grid.Items[0][i];
-                if (item.Status != StatusGridItem.close)
-                    item.ChangeStatus(StatusGridItem.init);
+                if (item.Status != StatusPos.close)
+                    item.ChangeStatus(StatusPos.init);
             }
         }
 

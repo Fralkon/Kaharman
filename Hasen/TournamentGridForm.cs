@@ -29,7 +29,7 @@ namespace Kaharman
         StatusFormTournamentGrid StatusForm;
         ParticipantDataTable participantsTable;
         bool notChange = true;
-
+        Tournament Tournament { get; set; } 
 
         ParticipantDataGrid AllParticipantsDataGrid;
         ParticipantDataGrid ParticipantGridDataGrid;
@@ -62,6 +62,7 @@ namespace Kaharman
             InitializeComponent();
             db = dataContext;
             StatusForm = statusForm;
+            Tournament = tournament;
             this.Text = tournament.NameTournament;
             button1.Text = "Создать";
             TournamentGridForm_Resize(null, null);
@@ -162,8 +163,11 @@ namespace Kaharman
                 }
                 TournamentGrid.Participants = ParticipantGridDataGrid.GetList();
                 TournamentGrid.CreateMatchs();
-               // db.TournamentGrid.Add(TournamentGrid);
-                //db.SaveChanges();
+                db.SaveChanges();
+                KaharmanDataContext dataContext = new KaharmanDataContext();
+                dataContext.TournamentGrid.Add(TournamentGrid);
+                Tournament.TournamentGrids.Add(TournamentGrid);
+                dataContext.SaveChanges();
                 GridForm gridForm = new GridForm(db, TournamentGrid);
                 gridForm.ShowDialog();
                 this.Close();
@@ -180,7 +184,7 @@ namespace Kaharman
                 Participant? participant = AllParticipantsDataGrid.GetParticipant((int)row.Cells[0].Value);
                 if (participant == null)
                     continue;
-                AllParticipantsDataGrid.DeleteParticipant(participant);
+                //AllParticipantsDataGrid.DeleteParticipant(participant);
                 TournamentGrid.Participants.Add(participant);
                 ParticipantGridDataGrid.AddParticipant(participant);
             }
@@ -196,7 +200,7 @@ namespace Kaharman
                     continue;
                 ParticipantGridDataGrid.DeleteParticipant(participant);
                 TournamentGrid.Participants.Remove(participant);
-                AllParticipantsDataGrid.AddParticipant(participant);
+                //AllParticipantsDataGrid.AddParticipant(participant);
             }
         }
         private void button2_Click(object sender, EventArgs e)

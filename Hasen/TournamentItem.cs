@@ -1,17 +1,12 @@
 ﻿using Hasen;
-using NPOI.POIFS.Crypt.Agile;
-using NPOI.Util;
-using System.CodeDom;
 using System.Data;
-using System.Drawing.Drawing2D;
 using System.Globalization;
 using System.Text.Json.Serialization;
-using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 using ToolTip = System.Windows.Forms.ToolTip;
 
 namespace Kaharman
 {
-    public enum StatusGridItem
+    public enum StatusPos
     {
         init,
         close,
@@ -82,60 +77,6 @@ namespace Kaharman
                 countTrainerPart.Remove(cTP);
 
             return item1;
-        }
-    }
-    public static class FillRandomMatch
-    {
-        public static void FillMatchs(List<Match> matches, List<Participant> participants, int TypeGrid)
-        {
-            var listPart = new List<Participant>(participants);
-            int firstLab = (listPart.Count - (TypeGrid / 2));
-            for (int numberMatch = 0; numberMatch < firstLab; numberMatch ++)
-            {
-                var parts = GetPair(listPart);               
-                Match? match = matches.Find(match => match.RoundNumber == 0 && match.MatchNumber == numberMatch);
-                if (match == null)
-                    throw new Exception("Ошибка FillRandom"); 
-                if (parts.Item2 == null)
-                    throw new Exception("Ошибка FillRandom");
-                match.SetParticipants(parts);
-                listPart.Remove(parts.Item1);
-                listPart.Remove(parts.Item2);
-            }
-            if (listPart.Count > 0)
-            {
-                for (int numberMatch = (TypeGrid / 4)-1; numberMatch >= 0; numberMatch--)
-                {
-                    var parts = GetPair(listPart);
-                    Match? match = matches.Find(match => match.RoundNumber == 1 && match.MatchNumber == numberMatch);
-                    if (match == null)
-                        throw new Exception("Ошибка FillRandom");
-                    match.SetParticipant2(parts.Item1);
-                    if (parts.Item2 == null)
-                        return;
-                    match.SetParticipant1(parts.Item2);
-                    listPart.Remove(parts.Item1);
-                    listPart.Remove(parts.Item2);
-                    if (listPart.Count == 0)
-                        return;
-                }
-            }
-        }
-        public static (Participant, Participant?) GetPair(List<Participant> participants)
-        {
-            Participant participant1 = participants.First();
-            if (participants.Count == 1)
-                return (participant1, null);
-            Participant? participant2 = participants.Find(part => part.City != participant1.City);
-            if (participant2 == null)
-            {
-                participant2 = participants.Find(part => part.Trainer != participant1.Trainer);
-                if (participant2 == null)
-                {
-                    participant2 = participants.LastOrDefault();
-                }
-            }
-            return (participant1, participant2);
         }
     }
     public class Category
@@ -326,14 +267,14 @@ namespace Kaharman
     {
         public PointItem? Point { get; set; }
         public int ID { get; set; }
-        public StatusGridItem Status { get; set; }
+        public StatusPos Status { get; set; }
         [JsonIgnore]
         public ParticipantX? Participant { get; set; }
         [JsonIgnore]
         public Label Label { get; set; }
         [JsonIgnore]
         ToolTip t = new ToolTip();
-        public GridItems(PointItem point, int iD = -1, StatusGridItem status = StatusGridItem.close)
+        public GridItems(PointItem point, int iD = -1, StatusPos status = StatusPos.close)
         {
             this.Point = point;
             ID = iD;
@@ -354,7 +295,7 @@ namespace Kaharman
             Label.BorderStyle = BorderStyle.FixedSingle;
             Label.Size = new Size(170, 20); 
             Label.AllowDrop = true;
-            Status = StatusGridItem.close;
+            Status = StatusPos.close;
         }
         public void InitPosition()
         {
@@ -368,7 +309,7 @@ namespace Kaharman
         {
             Label.Location = point;
         }
-        public void ChangeStatus(StatusGridItem status)
+        public void ChangeStatus(StatusPos status)
         {
             this.Status = status;
             InitColorItem();
@@ -377,7 +318,7 @@ namespace Kaharman
         {
             switch (Status)
             {
-                case StatusGridItem.init:
+                case StatusPos.init:
                     if (Point != null)
                         if (Point.Y % 2 == 0)
                             Label.BackColor = Color.DodgerBlue;
@@ -386,13 +327,13 @@ namespace Kaharman
                     else
                         Label.BackColor = Color.LightGray;
                     break;
-                case StatusGridItem.close:
+                case StatusPos.close:
                     Label.BackColor = SystemColors.Control;
                     break;
-                case StatusGridItem.win:
+                case StatusPos.win:
                     Label.BackColor = GridForm.ColorWonPosition;
                     break;
-                case StatusGridItem.lose:
+                case StatusPos.lose:
                     Label.BackColor = Color.LightGray;
                     break;
             }
@@ -406,7 +347,7 @@ namespace Kaharman
             string capction = $"Пол: {participant.Gender}\nВозраст: {participant.Age}\nВес: {participant.Weight}\nКвалификация: {participant.Gualiti}\nГород: {participant.City}\nТренер: {participant.Trainer}";
             t.SetToolTip(Label, capction);
         }
-        public void SetParticipant(ParticipantX participant, StatusGridItem statusGrid)
+        public void SetParticipant(ParticipantX participant, StatusPos statusGrid)
         {
             this.Status = statusGrid;
             SetParticipant(participant);
@@ -418,7 +359,7 @@ namespace Kaharman
         public void Clear()
         {
             Label.Text = "";
-            Status = StatusGridItem.close;
+            Status = StatusPos.close;
             InitColorItem();
             Participant = null;
             ID = -1;
@@ -438,23 +379,23 @@ namespace Kaharman
         {
             PointItem point = item.Point;
             int pos = (point.Y / 2) * 2;
-            Items[point.X][point.Y].ChangeStatus(StatusGridItem.win);
-            Items[point.X+1][point.Y/2].SetParticipant(item.Participant, StatusGridItem.init);
+            Items[point.X][point.Y].ChangeStatus(StatusPos.win);
+            Items[point.X+1][point.Y/2].SetParticipant(item.Participant, StatusPos.init);
             if (pos == point.Y)
                 pos = point.Y + 1;
-            Items[point.X][pos].ChangeStatus(StatusGridItem.lose);
+            Items[point.X][pos].ChangeStatus(StatusPos.lose);
             switch (Items.Length - item.Point.X)
             {
                 case 2:
-                    Places[0].SetParticipant(item.Participant, StatusGridItem.win);
-                    Items[point.X + 1][point.Y / 2].SetParticipant(item.Participant, StatusGridItem.win);
-                    Places[1].SetParticipant(Items[point.X][pos].Participant, StatusGridItem.win);
+                    Places[0].SetParticipant(item.Participant, StatusPos.win);
+                    Items[point.X + 1][point.Y / 2].SetParticipant(item.Participant, StatusPos.win);
+                    Places[1].SetParticipant(Items[point.X][pos].Participant, StatusPos.win);
                     break;
                 case 3:
-                    if (Places[2].Status == StatusGridItem.close || Places[2].Status == StatusGridItem.init)
-                        Places[2].SetParticipant(item.Participant, StatusGridItem.win);
+                    if (Places[2].Status == StatusPos.close || Places[2].Status == StatusPos.init)
+                        Places[2].SetParticipant(item.Participant, StatusPos.win);
                     else
-                        Places[3].SetParticipant(item.Participant, StatusGridItem.win);
+                        Places[3].SetParticipant(item.Participant, StatusPos.win);
                     break;
             }
         }
@@ -505,14 +446,14 @@ namespace Kaharman
             if (point.X == 1)
             {
                 int y = point.Y * 2;
-                if (Items[0][y].Status != StatusGridItem.close || Items[0][y + 1].Status != StatusGridItem.close)
+                if (Items[0][y].Status != StatusPos.close || Items[0][y + 1].Status != StatusPos.close)
                     throw new Exception("Невозможно перенести участников, т.к. предыдущий матч уже состоялся.");
-                if (Items[point.X][point.Y].Status != StatusGridItem.init || Items[point.X][point.Y].Status != StatusGridItem.init)
+                if (Items[point.X][point.Y].Status != StatusPos.init || Items[point.X][point.Y].Status != StatusPos.init)
                     throw new Exception("Невозможно перенести участников, т.к. предыдущий матч уже состоялся, или пустая ячейка.");
             }
             else if (point.X == 0)
             {
-                if (Items[point.X][point.Y].Status != StatusGridItem.init)
+                if (Items[point.X][point.Y].Status != StatusPos.init)
                     throw new Exception("Невозможно перенести участников, т.к. предыдущий матч уже состоялся, или пустая ячейка.");
             }
             else
@@ -539,8 +480,8 @@ namespace Kaharman
             }
             Items[point1.X][point1.Y].Clear();
             Items[point2.X][point2.Y].Clear();
-            Items[point1.X][point1.Y].SetParticipant(participant2, StatusGridItem.init);
-            Items[point2.X][point2.Y].SetParticipant(participant1, StatusGridItem.init);
+            Items[point1.X][point1.Y].SetParticipant(participant2, StatusPos.init);
+            Items[point2.X][point2.Y].SetParticipant(participant1, StatusPos.init);
         }
     }
 }

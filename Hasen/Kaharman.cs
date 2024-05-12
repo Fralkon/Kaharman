@@ -17,15 +17,15 @@ namespace Hasen
         TableVisible tableVisible;
         TournamentDataGrid DataHistoryTournaments;
         ParticipantDataGrid ParticipantDataGrid;
-        KaharmanDataContext dbContext = new KaharmanDataContext();
+        KaharmanDataContext dbContext = new KaharmanDataContext(); 
         public Kaharman()
         {
             InitializeComponent();
             //MessageBox.Show(Math.Log(8,2).ToString());
             //MessageBox.Show(Math.Log(16, 2).ToString());
             //MessageBox.Show(Math.Log(32, 2).ToString());
-            // dbContext.Database.EnsureDeleted();
-            //  dbContext.Database.EnsureCreated();
+            //dbContext.Database.EnsureDeleted();
+            //dbContext.Database.EnsureCreated();
             //StartForm startForm = new StartForm();
             //if (startForm.ShowDialog() == DialogResult.Cancel)
             //    this.Close();
