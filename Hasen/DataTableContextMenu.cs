@@ -148,7 +148,6 @@ namespace Kaharman
         protected BindingList<T> bindingList = new BindingList<T>();
         protected BindingSource pSource = new BindingSource();
         protected List<ContextFilter> listContextMenu = new List<ContextFilter>();
-        protected List<T> DataSet = new List<T>();
         protected DataGridView GridView;
         protected ContextMenuStrip? dataGridContextMenu;
         public TableContextMenu(DataGridView dataGridView)
@@ -163,15 +162,10 @@ namespace Kaharman
             dataGridView.MouseClick += MouseClick;
             InitTable();
         }
-        public virtual void LoadData(List<T> tournaments)
+        public virtual void LoadData(List<T> items)
         {
-            bindingList.Clear();
-            DataSet = tournaments;
-            foreach (var t in DataSet)
-            {
-                bindingList.Add(t);
-            }
-            GridView.Columns[0].Visible = false;
+            bindingList = new BindingList<T>(items);
+            GridView.DataSource = bindingList;
             SetValueContextFilter();
         }
         public void SetValueContextFilter()
@@ -191,6 +185,7 @@ namespace Kaharman
                             value = String.Empty;
                         filterValue.AddValue(value);
                     }
+                    filterValue.Items.AddRange(filterValue.Items.OfType<ToolStripItem>().OrderBy(x => x.Text).ToArray());
                 }
             }
         }
@@ -200,7 +195,7 @@ namespace Kaharman
                 dataGridContextMenu.Close();
             if (e.Button == MouseButtons.Right)
             {
-                foreach(var contextMenu in listContextMenu)
+                foreach (var contextMenu in listContextMenu)
                     if(contextMenu.Index ==e.ColumnIndex)
                         contextMenu.Show(Control.MousePosition, ToolStripDropDownDirection.Default);
             }
@@ -250,54 +245,6 @@ namespace Kaharman
                 }
             }
         }
-        public async void FillTable(DataTable table, Form form, ProgressBar progressBar)
-        {
-            progressBar.Visible = true;
-            progressBar.Maximum = table.Rows.Count;
-            try
-            {
-                await Task.Run(() =>
-                {
-                    for (int i = 0; i < table.Rows.Count; i++)
-                    {
-                        DataRow row = table.Rows[i];
-                        form.Invoke(() =>
-                        {
-                           // this.AddRow(row);
-                        });
-                        progressBar.Value = i;
-                    }
-                });
-            }
-            catch
-            { }
-            progressBar.Visible = false;
-        }
-        public async void FillTableOnAccess(DataTable table, Form form, ProgressBar progressBar)
-        {
-            progressBar.Visible = true;
-            progressBar.Maximum = table.Rows.Count;
-            try
-            {
-                await Task.Run(() =>
-                {
-                    for (int i = 0; i < table.Rows.Count; i++)
-                    {
-                        DataRow row = table.Rows[i];
-                        var objects = row.ItemArray;
-                        objects[3] = (int)((int)(DateTime.Now - DateTime.Parse(row["date_of_birth"].ToString())).TotalDays / ParticipantX.ValyeDayYear);
-                        form.Invoke(() =>
-                        {
-                            //AddRow(objects);
-                        });
-                        progressBar.Value = i;
-                    }
-                });
-            }
-            catch
-            { }
-            progressBar.Visible = false;
-        }
     }
     public class TournamentDataGrid : TableContextMenu<Tournament>
     {
@@ -315,13 +262,11 @@ namespace Kaharman
         protected override void TournamentDataGrid_ItemClicked(object? sender, ToolStripItemClickedEventArgs e)
         {
             base.TournamentDataGrid_ItemClicked(sender, e);
-            bindingList.Clear();
-            foreach (var d in DataSet.Where(data => listContextMenu[0].Filter(data.NameTournament) ).ToList())
-                bindingList.Add(d);
+            GridView.DataSource = bindingList.Where(data => listContextMenu[0].Filter(data.NameTournament)).ToList();
         }
-        public Tournament? GetParticipant(int id)
+        public Tournament? GetItem(int id)
         {
-            return DataSet.FirstOrDefault(p => p.Id == id);
+            return bindingList.FirstOrDefault(p => p.Id == id);
         }
     }
     public class ParticipantDataGrid : TableContextMenu<Participant>
@@ -336,14 +281,12 @@ namespace Kaharman
         protected override void TournamentDataGrid_ItemClicked(object? sender, ToolStripItemClickedEventArgs e)
         {
             base.TournamentDataGrid_ItemClicked(sender, e);
-            bindingList.Clear();
-            foreach (var d in DataSet.Where(data => 
+            GridView.DataSource = bindingList.Where(data =>
                 listContextMenu[0].Filter(data.FIO) &&
                 listContextMenu[1].Filter(data.Gender) &&
                 listContextMenu[2].Filter(data.Qualification) &&
                 listContextMenu[3].Filter(data.City) &&
-                listContextMenu[4].Filter(data.Trainer)).ToList())
-                bindingList.Add(d);
+                listContextMenu[4].Filter(data.Trainer)).ToList();
         }
         protected override void InitTable()
         {
@@ -354,35 +297,50 @@ namespace Kaharman
             listContextMenu.Add(new ContextFilterValue(8));
             base.InitTable();
         }
-        public override void LoadData(List<Participant> tournaments)
-        {
-            bindingList.Clear();
-            DataSet = tournaments;
-            foreach (var t in DataSet)
-            {
-                t.Age =  (int)((int)(DateTime.Now - t.DateOfBirth).TotalDays / Participant.ValyeDayYear);
-                bindingList.Add(t);
-            }
-            GridView.Columns[0].Visible = false;
-            SetValueContextFilter();
-        }
         public override void ColumnHeaderMouseClick(object? sender, DataGridViewCellMouseEventArgs e)
         {
             base.ColumnHeaderMouseClick(sender, e);
-           // GridView.DataSource = bindingList.OrderBy(t=> t.Age).ToList();
+            if (e.Button == MouseButtons.Left)
+            {
+                switch (e.ColumnIndex)
+                {
+                    case 1:
+                        GridView.DataSource = bindingList.OrderBy(t => t.FIO).ToList();
+                        break;
+                    case 2:
+                        GridView.DataSource = bindingList.OrderBy(t => t.Gender).ToList();
+                        break;
+                    case 3:
+                        GridView.DataSource = bindingList.OrderBy(t => t.Age).ToList();
+                        break;
+                    case 4:
+                        GridView.DataSource = bindingList.OrderBy(t => t.DateOfBirth).ToList();
+                        break;
+                    case 5:
+                        GridView.DataSource = bindingList.OrderBy(t => t.Weight).ToList();
+                        break;
+                    case 6:
+                        GridView.DataSource = bindingList.OrderBy(t => t.Qualification).ToList();
+                        break;
+                    case 7:
+                        GridView.DataSource = bindingList.OrderBy(t => t.City).ToList();
+                        break;
+                    case 8:
+                        GridView.DataSource = bindingList.OrderBy(t => t.Trainer).ToList();
+                        break;
+                }
+            }
         }
-        public Participant? GetParticipant(int id)
+        public Participant? GetItem(int id)
         {
-            return DataSet.FirstOrDefault(p => p.Id == id);
+            return bindingList.FirstOrDefault(p => p.Id == id);
         }
         public void AddParticipant(Participant participant)
         {
-            DataSet.Add(participant);
             bindingList.Add(participant);
         }
         public void DeleteParticipant(Participant participant)
         {
-            DataSet.Remove(participant);
             bindingList.Remove(participant);
         }
     }
@@ -390,31 +348,28 @@ namespace Kaharman
     {
         public TournamentGridDataGrid(DataGridView dataGridView) : base(dataGridView)
         {
-            GridView.Columns[0].Visible = false;
         }
         protected override void TournamentDataGrid_ItemClicked(object? sender, ToolStripItemClickedEventArgs e)
         {
             base.TournamentDataGrid_ItemClicked(sender, e);
-            bindingList.Clear();
-            foreach (var d in DataSet.Where(data =>
+            GridView.DataSource = bindingList.Where(data =>
                 listContextMenu[0].Filter(data.Number.ToString()) &&
                 listContextMenu[1].Filter(data.NameGrid) &&
                 listContextMenu[2].Filter(data.Gender) &&
                 listContextMenu[3].Filter(data.Programm) &&
                 listContextMenu[4].Filter(data.AgeRange) &&
                 listContextMenu[5].Filter(data.Qualification) &&
-                listContextMenu[6].Filter(data.Status)).ToList())
-                bindingList.Add(d);
+                listContextMenu[6].Filter(data.Status)).ToList();       
         }
         protected override void InitTable()
         {
-            listContextMenu.Add(new ContextFilterName(1));
+            listContextMenu.Add(new ContextFilterValue(1));
             listContextMenu.Add(new ContextFilterName(3));
             listContextMenu.Add(new ContextFilterValue(4));
             listContextMenu.Add(new ContextFilterValue(5));
             listContextMenu.Add(new ContextFilterValue(6));
             listContextMenu.Add(new ContextFilterValue(7));
-            listContextMenu.Add(new ContextFilterValue(9));
+            listContextMenu.Add(new ContextFilterValue(8));
             base.InitTable();
         }
     }

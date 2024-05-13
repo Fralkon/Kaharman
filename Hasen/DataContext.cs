@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations.Schema;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement;
+using NPOI.SS.Formula.Functions;
 
 namespace Kaharman
 {
@@ -16,7 +17,6 @@ namespace Kaharman
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             optionsBuilder.UseJet("Provider=Microsoft.ACE.OLEDB.12.0;Data Source=Database.accdb");
-            optionsBuilder.UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking);
         }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -81,6 +81,10 @@ namespace Kaharman
         public Participant() {
             Tournaments = new List<Tournament>();
             TournamentGrids = new List<TournamentGrid>();
+        }
+        public void InitAge()
+        {
+            Age = (int)((int)(DateTime.Now - DateOfBirth).TotalDays / ValyeDayYear);
         }
     }
     public class TournamentGrid

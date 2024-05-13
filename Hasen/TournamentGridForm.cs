@@ -29,12 +29,11 @@ namespace Kaharman
         StatusFormTournamentGrid StatusForm;
         ParticipantDataTable participantsTable;
         bool notChange = true;
-        Tournament Tournament { get; set; } 
+        Tournament Tournament { get; set; }
 
         ParticipantDataGrid AllParticipantsDataGrid;
         ParticipantDataGrid ParticipantGridDataGrid;
         TournamentGrid TournamentGrid { get; set; }
-        KaharmanDataContext db;
         public TournamentGridForm(string idTournament, string nameTournament, string judge, string secret, DateTime dateTime, ParticipantDataTable participantsTable, StatusFormTournamentGrid statusForm, string nameGrid = "", string? numberProtocol = null, string? number_grid = null)
         {
             InitializeComponent();
@@ -48,7 +47,7 @@ namespace Kaharman
             nameTextBox.Text = nameGrid;
             allParticipant.Columns[0].Visible = false;
             if (numberProtocol != null)
-                this.gender.Text = numberProtocol;
+                this.genderTextBox.Text = numberProtocol;
             if (number_grid != null)
             {
                 IdGrid = number_grid;
@@ -57,20 +56,19 @@ namespace Kaharman
                 button1.Text = "Изменить";
             TournamentGridForm_Resize(null, null);
         }
-        public TournamentGridForm(KaharmanDataContext dataContext, Tournament tournament, StatusFormTournamentGrid statusForm)
+        public TournamentGridForm(Tournament tournament, StatusFormTournamentGrid statusForm)
         {
             InitializeComponent();
-            db = dataContext;
             StatusForm = statusForm;
             Tournament = tournament;
             this.Text = tournament.NameTournament;
             button1.Text = "Создать";
             TournamentGridForm_Resize(null, null);
             AllParticipantsDataGrid = new ParticipantDataGrid(allParticipant);
-            AllParticipantsDataGrid.LoadData(tournament.Participants.Copy());
+            AllParticipantsDataGrid.LoadData(new List<Participant>(tournament.Participants));
             ParticipantGridDataGrid = new ParticipantDataGrid(gridParticipant);
             TournamentGrid = new TournamentGrid();
-            TournamentGrid.Tournament = tournament;
+            TournamentGrid.Tournament = Tournament;
         }
         private void button1_Click(object sender, EventArgs e)
         {
@@ -78,7 +76,7 @@ namespace Kaharman
             {
                 if (StatusForm != StatusFormTournamentGrid.Create)
                 {
-                    TournamentGrid? grid = db.TournamentGrid.FirstOrDefault(tg => tg.Number == nProtocol);
+                    TournamentGrid? grid = Tournament.TournamentGrids.FirstOrDefault(tg => tg.Number == nProtocol);
                     if (grid != null)
                     {
                         MessageBox.Show("Номер протокола уже существует.");
@@ -91,6 +89,45 @@ namespace Kaharman
                 MessageBox.Show("Введите номер протокола в числовом формате.");
                 return;
             }
+            if (!int.TryParse(ageMinTextBox.Text, out int ageMin) && ageMin > 0)
+            {
+                MessageBox.Show("Не верно введено числовое значение минимального возраста.");
+                return;
+            }
+            if (!int.TryParse(ageMaxTextBox.Text, out int ageMax) && ageMax > 0)
+            {
+                MessageBox.Show("Не верно введено числовое значение максимального возраста.");
+                return;
+            }
+            if (dateTimePicker1.Value < Tournament.StartDate || dateTimePicker1.Value > Tournament.EndDate)
+            {
+                MessageBox.Show("Не верно введена дата проведения турнирной сетки.");
+                return;
+            }
+            if (nameTextBox.Text.Length == 0)
+            {
+                MessageBox.Show("Введите наименование турнира.");
+                return;
+            }
+            if (programmText.Text.Length == 0)
+            {
+                MessageBox.Show("Выберите программу.");
+                return;
+            }
+            if (qualification.Text.Length == 0)
+            {
+                MessageBox.Show("Выберите квалификацию.");
+                return;
+            }
+
+            TournamentGrid.NameGrid = nameTextBox.Text;
+            TournamentGrid.Programm = programmText.Text;
+            TournamentGrid.Qualification = qualification.Text;
+            TournamentGrid.Number = nProtocol;
+            TournamentGrid.AgeRange = ageMin + "-" + ageMax;
+            TournamentGrid.DataStart = dateTimePicker1.Value;
+            TournamentGrid.Gender = genderTextBox.Text;
+
             if (StatusForm == StatusFormTournamentGrid.Edit && notChange)
             {
                 Grid grid = new Grid();
@@ -100,7 +137,7 @@ namespace Kaharman
                     return;
                 }
 
-                AccessSQL.SendSQL($"UPDATE TournamentGrid SET number_t = '{gender.Text}', [date] = '{dateTimePicker1.Value.ToString("dd.MM.yyyy")}' , name = '{nameTextBox.Text}' WHERE id = {IdGrid}");
+                AccessSQL.SendSQL($"UPDATE TournamentGrid SET number_t = '{genderTextBox.Text}', [date] = '{dateTimePicker1.Value.ToString("dd.MM.yyyy")}' , name = '{nameTextBox.Text}' WHERE id = {IdGrid}");
 
                 DateTime dateTime;
                 string nameGrid;
@@ -131,9 +168,9 @@ namespace Kaharman
             }
             else
             {
-                if (gridParticipant.RowCount == 0)
+                if (gridParticipant.RowCount < 2)
                 {
-                    MessageBox.Show("Отсутствуют участники в таблице.");
+                    MessageBox.Show("Минимальное количество участников 3.");
                     return;
                 }
                 if (gridParticipant.RowCount <= 4)
@@ -161,18 +198,20 @@ namespace Kaharman
                     MessageBox.Show("Больше 32 участников не предусмотрено");
                     return;
                 }
-                TournamentGrid.Participants = ParticipantGridDataGrid.GetList();
-                TournamentGrid.CreateMatchs();
-                db.SaveChanges();
-                KaharmanDataContext dataContext = new KaharmanDataContext();
-                dataContext.TournamentGrid.Add(TournamentGrid);
-                Tournament.TournamentGrids.Add(TournamentGrid);
-                dataContext.SaveChanges();
-                GridForm gridForm = new GridForm(db, TournamentGrid);
+                using (KaharmanDataContext context = new KaharmanDataContext())
+                {
+                    TournamentGrid.CreateMatchs();
+                    context.TournamentGrid.Attach(TournamentGrid);
+                    context.SaveChanges();
+                    TournamentGrid.Participants = context.Participant.Where(p => ParticipantGridDataGrid.GetList().Contains(p)).ToList();
+                    TournamentGrid.CreateMatchs();
+                    context.TournamentGrid.Update(TournamentGrid);
+                    context.SaveChanges();
+                }
+                GridForm gridForm = new GridForm(TournamentGrid);
                 gridForm.ShowDialog();
                 this.Close();
                 return;
-
             }
         }
         private void button3_Click(object? sender, EventArgs? e)
@@ -181,11 +220,10 @@ namespace Kaharman
             notChange = false;
             foreach (DataGridViewRow row in allParticipant.SelectedRows)
             {
-                Participant? participant = AllParticipantsDataGrid.GetParticipant((int)row.Cells[0].Value);
+                Participant? participant = AllParticipantsDataGrid.GetItem((int)row.Cells[0].Value);
                 if (participant == null)
                     continue;
-                //AllParticipantsDataGrid.DeleteParticipant(participant);
-                TournamentGrid.Participants.Add(participant);
+                AllParticipantsDataGrid.DeleteParticipant(participant);
                 ParticipantGridDataGrid.AddParticipant(participant);
             }
         }
@@ -195,12 +233,11 @@ namespace Kaharman
             notChange = false;
             foreach (DataGridViewRow row in gridParticipant.SelectedRows)
             {
-                Participant? participant = ParticipantGridDataGrid.GetParticipant((int)row.Cells[0].Value);
+                Participant? participant = ParticipantGridDataGrid.GetItem((int)row.Cells[0].Value);
                 if (participant == null)
                     continue;
                 ParticipantGridDataGrid.DeleteParticipant(participant);
-                TournamentGrid.Participants.Remove(participant);
-                //AllParticipantsDataGrid.AddParticipant(participant);
+                AllParticipantsDataGrid.AddParticipant(participant);
             }
         }
         private void button2_Click(object sender, EventArgs e)
@@ -224,6 +261,11 @@ namespace Kaharman
         }
         private void TournamentGridForm_Load(object sender, EventArgs e)
         {
+        }
+
+        private void ageMinTextBox_TextChanged(object sender, EventArgs e)
+        {
+
         }
     }
 }

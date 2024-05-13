@@ -27,7 +27,7 @@ namespace Kaharman
                 LabelParticipants.Add(label1);
                 control.Controls.Add(label1);
 
-                LabelParticipant label2 = new LabelParticipant(match, EPosMatch.UP);
+                LabelParticipant label2 = new LabelParticipant(match, EPosMatch.DOWN);
                 label2.SetParticipant(TournamentGrid.Participants.Find(p => p.Id == match.IdPos2), match.StatusPos2);
                 LabelParticipants.Add(label2);
                 control.Controls.Add(label2);
@@ -53,29 +53,29 @@ namespace Kaharman
 
             }
         }
-        public void CreateMatchs()
-        {
-            //int colMatch = (int)Math.Log(Type, 2);
-            //for (int i = 0, colRount = Type / 2; i < colMatch; i++, colRount /= 2)
-            //{
-            //    for (int j = 0; j < colRount; j++)
-            //    {
-            //        Match match = new Match(j, i);
-            //        match.Items[0].Label.MouseClick += Label1_MouseClick;
-            //        match.Items[1].Label.MouseClick += Label1_MouseClick;
-            //        Matchs.Add(match);
-            //    }
-            //}
-          //  FillMatchs();
-        }
+        //public void CreateMatchs()
+        //{
+        //    int colMatch = (int)Math.Log(TournamentGrid.Type, 2);
+        //    for (int i = 0, colRount = TournamentGrid.Type / 2; i < colMatch; i++, colRount /= 2)
+        //    {
+        //        for (int j = 0; j < colRount; j++)
+        //        {
+        //            Match match = new Match(j, i);
+        //            match.Items[0].Label.MouseClick += Label1_MouseClick;
+        //            match.Items[1].Label.MouseClick += Label1_MouseClick;
+        //            Matchs.Add(match);
+        //        }
+        //    }
+        //    FillMatchs();
+        //}
         //private void FillMatchs()
         //{
-        //    var listPart = new List<Participant>(Participants);
-        //    int firstLab = (listPart.Count - (Type / 2));
+        //    var listPart = new List<Participant>(TournamentGrid.Participants);
+        //    int firstLab = (listPart.Count - (TournamentGrid.Type / 2));
         //    for (int numberMatch = 0; numberMatch < firstLab; numberMatch++)
         //    {
         //        var parts = GetPair(listPart);
-        //        Match? match = Matchs.Find(match => match.RoundNumber == 0 && match.MatchNumber == numberMatch);
+        //        Match? match = TournamentGrid.Matchs.Find(match => match.RoundNumber == 0 && match.MatchNumber == numberMatch);
         //        if (match == null)
         //            throw new Exception("Ошибка FillRandom");
         //        if (parts.Item2 == null)
@@ -86,10 +86,10 @@ namespace Kaharman
         //    }
         //    if (listPart.Count > 0)
         //    {
-        //        for (int numberMatch = (Type / 4) - 1; numberMatch >= 0; numberMatch--)
+        //        for (int numberMatch = (TournamentGrid.Type / 4) - 1; numberMatch >= 0; numberMatch--)
         //        {
         //            var parts = GetPair(listPart);
-        //            Match? match = Matchs.Find(match => match.RoundNumber == 1 && match.MatchNumber == numberMatch);
+        //            Match? match = TournamentGrid.Matchs.Find(match => match.RoundNumber == 1 && match.MatchNumber == numberMatch);
         //            if (match == null)
         //                throw new Exception("Ошибка FillRandom");
         //            match.SetParticipant(parts.Item1, EPosMatch.DOWN);
@@ -103,22 +103,22 @@ namespace Kaharman
         //        }
         //    }
         //}
-        private (Participant, Participant?) GetPair(List<Participant> participants)
-        {
-            Participant participant1 = participants.First();
-            if (participants.Count == 1)
-                return (participant1, null);
-            Participant? participant2 = participants.Find(part => part.City != participant1.City);
-            if (participant2 == null)
-            {
-                participant2 = participants.Find(part => part.Trainer != participant1.Trainer);
-                if (participant2 == null)
-                {
-                    participant2 = participants.LastOrDefault();
-                }
-            }
-            return (participant1, participant2);
-        }
+        //private (Participant, Participant?) GetPair(List<Participant> participants)
+        //{
+        //    Participant participant1 = participants.First();
+        //    if (participants.Count == 1)
+        //        return (participant1, null);
+        //    Participant? participant2 = participants.Find(part => part.City != participant1.City);
+        //    if (participant2 == null)
+        //    {
+        //        participant2 = participants.Find(part => part.Trainer != participant1.Trainer);
+        //        if (participant2 == null)
+        //        {
+        //            participant2 = participants.LastOrDefault();
+        //        }
+        //    }
+        //    return (participant1, participant2);
+        //}
         //public Match GetMatch(int round, int match)
         //{
         //    return Matchs.Find(m => m.MatchNumber == match && m.RoundNumber == round);

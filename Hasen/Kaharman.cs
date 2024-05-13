@@ -17,15 +17,17 @@ namespace Hasen
         TableVisible tableVisible;
         TournamentDataGrid DataHistoryTournaments;
         ParticipantDataGrid ParticipantDataGrid;
-        KaharmanDataContext dbContext = new KaharmanDataContext(); 
         public Kaharman()
         {
             InitializeComponent();
             //MessageBox.Show(Math.Log(8,2).ToString());
             //MessageBox.Show(Math.Log(16, 2).ToString());
             //MessageBox.Show(Math.Log(32, 2).ToString());
-            //dbContext.Database.EnsureDeleted();
-            //dbContext.Database.EnsureCreated();
+            //using (KaharmanDataContext dbContext = new KaharmanDataContext())
+            //{
+            //    dbContext.Database.EnsureDeleted();
+            //    dbContext.Database.EnsureCreated();
+            //}
             //StartForm startForm = new StartForm();
             //if (startForm.ShowDialog() == DialogResult.Cancel)
             //    this.Close();
@@ -127,8 +129,14 @@ namespace Hasen
         {
             if (!File.Exists(Environment.CurrentDirectory + "/Database.accdb"))
             {
-                MessageBox.Show($"‘‡ÈÎ ·‡Á˚ ‰‡ÌÌ˚ı ÌÂ Ì‡È‰ÂÌ\n{Environment.CurrentDirectory}Database.accdb");
-                Close();
+                if(MessageBox.Show($"‘‡ÈÎ ·‡Á˚ ‰‡ÌÌ˚ı ÌÂ Ì‡È‰ÂÌ\n{Environment.CurrentDirectory}Database.accdb","Œ¯·ËÍ‡ ·‡Á˚",MessageBoxButtons.YesNo) == DialogResult.No)
+                    Close();
+                else
+                    using (KaharmanDataContext dbContext = new KaharmanDataContext())
+                    {
+                        dbContext.Database.EnsureDeleted();
+                        dbContext.Database.EnsureCreated();
+                    }
             }
         }
         private void dataGridView1_DragEnter(object sender, DragEventArgs e)
@@ -142,7 +150,7 @@ namespace Hasen
         }
         private void ÒÓÁ‰‡Ú¸ToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            TournamentForm createTournament = new TournamentForm(dbContext);
+            TournamentForm createTournament = new TournamentForm();
             this.Hide();
             createTournament.ShowDialog();
             this.Show();
@@ -172,7 +180,7 @@ namespace Hasen
             }
             if (tableVisible == TableVisible.HistoryTournaments)
             {
-                TournamentForm createTournament = new TournamentForm(ParticipantView.SelectedRows[0].Cells["ID"].Value.ToString(), dbContext);
+                TournamentForm createTournament = new TournamentForm(ParticipantView.SelectedRows[0].Cells["ID"].Value.ToString());
                 this.Hide();
                 createTournament.ShowDialog();
                 this.Show();
@@ -196,10 +204,14 @@ namespace Hasen
             }
             else if (ParticipantView.SelectedRows.Count == 1)
             {
-                Participant? participant = ParticipantDataGrid.GetParticipant((int)ParticipantView.SelectedRows[0].Cells[0].Value);
+                Participant? participant = ParticipantDataGrid.GetItem((int)ParticipantView.SelectedRows[0].Cells[0].Value);
                 if (participant != null)
                 {
-                    dbContext.Participant.Remove(participant);
+                    using (KaharmanDataContext dbContext = new KaharmanDataContext())
+                    {
+                        dbContext.Participant.Remove(participant);
+                        dbContext.SaveChanges();
+                    }
                 }
             }
             else
@@ -209,16 +221,23 @@ namespace Hasen
                 {
                     foreach (DataGridViewRow row in ParticipantView.SelectedRows)
                     {
-                        Participant? participant = ParticipantDataGrid.GetParticipant((int)row.Cells[0].Value);
+                        Participant? participant = ParticipantDataGrid.GetItem((int)row.Cells[0].Value);
                         if (participant != null)
                         {
-                            dbContext.Participant.Remove(participant);
+                            using (KaharmanDataContext dbContext = new KaharmanDataContext())
+                            {
+                                dbContext.Participant.Remove(participant);
+                                dbContext.SaveChanges();
+                            }
                         }
                     }
                 }
             }
-            dbContext.SaveChanges();
-            ParticipantDataGrid.LoadData(dbContext.Participant.ToList());
+            using (KaharmanDataContext dbContext = new KaharmanDataContext())
+            {
+                ParticipantDataGrid.LoadData(dbContext.Participant.ToList());
+                dbContext.SaveChanges();
+            }
         }
         private void ‰Ó·‡‚ËÚ¸ToolStripMenuItem_Click_1(object sender, EventArgs e)
         {
@@ -238,7 +257,7 @@ namespace Hasen
 
         private void TournamentView_CellMouseDoubleClick(object sender, DataGridViewCellMouseEventArgs e)
         {
-            TournamentForm tournamentForm = new TournamentForm(TournamentView.SelectedRows[0].Cells["Id"].Value.ToString(), dbContext);
+            TournamentForm tournamentForm = new TournamentForm(TournamentView.SelectedRows[0].Cells["Id"].Value.ToString());
             this.Hide();
             tournamentForm.ShowDialog();
             this.Show();
@@ -248,23 +267,38 @@ namespace Hasen
         private void Kaharman_Activated(object sender, EventArgs e)
         {
             if (tableVisible == TableVisible.HistoryTournaments)
-                DataHistoryTournaments.LoadData(dbContext.Tournament.ToList());
-            else
-                ParticipantDataGrid.LoadData(dbContext.Participant.ToList());
+                using (KaharmanDataContext dbContext = new KaharmanDataContext())
+                {
+                    DataHistoryTournaments.LoadData(dbContext.Tournament.ToList());
+                    dbContext.SaveChanges();
+                }
+            else using (KaharmanDataContext dbContext = new KaharmanDataContext())
+                {
+                    ParticipantDataGrid.LoadData(dbContext.Participant.ToList());
+                    dbContext.SaveChanges();
+                }
         }
         private void TournamentView_VisibleChanged(object sender, EventArgs e)
         {
             DataGridView? dataGridView = sender as DataGridView;
             if (dataGridView != null)
                 if (dataGridView.Visible == true)
-                    DataHistoryTournaments.LoadData(dbContext.Tournament.ToList());
+                    using (KaharmanDataContext dbContext = new KaharmanDataContext())
+                    {
+                        DataHistoryTournaments.LoadData(dbContext.Tournament.ToList());
+                        dbContext.SaveChanges();
+                    }
         }
         private void ParticipantView_VisibleChanged(object? sender, EventArgs e)
         {
             DataGridView? dataGridView = sender as DataGridView;
             if (dataGridView != null)
-                if (dataGridView.Visible == true)
-                    ParticipantDataGrid.LoadData(dbContext.Participant.ToList());
+                if (dataGridView.Visible == true) using (KaharmanDataContext dbContext = new KaharmanDataContext())
+                    {
+                        ParticipantDataGrid.LoadData(dbContext.Participant.ToList());
+                        dbContext.SaveChanges();
+                    }
+           
         }
 
         private void Û‰‡ÎËÚ¸ToolStripMenuItem1_Click(object sender, EventArgs e)
@@ -276,10 +310,15 @@ namespace Hasen
             }
             else if (TournamentView.SelectedRows.Count == 1)
             {
-                Tournament? tournament = DataHistoryTournaments.GetParticipant((int)TournamentView.SelectedRows[0].Cells[0].Value);
+                Tournament? tournament = DataHistoryTournaments.GetItem((int)TournamentView.SelectedRows[0].Cells[0].Value);
                 if (tournament != null)
                 {
-                    dbContext.Tournament.Remove(tournament);
+                     using (KaharmanDataContext dbContext = new KaharmanDataContext())
+                    {
+                        dbContext.Tournament.Remove(tournament);
+                        dbContext.SaveChanges();
+                    }
+
                 }
             }
             else
@@ -289,16 +328,24 @@ namespace Hasen
                 {
                     foreach (DataGridViewRow row in TournamentView.SelectedRows)
                     {
-                        Tournament? tournamnet = DataHistoryTournaments.GetParticipant((int)row.Cells[0].Value);
+                        Tournament? tournamnet = DataHistoryTournaments.GetItem((int)row.Cells[0].Value);
                         if (tournamnet != null)
                         {
-                            dbContext.Tournament.Remove(tournamnet);
+
+                            using (KaharmanDataContext dbContext = new KaharmanDataContext())
+                            {
+                               // dbContext.Tournament.Remove(tournament);
+                                dbContext.SaveChanges();
+                            }
                         }
                     }
                 }
             }
-            dbContext.SaveChanges();
-            DataHistoryTournaments.LoadData(dbContext.Tournament.ToList());
+            using (KaharmanDataContext dbContext = new KaharmanDataContext())
+            {
+                DataHistoryTournaments.LoadData(dbContext.Tournament.ToList());
+                dbContext.SaveChanges();
+            }
         }
     }
 }

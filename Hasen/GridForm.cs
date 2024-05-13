@@ -74,7 +74,7 @@ namespace Kaharman
                 panel1.Controls.Add(label);
             ElementsLocation();
         }
-        public GridForm(KaharmanDataContext dataContext, TournamentGrid tournamentGrid)
+        public GridForm(TournamentGrid tournamentGrid)
         {
             InitializeComponent();
             TournamentGrid = tournamentGrid;
