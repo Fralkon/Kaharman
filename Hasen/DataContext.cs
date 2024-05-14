@@ -215,6 +215,21 @@ namespace Kaharman
         public StatusPos StatusPos1 { get; set; }
         public StatusPos StatusPos2 { get; set; }
         public TournamentGrid TournamentGrid { get; set; }
+        public int WinPos(EPosMatch ePos)
+        {
+            switch (ePos)
+            {
+                case EPosMatch.UP:
+                    StatusPos1 = StatusPos.win;
+                    StatusPos2 = StatusPos.lose;
+                    return IdPos1;
+                case EPosMatch.DOWN:
+                    StatusPos1 = StatusPos.lose;
+                    StatusPos2 = StatusPos.win;
+                    return IdPos2;
+            }
+            return -1;
+        }
         public void SetParticipant(Participant participant, EPosMatch posMatch, StatusPos status = StatusPos.init)
         {
             switch (posMatch)

@@ -109,9 +109,9 @@ namespace Hasen
 
             ParticipantView.VisibleChanged += ParticipantView_VisibleChanged;
             ParticipantView.MouseClick += ParticipantView_MouseClick;
-            DataHistoryTournaments = new TournamentDataGrid(TournamentView);
+            DataHistoryTournaments = new TournamentDataGrid(TournamentView, tournamentContextMenuStrip);
 
-            ParticipantDataGrid = new ParticipantDataGrid(ParticipantView, contextMenuStrip1);
+            ParticipantDataGrid = new ParticipantDataGrid(ParticipantView, DataparticipantContextMenuStrip);
             tableVisible = TableVisible.HistoryTournaments;
 
             истори€“урнировToolStripMenuItem.Checked = true;
@@ -122,14 +122,14 @@ namespace Hasen
         private void ParticipantView_MouseClick(object? sender, MouseEventArgs e)
         {
             if (e.Button == MouseButtons.Right)
-                contextMenuStrip1.Show(MousePosition);
+                tournamentContextMenuStrip.Show(MousePosition);
         }
 
         private void Form1_Load(object sender, EventArgs e)
         {
             if (!File.Exists(Environment.CurrentDirectory + "/Database.accdb"))
             {
-                if(MessageBox.Show($"‘айл базы данных не найден\n{Environment.CurrentDirectory}Database.accdb","ќшбика базы",MessageBoxButtons.YesNo) == DialogResult.No)
+                if (MessageBox.Show($"‘айл базы данных не найден\n{Environment.CurrentDirectory}Database.accdb", "ќшбика базы", MessageBoxButtons.YesNo) == DialogResult.No)
                     Close();
                 else
                     using (KaharmanDataContext dbContext = new KaharmanDataContext())
@@ -298,7 +298,7 @@ namespace Hasen
                         ParticipantDataGrid.LoadData(dbContext.Participant.ToList());
                         dbContext.SaveChanges();
                     }
-           
+
         }
 
         private void удалитьToolStripMenuItem1_Click(object sender, EventArgs e)
@@ -313,7 +313,7 @@ namespace Hasen
                 Tournament? tournament = DataHistoryTournaments.GetItem((int)TournamentView.SelectedRows[0].Cells[0].Value);
                 if (tournament != null)
                 {
-                     using (KaharmanDataContext dbContext = new KaharmanDataContext())
+                    using (KaharmanDataContext dbContext = new KaharmanDataContext())
                     {
                         dbContext.Tournament.Remove(tournament);
                         dbContext.SaveChanges();
@@ -334,7 +334,7 @@ namespace Hasen
 
                             using (KaharmanDataContext dbContext = new KaharmanDataContext())
                             {
-                               // dbContext.Tournament.Remove(tournament);
+                                // dbContext.Tournament.Remove(tournament);
                                 dbContext.SaveChanges();
                             }
                         }

@@ -149,8 +149,8 @@ namespace Kaharman
         protected BindingSource pSource = new BindingSource();
         protected List<ContextFilter> listContextMenu = new List<ContextFilter>();
         protected DataGridView GridView;
-        protected ContextMenuStrip? dataGridContextMenu;
-        public TableContextMenu(DataGridView dataGridView)
+        protected ContextMenuStrip? DataGridContextMenu;
+        public TableContextMenu(DataGridView dataGridView, ContextMenuStrip? dataGridContextMenu)
         {
             bindingList.AllowEdit = true;
             bindingList.AllowNew = true;
@@ -160,6 +160,7 @@ namespace Kaharman
             dataGridView.DataSource = pSource;
             dataGridView.ColumnHeaderMouseClick += ColumnHeaderMouseClick;
             dataGridView.MouseClick += MouseClick;
+            DataGridContextMenu = dataGridContextMenu;
             InitTable();
         }
         public virtual void LoadData(List<T> items)
@@ -191,8 +192,8 @@ namespace Kaharman
         }
         public virtual void ColumnHeaderMouseClick(object? sender, DataGridViewCellMouseEventArgs e)
         {
-            if (dataGridContextMenu != null)
-                dataGridContextMenu.Close();
+            if (DataGridContextMenu != null)
+                DataGridContextMenu.Close();
             if (e.Button == MouseButtons.Right)
             {
                 foreach (var contextMenu in listContextMenu)
@@ -202,9 +203,9 @@ namespace Kaharman
         }
         public void MouseClick(object? sender, MouseEventArgs e)
         {
-            if (dataGridContextMenu != null)
+            if (DataGridContextMenu != null)
                 if (e.Button == MouseButtons.Right)
-                    dataGridContextMenu.Show(Control.MousePosition);
+                    DataGridContextMenu.Show(Control.MousePosition);
             foreach (var c in listContextMenu)
                 c.Close();
         }
@@ -248,14 +249,12 @@ namespace Kaharman
     }
     public class TournamentDataGrid : TableContextMenu<Tournament>
     {
-        public TournamentDataGrid(DataGridView dataGridView) : base(dataGridView)
+        public TournamentDataGrid(DataGridView dataGridView, ContextMenuStrip contextMenuStrip) : base(dataGridView, contextMenuStrip)
         {
-            GridView.Columns[0].Visible = false;
         }
         protected override void InitTable()
         {
             listContextMenu.Add(new ContextFilterName(1));
-            listContextMenu[0].ItemClicked += TournamentDataGrid_ItemClicked;
             base.InitTable();
         }
 
@@ -271,12 +270,8 @@ namespace Kaharman
     }
     public class ParticipantDataGrid : TableContextMenu<Participant>
     {
-        public ParticipantDataGrid(DataGridView dataGridView) : base(dataGridView)
+        public ParticipantDataGrid(DataGridView dataGridView, ContextMenuStrip? contextMenuStrip = null) : base(dataGridView, contextMenuStrip)
         {
-        }
-        public ParticipantDataGrid(DataGridView dataGridView, ContextMenuStrip contextMenuStrip) : base(dataGridView)
-        {
-            dataGridContextMenu = contextMenuStrip;
         }
         protected override void TournamentDataGrid_ItemClicked(object? sender, ToolStripItemClickedEventArgs e)
         {
@@ -346,20 +341,11 @@ namespace Kaharman
     }
     public class TournamentGridDataGrid : TableContextMenu<TournamentGrid>
     {
-        public TournamentGridDataGrid(DataGridView dataGridView) : base(dataGridView)
-        {
-        }
+        public TournamentGridDataGrid(DataGridView dataGridView, ContextMenuStrip contextMenuStrip) : base(dataGridView, contextMenuStrip) { }
         protected override void TournamentDataGrid_ItemClicked(object? sender, ToolStripItemClickedEventArgs e)
         {
             base.TournamentDataGrid_ItemClicked(sender, e);
-            GridView.DataSource = bindingList.Where(data =>
-                listContextMenu[0].Filter(data.Number.ToString()) &&
-                listContextMenu[1].Filter(data.NameGrid) &&
-                listContextMenu[2].Filter(data.Gender) &&
-                listContextMenu[3].Filter(data.Programm) &&
-                listContextMenu[4].Filter(data.AgeRange) &&
-                listContextMenu[5].Filter(data.Qualification) &&
-                listContextMenu[6].Filter(data.Status)).ToList();       
+            GridView.DataSource = GetFilterList();
         }
         protected override void InitTable()
         {
@@ -371,6 +357,17 @@ namespace Kaharman
             listContextMenu.Add(new ContextFilterValue(7));
             listContextMenu.Add(new ContextFilterValue(8));
             base.InitTable();
+        }
+        private List<TournamentGrid> GetFilterList()
+        {
+            return bindingList.Where(data =>
+                listContextMenu[0].Filter(data.Number.ToString()) &&
+                listContextMenu[1].Filter(data.NameGrid) &&
+                listContextMenu[2].Filter(data.Gender) &&
+                listContextMenu[3].Filter(data.Programm) &&
+                listContextMenu[4].Filter(data.AgeRange) &&
+                listContextMenu[5].Filter(data.Qualification) &&
+                listContextMenu[6].Filter(data.Status)).ToList();
         }
     }
 

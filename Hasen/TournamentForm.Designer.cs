@@ -41,7 +41,7 @@
             note = new TextBox();
             mainJudge = new TextBox();
             secret = new TextBox();
-            contextMenuStrip1 = new ContextMenuStrip(components);
+            gridContextMenuStrip = new ContextMenuStrip(components);
             создатьТурнирнуюТаблицуToolStripMenuItem = new ToolStripMenuItem();
             удалитьToolStripMenuItem = new ToolStripMenuItem();
             копToolStripMenuItem = new ToolStripMenuItem();
@@ -65,23 +65,20 @@
             participantGrid = new DataGridView();
             label6 = new Label();
             label7 = new Label();
-            contextMenuStrip2 = new ContextMenuStrip(components);
+            participantContextMenuStrip = new ContextMenuStrip(components);
             создатьToolStripMenuItem2 = new ToolStripMenuItem();
             добавитьToolStripMenuItem = new ToolStripMenuItem();
             удалитьToolStripMenuItem1 = new ToolStripMenuItem();
             panel1 = new Panel();
             panel2 = new Panel();
             progressBar1 = new ProgressBar();
-            contextMenuStrip3 = new ContextMenuStrip(components);
-            toolStripTextBox1 = new ToolStripTextBox();
-            contextMenuStrip1.SuspendLayout();
+            gridContextMenuStrip.SuspendLayout();
             menuStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)gridDataGridView).BeginInit();
             ((System.ComponentModel.ISupportInitialize)participantGrid).BeginInit();
-            contextMenuStrip2.SuspendLayout();
+            participantContextMenuStrip.SuspendLayout();
             panel1.SuspendLayout();
             panel2.SuspendLayout();
-            contextMenuStrip3.SuspendLayout();
             SuspendLayout();
             // 
             // label1
@@ -182,11 +179,11 @@
             secret.Size = new Size(200, 23);
             secret.TabIndex = 13;
             // 
-            // contextMenuStrip1
+            // gridContextMenuStrip
             // 
-            contextMenuStrip1.Items.AddRange(new ToolStripItem[] { создатьТурнирнуюТаблицуToolStripMenuItem, удалитьToolStripMenuItem, копToolStripMenuItem, изменитьToolStripMenuItem });
-            contextMenuStrip1.Name = "contextMenuStrip1";
-            contextMenuStrip1.Size = new Size(140, 92);
+            gridContextMenuStrip.Items.AddRange(new ToolStripItem[] { создатьТурнирнуюТаблицуToolStripMenuItem, удалитьToolStripMenuItem, копToolStripMenuItem, изменитьToolStripMenuItem });
+            gridContextMenuStrip.Name = "contextMenuStrip1";
+            gridContextMenuStrip.Size = new Size(140, 92);
             // 
             // создатьТурнирнуюТаблицуToolStripMenuItem
             // 
@@ -390,30 +387,30 @@
             label7.TabIndex = 19;
             label7.Text = "Участники";
             // 
-            // contextMenuStrip2
+            // participantContextMenuStrip
             // 
-            contextMenuStrip2.Items.AddRange(new ToolStripItem[] { создатьToolStripMenuItem2, добавитьToolStripMenuItem, удалитьToolStripMenuItem1 });
-            contextMenuStrip2.Name = "contextMenuStrip2";
-            contextMenuStrip2.Size = new Size(127, 70);
+            participantContextMenuStrip.Items.AddRange(new ToolStripItem[] { создатьToolStripMenuItem2, добавитьToolStripMenuItem, удалитьToolStripMenuItem1 });
+            participantContextMenuStrip.Name = "contextMenuStrip2";
+            participantContextMenuStrip.Size = new Size(127, 70);
             // 
             // создатьToolStripMenuItem2
             // 
             создатьToolStripMenuItem2.Name = "создатьToolStripMenuItem2";
-            создатьToolStripMenuItem2.Size = new Size(126, 22);
+            создатьToolStripMenuItem2.Size = new Size(180, 22);
             создатьToolStripMenuItem2.Text = "Создать";
             создатьToolStripMenuItem2.Click += создатьToolStripMenuItem1_Click;
             // 
             // добавитьToolStripMenuItem
             // 
             добавитьToolStripMenuItem.Name = "добавитьToolStripMenuItem";
-            добавитьToolStripMenuItem.Size = new Size(126, 22);
+            добавитьToolStripMenuItem.Size = new Size(180, 22);
             добавитьToolStripMenuItem.Text = "Добавить";
             добавитьToolStripMenuItem.Click += добавитьToolStripMenuItem1_Click;
             // 
             // удалитьToolStripMenuItem1
             // 
             удалитьToolStripMenuItem1.Name = "удалитьToolStripMenuItem1";
-            удалитьToolStripMenuItem1.Size = new Size(126, 22);
+            удалитьToolStripMenuItem1.Size = new Size(180, 22);
             удалитьToolStripMenuItem1.Text = "Удалить";
             удалитьToolStripMenuItem1.Click += удалитьToolStripMenuItem3_Click;
             // 
@@ -460,17 +457,6 @@
             progressBar1.TabIndex = 20;
             progressBar1.Visible = false;
             // 
-            // contextMenuStrip3
-            // 
-            contextMenuStrip3.Items.AddRange(new ToolStripItem[] { toolStripTextBox1 });
-            contextMenuStrip3.Name = "contextMenuStrip3";
-            contextMenuStrip3.Size = new Size(161, 29);
-            // 
-            // toolStripTextBox1
-            // 
-            toolStripTextBox1.Name = "toolStripTextBox1";
-            toolStripTextBox1.Size = new Size(100, 23);
-            // 
             // TournamentForm
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
@@ -485,18 +471,16 @@
             Activated += TournamentForm_Activated;
             Load += TournamentForm_Load;
             Resize += TournamentForm_Resize;
-            contextMenuStrip1.ResumeLayout(false);
+            gridContextMenuStrip.ResumeLayout(false);
             menuStrip1.ResumeLayout(false);
             menuStrip1.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)gridDataGridView).EndInit();
             ((System.ComponentModel.ISupportInitialize)participantGrid).EndInit();
-            contextMenuStrip2.ResumeLayout(false);
+            participantContextMenuStrip.ResumeLayout(false);
             panel1.ResumeLayout(false);
             panel1.PerformLayout();
             panel2.ResumeLayout(false);
             panel2.PerformLayout();
-            contextMenuStrip3.ResumeLayout(false);
-            contextMenuStrip3.PerformLayout();
             ResumeLayout(false);
             PerformLayout();
         }
@@ -514,7 +498,7 @@
         private TextBox note;
         private TextBox mainJudge;
         private TextBox secret;
-        private ContextMenuStrip contextMenuStrip1;
+        private ContextMenuStrip gridContextMenuStrip;
         private ToolStripMenuItem создатьТурнирнуюТаблицуToolStripMenuItem;
         private ToolStripMenuItem удалитьToolStripMenuItem;
         private MenuStrip menuStrip1;
@@ -525,7 +509,7 @@
         private DataGridView participantGrid;
         private Label label6;
         private Label label7;
-        private ContextMenuStrip contextMenuStrip2;
+        private ContextMenuStrip participantContextMenuStrip;
         private ToolStripMenuItem добавитьToolStripMenuItem;
         private ToolStripMenuItem удалитьToolStripMenuItem1;
         private ToolStripMenuItem удалитьToolStripMenuItem2;
@@ -545,7 +529,5 @@
         private ToolStripMenuItem копToolStripMenuItem;
         private ProgressBar progressBar1;
         private ToolStripMenuItem изменитьToolStripMenuItem;
-        private ContextMenuStrip contextMenuStrip3;
-        private ToolStripTextBox toolStripTextBox1;
     }
 }

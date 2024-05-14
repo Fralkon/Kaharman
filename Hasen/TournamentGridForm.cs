@@ -208,7 +208,7 @@ namespace Kaharman
                     context.TournamentGrid.Update(TournamentGrid);
                     context.SaveChanges();
                 }
-                GridForm gridForm = new GridForm(TournamentGrid);
+                GridForm gridForm = new GridForm(TournamentGrid.Id);
                 gridForm.ShowDialog();
                 this.Close();
                 return;

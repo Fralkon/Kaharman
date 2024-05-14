@@ -41,18 +41,18 @@
             добавитьToolStripMenuItem = new ToolStripMenuItem();
             базаДанныхToolStripMenuItem = new ToolStripMenuItem();
             ParticipantView = new DataGridView();
-            contextMenuStrip1 = new ContextMenuStrip(components);
+            tournamentContextMenuStrip = new ContextMenuStrip(components);
             создатьТурнирToolStripMenuItem = new ToolStripMenuItem();
             удалитьToolStripMenuItem = new ToolStripMenuItem();
             TournamentView = new DataGridView();
-            contextMenuStrip2 = new ContextMenuStrip(components);
+            DataparticipantContextMenuStrip = new ContextMenuStrip(components);
             создатьToolStripMenuItem2 = new ToolStripMenuItem();
             удалитьToolStripMenuItem1 = new ToolStripMenuItem();
             menuStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)ParticipantView).BeginInit();
-            contextMenuStrip1.SuspendLayout();
+            tournamentContextMenuStrip.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)TournamentView).BeginInit();
-            contextMenuStrip2.SuspendLayout();
+            DataparticipantContextMenuStrip.SuspendLayout();
             SuspendLayout();
             // 
             // menuStrip1
@@ -149,11 +149,11 @@
             ParticipantView.Size = new Size(834, 494);
             ParticipantView.TabIndex = 1;
             // 
-            // contextMenuStrip1
+            // tournamentContextMenuStrip
             // 
-            contextMenuStrip1.Items.AddRange(new ToolStripItem[] { создатьТурнирToolStripMenuItem, удалитьToolStripMenuItem });
-            contextMenuStrip1.Name = "contextMenuStrip1";
-            contextMenuStrip1.Size = new Size(119, 48);
+            tournamentContextMenuStrip.Items.AddRange(new ToolStripItem[] { создатьТурнирToolStripMenuItem, удалитьToolStripMenuItem });
+            tournamentContextMenuStrip.Name = "contextMenuStrip1";
+            tournamentContextMenuStrip.Size = new Size(119, 48);
             // 
             // создатьТурнирToolStripMenuItem
             // 
@@ -181,7 +181,7 @@
             TournamentView.BorderStyle = BorderStyle.Fixed3D;
             TournamentView.CellBorderStyle = DataGridViewCellBorderStyle.SingleHorizontal;
             TournamentView.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            TournamentView.ContextMenuStrip = contextMenuStrip2;
+            TournamentView.ContextMenuStrip = DataparticipantContextMenuStrip;
             TournamentView.Dock = DockStyle.Fill;
             TournamentView.Location = new Point(0, 24);
             TournamentView.Name = "TournamentView";
@@ -194,23 +194,23 @@
             TournamentView.CellMouseDoubleClick += TournamentView_CellMouseDoubleClick;
             TournamentView.VisibleChanged += TournamentView_VisibleChanged;
             // 
-            // contextMenuStrip2
+            // DataparticipantContextMenuStrip
             // 
-            contextMenuStrip2.Items.AddRange(new ToolStripItem[] { создатьToolStripMenuItem2, удалитьToolStripMenuItem1 });
-            contextMenuStrip2.Name = "contextMenuStrip2";
-            contextMenuStrip2.Size = new Size(119, 48);
+            DataparticipantContextMenuStrip.Items.AddRange(new ToolStripItem[] { создатьToolStripMenuItem2, удалитьToolStripMenuItem1 });
+            DataparticipantContextMenuStrip.Name = "contextMenuStrip2";
+            DataparticipantContextMenuStrip.Size = new Size(119, 48);
             // 
             // создатьToolStripMenuItem2
             // 
             создатьToolStripMenuItem2.Name = "создатьToolStripMenuItem2";
-            создатьToolStripMenuItem2.Size = new Size(118, 22);
+            создатьToolStripMenuItem2.Size = new Size(180, 22);
             создатьToolStripMenuItem2.Text = "Создать";
             создатьToolStripMenuItem2.Click += создатьToolStripMenuItem_Click;
             // 
             // удалитьToolStripMenuItem1
             // 
             удалитьToolStripMenuItem1.Name = "удалитьToolStripMenuItem1";
-            удалитьToolStripMenuItem1.Size = new Size(118, 22);
+            удалитьToolStripMenuItem1.Size = new Size(180, 22);
             удалитьToolStripMenuItem1.Text = "Удалить";
             удалитьToolStripMenuItem1.Click += удалитьToolStripMenuItem1_Click;
             // 
@@ -231,9 +231,9 @@
             menuStrip1.ResumeLayout(false);
             menuStrip1.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)ParticipantView).EndInit();
-            contextMenuStrip1.ResumeLayout(false);
+            tournamentContextMenuStrip.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)TournamentView).EndInit();
-            contextMenuStrip2.ResumeLayout(false);
+            DataparticipantContextMenuStrip.ResumeLayout(false);
             ResumeLayout(false);
             PerformLayout();
         }
@@ -248,13 +248,13 @@
         private ToolStripMenuItem выходToolStripMenuItem;
         private ToolStripMenuItem историяТурнировToolStripMenuItem;
         private ToolStripMenuItem базаДанныхToolStripMenuItem;
-        private ContextMenuStrip contextMenuStrip1;
+        private ContextMenuStrip tournamentContextMenuStrip;
         private ToolStripMenuItem создатьТурнирToolStripMenuItem;
         private ToolStripMenuItem удалитьToolStripMenuItem;
         private ToolStripMenuItem создатьToolStripMenuItem1;
         private ToolStripMenuItem создатьToolStripMenuItem;
         private DataGridView TournamentView;
-        private ContextMenuStrip contextMenuStrip2;
+        private ContextMenuStrip DataparticipantContextMenuStrip;
         private ToolStripMenuItem создатьToolStripMenuItem2;
         private ToolStripMenuItem удалитьToolStripMenuItem1;
     }

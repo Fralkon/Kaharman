@@ -33,7 +33,7 @@ namespace Kaharman
                     return;
                 }
                 foreach (var t in Tournament.Participants)
-                   t.InitAge();
+                    t.InitAge();
             }
             name.Text = Tournament.NameTournament;
             dateTimePicker1.Value = Tournament.StartDate;
@@ -47,8 +47,8 @@ namespace Kaharman
         private void InitializeTable()
         {
             ResizeForm();
-            ParticipantDataGrid = new ParticipantDataGrid(participantGrid);
-            TournamentGridDataGrid = new TournamentGridDataGrid(gridDataGridView);
+            ParticipantDataGrid = new ParticipantDataGrid(participantGrid, participantContextMenuStrip);
+            TournamentGridDataGrid = new TournamentGridDataGrid(gridDataGridView, gridContextMenuStrip);
         }
         private void SaveChangeTournament()
         {
@@ -110,7 +110,7 @@ namespace Kaharman
                 return;
             }
             SaveChangeTournament();
-            TournamentGridForm tournamentGrid = new TournamentGridForm(Tournament,StatusFormTournamentGrid.Create);
+            TournamentGridForm tournamentGrid = new TournamentGridForm(Tournament, StatusFormTournamentGrid.Create);
             tournamentGrid.ShowDialog();
             UpDataGrid();
         }
@@ -213,23 +213,12 @@ namespace Kaharman
             if (e.Button == MouseButtons.Left)
             {
                 if (int.TryParse(gridDataGridView.SelectedRows[0].Cells["ID"].Value.ToString(), out int id))
-                    using (KaharmanDataContext dbContext = new KaharmanDataContext())
-                    {
-                        TournamentGrid? grid = dbContext.TournamentGrid.Include(t=>t.Matchs).Include(t=>t.Participants).Include(t=>t.Tournament).FirstOrDefault(g => g.Id == id);
-                        if (grid != null)
-                        {
-                            foreach (var participant in grid.Participants)
-                                participant.InitAge();
-                            GridForm gridForm = new GridForm(grid);
-                            gridForm.Show();
-                        }
-                        else
-                        {
-                            MessageBox.Show("Произошла ошибка базы данных, перезапустите приложение.");
-                        }
-                    }
-                UpDataGrid();
+                {
+                    GridForm gridForm = new GridForm(id);
+                    gridForm.Show();
+                }
             }
+            UpDataGrid();
         }
         private void удалитьToolStripMenuItem_Click(object sender, EventArgs e)
         {
@@ -245,7 +234,7 @@ namespace Kaharman
         {
             if (e.Button == MouseButtons.Right)
             {
-                contextMenuStrip2.Show(Control.MousePosition);
+                participantContextMenuStrip.Show(Control.MousePosition);
             }
         }
         private void создатьToolStripMenuItem1_Click(object sender, EventArgs e)
@@ -424,11 +413,11 @@ namespace Kaharman
                 }
                 grid.FillItems(ParticipantX.GetParticipantsOnAccess(IDPart));
 
-                GridForm tournament = new GridForm(IDGrid, name.Text, nameGrid, numProt, dateTime, mainJudge.Text, secret.Text, grid);
-                tournament.Show();
-                tournament.Location = new Point(2000, 2000);
-                tournament.SaveGrid(folderBrowserDialog.SelectedPath);
-                tournament.Close();
+                //GridForm tournament = new GridForm(IDGrid, name.Text, nameGrid, numProt, dateTime, mainJudge.Text, secret.Text, grid);
+                //tournament.Show();
+                //tournament.Location = new Point(2000, 2000);
+                //tournament.SaveGrid(folderBrowserDialog.SelectedPath);
+                //tournament.Close();
             }
         }
 

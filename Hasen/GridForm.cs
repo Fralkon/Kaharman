@@ -3,6 +3,7 @@ using ICSharpCode.SharpZipLib.Core;
 using iTextSharp.text;
 using iTextSharp.text.pdf;
 using Kaharman;
+using Microsoft.EntityFrameworkCore;
 using NPOI.SS.Formula.Functions;
 using NPOI.SS.UserModel;
 using System.Data;
@@ -19,67 +20,31 @@ namespace Kaharman
         public static Color ColorWonPosition = Color.PaleGreen;
         public static Pen PenWonPosition = new Pen(Color.Black);
         Graphics graphics;
-        Grid Grid;
-        string ID;
         Label[] placesText = new Label[4];
-        DateTime DateStart;
-        string Judge, Secret;
-        bool selectLable = false;
         bool oneLoad = false;
-        string number_t;
-        string name_g;
-        TournamentGrid TournamentGrid;
+        bool selectLable = false;
+        TournamentGrid TournamentGrid { get; set; }
         GridLabel GridLabel;
-        public GridForm(string id, string nameT, string name,string numProt, DateTime dateStart, string judge, string secret, Grid grid)
+        KaharmanDataContext dbContext;       
+        public GridForm(int IDTournament)
         {
-            InitializeComponent();
-            Grid = grid;
-            switch (Grid.Type)
+            dbContext = new KaharmanDataContext();
+            TournamentGrid? grid = dbContext.TournamentGrid.Include(t => t.Matchs).Include(t => t.Participants).Include(t => t.Tournament).FirstOrDefault(g => g.Id == IDTournament);
+            if (grid != null)
             {
-                case 4:
-                    panel1.Size = new Size(1000, 500);
-                    break;
-                case 8:
-                    panel1.Size = new Size(1150, 500);
-                    break;
-                case 16:
-                    panel1.Size = new Size(1500, 800);
-                    break;
-                case 32:
-                    panel1.Size = new Size(1655, 1400);
-                    break;
+                foreach (var participant in grid.Participants)
+                    participant.InitAge();
+                TournamentGrid = grid;
             }
-            graphics = panel1.CreateGraphics();
-            panel1.Paint += Panel1_Paint;
-            this.ID = id;
-            nameTournamet.Text = nameT;
-            number_t = numProt;
-            name_g = name;
-            nameGrid.Text = "Протокол № " + numProt + " | " + name;
-            DateStart = dateStart;
-            Judge = judge;
-            Secret = secret;
-            this.dateStart.Text = "Дата проведения " + dateStart.ToString("dd MMMM yyyy");
-            placesText[0] = new Label();
-            placesText[0].Text = "Первое место";
-            placesText[1] = new Label();
-            placesText[1].Text = "Второе место";
-            placesText[2] = new Label();
-            placesText[2].Text = "Третье место";
-            placesText[3] = new Label();
-            placesText[3].Text = "Третье место";
-            labelJudge.Text = "Главный судья ___________________ " + judge;
-            labelSecret.Text = "Секретарь ________________________ " + secret;
-            foreach (Label label in placesText)
-                panel1.Controls.Add(label);
-            ElementsLocation();
-        }
-        public GridForm(TournamentGrid tournamentGrid)
-        {
+            else
+            {
+                MessageBox.Show("Произошла ошибка базы данных, перезапустите приложение.");
+                return;
+            }
+
             InitializeComponent();
-            TournamentGrid = tournamentGrid;
             GridLabel = new GridLabel(TournamentGrid);
-            switch (tournamentGrid.Type)
+            switch (TournamentGrid.Type)
             {
                 case 4:
                     panel1.Size = new Size(1000, 500);
@@ -96,9 +61,8 @@ namespace Kaharman
             }
             graphics = panel1.CreateGraphics();
             panel1.Paint += Panel1_Paint;
-            nameGrid.Text = "Протокол № " + tournamentGrid.Number.ToString() + " | " + tournamentGrid.Tournament.NameTournament;
-            DateStart = tournamentGrid.DataStart;
-            this.dateStart.Text = "Дата проведения " + DateStart.ToString("dd MMMM yyyy");
+            nameGrid.Text = "Протокол № " + TournamentGrid.Number.ToString() + " | " + TournamentGrid.Tournament.NameTournament;
+            this.dateStart.Text = "Дата проведения " + TournamentGrid.DataStart.ToString("dd MMMM yyyy");
             placesText[0] = new Label();
             placesText[0].Text = "Первое место";
             placesText[1] = new Label();
@@ -107,8 +71,8 @@ namespace Kaharman
             placesText[2].Text = "Третье место";
             placesText[3] = new Label();
             placesText[3].Text = "Третье место";
-            labelJudge.Text = "Главный судья ___________________ " + tournamentGrid.Tournament.Judge;
-            labelSecret.Text = "Секретарь ________________________ " + tournamentGrid.Tournament.Secret;
+            labelJudge.Text = "Главный судья ___________________ " + TournamentGrid.Tournament.Judge;
+            labelSecret.Text = "Секретарь ________________________ " + TournamentGrid.Tournament.Secret;
             GridLabel.InitLabel(panel1);
             ElementsLocation();
             foreach (Label label in placesText)
@@ -122,7 +86,7 @@ namespace Kaharman
                 var label = sender as Label;
                 if (label == null)
                     return;
-                PointItem? point = label.Tag as PointItem;
+                Match? point = label.Tag as Match;
                 if (point == null)
                     return;
                 label.DoDragDrop(point, DragDropEffects.Move);
@@ -140,13 +104,13 @@ namespace Kaharman
         }
         private void Label_DragOver(object? sender, DragEventArgs e)
         {
-            if (!e.Data.GetDataPresent(typeof(PointItem)))
+            if (!e.Data.GetDataPresent(typeof(Match)))
                 return;
             e.Effect = e.AllowedEffect;
         }
         private void Label_DragDrop(object? sender, DragEventArgs e)
         {
-            if (!e.Data.GetDataPresent(typeof(PointItem)))
+            if (!e.Data.GetDataPresent(typeof(Match)))
                 return;
             var draggedItem = (PointItem)e.Data.GetData(typeof(PointItem));
             if (draggedItem == null)
@@ -156,7 +120,7 @@ namespace Kaharman
             PointItem? point = label.Tag as PointItem;
             if (point == null)
                 return;
-            Grid.SwapItems(draggedItem, point);
+            //Grid.SwapItems(draggedItem, point);
         }
         #endregion
         private void Panel1_Paint(object? sender, PaintEventArgs e)
@@ -191,23 +155,6 @@ namespace Kaharman
             //    oneLoad = true;
             //}
         }
-        private void Item_Click(object? sender, EventArgs e)
-        {
-            Label? item = sender as Label;
-            if (item == null)
-                return;
-            PointItem? point = item.Tag as PointItem;
-            if (point == null)
-                return;
-            if (point.X != Grid.Items.Length - 1)
-            {
-                int pos = (point.Y / 2) * 2;
-                if (Grid.Items[point.X][pos].Status == StatusPos.init && Grid.Items[point.X][pos + 1].Status == StatusPos.init)
-                {
-                    WonPosition(Grid.Items[point.X][point.Y]);
-                }
-            }
-        }
         private void выходToolStripMenuItem_Click(object sender, EventArgs e)
         {
             Close();
@@ -223,8 +170,6 @@ namespace Kaharman
             if (saveFileDialog.ShowDialog() == DialogResult.OK)
             {
                 iTextSharp.text.Rectangle pageSize = new iTextSharp.text.Rectangle(0, 0, bitmap.Width, bitmap.Height);
-
-
                 using (var ms = new MemoryStream())
                 {
                     var document = new Document(pageSize, 0, 0, 0, 0);
@@ -272,83 +217,83 @@ namespace Kaharman
         {
             Color color = Color.White;
             this.panel1.BackColor = color;
-            foreach (var items in Grid.Items)
-                foreach (var item in items)
-                    item.Label.BackColor = color;
-            foreach (var item in Grid.Places)
-                item.Label.BackColor = color;
+            //foreach (var items in Grid.Items)
+            //    foreach (var item in items)
+            //        item.Label.BackColor = color;
+            //foreach (var item in Grid.Places)
+            //    item.Label.BackColor = color;
         }
         private void ChangeColorForVisible()
         {
             this.panel1.BackColor = this.BackColor;
-            foreach (var items in Grid.Items)
-                foreach (var item in items)
-                    item.InitColorItem();
-            foreach (var item in Grid.Places)
-                item.InitColorItem();
+            //foreach (var items in Grid.Items)
+            //    foreach (var item in items)
+            //        item.InitColorItem();
+            //foreach (var item in Grid.Places)
+            //    item.InitColorItem();
         }
         private void WonPosition(GridItems item)
         {
-            Grid.WinPosition(item);
-            DrawLines(graphics, item, PenWonPosition);
-            string StatusGrid = "";
-            for (int i = Grid.Items.Length - 1; i > 0; i--)
-            {
-                bool statusBool = true;
-                foreach (GridItems items in Grid.Items[i])
-                {
-                    if (items.Status == StatusPos.close)
-                    {
-                        statusBool = false;
-                        break;
-                    }
-                }
-                if (statusBool)
-                {
-                    int type = Grid.Items.Length - i - 1;
-                    switch (type)
-                    {
-                        case 0:
-                            StatusGrid = "Завершено";
-                            break;
-                        case 1:
-                            StatusGrid = "Финал";
-                            break;
-                        case 2:
-                            StatusGrid = "1/4";
-                            break;
-                        case 3:
-                            StatusGrid = "1/8";
-                            break;
-                        case 4:
-                            StatusGrid = "1/16";
-                            break;
-                        case 5:
-                            StatusGrid = "1/32";
-                            break;
-                    }
-                    break;
-                }
-            }
-            AccessSQL.SendSQL($"UPDATE TournamentGrid SET status = '{StatusGrid}' WHERE id = {ID}");
+            //Grid.WinPosition(item);
+            //DrawLines(graphics, item, PenWonPosition);
+            //string StatusGrid = "";
+            //for (int i = Grid.Items.Length - 1; i > 0; i--)
+            //{
+            //    bool statusBool = true;
+            //    foreach (GridItems items in Grid.Items[i])
+            //    {
+            //        if (items.Status == StatusPos.close)
+            //        {
+            //            statusBool = false;
+            //            break;
+            //        }
+            //    }
+            //    if (statusBool)
+            //    {
+            //        int type = Grid.Items.Length - i - 1;
+            //        switch (type)
+            //        {
+            //            case 0:
+            //                StatusGrid = "Завершено";
+            //                break;
+            //            case 1:
+            //                StatusGrid = "Финал";
+            //                break;
+            //            case 2:
+            //                StatusGrid = "1/4";
+            //                break;
+            //            case 3:
+            //                StatusGrid = "1/8";
+            //                break;
+            //            case 4:
+            //                StatusGrid = "1/16";
+            //                break;
+            //            case 5:
+            //                StatusGrid = "1/32";
+            //                break;
+            //        }
+            //        break;
+            //    }
+            //}
+            //AccessSQL.SendSQL($"UPDATE TournamentGrid SET status = '{StatusGrid}' WHERE id = {ID}");
         }
         private void DrawLines(Graphics graphics, GridItems item1, Pen pen)
         {
-            if (Grid.Items[item1.Point.X].Length == 1)
-                return;
-            int positionY = item1.Point.Y / 2;
-            GridItems item2 = Grid.Items[item1.Point.X + 1][positionY];
-            Point point1 = new Point(item1.Label.Right, item1.Label.Location.Y + item1.Label.Height / 2);
-            Point point4 = new Point(item2.Label.Left, item2.Label.Location.Y + item2.Label.Height / 2);
-            Point point2 = new Point(point1.X + 30, point1.Y);
-            Point point3 = new Point(point2.X, point4.Y);
-            graphics.DrawLine(pen, point1, point2);
-            graphics.DrawLine(pen, point2, point3);
-            graphics.DrawLine(pen, point3, point4);
+            //if (Grid.Items[item1.Point.X].Length == 1)
+            //    return;
+            //int positionY = item1.Point.Y / 2;
+            //GridItems item2 = Grid.Items[item1.Point.X + 1][positionY];
+            //Point point1 = new Point(item1.Label.Right, item1.Label.Location.Y + item1.Label.Height / 2);
+            //Point point4 = new Point(item2.Label.Left, item2.Label.Location.Y + item2.Label.Height / 2);
+            //Point point2 = new Point(point1.X + 30, point1.Y);
+            //Point point3 = new Point(point2.X, point4.Y);
+            //graphics.DrawLine(pen, point1, point2);
+            //graphics.DrawLine(pen, point2, point3);
+            //graphics.DrawLine(pen, point3, point4);
         }
         private void TournamentGrid_FormClosing(object sender, FormClosingEventArgs e)
         {
-            //AccessSQL.SendSQL($"UPDATE TournamentGrid SET grid = '{JsonSerializer.Serialize(Grid)}' WHERE id = {ID}");
+            SaveChange();
         }
         private void GridForm_Resize(object sender, EventArgs e)
         {
@@ -363,7 +308,6 @@ namespace Kaharman
             {
                 int posY = 120 + (i * 35);
                 GridLabel.LabelPlaces[i].Location = new Point(panel1.Width - GridLabel.LabelPlaces[i].Width - 30, posY);
-                // Grid.Places[i].InitPosition(new Point(panel1.Width - Grid.Places[i].Label.Width - 30, posY));
                 placesText[i].Location = new Point(panel1.Width - placesText[i].Width - 200, posY);
             }
             int lableX = placesText[0].Location.X - 50;
@@ -374,52 +318,57 @@ namespace Kaharman
         {
             SampleWord word = new SampleWord();
 
-            word.CreateProtacolGrid(nameTournamet.Text, DateStart, Judge, Secret);
+            //word.CreateProtacolGrid(nameTournamet.Text, DateStart, Judge, Secret);
 
-            word.FillTable(number_t,name_g, AccessSQL.GetDataTableSQL($"SELECT * FROM Participants WHERE id IN ({string.Join(", ",
-                    AccessSQL.GetDataTableSQL($"SELECT id_participants FROM TournamentGrid WHERE id = {ID}").
-                    Rows[0]["id_participants"].ToString().
-                    Split(';').
-                    Select(s => s.Trim('\"')).ToArray())})"));
-            SaveFileDialog saveFileDialog = new SaveFileDialog();
-            saveFileDialog.Filter = "docx file (*.docx)|*.docx";
-            if (saveFileDialog.ShowDialog() == DialogResult.OK)
-            {
-                word.SaveFile(saveFileDialog.FileName);
-                var proc = new Process();
-                proc.StartInfo.FileName = saveFileDialog.FileName;
-                proc.StartInfo.UseShellExecute = true;
-                proc.Start();
-            }
+            //word.FillTable(number_t, name_g, AccessSQL.GetDataTableSQL($"SELECT * FROM Participants WHERE id IN ({string.Join(", ",
+            //        AccessSQL.GetDataTableSQL($"SELECT id_participants FROM TournamentGrid WHERE id = {ID}").
+            //        Rows[0]["id_participants"].ToString().
+            //        Split(';').
+            //        Select(s => s.Trim('\"')).ToArray())})"));
+            //SaveFileDialog saveFileDialog = new SaveFileDialog();
+            //saveFileDialog.Filter = "docx file (*.docx)|*.docx";
+            //if (saveFileDialog.ShowDialog() == DialogResult.OK)
+            //{
+            //    word.SaveFile(saveFileDialog.FileName);
+            //    var proc = new Process();
+            //    proc.StartInfo.FileName = saveFileDialog.FileName;
+            //    proc.StartInfo.UseShellExecute = true;
+            //    proc.Start();
+            //}
         }
 
         private void сбросToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            foreach (GridItems item in Grid.Places)
-                item.Clear();
-            for (int i = 2; i < Grid.Items.Length; i++)
-                foreach (GridItems item in Grid.Items[i])
-                    item.Clear();
+            //foreach (GridItems item in Grid.Places)
+            //    item.Clear();
+            //for (int i = 2; i < Grid.Items.Length; i++)
+            //    foreach (GridItems item in Grid.Items[i])
+            //        item.Clear();
 
-            for (int i = 0; i < Grid.Items[1].Length; i++)
-            {
-                GridItems item = Grid.Items[1][i];
-                if (Grid.Items[0][i * 2].Status != StatusPos.close)
-                    item.Clear();
-                else
-                    item.ChangeStatus(StatusPos.init);
-            }
-            for (int i = 0; i < Grid.Items[0].Length; i++)
-            {
-                GridItems item = Grid.Items[0][i];
-                if (item.Status != StatusPos.close)
-                    item.ChangeStatus(StatusPos.init);
-            }
+            //for (int i = 0; i < Grid.Items[1].Length; i++)
+            //{
+            //    GridItems item = Grid.Items[1][i];
+            //    if (Grid.Items[0][i * 2].Status != StatusPos.close)
+            //        item.Clear();
+            //    else
+            //        item.ChangeStatus(StatusPos.init);
+            //}
+            //for (int i = 0; i < Grid.Items[0].Length; i++)
+            //{
+            //    GridItems item = Grid.Items[0][i];
+            //    if (item.Status != StatusPos.close)
+            //        item.ChangeStatus(StatusPos.init);
+            //}
         }
 
         private void сохранитьToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            //AccessSQL.SendSQL($"UPDATE TournamentGrid SET grid = '{JsonSerializer.Serialize(Grid)}' WHERE id = {ID}");
+            SaveChange();
+        }
+        private void SaveChange()
+        {
+            dbContext.TournamentGrid.Update(TournamentGrid);
+            dbContext.SaveChanges();
         }
     }
 }

@@ -24,11 +24,13 @@ namespace Kaharman
             {
                 LabelParticipant label1 = new LabelParticipant(match, EPosMatch.UP);
                 label1.SetParticipant(TournamentGrid.Participants.Find(p=>p.Id == match.IdPos1), match.StatusPos1);
+                label1.MouseClick += Label1_MouseClick;
                 LabelParticipants.Add(label1);
                 control.Controls.Add(label1);
 
                 LabelParticipant label2 = new LabelParticipant(match, EPosMatch.DOWN);
                 label2.SetParticipant(TournamentGrid.Participants.Find(p => p.Id == match.IdPos2), match.StatusPos2);
+                label2.MouseClick += Label1_MouseClick;
                 LabelParticipants.Add(label2);
                 control.Controls.Add(label2);
             }
@@ -43,13 +45,26 @@ namespace Kaharman
         }
         private void Label1_MouseClick(object? sender, MouseEventArgs e)
         {
-            LabelParticipant? label = sender as LabelParticipant;
-            if (label == null)
-                return;
             if (e.Button == MouseButtons.Left)
             {
-                if (label.Status != StatusPos.init)
+                LabelParticipant? label = sender as LabelParticipant;
+                if (label == null)
                     return;
+                if (label.PosMatch == EPosMatch.Place)
+                    return;
+                Match? match = label.Match;
+                if (match == null)
+                    return;
+                int idPartWin = match.WinPos(label.PosMatch);
+                label.SetStatus(StatusPos.win);
+                EPosMatch ePosMatchFind;
+                if (label.PosMatch == EPosMatch.DOWN)
+                    ePosMatchFind = EPosMatch.UP;
+                else
+                    ePosMatchFind = EPosMatch.DOWN;
+                LabelParticipants.First(l => l.FindLabel(match.MatchNumber,match.RoundNumber, ePosMatchFind)).SetStatus(StatusPos.lose);
+
+                LabelParticipants.First(l => l.FindLabel(match.MatchNumber/2, match.RoundNumber + 1, (EPosMatch)(match.MatchNumber%2))).SetParticipant(TournamentGrid.Participants.First(p=>p.Id == idPartWin),StatusPos.init);
 
             }
         }
@@ -149,24 +164,22 @@ namespace Kaharman
     {
         ToolTip t = new ToolTip();
         public EPosMatch PosMatch { get; set; }
-        public Match Match { get; set; }
-        public StatusPos Status { get; set; }
+        public Match? Match { get; set; }
+        private StatusPos Status { get; set; }
         public LabelParticipant(Match match, EPosMatch posMatch) : base()
         {
             Match = match;
             PosMatch = posMatch;
             Location = new Point(40 + (match.RoundNumber * 225), 100 + 10 * ((int)Math.Pow(2, match.RoundNumber + 1)) + (10 * ((int)Math.Pow(2, match.RoundNumber + 2))) * ((match.MatchNumber * 2) + (int)PosMatch));
-            AccessibleRole = AccessibleRole.None;
-            BorderStyle = BorderStyle.FixedSingle;
-            Size = new Size(170, 20);
-            Text = "";
-            TabStop = false;
-            AllowDrop = true;
-            Tag = match;
+            Init();
         }
         public LabelParticipant(EPosMatch posMatch = EPosMatch.Place) : base()
         {
             PosMatch = posMatch;
+            Init();
+        }
+        private void Init()
+        {
             AccessibleRole = AccessibleRole.None;
             BorderStyle = BorderStyle.FixedSingle;
             Size = new Size(170, 20);
@@ -225,6 +238,13 @@ namespace Kaharman
             Status = StatusPos.close;
             InitColorItem();
             t.RemoveAll();
+        }
+        public bool FindLabel(int match, int mount, EPosMatch ePosMatch)
+        {
+            if (Match != null)
+                if (match == Match.MatchNumber && mount == Match.RoundNumber && ePosMatch == PosMatch)
+                    return true;
+            return false;
         }
     }   
 }
