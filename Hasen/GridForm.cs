@@ -29,7 +29,7 @@ namespace Kaharman
         public GridForm(int IDTournament)
         {
             dbContext = new KaharmanDataContext();
-            TournamentGrid? grid = dbContext.TournamentGrid.Include(t => t.Matchs).Include(t => t.Participants).Include(t => t.Tournament).Include(t => t.Matchs).ThenInclude(m=>m.Items).FirstOrDefault(g => g.Id == IDTournament);
+            TournamentGrid? grid = dbContext.TournamentGrid.Include(t => t.Matchs).Include(t => t.Participants).Include(t => t.Tournament).Include(t=>t.Places).Include(t => t.Matchs).ThenInclude(m=>m.Items).FirstOrDefault(g => g.Id == IDTournament);
             if (grid != null)
             {
                 foreach (var participant in grid.Participants)
@@ -304,12 +304,12 @@ namespace Kaharman
             nameTournamet.Location = new Point((panel1.Width / 2) - (nameTournamet.Width / 2), 10);
             nameGrid.Location = new Point((panel1.Width / 2) - (nameGrid.Width / 2), 30);
             dateStart.Location = new Point((panel1.Width / 2) - (dateStart.Width / 2), 50);
-            //for (int i = 0; i < GridLabel.LabelPlaces.Length; i++)
-            //{
-            //    int posY = 120 + (i * 35);
-            //   // GridLabel.LabelPlaces[i].Location = new Point(panel1.Width - GridLabel.LabelPlaces[i].Width - 30, posY);
-            //    placesText[i].Location = new Point(panel1.Width - placesText[i].Width - 200, posY);
-            //}
+            for (int i = 0; i < 4; i++)
+            {
+                int posY = 120 + (i * 35);
+                TournamentGrid.Places[i].Label.Location = new Point(panel1.Width - TournamentGrid.Places[i].Label.Width - 30, posY);
+                placesText[i].Location = new Point(panel1.Width - placesText[i].Width - 200, posY);
+            }
             int lableX = placesText[0].Location.X - 50;
             labelJudge.Location = new Point(lableX, panel1.Height - 100);
             labelSecret.Location = new Point(lableX, panel1.Height - 70);
@@ -367,6 +367,13 @@ namespace Kaharman
         }
         private void SaveChange()
         {
+            Console.WriteLine(dbContext.ChangeTracker.ToDebugString());
+            foreach (var item in TournamentGrid.Places)
+            {
+                if(item.Participant!=null)
+                Console.WriteLine(item.Participant.FIO);
+                Console.WriteLine(item.Id);
+            }
             dbContext.TournamentGrid.Update(TournamentGrid);
             dbContext.SaveChanges();
         }

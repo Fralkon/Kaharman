@@ -3,10 +3,7 @@ using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations.Schema;
-using NPOI.SS.Formula.Functions;
-using iTextSharp.text;
-using System.Text.RegularExpressions;
-using System.Windows.Forms.VisualStyles;
+using System.Linq;
 
 namespace Kaharman
 {
@@ -15,6 +12,7 @@ namespace Kaharman
         public DbSet<Tournament> Tournament { get; set; }
         public DbSet<Participant> Participant { get; set; }
         public DbSet<TournamentGrid> TournamentGrid { get; set; }
+        public DbSet<ItemGrid> ItemGrid { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -26,6 +24,7 @@ namespace Kaharman
             modelBuilder.Entity<TournamentGrid>().HasMany(t => t.Participants).WithMany(t => t.TournamentGrids);
             modelBuilder.Entity<TournamentGrid>().HasOne(t => t.Tournament).WithMany(t => t.TournamentGrids);
             modelBuilder.Entity<TournamentGrid>().HasMany(t => t.Matchs).WithOne(m => m.TournamentGrid);
+            modelBuilder.Entity<TournamentGrid>().HasMany(t => t.Places).WithOne(i => i.TournamentGrid);
             modelBuilder.Entity<Match>().HasMany(m => m.Items).WithOne(i => i.Match);
             base.OnModelCreating(modelBuilder);
         }
@@ -96,6 +95,14 @@ namespace Kaharman
             Age = (int)((int)(DateTime.Now - DateOfBirth).TotalDays / ValyeDayYear);
         }
     }
+    public enum ItemPlaces
+    {
+        OnePlace,
+        TwoPlace, 
+        ThreePlace,
+        ThreePlace2,
+        Winner
+    }
     public class TournamentGrid
     {
         public int Id { get; set; }
@@ -123,10 +130,12 @@ namespace Kaharman
         public Tournament Tournament { get; set; }
         [Browsable(false)]
         public List<Match> Matchs { get; set; }
+        public List<ItemGrid> Places { get; set; }
         public TournamentGrid()
         {
             Participants = new List<Participant>();
             Matchs = new List<Match>();
+            Places = new List<ItemGrid>();
         }
         public void CreateMatchs()
         {
@@ -140,6 +149,8 @@ namespace Kaharman
                 }
             }
             FillMatchs();
+            for (int i = 0; i < 5; i++)
+                Places.Add(new ItemGrid(EPosMatch.Place));
         }
         private void FillMatchs()
         {
@@ -194,10 +205,28 @@ namespace Kaharman
         }
         public void InitLabelGrid(Control control)
         {
-            foreach(Match match in Matchs)
+            foreach (Match match in Matchs)
             {
-                foreach(ItemGrid itemGrid in match.Items)
+                foreach (ItemGrid itemGrid in match.Items)
                     itemGrid.Initialize(control);
+            }
+            foreach (ItemGrid place in Places)
+            {
+                place.Initialize(control);
+                place.TournamentGrid = this;
+            }
+            Places[(int)ItemPlaces.Winner].Label.Location = new Point(40 + ((int)Math.Log(Type, 2) * 225), 100 + 10 * ((int)Math.Pow(2, (int)Math.Log(Type, 2) + 1)));
+        }
+        public void WinPart(Match match, Participant participantWin, Participant participantLose)
+        {
+            if (Math.Log(Type,2) == match.RoundNumber + 1) {
+                Places[(int)ItemPlaces.Winner].SetParticipant(participantWin, StatusPos.win);
+                Places[(int)ItemPlaces.OnePlace].SetParticipant(participantWin, StatusPos.win);
+                Places[(int)ItemPlaces.TwoPlace].SetParticipant(participantLose, StatusPos.win);
+            }
+            else {
+                Match nextMatch = Matchs.First(m=>m.MatchNumber == match.MatchNumber / 2 && m.RoundNumber == match.RoundNumber + 1);
+                nextMatch.SetParticipant(participantWin, (EPosMatch)(match.MatchNumber % 2));
             }
         }
     }
@@ -225,29 +254,54 @@ namespace Kaharman
         {
             switch (posMatch)
             {
-                case EPosMatch.UP: Items[0].Participant = participant; Items[0].Status = status; break;
-                case EPosMatch.DOWN: Items[1].Participant = participant; Items[1].Status = status; break;
+                case EPosMatch.UP: Items[0].SetParticipant(participant, StatusPos.init); break;
+                case EPosMatch.DOWN: Items[1].SetParticipant(participant, StatusPos.init); break;
             }
         }
         public void SetParticipants((Participant, Participant?) participants)
         {
-            Items[0].Participant = participants.Item1; Items[0].Status = StatusPos.init;
-            Items[1].Participant = participants.Item2; Items[1].Status = StatusPos.init;
+            Items[0].Participant = participants.Item1; Items[0].ChangeStatus(StatusPos.init);
+            Items[1].Participant = participants.Item2; Items[1].ChangeStatus(StatusPos.init);
+        }
+        public void WinPos(EPosMatch posMatch)
+        {
+            switch (posMatch)
+            {
+                case EPosMatch.UP:
+                    {
+                        Items[0].ChangeStatus(StatusPos.win);
+                        Items[1].ChangeStatus(StatusPos.lose);
+                        TournamentGrid.WinPart(this, Items[0].Participant, Items[1].Participant);
+                        return;
+                    }
+                case EPosMatch.DOWN:
+                    {
+                        Items[0].ChangeStatus(StatusPos.lose);
+                        Items[1].ChangeStatus(StatusPos.win);
+                        TournamentGrid.WinPart(this, Items[1].Participant, Items[0].Participant);
+                        return;
+                    }
+            }
         }
     }
     public class ItemGrid
     {
+        public int Id { get; set; }
         public ItemGrid(Match match, EPosMatch ePosMatch) {
             PosMatch = ePosMatch;
             Match = match;
         }
         public ItemGrid()
         { }
-        public int Id { get; set; }
+        public ItemGrid(EPosMatch ePosMatch)
+        {
+            PosMatch = ePosMatch;
+        }
         public Participant? Participant { get;set; }
         public StatusPos Status { get; set; } = StatusPos.close;
         public EPosMatch PosMatch { get; set; }
-        public Match Match { get; set; }
+        public Match? Match { get; set; }
+        public TournamentGrid? TournamentGrid { get; set; }
         [NotMapped]
         public Label Label { get; set; } = new Label();
         [NotMapped]
@@ -260,7 +314,8 @@ namespace Kaharman
             Label.TabStop = false;
             Label.AllowDrop = true;
             Label.MouseClick += Label_MouseClick;
-            Label.Location = new Point(40 + (Match.RoundNumber * 225), 100 + 10 * ((int)Math.Pow(2, Match.RoundNumber + 1)) + (10 * ((int)Math.Pow(2, Match.RoundNumber + 2))) * ((Match.MatchNumber * 2) + (int)PosMatch));
+            if(PosMatch != EPosMatch.Place)
+                Label.Location = new Point(40 + (Match.RoundNumber * 225), 100 + 10 * ((int)Math.Pow(2, Match.RoundNumber + 1)) + (10 * ((int)Math.Pow(2, Match.RoundNumber + 2))) * ((Match.MatchNumber * 2) + (int)PosMatch));
             if (Participant != null)
             {
                 Label.Text = Participant.FIO + "( " + Participant.City.Substring(0, 3) + " )";
@@ -273,7 +328,6 @@ namespace Kaharman
             Label.Tag = this;
             ChangeStatus(Status);
         }
-
         private void Label_MouseClick(object? sender, MouseEventArgs e)
         {
             if (e.Button == MouseButtons.Left)
@@ -284,23 +338,13 @@ namespace Kaharman
                 ItemGrid? itemGrid = label.Tag as ItemGrid;
                 if (itemGrid == null)
                     return;
-                if (itemGrid.PosMatch == EPosMatch.Place)
-                    return;
                 if (itemGrid.Participant == null)
                     return;
-                //  int idPartWin = match.WinPos(label.PosMatch);
-                label.SetStatus(StatusPos.win);
-                EPosMatch ePosMatchFind;
-                if (label.PosMatch == EPosMatch.DOWN)
-                    ePosMatchFind = EPosMatch.UP;
-                else
-                    ePosMatchFind = EPosMatch.DOWN;
-                LabelParticipants.First(l => l.FindLabel(match.MatchNumber, match.RoundNumber, ePosMatchFind)).SetStatus(StatusPos.lose);
-
-                //  LabelParticipants.First(l => l.FindLabel(match.MatchNumber/2, match.RoundNumber + 1, (EPosMatch)(match.MatchNumber%2))).SetParticipant(TournamentGrid.Participants.First(p=>p.Id == idPartWin),StatusPos.init);
+                if (itemGrid.PosMatch == EPosMatch.Place)
+                    return;
+                itemGrid.Match.WinPos(itemGrid.PosMatch);
             }
         }
-
         public void ChangeStatus(StatusPos statusGridItem)
         {
             Status = statusGridItem; 
