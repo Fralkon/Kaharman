@@ -200,7 +200,6 @@ namespace Kaharman
                 }
                 using (KaharmanDataContext context = new KaharmanDataContext())
                 {
-                    TournamentGrid.CreateMatchs();
                     context.TournamentGrid.Attach(TournamentGrid);
                     context.SaveChanges();
                     TournamentGrid.Participants = context.Participant.Where(p => ParticipantGridDataGrid.GetList().Contains(p)).ToList();

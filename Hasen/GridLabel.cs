@@ -23,13 +23,13 @@ namespace Kaharman
             foreach (Match match in TournamentGrid.Matchs)
             {
                 LabelParticipant label1 = new LabelParticipant(match, EPosMatch.UP);
-                label1.SetParticipant(TournamentGrid.Participants.Find(p=>p.Id == match.IdPos1), match.StatusPos1);
+               // label1.SetParticipant(TournamentGrid.Participants.Find(p=>p.Id == match.IdPos1), match.StatusPos1);
                 label1.MouseClick += Label1_MouseClick;
                 LabelParticipants.Add(label1);
                 control.Controls.Add(label1);
 
                 LabelParticipant label2 = new LabelParticipant(match, EPosMatch.DOWN);
-                label2.SetParticipant(TournamentGrid.Participants.Find(p => p.Id == match.IdPos2), match.StatusPos2);
+              //  label2.SetParticipant(TournamentGrid.Participants.Find(p => p.Id == match.IdPos2), match.StatusPos2);
                 label2.MouseClick += Label1_MouseClick;
                 LabelParticipants.Add(label2);
                 control.Controls.Add(label2);
@@ -55,7 +55,7 @@ namespace Kaharman
                 Match? match = label.Match;
                 if (match == null)
                     return;
-                int idPartWin = match.WinPos(label.PosMatch);
+              //  int idPartWin = match.WinPos(label.PosMatch);
                 label.SetStatus(StatusPos.win);
                 EPosMatch ePosMatchFind;
                 if (label.PosMatch == EPosMatch.DOWN)
@@ -64,7 +64,7 @@ namespace Kaharman
                     ePosMatchFind = EPosMatch.DOWN;
                 LabelParticipants.First(l => l.FindLabel(match.MatchNumber,match.RoundNumber, ePosMatchFind)).SetStatus(StatusPos.lose);
 
-                LabelParticipants.First(l => l.FindLabel(match.MatchNumber/2, match.RoundNumber + 1, (EPosMatch)(match.MatchNumber%2))).SetParticipant(TournamentGrid.Participants.First(p=>p.Id == idPartWin),StatusPos.init);
+              //  LabelParticipants.First(l => l.FindLabel(match.MatchNumber/2, match.RoundNumber + 1, (EPosMatch)(match.MatchNumber%2))).SetParticipant(TournamentGrid.Participants.First(p=>p.Id == idPartWin),StatusPos.init);
 
             }
         }

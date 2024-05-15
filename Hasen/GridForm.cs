@@ -29,7 +29,7 @@ namespace Kaharman
         public GridForm(int IDTournament)
         {
             dbContext = new KaharmanDataContext();
-            TournamentGrid? grid = dbContext.TournamentGrid.Include(t => t.Matchs).Include(t => t.Participants).Include(t => t.Tournament).FirstOrDefault(g => g.Id == IDTournament);
+            TournamentGrid? grid = dbContext.TournamentGrid.Include(t => t.Matchs).Include(t => t.Participants).Include(t => t.Tournament).Include(t => t.Matchs).ThenInclude(m=>m.Items).FirstOrDefault(g => g.Id == IDTournament);
             if (grid != null)
             {
                 foreach (var participant in grid.Participants)
@@ -43,7 +43,7 @@ namespace Kaharman
             }
 
             InitializeComponent();
-            GridLabel = new GridLabel(TournamentGrid);
+            //GridLabel = new GridLabel(TournamentGrid);
             switch (TournamentGrid.Type)
             {
                 case 4:
@@ -73,7 +73,7 @@ namespace Kaharman
             placesText[3].Text = "Третье место";
             labelJudge.Text = "Главный судья ___________________ " + TournamentGrid.Tournament.Judge;
             labelSecret.Text = "Секретарь ________________________ " + TournamentGrid.Tournament.Secret;
-            GridLabel.InitLabel(panel1);
+            TournamentGrid.InitLabelGrid(panel1);
             ElementsLocation();
             foreach (Label label in placesText)
                 panel1.Controls.Add(label);
@@ -304,12 +304,12 @@ namespace Kaharman
             nameTournamet.Location = new Point((panel1.Width / 2) - (nameTournamet.Width / 2), 10);
             nameGrid.Location = new Point((panel1.Width / 2) - (nameGrid.Width / 2), 30);
             dateStart.Location = new Point((panel1.Width / 2) - (dateStart.Width / 2), 50);
-            for (int i = 0; i < GridLabel.LabelPlaces.Length; i++)
-            {
-                int posY = 120 + (i * 35);
-                GridLabel.LabelPlaces[i].Location = new Point(panel1.Width - GridLabel.LabelPlaces[i].Width - 30, posY);
-                placesText[i].Location = new Point(panel1.Width - placesText[i].Width - 200, posY);
-            }
+            //for (int i = 0; i < GridLabel.LabelPlaces.Length; i++)
+            //{
+            //    int posY = 120 + (i * 35);
+            //   // GridLabel.LabelPlaces[i].Location = new Point(panel1.Width - GridLabel.LabelPlaces[i].Width - 30, posY);
+            //    placesText[i].Location = new Point(panel1.Width - placesText[i].Width - 200, posY);
+            //}
             int lableX = placesText[0].Location.X - 50;
             labelJudge.Location = new Point(lableX, panel1.Height - 100);
             labelSecret.Location = new Point(lableX, panel1.Height - 70);

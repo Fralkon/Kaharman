@@ -3,8 +3,10 @@ using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations.Schema;
-using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 using NPOI.SS.Formula.Functions;
+using iTextSharp.text;
+using System.Text.RegularExpressions;
+using System.Windows.Forms.VisualStyles;
 
 namespace Kaharman
 {
@@ -24,8 +26,15 @@ namespace Kaharman
             modelBuilder.Entity<TournamentGrid>().HasMany(t => t.Participants).WithMany(t => t.TournamentGrids);
             modelBuilder.Entity<TournamentGrid>().HasOne(t => t.Tournament).WithMany(t => t.TournamentGrids);
             modelBuilder.Entity<TournamentGrid>().HasMany(t => t.Matchs).WithOne(m => m.TournamentGrid);
+            modelBuilder.Entity<Match>().HasMany(m => m.Items).WithOne(i => i.Match);
             base.OnModelCreating(modelBuilder);
         }
+    }
+    public enum EPosMatch
+    {
+        UP,
+        DOWN,
+        Place
     }
     public class Tournament
     {
@@ -183,19 +192,14 @@ namespace Kaharman
             }
             return (participant1, participant2);
         }
-    }
-    public enum StatusMatch {
-        Win1,
-        Win2,
-        Init,
-        Close,
-        None
-    }
-    public enum EPosMatch
-    {
-        UP,
-        DOWN,
-        Place
+        public void InitLabelGrid(Control control)
+        {
+            foreach(Match match in Matchs)
+            {
+                foreach(ItemGrid itemGrid in match.Items)
+                    itemGrid.Initialize(control);
+            }
+        }
     }
     public class Match
     {
@@ -207,41 +211,142 @@ namespace Kaharman
         {
             RoundNumber = round;
             MatchNumber = match;
+            Items = new List<ItemGrid>()
+            {
+                new ItemGrid(this, EPosMatch.UP),
+                new ItemGrid(this, EPosMatch.DOWN)
+            };
         }
         public int RoundNumber { get; set; }
         public int MatchNumber { get; set; }
-        public int IdPos1 { get; set; } = -1;
-        public int IdPos2 { get; set; } = -1;
-        public StatusPos StatusPos1 { get; set; }
-        public StatusPos StatusPos2 { get; set; }
+        public List<ItemGrid> Items{ get; set; }
         public TournamentGrid TournamentGrid { get; set; }
-        public int WinPos(EPosMatch ePos)
-        {
-            switch (ePos)
-            {
-                case EPosMatch.UP:
-                    StatusPos1 = StatusPos.win;
-                    StatusPos2 = StatusPos.lose;
-                    return IdPos1;
-                case EPosMatch.DOWN:
-                    StatusPos1 = StatusPos.lose;
-                    StatusPos2 = StatusPos.win;
-                    return IdPos2;
-            }
-            return -1;
-        }
         public void SetParticipant(Participant participant, EPosMatch posMatch, StatusPos status = StatusPos.init)
         {
             switch (posMatch)
             {
-                case EPosMatch.UP: IdPos1 = participant.Id; StatusPos1 = status; break;
-                case EPosMatch.DOWN: IdPos2 = participant.Id; StatusPos2 = status; break;
+                case EPosMatch.UP: Items[0].Participant = participant; Items[0].Status = status; break;
+                case EPosMatch.DOWN: Items[1].Participant = participant; Items[1].Status = status; break;
             }
         }
         public void SetParticipants((Participant, Participant?) participants)
         {
-            IdPos1 = participants.Item1.Id; StatusPos1 = StatusPos.init;
-            IdPos2 = participants.Item2.Id; StatusPos2 = StatusPos.init;
+            Items[0].Participant = participants.Item1; Items[0].Status = StatusPos.init;
+            Items[1].Participant = participants.Item2; Items[1].Status = StatusPos.init;
+        }
+    }
+    public class ItemGrid
+    {
+        public ItemGrid(Match match, EPosMatch ePosMatch) {
+            PosMatch = ePosMatch;
+            Match = match;
+        }
+        public ItemGrid()
+        { }
+        public int Id { get; set; }
+        public Participant? Participant { get;set; }
+        public StatusPos Status { get; set; } = StatusPos.close;
+        public EPosMatch PosMatch { get; set; }
+        public Match Match { get; set; }
+        [NotMapped]
+        public Label Label { get; set; } = new Label();
+        [NotMapped]
+        ToolTip toolTip = new ToolTip();
+        public void Initialize(Control control)
+        {
+            Label.AccessibleRole = AccessibleRole.None;
+            Label.BorderStyle = BorderStyle.FixedSingle;
+            Label.Size = new Size(170, 20);
+            Label.TabStop = false;
+            Label.AllowDrop = true;
+            Label.MouseClick += Label_MouseClick;
+            Label.Location = new Point(40 + (Match.RoundNumber * 225), 100 + 10 * ((int)Math.Pow(2, Match.RoundNumber + 1)) + (10 * ((int)Math.Pow(2, Match.RoundNumber + 2))) * ((Match.MatchNumber * 2) + (int)PosMatch));
+            if (Participant != null)
+            {
+                Label.Text = Participant.FIO + "( " + Participant.City.Substring(0, 3) + " )";
+                string capction = $"Пол: {Participant.Gender}\nВозраст: {Participant.Age}\nВес: {Participant.Weight}\nКвалификация: {Participant.Qualification}\nГород: {Participant.City}\nТренер: {Participant.Trainer}";
+                toolTip.SetToolTip(Label, capction);
+            }
+            else
+                Label.Text = "";
+            control.Controls.Add(Label);
+            Label.Tag = this;
+            ChangeStatus(Status);
+        }
+
+        private void Label_MouseClick(object? sender, MouseEventArgs e)
+        {
+            if (e.Button == MouseButtons.Left)
+            {
+                Label? label = sender as Label;
+                if (label == null)
+                    return;
+                ItemGrid? itemGrid = label.Tag as ItemGrid;
+                if (itemGrid == null)
+                    return;
+                if (itemGrid.PosMatch == EPosMatch.Place)
+                    return;
+                if (itemGrid.Participant == null)
+                    return;
+                //  int idPartWin = match.WinPos(label.PosMatch);
+                label.SetStatus(StatusPos.win);
+                EPosMatch ePosMatchFind;
+                if (label.PosMatch == EPosMatch.DOWN)
+                    ePosMatchFind = EPosMatch.UP;
+                else
+                    ePosMatchFind = EPosMatch.DOWN;
+                LabelParticipants.First(l => l.FindLabel(match.MatchNumber, match.RoundNumber, ePosMatchFind)).SetStatus(StatusPos.lose);
+
+                //  LabelParticipants.First(l => l.FindLabel(match.MatchNumber/2, match.RoundNumber + 1, (EPosMatch)(match.MatchNumber%2))).SetParticipant(TournamentGrid.Participants.First(p=>p.Id == idPartWin),StatusPos.init);
+            }
+        }
+
+        public void ChangeStatus(StatusPos statusGridItem)
+        {
+            Status = statusGridItem; 
+            switch (Status)
+            {
+                case StatusPos.init:
+                    if (PosMatch == EPosMatch.UP)
+                        Label.BackColor = Color.DodgerBlue;
+                    else
+                        Label.BackColor = Color.LightCoral;
+                    break;
+                case StatusPos.block:
+                    Label.BackColor = Color.LightGray;
+                    break;
+                case StatusPos.close:
+                    Label.BackColor = SystemColors.Control;
+                    break;
+                case StatusPos.win:
+                    Label.BackColor = GridForm.ColorWonPosition;
+                    break;
+                case StatusPos.lose:
+                    Label.BackColor = Color.LightGray;
+                    break;
+            }
+        }
+        public void Clear()
+        {
+            Label.Text = "";
+            ChangeStatus(StatusPos.close);
+            Participant = null;
+            toolTip.RemoveAll();
+        }
+        public void SetParticipant(Participant? participant, StatusPos statusGridItem)
+        {
+            if (participant != null)
+            {
+                ChangeStatus(statusGridItem);
+                Label.Text = participant.FIO + "( " + participant.City.Substring(0, 3) + " )";
+                string capction = $"Пол: {participant.Gender}\nВозраст: {participant.Age}\nВес: {participant.Weight}\nКвалификация: {participant.Qualification}\nГород: {participant.City}\nТренер: {participant.Trainer}";
+                toolTip.SetToolTip(Label, capction);
+                Participant = participant;
+            }
+            else
+            {
+                Status = StatusPos.close;
+            }
         }
     }
 }
