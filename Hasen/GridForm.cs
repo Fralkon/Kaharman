@@ -22,14 +22,13 @@ namespace Kaharman
         Graphics graphics;
         Label[] placesText = new Label[4];
         bool oneLoad = false;
-        bool selectLable = false;
+        public static bool SelectLable = false;
         TournamentGrid TournamentGrid { get; set; }
-        GridLabel GridLabel;
         KaharmanDataContext dbContext;       
         public GridForm(int IDTournament)
         {
             dbContext = new KaharmanDataContext();
-            TournamentGrid? grid = dbContext.TournamentGrid.Include(t => t.Matchs).Include(t => t.Participants).Include(t => t.Tournament).Include(t=>t.Places).Include(t => t.Matchs).ThenInclude(m=>m.Items).FirstOrDefault(g => g.Id == IDTournament);
+            TournamentGrid? grid = dbContext.TournamentGrid.Include(t => t.Participants).Include(t => t.Tournament).Include(t=>t.Places).Include(t => t.Matchs).ThenInclude(m=>m.Items).FirstOrDefault(g => g.Id == IDTournament);
             if (grid != null)
             {
                 foreach (var participant in grid.Participants)
@@ -43,7 +42,6 @@ namespace Kaharman
             }
 
             InitializeComponent();
-            //GridLabel = new GridLabel(TournamentGrid);
             switch (TournamentGrid.Type)
             {
                 case 4:
@@ -81,7 +79,7 @@ namespace Kaharman
         #region SwapItem
         private void Label_MouseMove(object? sender, MouseEventArgs e)
         {
-            if (selectLable)
+            if (SelectLable)
             {
                 var label = sender as Label;
                 if (label == null)
@@ -90,17 +88,17 @@ namespace Kaharman
                 if (point == null)
                     return;
                 label.DoDragDrop(point, DragDropEffects.Move);
-                selectLable = false;
+                SelectLable = false;
             }
         }
         private void Label_MouseUp(object? sender, MouseEventArgs e)
         {
-            if (selectLable)
-                selectLable = false;
+            if (SelectLable)
+                SelectLable = false;
         }
         private void Label_MouseDown(object? sender, MouseEventArgs e)
         {
-            selectLable = true;
+            SelectLable = true;
         }
         private void Label_DragOver(object? sender, DragEventArgs e)
         {

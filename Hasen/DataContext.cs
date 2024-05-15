@@ -103,6 +103,14 @@ namespace Kaharman
         ThreePlace2,
         Winner
     }
+    public enum ItemPlaces
+    {
+        OnePlace,
+        TwoPlace, 
+        ThreePlace,
+        ThreePlace2,
+        Winner
+    }
     public class TournamentGrid
     {
         public int Id { get; set; }
@@ -306,6 +314,8 @@ namespace Kaharman
         public Label Label { get; set; } = new Label();
         [NotMapped]
         ToolTip toolTip = new ToolTip();
+        [NotMapped]
+        Control? panel1;
         public void Initialize(Control control)
         {
             Label.AccessibleRole = AccessibleRole.None;
@@ -314,6 +324,11 @@ namespace Kaharman
             Label.TabStop = false;
             Label.AllowDrop = true;
             Label.MouseClick += Label_MouseClick;
+            Label.MouseUp += Label_MouseUp;
+            Label.MouseMove += Label_MouseMove;
+            Label.MouseDown += Label_MouseDown;
+            Label.DragDrop += Label_DragDrop;
+            Label.DragOver += Label_DragOver;
             if(PosMatch != EPosMatch.Place)
                 Label.Location = new Point(40 + (Match.RoundNumber * 225), 100 + 10 * ((int)Math.Pow(2, Match.RoundNumber + 1)) + (10 * ((int)Math.Pow(2, Match.RoundNumber + 2))) * ((Match.MatchNumber * 2) + (int)PosMatch));
             if (Participant != null)
@@ -327,6 +342,7 @@ namespace Kaharman
             control.Controls.Add(Label);
             Label.Tag = this;
             ChangeStatus(Status);
+            panel1 = control;
         }
         private void Label_MouseClick(object? sender, MouseEventArgs e)
         {
@@ -345,6 +361,56 @@ namespace Kaharman
                 itemGrid.Match.WinPos(itemGrid.PosMatch);
             }
         }
+        #region SwapItem
+        private void Label_MouseMove(object? sender, MouseEventArgs e)
+        {
+            if (GridForm.SelectLable)
+            {
+                var label = sender as Label;
+                if (label == null)
+                    return;
+                ItemGrid? item = label.Tag as ItemGrid;
+                if (item == null)
+                    return;
+                label.DoDragDrop(item, DragDropEffects.Move);
+                GridForm.SelectLable = false;
+            }
+        }
+        private void Label_MouseUp(object? sender, MouseEventArgs e)
+        {
+            if (GridForm.SelectLable)
+                GridForm.SelectLable = false;
+        }
+        private void Label_MouseDown(object? sender, MouseEventArgs e)
+        {
+            GridForm.SelectLable = true;
+        }
+        private void Label_DragOver(object? sender, DragEventArgs e)
+        {
+            if (!e.Data.GetDataPresent(typeof(ItemGrid)))
+                return;
+            e.Effect = e.AllowedEffect;
+        }
+        private void Label_DragDrop(object? sender, DragEventArgs e)
+        {
+            if (!e.Data.GetDataPresent(typeof(ItemGrid)))
+                return;
+            var draggedItem = (ItemGrid)e.Data.GetData(typeof(ItemGrid));
+            if (draggedItem == null)
+                return;
+            var pt = panel1.PointToClient(new Point(e.X, e.Y));
+            var label = (Label)panel1.GetChildAtPoint(pt);
+            ItemGrid? point = label.Tag as ItemGrid;
+            if (point == null)
+                return;
+            Participant? p = point.Participant;
+            StatusPos s = point.Status;
+            point.Clear();
+            point.SetParticipant(draggedItem.Participant,draggedItem.Status);
+            draggedItem.Clear();
+            draggedItem.SetParticipant(p,s);
+        }
+        #endregion
         public void ChangeStatus(StatusPos statusGridItem)
         {
             Status = statusGridItem; 
