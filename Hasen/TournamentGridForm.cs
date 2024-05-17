@@ -22,45 +22,17 @@ namespace Kaharman
     }
     public partial class TournamentGridForm : Form
     {
-        ParticipantDataTable ParticipantsTable;
-        ParticipantDataTable ParticipantGridTable;
-        string IdTournament;
         public string? IdGrid { get; set; }
         StatusFormTournamentGrid StatusForm;
-        ParticipantDataTable participantsTable;
         bool notChange = true;
-        Tournament Tournament { get; set; }
 
         ParticipantDataGrid AllParticipantsDataGrid;
         ParticipantDataGrid ParticipantGridDataGrid;
         TournamentGrid TournamentGrid { get; set; }
-        public TournamentGridForm(string idTournament, string nameTournament, string judge, string secret, DateTime dateTime, ParticipantDataTable participantsTable, StatusFormTournamentGrid statusForm, string nameGrid = "", string? numberProtocol = null, string? number_grid = null)
-        {
-            InitializeComponent();
-            StatusForm = statusForm;
-            dateTimePicker1.Value = dateTime;
-            IdTournament = idTournament;
-            this.Text = nameTournament;
-            this.participantsTable = participantsTable;
-            ParticipantsTable = new ParticipantDataTable(allParticipant);
-            ParticipantGridTable = new ParticipantDataTable(gridParticipant);
-            nameTextBox.Text = nameGrid;
-            allParticipant.Columns[0].Visible = false;
-            if (numberProtocol != null)
-                this.genderTextBox.Text = numberProtocol;
-            if (number_grid != null)
-            {
-                IdGrid = number_grid;
-            }
-            if (statusForm == StatusFormTournamentGrid.Edit)
-                button1.Text = "Изменить";
-            TournamentGridForm_Resize(null, null);
-        }
         public TournamentGridForm(Tournament tournament, StatusFormTournamentGrid statusForm)
         {
             InitializeComponent();
             StatusForm = statusForm;
-            Tournament = tournament;
             this.Text = tournament.NameTournament;
             button1.Text = "Создать";
             TournamentGridForm_Resize(null, null);
@@ -68,7 +40,57 @@ namespace Kaharman
             AllParticipantsDataGrid.LoadData(new List<Participant>(tournament.Participants));
             ParticipantGridDataGrid = new ParticipantDataGrid(gridParticipant);
             TournamentGrid = new TournamentGrid();
-            TournamentGrid.Tournament = Tournament;
+            TournamentGrid.Tournament = tournament;
+        }
+        public TournamentGridForm(TournamentGrid tournamentGrid, StatusFormTournamentGrid statusForm)
+        {
+            InitializeComponent();
+            StatusForm = statusForm;
+            this.Text = tournamentGrid.Tournament.NameTournament;
+            button1.Text = "Создать";
+            TournamentGridForm_Resize(null, null);
+            AllParticipantsDataGrid = new ParticipantDataGrid(allParticipant);
+            AllParticipantsDataGrid.LoadData(new List<Participant>(tournamentGrid.Tournament.Participants));
+            ParticipantGridDataGrid = new ParticipantDataGrid(gridParticipant);
+
+            nameTextBox.Text = tournamentGrid.NameGrid;
+            programmText.Text = tournamentGrid.Programm;
+            qualification.Text = tournamentGrid.Qualification;
+            numberProtocol.Text = tournamentGrid.Number.ToString();
+
+            string[] strings = tournamentGrid.AgeRange.ToString().Split('-');
+            if(strings.Length == 2 )
+            {
+                ageMinTextBox.Text = strings[0];
+                ageMaxTextBox.Text = strings[1];
+            }
+            dateTimePicker1.Value = tournamentGrid.DataStart;
+            genderTextBox.Text = tournamentGrid.Gender;
+            programmText.Text = tournamentGrid.Programm;
+
+            if (statusForm == StatusFormTournamentGrid.Copy)
+            {
+                TournamentGrid = new TournamentGrid();
+                TournamentGrid.NameGrid = tournamentGrid.NameGrid;
+                TournamentGrid.Programm = tournamentGrid.Programm;
+                TournamentGrid.Qualification = tournamentGrid.Qualification;
+                TournamentGrid.Number = tournamentGrid.Number;
+                TournamentGrid.AgeRange = tournamentGrid.AgeRange;
+                TournamentGrid.DataStart = tournamentGrid.DataStart;
+                TournamentGrid.Gender = tournamentGrid.Gender;
+                TournamentGrid.Programm = tournamentGrid.Programm;
+
+                foreach (Participant participant in TournamentGrid.Participants)
+                    AllParticipantsDataGrid.DeleteParticipant(participant);
+                ParticipantGridDataGrid.LoadData(new List<Participant>(TournamentGrid.Participants));
+            }
+            else if (statusForm == StatusFormTournamentGrid.Edit)
+            {
+                TournamentGrid = tournamentGrid;
+                foreach (Participant participant in TournamentGrid.Participants)
+                    AllParticipantsDataGrid.DeleteParticipant(participant);
+                ParticipantGridDataGrid.LoadData(new List<Participant>(TournamentGrid.Participants));
+            }
         }
         private void button1_Click(object sender, EventArgs e)
         {
@@ -76,7 +98,7 @@ namespace Kaharman
             {
                 if (StatusForm != StatusFormTournamentGrid.Create)
                 {
-                    TournamentGrid? grid = Tournament.TournamentGrids.FirstOrDefault(tg => tg.Number == nProtocol);
+                    TournamentGrid? grid = TournamentGrid.Tournament.TournamentGrids.FirstOrDefault(tg => tg.Number == nProtocol);
                     if (grid != null)
                     {
                         MessageBox.Show("Номер протокола уже существует.");
@@ -99,7 +121,7 @@ namespace Kaharman
                 MessageBox.Show("Не верно введено числовое значение максимального возраста.");
                 return;
             }
-            if (dateTimePicker1.Value < Tournament.StartDate || dateTimePicker1.Value > Tournament.EndDate)
+            if (dateTimePicker1.Value < TournamentGrid.Tournament.StartDate || dateTimePicker1.Value > TournamentGrid.Tournament.EndDate)
             {
                 MessageBox.Show("Не верно введена дата проведения турнирной сетки.");
                 return;
@@ -166,7 +188,7 @@ namespace Kaharman
                 this.Close();
                 return;
             }
-            else
+            else if(StatusForm == StatusFormTournamentGrid.Copy || StatusForm == StatusFormTournamentGrid.Create)
             {
                 if (gridParticipant.RowCount < 2)
                 {

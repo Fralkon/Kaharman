@@ -76,51 +76,6 @@ namespace Kaharman
             foreach (Label label in placesText)
                 panel1.Controls.Add(label);
         }
-        #region SwapItem
-        private void Label_MouseMove(object? sender, MouseEventArgs e)
-        {
-            if (SelectLable)
-            {
-                var label = sender as Label;
-                if (label == null)
-                    return;
-                Match? point = label.Tag as Match;
-                if (point == null)
-                    return;
-                label.DoDragDrop(point, DragDropEffects.Move);
-                SelectLable = false;
-            }
-        }
-        private void Label_MouseUp(object? sender, MouseEventArgs e)
-        {
-            if (SelectLable)
-                SelectLable = false;
-        }
-        private void Label_MouseDown(object? sender, MouseEventArgs e)
-        {
-            SelectLable = true;
-        }
-        private void Label_DragOver(object? sender, DragEventArgs e)
-        {
-            if (!e.Data.GetDataPresent(typeof(Match)))
-                return;
-            e.Effect = e.AllowedEffect;
-        }
-        private void Label_DragDrop(object? sender, DragEventArgs e)
-        {
-            if (!e.Data.GetDataPresent(typeof(Match)))
-                return;
-            var draggedItem = (PointItem)e.Data.GetData(typeof(PointItem));
-            if (draggedItem == null)
-                return;
-            var pt = panel1.PointToClient(new Point(e.X, e.Y));
-            var label = (Label)panel1.GetChildAtPoint(pt);
-            PointItem? point = label.Tag as PointItem;
-            if (point == null)
-                return;
-            //Grid.SwapItems(draggedItem, point);
-        }
-        #endregion
         private void Panel1_Paint(object? sender, PaintEventArgs e)
         {
             //Pen pen = new Pen(Color.Black);
@@ -365,13 +320,6 @@ namespace Kaharman
         }
         private void SaveChange()
         {
-            Console.WriteLine(dbContext.ChangeTracker.ToDebugString());
-            foreach (var item in TournamentGrid.Places)
-            {
-                if(item.Participant!=null)
-                Console.WriteLine(item.Participant.FIO);
-                Console.WriteLine(item.Id);
-            }
             dbContext.TournamentGrid.Update(TournamentGrid);
             dbContext.SaveChanges();
         }

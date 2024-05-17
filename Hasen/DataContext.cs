@@ -22,10 +22,10 @@ namespace Kaharman
         {
             modelBuilder.Entity<Tournament>().HasMany(t => t.Participants).WithMany(t => t.Tournaments);
             modelBuilder.Entity<TournamentGrid>().HasMany(t => t.Participants).WithMany(t => t.TournamentGrids);
-            modelBuilder.Entity<TournamentGrid>().HasOne(t => t.Tournament).WithMany(t => t.TournamentGrids);
-            modelBuilder.Entity<TournamentGrid>().HasMany(t => t.Matchs).WithOne(m => m.TournamentGrid);
-            modelBuilder.Entity<TournamentGrid>().HasMany(t => t.Places).WithOne(i => i.TournamentGrid);
-            modelBuilder.Entity<Match>().HasMany(m => m.Items).WithOne(i => i.Match);
+            modelBuilder.Entity<TournamentGrid>().HasOne(t => t.Tournament).WithMany(t => t.TournamentGrids).OnDelete(DeleteBehavior.Cascade);
+            modelBuilder.Entity<TournamentGrid>().HasMany(t => t.Matchs).WithOne(m => m.TournamentGrid).OnDelete(DeleteBehavior.Cascade);
+            modelBuilder.Entity<TournamentGrid>().HasMany(t => t.Places).WithOne(i => i.TournamentGrid).OnDelete(DeleteBehavior.Cascade);
+            modelBuilder.Entity<Match>().HasMany(m => m.Items).WithOne(i => i.Match).OnDelete(DeleteBehavior.Cascade);
             base.OnModelCreating(modelBuilder);
         }
     }
@@ -83,9 +83,9 @@ namespace Kaharman
         [DisplayName("Тренер")]
         public string Trainer { get; set; }
         [Browsable(false)]
-        public List<Tournament> Tournaments { get; set; }
+        public List<Tournament>? Tournaments { get; set; }
         [Browsable(false)]
-        public List<TournamentGrid> TournamentGrids { get; set; }
+        public List<TournamentGrid>? TournamentGrids { get; set; }
         public Participant() {
             Tournaments = new List<Tournament>();
             TournamentGrids = new List<TournamentGrid>();
@@ -94,14 +94,6 @@ namespace Kaharman
         {
             Age = (int)((int)(DateTime.Now - DateOfBirth).TotalDays / ValyeDayYear);
         }
-    }
-    public enum ItemPlaces
-    {
-        OnePlace,
-        TwoPlace, 
-        ThreePlace,
-        ThreePlace2,
-        Winner
     }
     public enum ItemPlaces
     {

@@ -11,7 +11,7 @@ namespace Kaharman
 {
     public partial class TournamentForm : Form
     {
-        Tournament? Tournament;
+        Tournament Tournament;
         ParticipantDataGrid ParticipantDataGrid;
         TournamentGridDataGrid TournamentGridDataGrid;
         public TournamentForm()
@@ -26,14 +26,15 @@ namespace Kaharman
             int i = int.Parse(ID);
             using (KaharmanDataContext dbContext = new KaharmanDataContext())
             {
-                Tournament = dbContext.Tournament.Include(t => t.Participants).Include(t => t.TournamentGrids).Where(t => t.Id == i).FirstOrDefault();
-                if (Tournament == null)
+                Tournament? t = dbContext.Tournament.Include(t => t.Participants).Include(t => t.TournamentGrids).Where(t => t.Id == i).FirstOrDefault();
+                if (t == null)
                 {
                     MessageBox.Show("Ошибка базы данных.");
                     return;
                 }
-                foreach (var t in Tournament.Participants)
-                    t.InitAge();
+                Tournament = t;
+                foreach (var p in Tournament.Participants)
+                    p.InitAge();
             }
             name.Text = Tournament.NameTournament;
             dateTimePicker1.Value = Tournament.StartDate;
@@ -158,6 +159,8 @@ namespace Kaharman
                                             newPart = true;
                                             participant.FIO = rowExcel[i][1].ToString().Trim().ToUpper();
                                         }
+                                        if (Tournament.Participants.Find(p=>p.FIO == participant.FIO) != null)
+                                            continue;
                                         participant.Gender = ValidateGender(rowExcel[i][2].ToString().ToUpper());
                                         if (DateTime.TryParse(rowExcel[i][3].ToString(), out DateTime time))
                                             participant.DateOfBirth = time;
@@ -225,9 +228,19 @@ namespace Kaharman
             if (gridDataGridView.SelectedRows.Count == 0)
             {
                 MessageBox.Show("Выделите таблицы которые желаете удалить");
+                return;
             }
-            foreach (DataGridViewRow row in gridDataGridView.SelectedRows)
-                AccessSQL.SendSQL("DELETE * FROM TournamentGrid WHERE id = " + row.Cells["ID"].Value.ToString());
+            if (gridDataGridView.SelectedRows.Count == 1) {
+                using (KaharmanDataContext dbContext = new KaharmanDataContext())
+                {
+                    TournamentGrid? tournamentGrid = dbContext.TournamentGrid.Find((int)gridDataGridView.SelectedRows[0].Cells["Id"].Value);
+                    if (tournamentGrid == null)
+                        return;
+                    Tournament.TournamentGrids.Remove(Tournament.TournamentGrids.Find(g=>g.Id == tournamentGrid.Id));
+                    dbContext.TournamentGrid.Remove(tournamentGrid);
+                    dbContext.SaveChanges();
+                }
+            }
             UpDataGrid();
         }
         private void dataGridView2_CellClick(object sender, DataGridViewCellMouseEventArgs e)
@@ -420,32 +433,22 @@ namespace Kaharman
                 //tournament.Close();
             }
         }
-
         private void копToolStripMenuItem_Click(object sender, EventArgs e)
         {
             if (gridDataGridView.SelectedRows.Count == 1)
             {
-                string IDGrid = gridDataGridView.SelectedRows[0].Cells["ID"].Value.ToString();
-                DateTime dateTime;
-                string nameGrid;
-                string id_tournt;
-                using (DataTable data = AccessSQL.GetDataTableSQL($"SELECT * FROM TournamentGrid WHERE id = {IDGrid}"))
+                int IDGrid = (int)gridDataGridView.SelectedRows[0].Cells[0].Value;
+                using (KaharmanDataContext dbContext = new KaharmanDataContext())
                 {
-                    if (data.Rows.Count == 1)
+                    TournamentGrid? grid = dbContext.TournamentGrid.Include(g=>g.Participants).Include(g=>g.Tournament).ThenInclude(t=>t.Participants).FirstOrDefault(g=>g.Id == IDGrid);
+                    if (grid == null)
                     {
-                        DataRow row = data.Rows[0];
-                        dateTime = DateTime.Parse(row["date"].ToString());
-                        nameGrid = row["name"].ToString();
-                        id_tournt = row["id_tournament"].ToString();
-                    }
-                    else
-                    {
-                        MessageBox.Show("Ошибка базы данных");
+                        MessageBox.Show("Ошибка базы данных, перезапустите приложение.");
                         return;
                     }
+                    TournamentGridForm tournamentGrid = new TournamentGridForm(grid,StatusFormTournamentGrid.Copy);
+                    tournamentGrid.ShowDialog();
                 }
-                //    TournamentGridForm tournamentGrid = new TournamentGridForm(id_tournt, name.Text, mainJudge.Text, secret.Text, dateTime, ParticipantsTable, StatusFormTournamentGrid.Copy, nameGrid);
-                //    tournamentGrid.ShowDialog();
                 UpDataGrid();
             }
             else
@@ -461,29 +464,18 @@ namespace Kaharman
         {
             if (gridDataGridView.SelectedRows.Count == 1)
             {
-                string IDGrid = gridDataGridView.SelectedRows[0].Cells["ID"].Value.ToString();
-                DateTime dateTime;
-                string nameGrid;
-                string id_tournt;
-                string num_prot;
-                using (DataTable data = AccessSQL.GetDataTableSQL($"SELECT * FROM TournamentGrid WHERE id = {IDGrid}"))
+                int IDGrid = (int)gridDataGridView.SelectedRows[0].Cells[0].Value;
+                using (KaharmanDataContext dbContext = new KaharmanDataContext())
                 {
-                    if (data.Rows.Count == 1)
+                    TournamentGrid? grid = dbContext.TournamentGrid.Include(g => g.Participants).Include(g => g.Tournament).ThenInclude(t => t.Participants).FirstOrDefault(g => g.Id == IDGrid);
+                    if (grid == null)
                     {
-                        DataRow row = data.Rows[0];
-                        dateTime = DateTime.Parse(row["date"].ToString());
-                        nameGrid = row["name"].ToString();
-                        id_tournt = row["id_tournament"].ToString();
-                        num_prot = row["number_t"].ToString();
-                    }
-                    else
-                    {
-                        MessageBox.Show("Ошибка базы данных");
+                        MessageBox.Show("Ошибка базы данных, перезапустите приложение.");
                         return;
                     }
+                    TournamentGridForm tournamentGrid = new TournamentGridForm(grid, StatusFormTournamentGrid.Create);
+                    tournamentGrid.ShowDialog();
                 }
-                //       TournamentGridForm tournamentGrid = new TournamentGridForm(id_tournt, name.Text, mainJudge.Text, secret.Text, dateTime, ParticipantsTable, StatusFormTournamentGrid.Edit, nameGrid, num_prot, IDGrid);
-                //      tournamentGrid.ShowDialog();
                 UpDataGrid();
             }
             else

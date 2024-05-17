@@ -1,6 +1,7 @@
 using Kaharman;
 using Microsoft.EntityFrameworkCore;
 using NPOI.SS.Formula.Functions;
+using NPOI.SS.UserModel;
 using System.ComponentModel;
 using System.Data;
 
@@ -20,93 +21,11 @@ namespace Hasen
         public Kaharman()
         {
             InitializeComponent();
-            //MessageBox.Show(Math.Log(8,2).ToString());
-            //MessageBox.Show(Math.Log(16, 2).ToString());
-            //MessageBox.Show(Math.Log(32, 2).ToString());
             //using (KaharmanDataContext dbContext = new KaharmanDataContext())
             //{
             //    dbContext.Database.EnsureDeleted();
             //    dbContext.Database.EnsureCreated();
             //}
-            //StartForm startForm = new StartForm();
-            //if (startForm.ShowDialog() == DialogResult.Cancel)
-            //    this.Close();
-            //ParticipantsTable = new ParticipantDataTable(dataGridView1);
-            //Participant participant = new Participant()
-            //{
-            //    FIO = "—¿–—≈ÕŒ¬¿ Ã»À¿Õ¿",
-            //    Gender = "∆",
-            //    DateOfBirth = DateTime.Now,
-            //    Weight = 123,
-            //    Qualification = "asdasd",
-            //    City = "as312123",
-            //    Trainer = "3cvvfg"
-            //};
-            //Participant participant1 = new Participant()
-            //{
-            //    FIO = "—¿–—≈ÕŒ¬¿ Ã»À¿Õ¿sd",
-            //    Gender = "∆f",
-            //    DateOfBirth = DateTime.Now,
-            //    Weight = 1235,
-            //    Qualification = "asdasd123",
-            //    City = "as312123123",
-            //    Trainer = "3cvvfg12"
-            ////};
-            //dbContext.Participant.Add(participant);
-            //MessageBox.Show(participant.Id.ToString());
-            //dbContext.SaveChanges();
-            //MessageBox.Show(participant.Id.ToString());
-            //dbContext.Participant.Add(participant1);
-            //dbContext.SaveChanges();
-
-            //Tournament tournament = new Tournament()
-            //{
-            //    NameTournament = "123123123123",
-            //    StartDate = DateTime.Now,
-            //    EndDate = DateTime.Now,
-            //    NoteTournament = "123123123",
-            //    Judge = "xzczxcxzc",
-            //    Secret = "123123123",
-            //    Participants = new List<Participant>() { participant, participant1 }
-            //};
-
-            //TournamentGrid grid = new TournamentGrid()
-            //{
-            //    Number = 1,
-            //    DataStart = DateTime.Now,
-            //    NameGrid = "asdsda",
-            //    Type = 4,
-            //    Status = "1/4",
-            //    Participants = new List<Participant> { participant, participant1 },
-            //    Tournament = tournament,
-            //    Matchs = new List<Match>()
-            //};
-            //grid.Matchs.Add(new Match()
-            //{
-            //    RoundNumber = 1,
-            //    MatchNumber = 2,
-            //    IdParticipant1 = 1,
-            //    IdParticipant2 = 2,
-            //    Status = StatusMatch.WinPar2,
-            //    TournamentGrid = grid
-            //});
-            //grid.Matchs.Add(new Match()
-            //{
-            //    RoundNumber = 1,
-            //    MatchNumber = 2,
-            //    IdParticipant1 = 1,
-            //    IdParticipant2 = 2,
-            //    Status = StatusMatch.WinPar2,
-            //    TournamentGrid = grid
-            //});
-            //grid.Tournament = tournament;
-
-
-            //dbContext.TournamentGrid.Add(grid);
-            //dbContext.Tournament.Add(tournament);
-
-            //dbContext.SaveChanges();
-
             ParticipantView.VisibleChanged += ParticipantView_VisibleChanged;
             ParticipantView.MouseClick += ParticipantView_MouseClick;
             DataHistoryTournaments = new TournamentDataGrid(TournamentView, tournamentContextMenuStrip);
@@ -300,7 +219,6 @@ namespace Hasen
                     }
 
         }
-
         private void Û‰‡ÎËÚ¸ToolStripMenuItem1_Click(object sender, EventArgs e)
         {
             if (TournamentView.SelectedRows.Count == 0)
@@ -310,15 +228,14 @@ namespace Hasen
             }
             else if (TournamentView.SelectedRows.Count == 1)
             {
-                Tournament? tournament = DataHistoryTournaments.GetItem((int)TournamentView.SelectedRows[0].Cells[0].Value);
-                if (tournament != null)
+                using (KaharmanDataContext dbContext = new KaharmanDataContext())
                 {
-                    using (KaharmanDataContext dbContext = new KaharmanDataContext())
+                    Tournament? tournament = dbContext.Tournament.Find((int)TournamentView.SelectedRows[0].Cells[0].Value);
+                    if (tournament != null)
                     {
                         dbContext.Tournament.Remove(tournament);
                         dbContext.SaveChanges();
                     }
-
                 }
             }
             else
@@ -328,17 +245,17 @@ namespace Hasen
                 {
                     foreach (DataGridViewRow row in TournamentView.SelectedRows)
                     {
-                        Tournament? tournamnet = DataHistoryTournaments.GetItem((int)row.Cells[0].Value);
-                        if (tournamnet != null)
+                        using (KaharmanDataContext dbContext = new KaharmanDataContext())
                         {
-
-                            using (KaharmanDataContext dbContext = new KaharmanDataContext())
+                            Tournament? tournament = dbContext.Tournament.Find((int)row.Cells[0].Value);
+                            if (tournament != null)
                             {
-                                // dbContext.Tournament.Remove(tournament);
+                                dbContext.Tournament.Remove(tournament);
                                 dbContext.SaveChanges();
                             }
                         }
                     }
+
                 }
             }
             using (KaharmanDataContext dbContext = new KaharmanDataContext())
