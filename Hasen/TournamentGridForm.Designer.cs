@@ -42,19 +42,18 @@
             button3 = new Button();
             button4 = new Button();
             panel1 = new Panel();
-            numberProtocol = new TextBox();
-            label2 = new Label();
             programmText = new Label();
             programm = new TextBox();
-            genderTextBox = new TextBox();
-            genderFilterText = new Label();
-            panel2 = new Panel();
             label7 = new Label();
+            genderTextBox = new TextBox();
             label6 = new Label();
-            qualification = new TextBox();
+            genderFilterText = new Label();
             ageMaxTextBox = new TextBox();
             ageRange = new Label();
             ageMinTextBox = new TextBox();
+            numberProtocol = new TextBox();
+            label2 = new Label();
+            panel2 = new Panel();
             ((System.ComponentModel.ISupportInitialize)allParticipant).BeginInit();
             ((System.ComponentModel.ISupportInitialize)gridParticipant).BeginInit();
             panel1.SuspendLayout();
@@ -86,7 +85,7 @@
             // dateTimePicker1
             // 
             dateTimePicker1.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
-            dateTimePicker1.Location = new Point(144, 39);
+            dateTimePicker1.Location = new Point(125, 74);
             dateTimePicker1.Name = "dateTimePicker1";
             dateTimePicker1.Size = new Size(339, 23);
             dateTimePicker1.TabIndex = 2;
@@ -102,7 +101,7 @@
             // nameTextBox
             // 
             nameTextBox.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
-            nameTextBox.Location = new Point(129, 39);
+            nameTextBox.Location = new Point(124, 42);
             nameTextBox.Name = "nameTextBox";
             nameTextBox.Size = new Size(375, 23);
             nameTextBox.TabIndex = 4;
@@ -110,7 +109,7 @@
             // label1
             // 
             label1.AutoSize = true;
-            label1.Location = new Point(17, 42);
+            label1.Location = new Point(15, 45);
             label1.Name = "label1";
             label1.Size = new Size(90, 15);
             label1.TabIndex = 5;
@@ -119,7 +118,7 @@
             // label3
             // 
             label3.AutoSize = true;
-            label3.Location = new Point(25, 42);
+            label3.Location = new Point(15, 80);
             label3.Name = "label3";
             label3.Size = new Size(100, 15);
             label3.TabIndex = 8;
@@ -181,7 +180,7 @@
             // label5
             // 
             label5.AutoSize = true;
-            label5.Location = new Point(12, 149);
+            label5.Location = new Point(17, 149);
             label5.Name = "label5";
             label5.Size = new Size(86, 15);
             label5.TabIndex = 21;
@@ -209,43 +208,27 @@
             // 
             // panel1
             // 
-            panel1.Controls.Add(numberProtocol);
-            panel1.Controls.Add(label2);
             panel1.Controls.Add(programmText);
             panel1.Controls.Add(programm);
+            panel1.Controls.Add(label7);
             panel1.Controls.Add(genderTextBox);
+            panel1.Controls.Add(label6);
             panel1.Controls.Add(genderFilterText);
-            panel1.Controls.Add(nameTextBox);
-            panel1.Controls.Add(label1);
             panel1.Controls.Add(label5);
+            panel1.Controls.Add(ageMaxTextBox);
             panel1.Controls.Add(allParticipant);
+            panel1.Controls.Add(ageRange);
+            panel1.Controls.Add(ageMinTextBox);
             panel1.Dock = DockStyle.Left;
             panel1.Location = new Point(0, 24);
             panel1.Name = "panel1";
             panel1.Size = new Size(534, 557);
             panel1.TabIndex = 24;
             // 
-            // numberProtocol
-            // 
-            numberProtocol.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
-            numberProtocol.Location = new Point(129, 10);
-            numberProtocol.Name = "numberProtocol";
-            numberProtocol.Size = new Size(375, 23);
-            numberProtocol.TabIndex = 27;
-            // 
-            // label2
-            // 
-            label2.AutoSize = true;
-            label2.Location = new Point(17, 13);
-            label2.Name = "label2";
-            label2.Size = new Size(107, 15);
-            label2.TabIndex = 26;
-            label2.Text = "Номер протокола";
-            // 
             // programmText
             // 
             programmText.AutoSize = true;
-            programmText.Location = new Point(17, 100);
+            programmText.Location = new Point(17, 74);
             programmText.Name = "programmText";
             programmText.Size = new Size(72, 15);
             programmText.TabIndex = 25;
@@ -254,38 +237,96 @@
             // programm
             // 
             programm.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
-            programm.Location = new Point(129, 97);
+            programm.Location = new Point(129, 72);
             programm.Name = "programm";
             programm.Size = new Size(375, 23);
             programm.TabIndex = 24;
             // 
+            // label7
+            // 
+            label7.AutoSize = true;
+            label7.Location = new Point(17, 103);
+            label7.Name = "label7";
+            label7.Size = new Size(88, 15);
+            label7.TabIndex = 27;
+            label7.Text = "Квалификация";
+            // 
             // genderTextBox
             // 
             genderTextBox.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
-            genderTextBox.Location = new Point(129, 68);
+            genderTextBox.Location = new Point(129, 14);
             genderTextBox.Name = "genderTextBox";
             genderTextBox.Size = new Size(375, 23);
             genderTextBox.TabIndex = 23;
             // 
+            // label6
+            // 
+            label6.AutoSize = true;
+            label6.Location = new Point(254, 45);
+            label6.Name = "label6";
+            label6.Size = new Size(12, 15);
+            label6.TabIndex = 29;
+            label6.Text = "-";
+            // 
             // genderFilterText
             // 
             genderFilterText.AutoSize = true;
-            genderFilterText.Location = new Point(17, 71);
+            genderFilterText.Location = new Point(17, 17);
             genderFilterText.Name = "genderFilterText";
             genderFilterText.Size = new Size(30, 15);
             genderFilterText.TabIndex = 21;
             genderFilterText.Text = "Пол";
             // 
+            // ageMaxTextBox
+            // 
+            ageMaxTextBox.Location = new Point(285, 42);
+            ageMaxTextBox.Name = "ageMaxTextBox";
+            ageMaxTextBox.Size = new Size(101, 23);
+            ageMaxTextBox.TabIndex = 28;
+            ageMaxTextBox.TextChanged += ageMaxTextBox_TextChanged;
+            // 
+            // ageRange
+            // 
+            ageRange.AutoSize = true;
+            ageRange.Location = new Point(17, 45);
+            ageRange.Name = "ageRange";
+            ageRange.Size = new Size(50, 15);
+            ageRange.TabIndex = 27;
+            ageRange.Text = "Возраст";
+            // 
+            // ageMinTextBox
+            // 
+            ageMinTextBox.Location = new Point(129, 43);
+            ageMinTextBox.Name = "ageMinTextBox";
+            ageMinTextBox.Size = new Size(101, 23);
+            ageMinTextBox.TabIndex = 26;
+            ageMinTextBox.TextChanged += ageMinTextBox_TextChanged;
+            // 
+            // numberProtocol
+            // 
+            numberProtocol.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
+            numberProtocol.Location = new Point(125, 14);
+            numberProtocol.Name = "numberProtocol";
+            numberProtocol.Size = new Size(375, 23);
+            numberProtocol.TabIndex = 27;
+            // 
+            // label2
+            // 
+            label2.AutoSize = true;
+            label2.Location = new Point(15, 17);
+            label2.Name = "label2";
+            label2.Size = new Size(107, 15);
+            label2.TabIndex = 26;
+            label2.Text = "Номер протокола";
+            // 
             // panel2
             // 
             panel2.AutoScroll = true;
-            panel2.Controls.Add(label7);
-            panel2.Controls.Add(label6);
-            panel2.Controls.Add(qualification);
-            panel2.Controls.Add(ageMaxTextBox);
-            panel2.Controls.Add(ageRange);
+            panel2.Controls.Add(numberProtocol);
+            panel2.Controls.Add(label2);
+            panel2.Controls.Add(nameTextBox);
             panel2.Controls.Add(label3);
-            panel2.Controls.Add(ageMinTextBox);
+            panel2.Controls.Add(label1);
             panel2.Controls.Add(dateTimePicker1);
             panel2.Controls.Add(button2);
             panel2.Controls.Add(button1);
@@ -296,56 +337,6 @@
             panel2.Name = "panel2";
             panel2.Size = new Size(515, 557);
             panel2.TabIndex = 25;
-            // 
-            // label7
-            // 
-            label7.AutoSize = true;
-            label7.Location = new Point(25, 100);
-            label7.Name = "label7";
-            label7.Size = new Size(88, 15);
-            label7.TabIndex = 27;
-            label7.Text = "Квалификация";
-            // 
-            // label6
-            // 
-            label6.AutoSize = true;
-            label6.Location = new Point(267, 71);
-            label6.Name = "label6";
-            label6.Size = new Size(12, 15);
-            label6.TabIndex = 29;
-            label6.Text = "-";
-            // 
-            // qualification
-            // 
-            qualification.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
-            qualification.Location = new Point(144, 97);
-            qualification.Name = "qualification";
-            qualification.Size = new Size(339, 23);
-            qualification.TabIndex = 26;
-            // 
-            // ageMaxTextBox
-            // 
-            ageMaxTextBox.Location = new Point(298, 68);
-            ageMaxTextBox.Name = "ageMaxTextBox";
-            ageMaxTextBox.Size = new Size(101, 23);
-            ageMaxTextBox.TabIndex = 28;
-            // 
-            // ageRange
-            // 
-            ageRange.AutoSize = true;
-            ageRange.Location = new Point(25, 71);
-            ageRange.Name = "ageRange";
-            ageRange.Size = new Size(50, 15);
-            ageRange.TabIndex = 27;
-            ageRange.Text = "Возраст";
-            // 
-            // ageMinTextBox
-            // 
-            ageMinTextBox.Location = new Point(144, 68);
-            ageMinTextBox.Name = "ageMinTextBox";
-            ageMinTextBox.Size = new Size(101, 23);
-            ageMinTextBox.TabIndex = 26;
-            ageMinTextBox.TextChanged += ageMinTextBox_TextChanged;
             // 
             // TournamentGridForm
             // 
@@ -398,7 +389,6 @@
         private Label label6;
         private TextBox ageMaxTextBox;
         private Label label7;
-        private TextBox qualification;
         private TextBox numberProtocol;
         private Label label2;
     }

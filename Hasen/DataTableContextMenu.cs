@@ -270,18 +270,41 @@ namespace Kaharman
     }
     public class ParticipantDataGrid : TableContextMenu<Participant>
     {
-        public ParticipantDataGrid(DataGridView dataGridView, ContextMenuStrip? contextMenuStrip = null) : base(dataGridView, contextMenuStrip)
+        int MinAgeFilter = 0;
+        int MaxAgeFiter = 100;
+        bool filterForm;
+        public ParticipantDataGrid(DataGridView dataGridView, ContextMenuStrip? contextMenuStrip = null, bool FilterForm = false) : base(dataGridView, contextMenuStrip)
         {
+            filterForm = FilterForm;
         }
         protected override void TournamentDataGrid_ItemClicked(object? sender, ToolStripItemClickedEventArgs e)
         {
             base.TournamentDataGrid_ItemClicked(sender, e);
-            GridView.DataSource = bindingList.Where(data =>
+            GridView.DataSource = GetFilterList();
+        }
+        private List<Participant> GetFilterList()
+        {
+            return GetFilterForm().Where(data =>
                 listContextMenu[0].Filter(data.FIO) &&
                 listContextMenu[1].Filter(data.Gender) &&
                 listContextMenu[2].Filter(data.Qualification) &&
                 listContextMenu[3].Filter(data.City) &&
                 listContextMenu[4].Filter(data.Trainer)).ToList();
+        }
+        private List<Participant> GetFilterForm()
+        {
+            if (filterForm == false)
+                return bindingList.ToList();
+            return bindingList.Where(FilterParticipant).ToList();
+        }
+        private bool FilterParticipant(Participant participant)
+        {
+            if (MinAgeFilter != 0 || MaxAgeFiter != 100)
+                if (MinAgeFilter > participant.Age || MaxAgeFiter < participant.Age)
+                {
+                    return false;
+                }
+            return true;
         }
         protected override void InitTable()
         {
@@ -300,28 +323,28 @@ namespace Kaharman
                 switch (e.ColumnIndex)
                 {
                     case 1:
-                        GridView.DataSource = bindingList.OrderBy(t => t.FIO).ToList();
+                        GridView.DataSource = GetFilterList().OrderBy(t => t.FIO).ToList();
                         break;
                     case 2:
-                        GridView.DataSource = bindingList.OrderBy(t => t.Gender).ToList();
+                        GridView.DataSource = GetFilterList().OrderBy(t => t.Gender).ToList();
                         break;
                     case 3:
-                        GridView.DataSource = bindingList.OrderBy(t => t.Age).ToList();
+                        GridView.DataSource = GetFilterList().OrderBy(t => t.Age).ToList();
                         break;
                     case 4:
-                        GridView.DataSource = bindingList.OrderBy(t => t.DateOfBirth).ToList();
+                        GridView.DataSource = GetFilterList().OrderBy(t => t.DateOfBirth).ToList();
                         break;
                     case 5:
-                        GridView.DataSource = bindingList.OrderBy(t => t.Weight).ToList();
+                        GridView.DataSource = GetFilterList().OrderBy(t => t.Weight).ToList();
                         break;
                     case 6:
-                        GridView.DataSource = bindingList.OrderBy(t => t.Qualification).ToList();
+                        GridView.DataSource = GetFilterList().OrderBy(t => t.Qualification).ToList();
                         break;
                     case 7:
-                        GridView.DataSource = bindingList.OrderBy(t => t.City).ToList();
+                        GridView.DataSource = GetFilterList().OrderBy(t => t.City).ToList();
                         break;
                     case 8:
-                        GridView.DataSource = bindingList.OrderBy(t => t.Trainer).ToList();
+                        GridView.DataSource = GetFilterList().OrderBy(t => t.Trainer).ToList();
                         break;
                 }
             }
@@ -337,6 +360,16 @@ namespace Kaharman
         public void DeleteParticipant(Participant participant)
         {
             bindingList.Remove(participant);
+        }
+        public void AddFilterMin(int age)
+        {
+            MinAgeFilter = age;
+            TournamentDataGrid_ItemClicked(null, null);
+        }
+        public void AddFilterMax(int age)
+        {
+            MaxAgeFiter = age;
+            TournamentDataGrid_ItemClicked(null, null);
         }
     }
     public class TournamentGridDataGrid : TableContextMenu<TournamentGrid>
@@ -368,477 +401,6 @@ namespace Kaharman
                 listContextMenu[4].Filter(data.AgeRange) &&
                 listContextMenu[5].Filter(data.Qualification) &&
                 listContextMenu[6].Filter(data.Status)).ToList();
-        }
-    }
-
-    public class DataTableContextMenu : DataTable
-    {
-        List<ContextMenuStrip> listContextMenu = new List<ContextMenuStrip>();
-        public DataView DataView { get; }
-        public DataTableContextMenu() : base()
-        {
-            RowChanged += DataTableContextMenu_RowChanged; 
-            DataView = new DataView(this);
-        }
-        public void AddColunm(string name)
-        {
-            Columns.Add(name);
-            ContextMenuFilter contextMenu = new ContextMenuFilter()
-            {
-                Name = name,
-                AutoClose = false,
-                ShowCheckMargin = true
-            };
-            contextMenu.ItemClicked += ContextMenuStrip_ItemClicked;
-            listContextMenu.Add(contextMenu);
-        }
-        public void AddColunm(string name, ContextMenuFilter contextMenu)
-        {
-            Columns.Add(name);
-            contextMenu.Name = name;
-            contextMenu.AutoClose = false;
-            contextMenu.ShowCheckMargin = true;
-            contextMenu.ItemClicked += ContextMenuStrip_ItemClicked;
-            listContextMenu.Add(contextMenu);
-        }
-        public void AddColunm(string name, Type type)
-        {
-            Columns.Add(name, type);
-            ContextMenuFilter contextMenuStrip = new ContextMenuFilter()
-            {
-                AutoClose = false,
-                Name = name,
-                ShowCheckMargin = true
-            };
-            contextMenuStrip.ItemClicked += ContextMenuStrip_ItemClicked;
-            listContextMenu.Add(contextMenuStrip);
-        }
-        public void AddColunm(string name, Type type, ContextMenuFilter contextMenu)
-        {
-            Columns.Add(name, type);
-            contextMenu.Name = name;
-            contextMenu.AutoClose = false;
-            contextMenu.ShowCheckMargin = true;
-            contextMenu.ItemClicked += ContextMenuStrip_ItemClicked;
-            listContextMenu.Add(contextMenu);
-        }
-        private void ContextMenuStrip_ItemClicked(object? sender, ToolStripItemClickedEventArgs e)
-        {
-            ContextMenuFilterName? contextMenu = sender as ContextMenuFilterName;
-            if(contextMenu != null)
-            {
-                FilterContent();
-                return;
-            }
-            ContextMenuStrip? contextMenuStrip = sender as ContextMenuStrip;
-            if(contextMenuStrip != null)
-            {
-                ToolStripMenuItem? toolStrip = e.ClickedItem as ToolStripMenuItem;
-                if (toolStrip != null)
-                {
-                    if (toolStrip.Text == " Выделить всё")
-                    {
-                        bool value;
-                        if (toolStrip.Checked)
-                            value = false;
-                        else value = true;
-                        toolStrip.Checked = value;
-                        for (int i = 0; i < contextMenuStrip.Items.Count; i++)
-                            ((ToolStripMenuItem)contextMenuStrip.Items[i]).Checked = value; 
-                    }
-                    else {
-                        if (toolStrip.Checked)
-                            toolStrip.Checked = false;
-                        else toolStrip.Checked = true;
-                    }
-                    FilterContent();
-                }
-            }            
-        }
-        private void FilterContent() {
-            List<string> filters = new List<string>();
-            foreach(ContextMenuFilter contextMenuStrip in listContextMenu)
-            {
-                string? filter = contextMenuStrip.GetFilter();
-                if (filter != null)
-                {
-                    filters.Add(filter);
-                }
-            }
-            if (filters.Count > 0)
-                DataView.RowFilter = string.Join(" AND ", filters);
-            else
-                DataView.RowFilter = String.Empty;
-        }      
-        private void DataTableContextMenu_RowChanged(object sender, DataRowChangeEventArgs e)
-        {
-            if (e.Action == DataRowAction.Add)
-            {
-                object[]? cells = e.Row.ItemArray;
-                if (cells != null && cells.Length == listContextMenu.Count)
-                {
-                    for (int i = 0; i < cells.Length; i++)
-                    {
-                        if (((ContextMenuFilter)listContextMenu[i]).AddAutoItems)
-                        {
-                            string? item = cells[i].ToString();
-                            if (item != null && item.Length != 0)
-                                AddItemContextMenu(listContextMenu[i], item);
-                        }
-                    }
-                }
-            }
-        }        
-        public void ShowContextMenu(int IdColumn, Point Position)
-        {
-            CloseContextMenu();
-            listContextMenu[IdColumn].Show(Position, ToolStripDropDownDirection.Default);
-        }
-        public void CloseContextMenu()
-        {
-            foreach (ContextMenuStrip c in listContextMenu)
-                c.Close();
-        }
-        private void AddItemContextMenu(ContextMenuStrip menuStrip, string item)
-        {
-            System.Collections.IList list = menuStrip.Items;
-            List<string> text = new List<string>();
-            for (int i = 0; i < list.Count; i++)
-            {
-                ToolStripMenuItem? toolStrip = list[i] as ToolStripMenuItem;
-                if (toolStrip != null)
-                {
-                    if (toolStrip.Text == item)
-                        return;
-                    text.Add(toolStrip.Text);
-                }
-            }
-            text.Add(item);
-            text.Sort();
-
-            for (int i = 0; i < text.Count; ++i)
-            {
-                if (text[i] == item)
-                {
-                    ToolStripMenuItem toolStrip = new ToolStripMenuItem();
-                    toolStrip.Text = item;
-                    toolStrip.Checked = true;
-                    menuStrip.Items.Insert(i, toolStrip);
-                }
-            }
-        }
-        
-        public void FillTable(DataTable table)
-        {
-            foreach(DataRow row in table.Rows)
-            {
-                this.AddRow(row);
-            }
-        }
-        public async void FillTable(DataTable table, Form form, ProgressBar progressBar)
-        {
-            progressBar.Visible = true;
-            progressBar.Maximum = table.Rows.Count;
-            try
-            {
-                await Task.Run(() =>
-                {
-                    for (int i = 0; i < table.Rows.Count; i++)
-                    {
-                        DataRow row = table.Rows[i];
-                        form.Invoke(() =>
-                        {
-                            this.AddRow(row);
-                        });
-                        progressBar.Value = i;
-                    }
-                });
-            }
-            catch
-            {  }
-            progressBar.Visible = false;
-        }
-        public async void FillTableOnAccess(DataTable table, Form form, ProgressBar progressBar)
-        {
-            progressBar.Visible = true;
-            progressBar.Maximum = table.Rows.Count;
-            try
-            {
-                await Task.Run(() =>
-                {
-                    for (int i = 0; i < table.Rows.Count; i++)
-                    {
-                        DataRow row = table.Rows[i];
-                        var objects = row.ItemArray;
-                        objects[3] = (int)((int)(DateTime.Now - DateTime.Parse(row["date_of_birth"].ToString())).TotalDays / ParticipantX.ValyeDayYear);
-                        form.Invoke(() =>
-                        {
-                            AddRow(objects);
-                        });
-                        progressBar.Value = i;
-                    }
-                });
-            }
-            catch
-            { }
-            progressBar.Visible = false;
-        }
-        public void AddRow(DataRow Row)
-        {
-            object[]? cells = Row.ItemArray;
-            if (cells != null && cells.Length == listContextMenu.Count)
-            {
-                for (int i = 0; i < cells.Length; i++)
-                {
-                    if (((ContextMenuFilter)listContextMenu[i]).AddAutoItems)
-                    {
-                        string? item = cells[i].ToString();
-                        if (item != null && item.Length != 0)
-                            AddItemContextMenu(listContextMenu[i], item);
-                    }
-                }
-            }
-            this.Rows.Add(cells);
-        }
-        public void AddRow(object[]? cells)
-        {
-            if (cells != null && cells.Length == listContextMenu.Count)
-            {
-                for (int i = 0; i < cells.Length; i++)
-                {
-                    if (((ContextMenuFilter)listContextMenu[i]).AddAutoItems)
-                    {
-                        string? item = cells[i].ToString();
-                        if (item != null && item.Length != 0)
-                            AddItemContextMenu(listContextMenu[i], item);
-                    }
-                }
-            }
-            this.Rows.Add(cells);
-        }
-        public DataRow? GetRowToID(string id)
-        {
-            foreach(DataRow row in Rows)
-            {
-                if (row["ID"].ToString() == id)
-                    return row;
-            }
-            return null;
-        }
-        public void DeleteRow(DataRow row)
-        {
-            for (int j = 0; j < Columns.Count; j++)
-            {
-                if (row[j].ToString() == "" || !((ContextMenuFilter)listContextMenu[j]).AddAutoItems)
-                    continue;
-                DeleteItemContextMenu(j, row[j].ToString(), (ContextMenuFilter)listContextMenu[j]);
-            }
-            Rows.Remove(row);
-        }
-        private void DeleteItemContextMenu(int index, string item, ContextMenuFilter contextMenu)
-        {
-            int c = 0;
-            for (int i = 0; i < Rows.Count; i++)
-            {
-                if (Rows[i][index].ToString() == item)
-                    c++;
-                if (c == 2)
-                    return;
-            }
-            for (int i = 0; i < contextMenu.Items.Count; i++)
-            {
-                if (contextMenu.Items[i].Text == item)
-                {
-                    contextMenu.Items.RemoveAt(i);
-                    return;
-                }
-            }
-        }
-        public void DeleteRow(string id)
-        {
-            foreach (DataRow row in Rows)
-            {
-                if (row["ID"].ToString() == id)
-                {
-                    for (int j = 0; j < Columns.Count; j++)
-                    {
-                        if (row[j].ToString() == "" || !((ContextMenuFilter)listContextMenu[j]).AddAutoItems)
-                            continue;
-                        DeleteItemContextMenu(j, row[j].ToString(), (ContextMenuFilter)listContextMenu[j]);
-                    }
-                    Rows.Remove(row);                   
-                    return;
-                }
-            }
-        }
-    }
-    public class ParticipantDataTable : DataTableContextMenu {
-        public ParticipantDataTable() : base() {
-            Initialize();
-        }
-        public ParticipantDataTable(DataGridView dataGridView) : base()
-        {
-            Initialize();
-            dataGridView.DataSource = DataView;
-            dataGridView.MouseClick += MouseClick;
-            dataGridView.ColumnHeaderMouseClick += ColumnHeaderMouseClick;
-            dataGridView.Columns[0].Visible = false;
-        }
-        private void Initialize()
-        {
-            AddColunm("ID", typeof(int));
-
-            ContextMenuFilterName contextMenuName = new ContextMenuFilterName();
-            AddColunm("Фамилия и имя", contextMenuName);
-
-            AddColunm("Пол");
-
-            ContextMenuFilter contextMenuAge = new ContextMenuFilter();
-            ((ToolStripMenuItem)contextMenuAge.Items.Add(" Выделить всё")).Checked = true;
-            AddColunm("Возраст", typeof(int), contextMenuAge);
-
-            ContextMenuFilter contextMenuWeigth = new ContextMenuFilter();
-            ((ToolStripMenuItem)contextMenuWeigth.Items.Add(" Выделить всё")).Checked = true;
-            AddColunm("Вес",typeof(float), contextMenuWeigth);
-
-            ContextMenuFilter contextMenuQualiti = new ContextMenuFilter();
-            ((ToolStripMenuItem)contextMenuQualiti.Items.Add(" Выделить всё")).Checked = true;
-            ((ToolStripMenuItem)contextMenuQualiti.Items.Add(" Пустые")).Checked = true;
-            AddColunm("Квалификация", contextMenuQualiti);
-
-            ContextMenuFilter contextMenuCity = new ContextMenuFilter();
-            ((ToolStripMenuItem)contextMenuCity.Items.Add(" Выделить всё")).Checked = true;
-            ((ToolStripMenuItem)contextMenuCity.Items.Add(" Пустые")).Checked = true;
-            AddColunm("Город", contextMenuCity);
-
-            ContextMenuFilter contextMenuTrainer = new ContextMenuFilter();
-            ((ToolStripMenuItem)contextMenuTrainer.Items.Add(" Выделить всё")).Checked = true;
-            ((ToolStripMenuItem)contextMenuTrainer.Items.Add(" Пустые")).Checked = true;
-            AddColunm("Тренер", contextMenuTrainer);
-        }
-        public string GetIDsPartString()
-        {
-            string[] strings = new string[Rows.Count];
-            for(int i = 0; i < Rows.Count; i++)
-                strings[i] = $"\"{Rows[i]["ID"]}\"";
-            return string.Join(";",strings);
-        }
-        public void LoadPartOnIDs(string ids, Form form, ProgressBar progressBar)
-        {
-            string[] strings = ids.Split(';');
-            for(int i = 0; i < strings.Length; i++)
-                strings[i] = strings[i].Trim('\"');
-            if (ids.Length > 0)
-            {
-                using (DataTable data = AccessSQL.GetDataTableSQL($"SELECT * FROM Participants WHERE id IN ({string.Join(", ", strings)})"))
-                {
-                    this.FillTableOnAccess(data, form, progressBar);
-                }
-            }
-        }
-        private DataTable LoadDataTableOnFile(string file)
-        {
-            using (OleDbConnection conn = new OleDbConnection(@"Provider=Microsoft.ACE.OLEDB.12.0;Data Source=" + file + ";Extended Properties=\"Excel 12.0;HDR=YES;\""))
-            {
-                conn.Open();
-                OleDbCommand cmd = new OleDbCommand();
-                cmd.Connection = conn;
-
-                DataTable dtSheet = conn.GetOleDbSchemaTable(OleDbSchemaGuid.Tables, null);
-
-                string sheetName = String.Empty;
-                try
-                {
-                    sheetName = dtSheet.Rows[0]["TABLE_NAME"].ToString();
-                    cmd.CommandText = "SELECT * FROM [" + sheetName + "]";
-                    DataTable dt = new DataTable();
-                    dt.TableName = sheetName;
-                    OleDbDataAdapter da = new OleDbDataAdapter(cmd);
-                    da.Fill(dt);
-                    return dt;
-                }
-                catch (Exception ex)
-                {
-                    MessageBox.Show(string.Format("Ошибка заполнения таблицы. Error:{0}", ex.Message));
-                    return null;
-                }
-            }
-        }
-        public void LoadDataOnFiles(string[] files)
-        {
-            if (files.Length != 0)
-            {
-                foreach (string file in files)
-                {
-                    using (DataTable dataExcel = LoadDataTableOnFile(file))
-                    {
-                        try
-                        {
-                            var rowExcel = dataExcel.Rows;
-                            for (int i = 4; i < rowExcel.Count; i++)
-                            {
-                                if (rowExcel[i][1].ToString() == "")
-                                    continue;
-                                bool cont = false;
-                                foreach (DataRow r in Rows)
-                                {
-                                    if (r[1].ToString() == rowExcel[i][1].ToString())
-                                    {
-                                        cont = true;
-                                        break;
-                                    }
-                                }
-                                if (cont)
-                                    continue;
-                                ParticipantX participant = new ParticipantX();
-                                participant.Name = rowExcel[i][1].ToString().Trim();
-                                participant.Gender = ValidateGender(rowExcel[i][2].ToString().ToLower().Trim());
-                                if (DateTime.TryParse(rowExcel[i][3].ToString(), out DateTime time))
-                                    participant.DayOfBirth = time;
-                                try
-                                {
-                                    if (float.TryParse(rowExcel[i][5].ToString().Replace(',', '.'), new NumberFormatInfo { NumberDecimalSeparator = "." }, out float wight))
-                                        participant.Weight = wight;
-                                }
-                                catch
-                                {
-                                    participant.Weight = 0;
-                                }
-                                participant.Gualiti = rowExcel[i][6].ToString().ToLower().Trim();
-                                participant.City = rowExcel[i][12].ToString().Trim();
-                                participant.Trainer = rowExcel[i][13].ToString().Trim();
-                                AccessSQL.UpDateParticipant(participant);
-                                Rows.Add(participant.GetDataRow(this));
-                            }
-                        }
-                        catch (Exception ex)
-                        {
-                            MessageBox.Show(ex.Message);
-                        }
-                    }
-                }
-                MessageBox.Show("Загрузка завершена");
-            }
-        }
-        private string ValidateGender(string gender)
-        {
-            if (gender == "муж")
-                return "м";
-            else if (gender == "жен")
-                return "ж";
-            else
-                return gender;
-        }
-        public void ColumnHeaderMouseClick(object sender, DataGridViewCellMouseEventArgs e)
-        {
-            if (e.Button == MouseButtons.Right)
-            {
-                ShowContextMenu(e.ColumnIndex, Control.MousePosition);
-            }
-        }
-        public void MouseClick(object sender, MouseEventArgs e)
-        {
-            CloseContextMenu();
         }
     }
 }

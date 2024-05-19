@@ -1,5 +1,6 @@
 ﻿using Hasen;
 using MathNet.Numerics.RootFinding;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.VisualBasic.ApplicationServices;
 using NPOI.SS.Formula.Functions;
 using NPOI.SS.UserModel;
@@ -29,6 +30,7 @@ namespace Kaharman
         ParticipantDataGrid AllParticipantsDataGrid;
         ParticipantDataGrid ParticipantGridDataGrid;
         TournamentGrid TournamentGrid { get; set; }
+        KaharmanDataContext dbContext = new KaharmanDataContext();
         public TournamentGridForm(Tournament tournament, StatusFormTournamentGrid statusForm)
         {
             InitializeComponent();
@@ -36,16 +38,22 @@ namespace Kaharman
             this.Text = tournament.NameTournament;
             button1.Text = "Создать";
             TournamentGridForm_Resize(null, null);
-            AllParticipantsDataGrid = new ParticipantDataGrid(allParticipant);
+            AllParticipantsDataGrid = new ParticipantDataGrid(allParticipant, FilterForm: true);
             AllParticipantsDataGrid.LoadData(new List<Participant>(tournament.Participants));
             ParticipantGridDataGrid = new ParticipantDataGrid(gridParticipant);
             TournamentGrid = new TournamentGrid();
             TournamentGrid.Tournament = tournament;
         }
-        public TournamentGridForm(TournamentGrid tournamentGrid, StatusFormTournamentGrid statusForm)
+        public TournamentGridForm(int IDTournamentGrid, StatusFormTournamentGrid statusForm)
         {
             InitializeComponent();
             StatusForm = statusForm;
+            TournamentGrid? tournamentGrid = dbContext.TournamentGrid.Include(g => g.Participants).Include(g => g.Tournament).ThenInclude(t => t.Participants).FirstOrDefault(g => g.Id == IDTournamentGrid);
+            if (tournamentGrid == null)
+            {
+                MessageBox.Show("Ошибка базы данных, перезапустите приложение.");
+                return;
+            }
             this.Text = tournamentGrid.Tournament.NameTournament;
             button1.Text = "Создать";
             TournamentGridForm_Resize(null, null);
@@ -59,7 +67,7 @@ namespace Kaharman
             numberProtocol.Text = tournamentGrid.Number.ToString();
 
             string[] strings = tournamentGrid.AgeRange.ToString().Split('-');
-            if(strings.Length == 2 )
+            if (strings.Length == 2)
             {
                 ageMinTextBox.Text = strings[0];
                 ageMaxTextBox.Text = strings[1];
@@ -188,7 +196,7 @@ namespace Kaharman
                 this.Close();
                 return;
             }
-            else if(StatusForm == StatusFormTournamentGrid.Copy || StatusForm == StatusFormTournamentGrid.Create)
+            else if (StatusForm == StatusFormTournamentGrid.Copy || StatusForm == StatusFormTournamentGrid.Create)
             {
                 if (gridParticipant.RowCount < 2)
                 {
@@ -220,15 +228,11 @@ namespace Kaharman
                     MessageBox.Show("Больше 32 участников не предусмотрено");
                     return;
                 }
-                using (KaharmanDataContext context = new KaharmanDataContext())
-                {
-                    context.TournamentGrid.Attach(TournamentGrid);
-                    context.SaveChanges();
-                    TournamentGrid.Participants = context.Participant.Where(p => ParticipantGridDataGrid.GetList().Contains(p)).ToList();
-                    TournamentGrid.CreateMatchs();
-                    context.TournamentGrid.Update(TournamentGrid);
-                    context.SaveChanges();
-                }
+                dbContext.TournamentGrid.Attach(TournamentGrid);
+                dbContext.SaveChanges();
+                TournamentGrid.Participants = dbContext.Participant.Where(p => ParticipantGridDataGrid.GetList().Contains(p)).ToList();
+                TournamentGrid.CreateMatchs();
+                dbContext.SaveChanges();
                 GridForm gridForm = new GridForm(TournamentGrid.Id);
                 gridForm.ShowDialog();
                 this.Close();
@@ -286,7 +290,18 @@ namespace Kaharman
 
         private void ageMinTextBox_TextChanged(object sender, EventArgs e)
         {
+            if(ageMinTextBox.Text.Length == 0)
+                AllParticipantsDataGrid.AddFilterMin(0);
+            else if (int.TryParse(ageMinTextBox.Text, out int age))
+                AllParticipantsDataGrid.AddFilterMin(age);
+        }
 
+        private void ageMaxTextBox_TextChanged(object sender, EventArgs e)
+        {
+            if (ageMinTextBox.Text.Length == 0)
+                AllParticipantsDataGrid.AddFilterMin(100);
+            else if (int.TryParse(ageMaxTextBox.Text, out int age))
+                AllParticipantsDataGrid.AddFilterMax(age);
         }
     }
 }

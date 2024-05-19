@@ -14,6 +14,7 @@ namespace Kaharman
         Tournament Tournament;
         ParticipantDataGrid ParticipantDataGrid;
         TournamentGridDataGrid TournamentGridDataGrid;
+        KaharmanDataContext dbContext = new KaharmanDataContext();
         public TournamentForm()
         {
             InitializeComponent();
@@ -24,18 +25,15 @@ namespace Kaharman
         {
             InitializeComponent();
             int i = int.Parse(ID);
-            using (KaharmanDataContext dbContext = new KaharmanDataContext())
+            Tournament? t = dbContext.Tournament.Include(t => t.Participants).Include(t => t.TournamentGrids).Where(t => t.Id == i).FirstOrDefault();
+            if (t == null)
             {
-                Tournament? t = dbContext.Tournament.Include(t => t.Participants).Include(t => t.TournamentGrids).Where(t => t.Id == i).FirstOrDefault();
-                if (t == null)
-                {
-                    MessageBox.Show("Ошибка базы данных.");
-                    return;
-                }
-                Tournament = t;
-                foreach (var p in Tournament.Participants)
-                    p.InitAge();
+                MessageBox.Show("Ошибка базы данных.");
+                return;
             }
+            Tournament = t;
+            foreach (var p in Tournament.Participants)
+                p.InitAge();
             name.Text = Tournament.NameTournament;
             dateTimePicker1.Value = Tournament.StartDate;
             dateTimePicker2.Value = Tournament.EndDate;
@@ -141,45 +139,43 @@ namespace Kaharman
                             da.Fill(dt);
                             try
                             {
-                                using (KaharmanDataContext dbContext = new KaharmanDataContext())
+                                var rowExcel = dt.Rows;
+                                for (int i = 4; i < rowExcel.Count; i++)
                                 {
-                                    var rowExcel = dt.Rows;
-                                    for (int i = 4; i < rowExcel.Count; i++)
+                                    if (rowExcel[i][1].ToString() == "")
+                                        continue;
+                                    string? fio = rowExcel[i][1].ToString().Trim().ToUpper();
+                                    if (fio == null)
+                                        continue;
+                                    Participant? participant = dbContext.Participant.FirstOrDefault(p => p.FIO == fio);
+                                    bool newPart = false;
+                                    if (participant == null)
                                     {
-                                        if (rowExcel[i][1].ToString() == "")
-                                            continue;
-                                        string? fio = rowExcel[i][1].ToString().Trim().ToUpper();
-                                        if (fio == null)
-                                            continue;
-                                        Participant? participant = dbContext.Participant.FirstOrDefault(p => p.FIO == fio);
-                                        bool newPart = false;
-                                        if (participant == null)
-                                        {
-                                            participant = new Participant();
-                                            newPart = true;
-                                            participant.FIO = rowExcel[i][1].ToString().Trim().ToUpper();
-                                        }
-                                        if (Tournament.Participants.Find(p=>p.FIO == participant.FIO) != null)
-                                            continue;
-                                        participant.Gender = ValidateGender(rowExcel[i][2].ToString().ToUpper());
-                                        if (DateTime.TryParse(rowExcel[i][3].ToString(), out DateTime time))
-                                            participant.DateOfBirth = time;
-                                        try
-                                        {
-                                            if (float.TryParse(rowExcel[i][5].ToString().Replace(',', '.'), new NumberFormatInfo { NumberDecimalSeparator = "." }, out float wight))
-                                                participant.Weight = wight;
-                                        }
-                                        catch
-                                        {
-                                            participant.Weight = 0;
-                                        }
-                                        participant.Qualification = rowExcel[i][6].ToString().ToUpper().Trim();
-                                        participant.City = rowExcel[i][12].ToString().Trim().ToUpper();
-                                        participant.Trainer = rowExcel[i][13].ToString().Trim().ToUpper();
-                                        participant.InitAge();
-                                        Tournament.Participants.Add(participant);
+                                        participant = new Participant();
+                                        newPart = true;
+                                        participant.FIO = rowExcel[i][1].ToString().Trim().ToUpper();
                                     }
+                                    if (Tournament.Participants.Find(p => p.FIO == participant.FIO) != null)
+                                        continue;
+                                    participant.Gender = ValidateGender(rowExcel[i][2].ToString().ToUpper());
+                                    if (DateTime.TryParse(rowExcel[i][3].ToString(), out DateTime time))
+                                        participant.DateOfBirth = time;
+                                    try
+                                    {
+                                        if (float.TryParse(rowExcel[i][5].ToString().Replace(',', '.'), new NumberFormatInfo { NumberDecimalSeparator = "." }, out float wight))
+                                            participant.Weight = wight;
+                                    }
+                                    catch
+                                    {
+                                        participant.Weight = 0;
+                                    }
+                                    participant.Qualification = rowExcel[i][6].ToString().ToUpper().Trim();
+                                    participant.City = rowExcel[i][12].ToString().Trim().ToUpper();
+                                    participant.Trainer = rowExcel[i][13].ToString().Trim().ToUpper();
+                                    participant.InitAge();
+                                    Tournament.Participants.Add(participant);
                                 }
+
                             }
                             catch (Exception ex)
                             {
@@ -191,7 +187,6 @@ namespace Kaharman
                             MessageBox.Show(string.Format("Ошибка заполнения таблицы. Error:{0}", ex.Message));
                         }
                     }
-
                 }
                 MessageBox.Show("Загрузка завершена");
                 UpDataGrid();
@@ -230,16 +225,15 @@ namespace Kaharman
                 MessageBox.Show("Выделите таблицы которые желаете удалить");
                 return;
             }
-            if (gridDataGridView.SelectedRows.Count == 1) {
-                using (KaharmanDataContext dbContext = new KaharmanDataContext())
-                {
-                    TournamentGrid? tournamentGrid = dbContext.TournamentGrid.Find((int)gridDataGridView.SelectedRows[0].Cells["Id"].Value);
-                    if (tournamentGrid == null)
-                        return;
-                    Tournament.TournamentGrids.Remove(Tournament.TournamentGrids.Find(g=>g.Id == tournamentGrid.Id));
-                    dbContext.TournamentGrid.Remove(tournamentGrid);
-                    dbContext.SaveChanges();
-                }
+            if (gridDataGridView.SelectedRows.Count == 1)
+            {
+                TournamentGrid? tournamentGrid = dbContext.TournamentGrid.Find((int)gridDataGridView.SelectedRows[0].Cells["Id"].Value);
+                if (tournamentGrid == null)
+                    return;
+                Tournament.TournamentGrids.Remove(Tournament.TournamentGrids.Find(g => g.Id == tournamentGrid.Id));
+                dbContext.TournamentGrid.Remove(tournamentGrid);
+                dbContext.SaveChanges();
+
             }
             UpDataGrid();
         }
@@ -284,9 +278,11 @@ namespace Kaharman
             }
             foreach (DataGridViewRow row in participantGrid.SelectedRows)
             {
-                //      ParticipantsTable.DeleteRow(row.Cells["ID"].Value.ToString());
+                Tournament.Participants.Remove(Tournament.Participants.Find(p => p.Id == (int)row.Cells["ID"].Value));
+                dbContext.Tournament.Update(Tournament);
+                dbContext.SaveChanges();
             }
-            SaveChangeTournament();
+            UpDataGrid();
         }
         private void dataGridView2_MouseDoubleClick(object sender, MouseEventArgs e)
         {
@@ -380,11 +376,8 @@ namespace Kaharman
             Tournament.NoteTournament = note.Text;
             Tournament.Judge = mainJudge.Text;
             Tournament.Secret = secret.Text;
-            using (KaharmanDataContext dbContext = new KaharmanDataContext())
-            {
-                dbContext.Tournament.Attach(Tournament);
-                dbContext.SaveChanges();
-            }
+            dbContext.Tournament.Attach(Tournament);
+            dbContext.SaveChanges();
         }
 
         private void сеткаТурнираToolStripMenuItem_Click(object sender, EventArgs e)
@@ -437,18 +430,8 @@ namespace Kaharman
         {
             if (gridDataGridView.SelectedRows.Count == 1)
             {
-                int IDGrid = (int)gridDataGridView.SelectedRows[0].Cells[0].Value;
-                using (KaharmanDataContext dbContext = new KaharmanDataContext())
-                {
-                    TournamentGrid? grid = dbContext.TournamentGrid.Include(g=>g.Participants).Include(g=>g.Tournament).ThenInclude(t=>t.Participants).FirstOrDefault(g=>g.Id == IDGrid);
-                    if (grid == null)
-                    {
-                        MessageBox.Show("Ошибка базы данных, перезапустите приложение.");
-                        return;
-                    }
-                    TournamentGridForm tournamentGrid = new TournamentGridForm(grid,StatusFormTournamentGrid.Copy);
-                    tournamentGrid.ShowDialog();
-                }
+                TournamentGridForm tournamentGrid = new TournamentGridForm((int)gridDataGridView.SelectedRows[0].Cells[0].Value, StatusFormTournamentGrid.Copy);
+                tournamentGrid.ShowDialog();
                 UpDataGrid();
             }
             else
@@ -464,18 +447,8 @@ namespace Kaharman
         {
             if (gridDataGridView.SelectedRows.Count == 1)
             {
-                int IDGrid = (int)gridDataGridView.SelectedRows[0].Cells[0].Value;
-                using (KaharmanDataContext dbContext = new KaharmanDataContext())
-                {
-                    TournamentGrid? grid = dbContext.TournamentGrid.Include(g => g.Participants).Include(g => g.Tournament).ThenInclude(t => t.Participants).FirstOrDefault(g => g.Id == IDGrid);
-                    if (grid == null)
-                    {
-                        MessageBox.Show("Ошибка базы данных, перезапустите приложение.");
-                        return;
-                    }
-                    TournamentGridForm tournamentGrid = new TournamentGridForm(grid, StatusFormTournamentGrid.Create);
-                    tournamentGrid.ShowDialog();
-                }
+                TournamentGridForm tournamentGrid = new TournamentGridForm((int)gridDataGridView.SelectedRows[0].Cells[0].Value, StatusFormTournamentGrid.Create);
+                tournamentGrid.ShowDialog();
                 UpDataGrid();
             }
             else

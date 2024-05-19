@@ -242,13 +242,7 @@ namespace Kaharman
             }
             return list;
         }
-        public static List<ParticipantX> GetListToID(ParticipantDataTable table)
-        {
-            List<ParticipantX> outputList = new List<ParticipantX>();
-            foreach(DataRow row in table.Rows)
-                    outputList.Add(new ParticipantX(row));
-            return outputList;
-        }
+  
         public static List<ParticipantX> GetParticipantsOnAccess(List<string> ids)
         {
             List<ParticipantX> list = new List<ParticipantX>();
