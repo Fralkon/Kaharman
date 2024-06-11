@@ -42,10 +42,11 @@
             button3 = new Button();
             button4 = new Button();
             panel1 = new Panel();
+            gender = new ComboBox();
+            programm = new ComboBox();
+            qualification = new ComboBox();
             programmText = new Label();
-            programm = new TextBox();
             label7 = new Label();
-            genderTextBox = new TextBox();
             label6 = new Label();
             genderFilterText = new Label();
             ageMaxTextBox = new TextBox();
@@ -209,11 +210,11 @@
             // 
             // panel1
             // 
+            panel1.Controls.Add(gender);
+            panel1.Controls.Add(programm);
             panel1.Controls.Add(qualification);
             panel1.Controls.Add(programmText);
-            panel1.Controls.Add(programm);
             panel1.Controls.Add(label7);
-            panel1.Controls.Add(genderTextBox);
             panel1.Controls.Add(label6);
             panel1.Controls.Add(genderFilterText);
             panel1.Controls.Add(label5);
@@ -227,6 +228,33 @@
             panel1.Size = new Size(534, 557);
             panel1.TabIndex = 24;
             // 
+            // gender
+            // 
+            gender.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
+            gender.FormattingEnabled = true;
+            gender.Location = new Point(129, 14);
+            gender.Name = "gender";
+            gender.Size = new Size(375, 23);
+            gender.TabIndex = 32;
+            // 
+            // programm
+            // 
+            programm.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
+            programm.FormattingEnabled = true;
+            programm.Location = new Point(129, 72);
+            programm.Name = "programm";
+            programm.Size = new Size(375, 23);
+            programm.TabIndex = 31;
+            // 
+            // qualification
+            // 
+            qualification.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
+            qualification.FormattingEnabled = true;
+            qualification.Location = new Point(129, 103);
+            qualification.Name = "qualification";
+            qualification.Size = new Size(375, 23);
+            qualification.TabIndex = 30;
+            // 
             // programmText
             // 
             programmText.AutoSize = true;
@@ -236,30 +264,14 @@
             programmText.TabIndex = 25;
             programmText.Text = "Программа";
             // 
-            // programm
-            // 
-            programm.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
-            programm.Location = new Point(129, 72);
-            programm.Name = "programm";
-            programm.Size = new Size(375, 23);
-            programm.TabIndex = 24;
-            // 
             // label7
             // 
             label7.AutoSize = true;
-            label7.Location = new Point(17, 103);
+            label7.Location = new Point(17, 106);
             label7.Name = "label7";
             label7.Size = new Size(88, 15);
             label7.TabIndex = 27;
             label7.Text = "Квалификация";
-            // 
-            // genderTextBox
-            // 
-            genderTextBox.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
-            genderTextBox.Location = new Point(129, 14);
-            genderTextBox.Name = "genderTextBox";
-            genderTextBox.Size = new Size(375, 23);
-            genderTextBox.TabIndex = 23;
             // 
             // label6
             // 
@@ -391,9 +403,7 @@
         private Panel panel1;
         private Panel panel2;
         private Label genderFilterText;
-        private TextBox genderTextBox;
         private Label programmText;
-        private TextBox programm;
         private Label ageRange;
         private TextBox ageMinTextBox;
         private Label label6;
@@ -401,6 +411,5 @@
         private Label label7;
         private TextBox numberProtocol;
         private Label label2;
-        private TextBox qualification;
     }
 }
