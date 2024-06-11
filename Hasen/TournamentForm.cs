@@ -35,8 +35,8 @@ namespace Kaharman
             foreach (var p in Tournament.Participants)
                 p.InitAge();
             name.Text = Tournament.NameTournament;
-            dateTimePicker1.Value = Tournament.StartDate;
-            dateTimePicker2.Value = Tournament.EndDate;
+            dateTimePicker1.Value = DateTime.Parse(Tournament.StartDate.ToString());
+            dateTimePicker2.Value = DateTime.Parse(Tournament.EndDate.ToString());
             note.Text = Tournament.NoteTournament;
             mainJudge.Text = Tournament.Judge;
             secret.Text = Tournament.Secret;
@@ -69,8 +69,8 @@ namespace Kaharman
                     return;
                 }
                 Tournament.NameTournament = name.Text;
-                Tournament.StartDate = dateTimePicker1.Value;
-                Tournament.EndDate = dateTimePicker2.Value;
+                Tournament.StartDate = DateOnly.FromDateTime(dateTimePicker1.Value);
+                Tournament.EndDate = DateOnly.FromDateTime(dateTimePicker2.Value);
                 Tournament.NoteTournament = note.Text;
                 Tournament.Judge = mainJudge.Text;
                 Tournament.Secret = secret.Text;
@@ -80,8 +80,6 @@ namespace Kaharman
                 //    dbContext.SaveChanges();
                 //}
             }
-            else
-                создатьToolStripMenuItem1_Click(null, null);
         }
         private void UpDataGrid()
         {
@@ -159,7 +157,7 @@ namespace Kaharman
                                         continue;
                                     participant.Gender = ValidateGender(rowExcel[i][2].ToString().ToUpper());
                                     if (DateTime.TryParse(rowExcel[i][3].ToString(), out DateTime time))
-                                        participant.DateOfBirth = time;
+                                        participant.DateOfBirth = DateOnly.FromDateTime(time);
                                     try
                                     {
                                         if (float.TryParse(rowExcel[i][5].ToString().Replace(',', '.'), new NumberFormatInfo { NumberDecimalSeparator = "." }, out float wight))
@@ -288,22 +286,23 @@ namespace Kaharman
         {
             if (e.Button == MouseButtons.Left)
             {
-                //ParticipantForm participants = new ParticipantForm(participantGrid.SelectedRows[0].Cells["ID"].Value.ToString());
-                //this.Hide();
-                //if (participants.ShowDialog() == DialogResult.OK)
-                //{
-                //    if (participants.Participant != null)
-                //    {
-                //        participantGrid.SelectedRows[0].Cells[1].Value = participants.Participant.Name;
-                //        participantGrid.SelectedRows[0].Cells[2].Value = participants.Participant.Gender;
-                //        participantGrid.SelectedRows[0].Cells[3].Value = participants.Participant.Age;
-                //        participantGrid.SelectedRows[0].Cells[4].Value = participants.Participant.Weight;
-                //        participantGrid.SelectedRows[0].Cells[5].Value = participants.Participant.Gualiti;
-                //        participantGrid.SelectedRows[0].Cells[6].Value = participants.Participant.City;
-                //        participantGrid.SelectedRows[0].Cells[7].Value = participants.Participant.Trainer;
-                //    }
-                //}
-                //this.Show();
+                ParticipantForm participants = new ParticipantForm(Tournament.Participants.First(p=>p.Id == (int)participantGrid.SelectedRows[0].Cells["ID"].Value));
+                this.Hide();
+                if (participants.ShowDialog() == DialogResult.OK)
+                {
+                    if (participants.Participant != null)
+                    {
+                        participantGrid.SelectedRows[0].Cells[1].Value = participants.Participant.FIO;
+                        participantGrid.SelectedRows[0].Cells[2].Value = participants.Participant.Gender;
+                        participantGrid.SelectedRows[0].Cells[3].Value = participants.Participant.Age;
+                        participantGrid.SelectedRows[0].Cells[4].Value = participants.Participant.DateOfBirth;
+                        participantGrid.SelectedRows[0].Cells[5].Value = participants.Participant.Weight;
+                        participantGrid.SelectedRows[0].Cells[6].Value = participants.Participant.Qualification;
+                        participantGrid.SelectedRows[0].Cells[7].Value = participants.Participant.City;
+                        participantGrid.SelectedRows[0].Cells[8].Value = participants.Participant.Trainer;
+                    }
+                }
+                this.Show();
             }
         }
         private void выходToolStripMenuItem_Click(object sender, EventArgs e)
@@ -371,12 +370,12 @@ namespace Kaharman
                 return;
             }
             Tournament.NameTournament = name.Text;
-            Tournament.StartDate = dateTimePicker1.Value;
-            Tournament.EndDate = dateTimePicker2.Value;
+            Tournament.StartDate = DateOnly.FromDateTime(dateTimePicker1.Value);
+            Tournament.EndDate = DateOnly.FromDateTime(dateTimePicker2.Value);
             Tournament.NoteTournament = note.Text;
             Tournament.Judge = mainJudge.Text;
             Tournament.Secret = secret.Text;
-            dbContext.Tournament.Attach(Tournament);
+            dbContext.Tournament.Update(Tournament);
             dbContext.SaveChanges();
         }
 
@@ -389,7 +388,7 @@ namespace Kaharman
             }
             foreach (DataGridViewRow gridRow in gridDataGridView.Rows)
             {
-              //  Grid grid = new Grid();
+                Grid grid = new Grid();
                 if (gridDataGridView.RowCount == 0)
                 {
                     MessageBox.Show("Выделите строку.");

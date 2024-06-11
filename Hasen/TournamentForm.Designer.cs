@@ -154,7 +154,6 @@
             // dateTimePicker2
             // 
             dateTimePicker2.Checked = false;
-            dateTimePicker2.Format = DateTimePickerFormat.Short;
             dateTimePicker2.Location = new Point(447, 16);
             dateTimePicker2.Name = "dateTimePicker2";
             dateTimePicker2.Size = new Size(200, 23);

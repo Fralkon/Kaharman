@@ -5,6 +5,7 @@ using System.ComponentModel;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Drawing;
+using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Kaharman
 {
@@ -15,6 +16,14 @@ namespace Kaharman
         INIT,
         CLOSE,
         BLOCK
+    }
+    public class DateOnlyConverter : ValueConverter<DateOnly, DateTime>
+    {
+        public DateOnlyConverter()
+            : base(dateOnly =>
+                    dateOnly.ToDateTime(TimeOnly.MinValue),
+                dateTime => DateOnly.FromDateTime(dateTime))
+        { }
     }
     public class KaharmanDataContext : DbContext
     {
@@ -37,6 +46,15 @@ namespace Kaharman
             modelBuilder.Entity<Match>().HasMany(m => m.Items).WithOne(i => i.Match).OnDelete(DeleteBehavior.Cascade);
             base.OnModelCreating(modelBuilder);
         }
+        protected override void ConfigureConventions(ModelConfigurationBuilder builder)
+        {
+
+            builder.Properties<DateOnly>()
+                .HaveConversion<DateOnlyConverter>()
+                .HaveColumnType("date");
+
+            base.ConfigureConventions(builder);
+        }
     }
     public enum EPosMatch
     {
@@ -51,9 +69,9 @@ namespace Kaharman
         [DisplayName("Наименование")]
         public string NameTournament {  get; set; }
         [DisplayName("Начало")]
-        public DateTime StartDate { get; set; }
+        public DateOnly StartDate { get; set; }
         [DisplayName("Завершение")]
-        public DateTime EndDate { get; set; }
+        public DateOnly EndDate { get; set; }
         [DisplayName("Примечание")]
         public string NoteTournament { get; set; }
         [DisplayName("Главный судья")]
@@ -82,7 +100,7 @@ namespace Kaharman
         [NotMapped]
         public int Age { get; set; }
         [DisplayName("Дата рождения")]
-        public DateTime DateOfBirth { get;set; }
+        public DateOnly DateOfBirth { get;set; }
         [DisplayName("Вес")]
         public float Weight { get; set; }
         [DisplayName("Квалификация")]
@@ -101,7 +119,7 @@ namespace Kaharman
         }
         public void InitAge()
         {
-            Age = (int)((int)(DateTime.Now - DateOfBirth).TotalDays / ValyeDayYear);
+            Age = (int)((int)(DateTime.Now - DateTime.Parse(DateOfBirth.ToString())).TotalDays / ValyeDayYear);
         }
     }
     public enum ItemPlaces
@@ -118,7 +136,7 @@ namespace Kaharman
         [DisplayName("Протокол")]
         public int Number { get; set; }
         [DisplayName("Дата проведения")]
-        public DateTime DataStart { get; set; }
+        public DateOnly DataStart { get; set; }
         [DisplayName("Наименование")]
         public string NameGrid { get; set; }
         [DisplayName("Пол")]
@@ -228,22 +246,13 @@ namespace Kaharman
         }
         public void WinPart(Match match, Participant participantWin, Participant participantLose)
         {
-            if (Math.Log(Type, 2) == match.RoundNumber + 1)
-            {
-                Places[(int)ItemPlaces.Winner].SetParticipant(participantWin, StatusPos.WIN);
-                Places[(int)ItemPlaces.OnePlace].SetParticipant(participantWin, StatusPos.WIN);
-                Places[(int)ItemPlaces.TwoPlace].SetParticipant(participantLose, StatusPos.WIN);
+            if (Math.Log(Type,2) == match.RoundNumber + 1) {
+                Places[(int)ItemPlaces.Winner].SetParticipant(participantWin, StatusPos.win);
+                Places[(int)ItemPlaces.OnePlace].SetParticipant(participantWin, StatusPos.win);
+                Places[(int)ItemPlaces.TwoPlace].SetParticipant(participantLose, StatusPos.win);
             }
-            else
-            {
-                if (Math.Log(Type, 2) == match.RoundNumber + 2)
-                {
-                    if (Places[(int)ItemPlaces.ThreePlace].Status != StatusPos.WIN)
-                        Places[(int)ItemPlaces.ThreePlace].SetParticipant(participantWin, StatusPos.WIN);
-                    else
-                        Places[(int)ItemPlaces.ThreePlace2].SetParticipant(participantWin, StatusPos.WIN);
-                }
-                Match nextMatch = Matchs.First(m => m.MatchNumber == match.MatchNumber / 2 && m.RoundNumber == match.RoundNumber + 1);
+            else {
+                Match nextMatch = Matchs.First(m=>m.MatchNumber == match.MatchNumber / 2 && m.RoundNumber == match.RoundNumber + 1);
                 nextMatch.SetParticipant(participantWin, (EPosMatch)(match.MatchNumber % 2));
                 DrawLine(match, nextMatch.Items[match.MatchNumber % 2], new Pen(Color.Black));
             }

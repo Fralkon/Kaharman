@@ -44,7 +44,6 @@
             panel1 = new Panel();
             programmText = new Label();
             programm = new TextBox();
-            label7 = new Label();
             genderTextBox = new TextBox();
             label6 = new Label();
             genderFilterText = new Label();
@@ -54,7 +53,6 @@
             numberProtocol = new TextBox();
             label2 = new Label();
             panel2 = new Panel();
-            qualification = new TextBox();
             ((System.ComponentModel.ISupportInitialize)allParticipant).BeginInit();
             ((System.ComponentModel.ISupportInitialize)gridParticipant).BeginInit();
             panel1.SuspendLayout();
@@ -86,9 +84,9 @@
             // dateTimePicker1
             // 
             dateTimePicker1.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
-            dateTimePicker1.Location = new Point(125, 74);
+            dateTimePicker1.Location = new Point(126, 69);
             dateTimePicker1.Name = "dateTimePicker1";
-            dateTimePicker1.Size = new Size(339, 23);
+            dateTimePicker1.Size = new Size(375, 23);
             dateTimePicker1.TabIndex = 2;
             // 
             // menuStrip1
@@ -102,7 +100,7 @@
             // nameTextBox
             // 
             nameTextBox.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
-            nameTextBox.Location = new Point(124, 42);
+            nameTextBox.Location = new Point(126, 11);
             nameTextBox.Name = "nameTextBox";
             nameTextBox.Size = new Size(375, 23);
             nameTextBox.TabIndex = 4;
@@ -110,7 +108,7 @@
             // label1
             // 
             label1.AutoSize = true;
-            label1.Location = new Point(15, 45);
+            label1.Location = new Point(17, 14);
             label1.Name = "label1";
             label1.Size = new Size(90, 15);
             label1.TabIndex = 5;
@@ -119,7 +117,7 @@
             // label3
             // 
             label3.AutoSize = true;
-            label3.Location = new Point(15, 80);
+            label3.Location = new Point(17, 74);
             label3.Name = "label3";
             label3.Size = new Size(100, 15);
             label3.TabIndex = 8;
@@ -136,13 +134,13 @@
             allParticipant.BackgroundColor = SystemColors.Window;
             allParticipant.BorderStyle = BorderStyle.Fixed3D;
             allParticipant.CellBorderStyle = DataGridViewCellBorderStyle.SingleHorizontal;
-            allParticipant.Location = new Point(17, 167);
+            allParticipant.Location = new Point(17, 132);
             allParticipant.Name = "allParticipant";
             allParticipant.ReadOnly = true;
             allParticipant.RowHeadersVisible = false;
             allParticipant.RowTemplate.Height = 25;
             allParticipant.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-            allParticipant.Size = new Size(504, 321);
+            allParticipant.Size = new Size(504, 356);
             allParticipant.TabIndex = 15;
             allParticipant.CellDoubleClick += dataGridView1_CellDoubleClick;
             // 
@@ -159,20 +157,20 @@
             gridParticipant.BorderStyle = BorderStyle.Fixed3D;
             gridParticipant.CellBorderStyle = DataGridViewCellBorderStyle.SingleHorizontal;
             gridParticipant.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            gridParticipant.Location = new Point(15, 167);
+            gridParticipant.Location = new Point(15, 132);
             gridParticipant.Name = "gridParticipant";
             gridParticipant.ReadOnly = true;
             gridParticipant.RowHeadersVisible = false;
             gridParticipant.RowTemplate.Height = 25;
             gridParticipant.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-            gridParticipant.Size = new Size(484, 321);
+            gridParticipant.Size = new Size(484, 356);
             gridParticipant.TabIndex = 19;
             gridParticipant.CellDoubleClick += dataGridView2_CellDoubleClick;
             // 
             // label4
             // 
             label4.AutoSize = true;
-            label4.Location = new Point(15, 149);
+            label4.Location = new Point(15, 114);
             label4.Name = "label4";
             label4.Size = new Size(98, 15);
             label4.TabIndex = 20;
@@ -181,7 +179,7 @@
             // label5
             // 
             label5.AutoSize = true;
-            label5.Location = new Point(17, 149);
+            label5.Location = new Point(17, 114);
             label5.Name = "label5";
             label5.Size = new Size(86, 15);
             label5.TabIndex = 21;
@@ -209,18 +207,14 @@
             // 
             // panel1
             // 
-            panel1.Controls.Add(qualification);
-            panel1.Controls.Add(programmText);
-            panel1.Controls.Add(programm);
-            panel1.Controls.Add(label7);
-            panel1.Controls.Add(genderTextBox);
-            panel1.Controls.Add(label6);
-            panel1.Controls.Add(genderFilterText);
+            panel1.Controls.Add(numberProtocol);
+            panel1.Controls.Add(label2);
             panel1.Controls.Add(label5);
-            panel1.Controls.Add(ageMaxTextBox);
+            panel1.Controls.Add(nameTextBox);
             panel1.Controls.Add(allParticipant);
-            panel1.Controls.Add(ageRange);
-            panel1.Controls.Add(ageMinTextBox);
+            panel1.Controls.Add(label1);
+            panel1.Controls.Add(dateTimePicker1);
+            panel1.Controls.Add(label3);
             panel1.Dock = DockStyle.Left;
             panel1.Location = new Point(0, 24);
             panel1.Name = "panel1";
@@ -230,7 +224,7 @@
             // programmText
             // 
             programmText.AutoSize = true;
-            programmText.Location = new Point(17, 74);
+            programmText.Location = new Point(15, 74);
             programmText.Name = "programmText";
             programmText.Size = new Size(72, 15);
             programmText.TabIndex = 25;
@@ -239,24 +233,15 @@
             // programm
             // 
             programm.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
-            programm.Location = new Point(129, 72);
+            programm.Location = new Point(124, 69);
             programm.Name = "programm";
             programm.Size = new Size(375, 23);
             programm.TabIndex = 24;
             // 
-            // label7
-            // 
-            label7.AutoSize = true;
-            label7.Location = new Point(17, 103);
-            label7.Name = "label7";
-            label7.Size = new Size(88, 15);
-            label7.TabIndex = 27;
-            label7.Text = "Квалификация";
-            // 
             // genderTextBox
             // 
             genderTextBox.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
-            genderTextBox.Location = new Point(129, 14);
+            genderTextBox.Location = new Point(124, 11);
             genderTextBox.Name = "genderTextBox";
             genderTextBox.Size = new Size(375, 23);
             genderTextBox.TabIndex = 23;
@@ -264,7 +249,7 @@
             // label6
             // 
             label6.AutoSize = true;
-            label6.Location = new Point(254, 45);
+            label6.Location = new Point(247, 43);
             label6.Name = "label6";
             label6.Size = new Size(12, 15);
             label6.TabIndex = 29;
@@ -273,7 +258,7 @@
             // genderFilterText
             // 
             genderFilterText.AutoSize = true;
-            genderFilterText.Location = new Point(17, 17);
+            genderFilterText.Location = new Point(15, 14);
             genderFilterText.Name = "genderFilterText";
             genderFilterText.Size = new Size(30, 15);
             genderFilterText.TabIndex = 21;
@@ -281,7 +266,7 @@
             // 
             // ageMaxTextBox
             // 
-            ageMaxTextBox.Location = new Point(285, 42);
+            ageMaxTextBox.Location = new Point(280, 40);
             ageMaxTextBox.Name = "ageMaxTextBox";
             ageMaxTextBox.Size = new Size(101, 23);
             ageMaxTextBox.TabIndex = 28;
@@ -290,7 +275,7 @@
             // ageRange
             // 
             ageRange.AutoSize = true;
-            ageRange.Location = new Point(17, 45);
+            ageRange.Location = new Point(15, 43);
             ageRange.Name = "ageRange";
             ageRange.Size = new Size(50, 15);
             ageRange.TabIndex = 27;
@@ -298,7 +283,7 @@
             // 
             // ageMinTextBox
             // 
-            ageMinTextBox.Location = new Point(129, 43);
+            ageMinTextBox.Location = new Point(124, 40);
             ageMinTextBox.Name = "ageMinTextBox";
             ageMinTextBox.Size = new Size(101, 23);
             ageMinTextBox.TabIndex = 26;
@@ -307,7 +292,7 @@
             // numberProtocol
             // 
             numberProtocol.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
-            numberProtocol.Location = new Point(125, 14);
+            numberProtocol.Location = new Point(126, 40);
             numberProtocol.Name = "numberProtocol";
             numberProtocol.Size = new Size(375, 23);
             numberProtocol.TabIndex = 27;
@@ -315,7 +300,7 @@
             // label2
             // 
             label2.AutoSize = true;
-            label2.Location = new Point(15, 17);
+            label2.Location = new Point(17, 44);
             label2.Name = "label2";
             label2.Size = new Size(107, 15);
             label2.TabIndex = 26;
@@ -324,29 +309,23 @@
             // panel2
             // 
             panel2.AutoScroll = true;
-            panel2.Controls.Add(numberProtocol);
-            panel2.Controls.Add(label2);
-            panel2.Controls.Add(nameTextBox);
-            panel2.Controls.Add(label3);
-            panel2.Controls.Add(label1);
-            panel2.Controls.Add(dateTimePicker1);
             panel2.Controls.Add(button2);
+            panel2.Controls.Add(programmText);
             panel2.Controls.Add(button1);
+            panel2.Controls.Add(programm);
             panel2.Controls.Add(gridParticipant);
+            panel2.Controls.Add(genderTextBox);
             panel2.Controls.Add(label4);
+            panel2.Controls.Add(label6);
+            panel2.Controls.Add(genderFilterText);
+            panel2.Controls.Add(ageMinTextBox);
+            panel2.Controls.Add(ageRange);
+            panel2.Controls.Add(ageMaxTextBox);
             panel2.Dock = DockStyle.Right;
             panel2.Location = new Point(589, 24);
             panel2.Name = "panel2";
             panel2.Size = new Size(515, 557);
             panel2.TabIndex = 25;
-            // 
-            // qualification
-            // 
-            qualification.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
-            qualification.Location = new Point(129, 101);
-            qualification.Name = "qualification";
-            qualification.Size = new Size(375, 23);
-            qualification.TabIndex = 30;
             // 
             // TournamentGridForm
             // 
@@ -398,9 +377,7 @@
         private TextBox ageMinTextBox;
         private Label label6;
         private TextBox ageMaxTextBox;
-        private Label label7;
         private TextBox numberProtocol;
         private Label label2;
-        private TextBox qualification;
     }
 }

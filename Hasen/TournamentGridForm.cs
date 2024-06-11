@@ -63,7 +63,6 @@ namespace Kaharman
 
             nameTextBox.Text = tournamentGrid.NameGrid;
             programmText.Text = tournamentGrid.Programm;
-            qualification.Text = tournamentGrid.Qualification;
             numberProtocol.Text = tournamentGrid.Number.ToString();
 
             string[] strings = tournamentGrid.AgeRange.ToString().Split('-');
@@ -72,7 +71,7 @@ namespace Kaharman
                 ageMinTextBox.Text = strings[0];
                 ageMaxTextBox.Text = strings[1];
             }
-            dateTimePicker1.Value = tournamentGrid.DataStart;
+            dateTimePicker1.Value = DateTime.Parse(tournamentGrid.DataStart.ToString());
             genderTextBox.Text = tournamentGrid.Gender;
             programmText.Text = tournamentGrid.Programm;
 
@@ -129,7 +128,8 @@ namespace Kaharman
                 MessageBox.Show("Не верно введено числовое значение максимального возраста.");
                 return;
             }
-            if (dateTimePicker1.Value < TournamentGrid.Tournament.StartDate || dateTimePicker1.Value > TournamentGrid.Tournament.EndDate)
+            DateOnly dateOnly = DateOnly.FromDateTime(dateTimePicker1.Value);
+            if (dateOnly < TournamentGrid.Tournament.StartDate || dateOnly > TournamentGrid.Tournament.EndDate)
             {
                 MessageBox.Show("Не верно введена дата проведения турнирной сетки.");
                 return;
@@ -149,12 +149,12 @@ namespace Kaharman
                 MessageBox.Show("Выберите квалификацию.");
                 return;
             }
+
             TournamentGrid.NameGrid = nameTextBox.Text;
             TournamentGrid.Programm = programmText.Text;
-            TournamentGrid.Qualification = qualification.Text;
             TournamentGrid.Number = nProtocol;
             TournamentGrid.AgeRange = ageMin + "-" + ageMax;
-            TournamentGrid.DataStart = dateTimePicker1.Value;
+            TournamentGrid.DataStart = DateOnly.FromDateTime(dateTimePicker1.Value);
             TournamentGrid.Gender = genderTextBox.Text;
 
             if (StatusForm == StatusFormTournamentGrid.Edit && notChange)

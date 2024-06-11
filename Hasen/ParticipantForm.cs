@@ -20,7 +20,7 @@ namespace Hasen
             InitForm();
             name.Text = participant.FIO;
             gender.Text = participant.Gender;
-            dateOfBirth.Value = participant.DateOfBirth;
+            dateOfBirth.Value = DateTime.Parse(participant.DateOfBirth.ToString());
             weigth.Text = participant.Weight.ToString();
             qualification.Text = participant.Qualification;
             city.Text = participant.City;
@@ -61,42 +61,36 @@ namespace Hasen
         }
         private void button1_Click(object sender, EventArgs e)
         {
-            if (float.TryParse(weigth.Text, out float weight))
+            if (ID == null)
             {
-                using (KaharmanDataContext dataContext = new KaharmanDataContext())
+                if (float.TryParse(weigth.Text, out float weight))
                 {
-                    Participant? part = dataContext.Participant.FirstOrDefault(p => p.FIO == name.Text);
-                    if (part == null)
-                    {
-                        part = new Participant()
-                        {
-                            FIO = name.Text,
-                            Gender = gender.Text,
-                            DateOfBirth = dateOfBirth.Value,
-                            Weight = weight,
-                            City = city.Text,
-                            Qualification = qualification.Text,
-                            Trainer = trainer.Text
-                        };
-                        dataContext.Participant.Add(part);
-                    }
-                    else
-                    {
-                        part.Gender = gender.Text;
-                        part.DateOfBirth = dateOfBirth.Value;
-                        part.Weight = weight;
-                        part.City = city.Text;
-                        part.Qualification = qualification.Text;
-                        part.Trainer = trainer.Text;
-                        dataContext.Participant.Update(part);
-                    }
-                    Participant = part;
-                    dataContext.SaveChanges();
+                    AccessSQL.SendSQL($"INSERT INTO Participants (name,gender,[date_of_birth],weight,qualification,city,trainer) VALUES ('{name.Text}','{gender.Text}','{dateOfBirth.Value.ToString("dd.MM.yyyy")}',{weight},'{qualification.Text}','{city.Text}','{trainer.Text}')");
+                    int id = AccessSQL.GetIDInsert();
+                    ID = id;
+                    DialogResult = DialogResult.OK;
+                    Participant = new ParticipantX(id, name.Text, gender.Text, dateOfBirth.Value, weight, qualification.Text, city.Text, trainer.Text);
                     this.Close();
+                }
+                else
+                {
+                    MessageBox.Show("Неправильно введены данные.");
                 }
             }
             else
-                return;
+            {
+                if (float.TryParse(weigth.Text, out float weight))
+                {
+                    AccessSQL.SendSQL($"UPDATE Participants SET name = '{name.Text}', gender = '{gender.Text}', [date_of_birth] = '{dateOfBirth.Value.ToString("dd.MM.yyyy")}', weight = {weight},qualification = '{qualification.Text}',city = '{city.Text}',trainer = '{trainer.Text}' WHERE id = {ID}");
+                    DialogResult = DialogResult.OK;
+                    Participant = new ParticipantX((int)ID, name.Text, gender.Text, dateOfBirth.Value, weight, qualification.Text, city.Text, trainer.Text);
+                    this.Close();
+                }
+                else
+                {
+                    MessageBox.Show("Неправильно введены данные.");
+                }
+            }
         }
         private void button2_Click(object sender, EventArgs e)
         {

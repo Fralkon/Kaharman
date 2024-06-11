@@ -23,7 +23,7 @@ namespace Hasen
             InitializeComponent();
             //using (KaharmanDataContext dbContext = new KaharmanDataContext())
             //{
-            //    dbContext.Database.EnsureDeleted();
+            //   // dbContext.Database.EnsureDeleted();
             //    dbContext.Database.EnsureCreated();
             //}
             ParticipantView.VisibleChanged += ParticipantView_VisibleChanged;
