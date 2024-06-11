@@ -54,6 +54,7 @@
             numberProtocol = new TextBox();
             label2 = new Label();
             panel2 = new Panel();
+            qualification = new TextBox();
             ((System.ComponentModel.ISupportInitialize)allParticipant).BeginInit();
             ((System.ComponentModel.ISupportInitialize)gridParticipant).BeginInit();
             panel1.SuspendLayout();
@@ -208,6 +209,7 @@
             // 
             // panel1
             // 
+            panel1.Controls.Add(qualification);
             panel1.Controls.Add(programmText);
             panel1.Controls.Add(programm);
             panel1.Controls.Add(label7);
@@ -338,6 +340,14 @@
             panel2.Size = new Size(515, 557);
             panel2.TabIndex = 25;
             // 
+            // qualification
+            // 
+            qualification.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
+            qualification.Location = new Point(129, 101);
+            qualification.Name = "qualification";
+            qualification.Size = new Size(375, 23);
+            qualification.TabIndex = 30;
+            // 
             // TournamentGridForm
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
@@ -391,5 +401,6 @@
         private Label label7;
         private TextBox numberProtocol;
         private Label label2;
+        private TextBox qualification;
     }
 }

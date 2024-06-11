@@ -290,7 +290,7 @@ namespace Kaharman
 
         private void ageMinTextBox_TextChanged(object sender, EventArgs e)
         {
-            if(ageMinTextBox.Text.Length == 0)
+            if (ageMinTextBox.Text.Length == 0)
                 AllParticipantsDataGrid.AddFilterMin(0);
             else if (int.TryParse(ageMinTextBox.Text, out int age))
                 AllParticipantsDataGrid.AddFilterMin(age);

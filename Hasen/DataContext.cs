@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
+using System.Drawing;
 
 namespace Kaharman
 {
@@ -131,6 +132,8 @@ namespace Kaharman
         [Browsable(false)]
         public List<Match> Matchs { get; set; }
         public List<ItemGrid> Places { get; set; }
+        [NotMapped]
+        Graphics graphics;
         public TournamentGrid()
         {
             Participants = new List<Participant>();
@@ -150,7 +153,7 @@ namespace Kaharman
             }
             FillMatchs();
             for (int i = 0; i < 5; i++)
-                Places.Add(new ItemGrid(EPosMatch.Place));
+                Places.Add(new ItemGrid(EPosMatch.Place) { TournamentGrid = this});
         }
         private void FillMatchs()
         {
@@ -203,18 +206,16 @@ namespace Kaharman
             }
             return (participant1, participant2);
         }
-        public void InitLabelGrid(Control control)
+        public void InitLabelGrid(Control control, Graphics g)
         {
+            graphics = g;
             foreach (Match match in Matchs)
             {
                 foreach (ItemGrid itemGrid in match.Items)
                     itemGrid.Initialize(control);
             }
             foreach (ItemGrid place in Places)
-            {
                 place.Initialize(control);
-                place.TournamentGrid = this;
-            }
             Places[(int)ItemPlaces.Winner].Label.Location = new Point(40 + ((int)Math.Log(Type, 2) * 225), 100 + 10 * ((int)Math.Pow(2, (int)Math.Log(Type, 2) + 1)));
         }
         public void WinPart(Match match, Participant participantWin, Participant participantLose)
@@ -227,7 +228,23 @@ namespace Kaharman
             else {
                 Match nextMatch = Matchs.First(m=>m.MatchNumber == match.MatchNumber / 2 && m.RoundNumber == match.RoundNumber + 1);
                 nextMatch.SetParticipant(participantWin, (EPosMatch)(match.MatchNumber % 2));
+                DrawLine(graphics, match, nextMatch.Items[match.MatchNumber % 2], new Pen(Color.Black));
             }
+        }
+        public void DrawLine(Graphics graphics, Match match, ItemGrid nextItem, Pen pen)
+        {
+            ItemGrid item;
+            if (match.Items[0].Status == StatusPos.win)
+                item = match.Items[0];
+            else
+                item = match.Items[1];
+            Point point1 = new Point(item.Label.Right, item.Label.Location.Y + item.Label.Height / 2);
+            Point point4 = new Point(nextItem.Label.Left, nextItem.Label.Location.Y + nextItem.Label.Height / 2);
+            Point point2 = new Point(point1.X + 30, point1.Y);
+            Point point3 = new Point(point2.X, point4.Y);
+            graphics.DrawLine(pen, point1, point2);
+            graphics.DrawLine(pen, point2, point3);
+            graphics.DrawLine(pen, point3, point4);
         }
     }
     public class Match

@@ -33,6 +33,15 @@ namespace Kaharman
             {
                 foreach (var participant in grid.Participants)
                     participant.InitAge();
+                foreach (var match in grid.Matchs)
+                {
+                    if (match.Items[0].PosMatch != EPosMatch.UP)
+                    {
+                        ItemGrid item = match.Items[0];
+                        match.Items[0] = match.Items[1];
+                        match.Items[1] = item;
+                    }
+                }
                 TournamentGrid = grid;
             }
             else
@@ -71,7 +80,7 @@ namespace Kaharman
             placesText[3].Text = "Третье место";
             labelJudge.Text = "Главный судья ___________________ " + TournamentGrid.Tournament.Judge;
             labelSecret.Text = "Секретарь ________________________ " + TournamentGrid.Tournament.Secret;
-            TournamentGrid.InitLabelGrid(panel1);
+            TournamentGrid.InitLabelGrid(panel1, graphics);
             ElementsLocation();
             foreach (Label label in placesText)
                 panel1.Controls.Add(label);
