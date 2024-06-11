@@ -107,10 +107,10 @@ namespace Hasen
             }
             else if (tableVisible == TableVisible.Participants || tableVisible == TableVisible.DataParticipants)
             {
-                ParticipantForm participants = new ParticipantForm(ParticipantView.SelectedRows[0].Cells["ID"].Value.ToString());
-                this.Hide();
-                participants.ShowDialog();
-                this.Show();
+                //ParticipantForm participants = new ParticipantForm(ParticipantView.SelectedRows[0].Cells["ID"].Value.ToString());
+                //this.Hide();
+                //participants.ShowDialog();
+                //this.Show();
                 return;
             }
         }

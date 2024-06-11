@@ -157,14 +157,14 @@
             // сбросToolStripMenuItem
             // 
             сбросToolStripMenuItem.Name = "сбросToolStripMenuItem";
-            сбросToolStripMenuItem.Size = new Size(180, 22);
+            сбросToolStripMenuItem.Size = new Size(133, 22);
             сбросToolStripMenuItem.Text = "Сброс";
             сбросToolStripMenuItem.Click += сбросToolStripMenuItem_Click;
             // 
             // сохранитьToolStripMenuItem
             // 
             сохранитьToolStripMenuItem.Name = "сохранитьToolStripMenuItem";
-            сохранитьToolStripMenuItem.Size = new Size(180, 22);
+            сохранитьToolStripMenuItem.Size = new Size(133, 22);
             сохранитьToolStripMenuItem.Text = "Сохранить";
             сохранитьToolStripMenuItem.Click += сохранитьToolStripMenuItem_Click;
             // 
@@ -180,6 +180,7 @@
             Name = "GridForm";
             Text = "Турнирная сетка";
             FormClosing += TournamentGrid_FormClosing;
+            Load += GridForm_Load;
             Resize += GridForm_Resize;
             panel1.ResumeLayout(false);
             panel1.PerformLayout();

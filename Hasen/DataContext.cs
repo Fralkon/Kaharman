@@ -8,6 +8,14 @@ using System.Drawing;
 
 namespace Kaharman
 {
+    public enum StatusPos
+    {
+        WIN,
+        LOSE,
+        INIT,
+        CLOSE,
+        BLOCK
+    }
     public class KaharmanDataContext : DbContext
     {
         public DbSet<Tournament> Tournament { get; set; }
@@ -211,33 +219,60 @@ namespace Kaharman
             graphics = g;
             foreach (Match match in Matchs)
             {
-                foreach (ItemGrid itemGrid in match.Items)
-                    itemGrid.Initialize(control);
+                    foreach (ItemGrid itemGrid in match.Items)
+                        itemGrid.Initialize(control);
             }
             foreach (ItemGrid place in Places)
                 place.Initialize(control);
-            Places[(int)ItemPlaces.Winner].Label.Location = new Point(40 + ((int)Math.Log(Type, 2) * 225), 100 + 10 * ((int)Math.Pow(2, (int)Math.Log(Type, 2) + 1)));
+            Places[(int)ItemPlaces.Winner].Label.Location = new Point(40 + ((int)Math.Log(Type, 2) * 225), 100 + 10 * ((int)Math.Pow(2, (int)Math.Log(Type, 2) + 1)));          
         }
         public void WinPart(Match match, Participant participantWin, Participant participantLose)
         {
-            if (Math.Log(Type,2) == match.RoundNumber + 1) {
-                Places[(int)ItemPlaces.Winner].SetParticipant(participantWin, StatusPos.win);
-                Places[(int)ItemPlaces.OnePlace].SetParticipant(participantWin, StatusPos.win);
-                Places[(int)ItemPlaces.TwoPlace].SetParticipant(participantLose, StatusPos.win);
+            if (Math.Log(Type, 2) == match.RoundNumber + 1)
+            {
+                Places[(int)ItemPlaces.Winner].SetParticipant(participantWin, StatusPos.WIN);
+                Places[(int)ItemPlaces.OnePlace].SetParticipant(participantWin, StatusPos.WIN);
+                Places[(int)ItemPlaces.TwoPlace].SetParticipant(participantLose, StatusPos.WIN);
             }
-            else {
-                Match nextMatch = Matchs.First(m=>m.MatchNumber == match.MatchNumber / 2 && m.RoundNumber == match.RoundNumber + 1);
+            else
+            {
+                if (Math.Log(Type, 2) == match.RoundNumber + 2)
+                {
+                    if (Places[(int)ItemPlaces.ThreePlace].Status != StatusPos.WIN)
+                        Places[(int)ItemPlaces.ThreePlace].SetParticipant(participantWin, StatusPos.WIN);
+                    else
+                        Places[(int)ItemPlaces.ThreePlace2].SetParticipant(participantWin, StatusPos.WIN);
+                }
+                Match nextMatch = Matchs.First(m => m.MatchNumber == match.MatchNumber / 2 && m.RoundNumber == match.RoundNumber + 1);
                 nextMatch.SetParticipant(participantWin, (EPosMatch)(match.MatchNumber % 2));
-                DrawLine(graphics, match, nextMatch.Items[match.MatchNumber % 2], new Pen(Color.Black));
+                DrawLine(match, nextMatch.Items[match.MatchNumber % 2], new Pen(Color.Black));
             }
         }
-        public void DrawLine(Graphics graphics, Match match, ItemGrid nextItem, Pen pen)
+        public void DrawLine(Match match, ItemGrid nextItem, Pen pen)
         {
             ItemGrid item;
-            if (match.Items[0].Status == StatusPos.win)
+            if (match.Items[0].Status == StatusPos.WIN)
                 item = match.Items[0];
             else
                 item = match.Items[1];
+            DrawLine(item,nextItem,pen);
+        }
+        public void DrawLine(Match match, Pen pen)
+        {
+            ItemGrid item;
+            if (match.Items[0].Status == StatusPos.WIN)
+                item = match.Items[0];
+            else if (match.Items[1].Status == StatusPos.WIN)
+                item = match.Items[1];
+            else
+                return;
+            if (match.RoundNumber + 1 == Math.Log(Type, 2))
+                DrawLine(item, Places[(int)ItemPlaces.Winner], pen);
+            else
+            DrawLine(item, GetNextItemGrid(match), pen);
+        }
+        public void DrawLine(ItemGrid item, ItemGrid nextItem, Pen pen)
+        {
             Point point1 = new Point(item.Label.Right, item.Label.Location.Y + item.Label.Height / 2);
             Point point4 = new Point(nextItem.Label.Left, nextItem.Label.Location.Y + nextItem.Label.Height / 2);
             Point point2 = new Point(point1.X + 30, point1.Y);
@@ -245,6 +280,25 @@ namespace Kaharman
             graphics.DrawLine(pen, point1, point2);
             graphics.DrawLine(pen, point2, point3);
             graphics.DrawLine(pen, point3, point4);
+        }
+        private ItemGrid GetNextItemGrid(Match match)
+        {
+            Match nextMatch = Matchs.First(m => m.MatchNumber == match.MatchNumber / 2 && m.RoundNumber == match.RoundNumber + 1);
+            return nextMatch.Items[match.MatchNumber % 2];
+        }
+        public void DrawWinnerLine()
+        {
+            foreach (Match match in Matchs)
+            {
+                DrawLine(match, new Pen(Color.Black));
+            }
+        }
+        public void DrawWinnerLine(Graphics graphics)
+        {
+            foreach (Match match in Matchs)
+            {
+                DrawLine(match, new Pen(Color.Black));
+            }
         }
     }
     public class Match
@@ -267,18 +321,18 @@ namespace Kaharman
         public int MatchNumber { get; set; }
         public List<ItemGrid> Items{ get; set; }
         public TournamentGrid TournamentGrid { get; set; }
-        public void SetParticipant(Participant participant, EPosMatch posMatch, StatusPos status = StatusPos.init)
+        public void SetParticipant(Participant participant, EPosMatch posMatch, StatusPos status = StatusPos.INIT)
         {
             switch (posMatch)
             {
-                case EPosMatch.UP: Items[0].SetParticipant(participant, StatusPos.init); break;
-                case EPosMatch.DOWN: Items[1].SetParticipant(participant, StatusPos.init); break;
+                case EPosMatch.UP: Items[0].SetParticipant(participant, StatusPos.INIT); break;
+                case EPosMatch.DOWN: Items[1].SetParticipant(participant, StatusPos.INIT); break;
             }
         }
         public void SetParticipants((Participant, Participant?) participants)
         {
-            Items[0].Participant = participants.Item1; Items[0].ChangeStatus(StatusPos.init);
-            Items[1].Participant = participants.Item2; Items[1].ChangeStatus(StatusPos.init);
+            Items[0].Participant = participants.Item1; Items[0].ChangeStatus(StatusPos.INIT);
+            Items[1].Participant = participants.Item2; Items[1].ChangeStatus(StatusPos.INIT);
         }
         public void WinPos(EPosMatch posMatch)
         {
@@ -286,15 +340,15 @@ namespace Kaharman
             {
                 case EPosMatch.UP:
                     {
-                        Items[0].ChangeStatus(StatusPos.win);
-                        Items[1].ChangeStatus(StatusPos.lose);
+                        Items[0].ChangeStatus(StatusPos.WIN);
+                        Items[1].ChangeStatus(StatusPos.LOSE);
                         TournamentGrid.WinPart(this, Items[0].Participant, Items[1].Participant);
                         return;
                     }
                 case EPosMatch.DOWN:
                     {
-                        Items[0].ChangeStatus(StatusPos.lose);
-                        Items[1].ChangeStatus(StatusPos.win);
+                        Items[0].ChangeStatus(StatusPos.LOSE);
+                        Items[1].ChangeStatus(StatusPos.WIN);
                         TournamentGrid.WinPart(this, Items[1].Participant, Items[0].Participant);
                         return;
                     }
@@ -315,7 +369,7 @@ namespace Kaharman
             PosMatch = ePosMatch;
         }
         public Participant? Participant { get;set; }
-        public StatusPos Status { get; set; } = StatusPos.close;
+        public StatusPos Status { get; set; } = StatusPos.CLOSE;
         public EPosMatch PosMatch { get; set; }
         public Match? Match { get; set; }
         public TournamentGrid? TournamentGrid { get; set; }
@@ -363,9 +417,9 @@ namespace Kaharman
                 ItemGrid? itemGrid = label.Tag as ItemGrid;
                 if (itemGrid == null)
                     return;
-                if (itemGrid.Participant == null)
+                if (itemGrid.Status != StatusPos.INIT)
                     return;
-                if (itemGrid.PosMatch == EPosMatch.Place)
+                if (itemGrid.Match == null)
                     return;
                 itemGrid.Match.WinPos(itemGrid.PosMatch);
             }
@@ -425,22 +479,22 @@ namespace Kaharman
             Status = statusGridItem; 
             switch (Status)
             {
-                case StatusPos.init:
+                case StatusPos.INIT:
                     if (PosMatch == EPosMatch.UP)
                         Label.BackColor = Color.DodgerBlue;
                     else
                         Label.BackColor = Color.LightCoral;
                     break;
-                case StatusPos.block:
+                case StatusPos.BLOCK:
                     Label.BackColor = Color.LightGray;
                     break;
-                case StatusPos.close:
+                case StatusPos.CLOSE:
                     Label.BackColor = SystemColors.Control;
                     break;
-                case StatusPos.win:
+                case StatusPos.WIN:
                     Label.BackColor = GridForm.ColorWonPosition;
                     break;
-                case StatusPos.lose:
+                case StatusPos.LOSE:
                     Label.BackColor = Color.LightGray;
                     break;
             }
@@ -448,7 +502,7 @@ namespace Kaharman
         public void Clear()
         {
             Label.Text = "";
-            ChangeStatus(StatusPos.close);
+            ChangeStatus(StatusPos.CLOSE);
             Participant = null;
             toolTip.RemoveAll();
         }
@@ -464,7 +518,7 @@ namespace Kaharman
             }
             else
             {
-                Status = StatusPos.close;
+                Status = StatusPos.CLOSE;
             }
         }
     }

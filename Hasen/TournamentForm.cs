@@ -98,7 +98,7 @@ namespace Kaharman
                 MessageBox.Show("Введите наименование соревнования.");
                 return;
             }
-            if (dateTimePicker1.Value > dateTimePicker2.Value)
+            if (dateTimePicker2.Value <= dateTimePicker1.Value)
             {
                 MessageBox.Show("Дата начала должна быть меньше дате окончания соревнования.");
                 return;
@@ -249,10 +249,10 @@ namespace Kaharman
             ParticipantForm participants = new ParticipantForm();
             if (participants.ShowDialog() == DialogResult.OK)
             {
-                using (DataTable data = AccessSQL.GetDataTableSQL($"SELECT * FROM Participants WHERE id = " + participants.ID))
-                {
-                    //       ParticipantsTable.FillTableOnAccess(data, this, progressBar1);
-                }
+                //using (DataTable data = AccessSQL.GetDataTableSQL($"SELECT * FROM Participants WHERE id = " + participants.ID))
+                //{
+                //    //       ParticipantsTable.FillTableOnAccess(data, this, progressBar1);
+                //}
                 SaveChangeTournament();
             }
         }
@@ -288,22 +288,22 @@ namespace Kaharman
         {
             if (e.Button == MouseButtons.Left)
             {
-                ParticipantForm participants = new ParticipantForm(participantGrid.SelectedRows[0].Cells["ID"].Value.ToString());
-                this.Hide();
-                if (participants.ShowDialog() == DialogResult.OK)
-                {
-                    if (participants.Participant != null)
-                    {
-                        participantGrid.SelectedRows[0].Cells[1].Value = participants.Participant.Name;
-                        participantGrid.SelectedRows[0].Cells[2].Value = participants.Participant.Gender;
-                        participantGrid.SelectedRows[0].Cells[3].Value = participants.Participant.Age;
-                        participantGrid.SelectedRows[0].Cells[4].Value = participants.Participant.Weight;
-                        participantGrid.SelectedRows[0].Cells[5].Value = participants.Participant.Gualiti;
-                        participantGrid.SelectedRows[0].Cells[6].Value = participants.Participant.City;
-                        participantGrid.SelectedRows[0].Cells[7].Value = participants.Participant.Trainer;
-                    }
-                }
-                this.Show();
+                //ParticipantForm participants = new ParticipantForm(participantGrid.SelectedRows[0].Cells["ID"].Value.ToString());
+                //this.Hide();
+                //if (participants.ShowDialog() == DialogResult.OK)
+                //{
+                //    if (participants.Participant != null)
+                //    {
+                //        participantGrid.SelectedRows[0].Cells[1].Value = participants.Participant.Name;
+                //        participantGrid.SelectedRows[0].Cells[2].Value = participants.Participant.Gender;
+                //        participantGrid.SelectedRows[0].Cells[3].Value = participants.Participant.Age;
+                //        participantGrid.SelectedRows[0].Cells[4].Value = participants.Participant.Weight;
+                //        participantGrid.SelectedRows[0].Cells[5].Value = participants.Participant.Gualiti;
+                //        participantGrid.SelectedRows[0].Cells[6].Value = participants.Participant.City;
+                //        participantGrid.SelectedRows[0].Cells[7].Value = participants.Participant.Trainer;
+                //    }
+                //}
+                //this.Show();
             }
         }
         private void выходToolStripMenuItem_Click(object sender, EventArgs e)
@@ -318,11 +318,11 @@ namespace Kaharman
 
             foreach (DataGridViewRow row in gridDataGridView.Rows)
             {
-                word.FillTable(row.Cells[1].Value.ToString(), row.Cells[2].Value.ToString(), AccessSQL.GetDataTableSQL($"SELECT * FROM Participants WHERE id IN ({string.Join(", ",
-                        AccessSQL.GetDataTableSQL($"SELECT id_participants FROM TournamentGrid WHERE id = {row.Cells[0].Value}").
-                        Rows[0]["id_participants"].ToString().
-                        Split(';').
-                        Select(s => s.Trim('\"')).ToArray())})"));
+                //word.FillTable(row.Cells[1].Value.ToString(), row.Cells[2].Value.ToString(), AccessSQL.GetDataTableSQL($"SELECT * FROM Participants WHERE id IN ({string.Join(", ",
+                //        AccessSQL.GetDataTableSQL($"SELECT id_participants FROM TournamentGrid WHERE id = {row.Cells[0].Value}").
+                //        Rows[0]["id_participants"].ToString().
+                //        Split(';').
+                //        Select(s => s.Trim('\"')).ToArray())})"));
             }
             SaveFileDialog saveFileDialog = new SaveFileDialog();
             saveFileDialog.Filter = "docx file (*.docx)|*.docx";
@@ -389,7 +389,7 @@ namespace Kaharman
             }
             foreach (DataGridViewRow gridRow in gridDataGridView.Rows)
             {
-                Grid grid = new Grid();
+              //  Grid grid = new Grid();
                 if (gridDataGridView.RowCount == 0)
                 {
                     MessageBox.Show("Выделите строку.");
@@ -400,24 +400,24 @@ namespace Kaharman
                 string nameGrid;
                 List<string> IDPart = new List<string>();
                 string numProt;
-                using (DataTable data = AccessSQL.GetDataTableSQL($"SELECT * FROM TournamentGrid WHERE id = {IDGrid}"))
-                {
-                    if (data.Rows.Count == 1)
-                    {
-                        DataRow row = data.Rows[0];
-                        dateTime = DateTime.Parse(row["date"].ToString());
-                        nameGrid = row["name"].ToString();
-                        numProt = row["number_t"].ToString();
-                        IDPart.AddRange(row["id_participants"].ToString().Split(";").Select(item => item.Trim('"')));
-                        grid = JsonSerializer.Deserialize<Grid>(row["grid"].ToString());
-                    }
-                    else
-                    {
-                        MessageBox.Show("Ошибка базы данных");
-                        return;
-                    }
-                }
-                grid.FillItems(ParticipantX.GetParticipantsOnAccess(IDPart));
+                //using (DataTable data = AccessSQL.GetDataTableSQL($"SELECT * FROM TournamentGrid WHERE id = {IDGrid}"))
+                //{
+                //    if (data.Rows.Count == 1)
+                //    {
+                //        DataRow row = data.Rows[0];
+                //        dateTime = DateTime.Parse(row["date"].ToString());
+                //        nameGrid = row["name"].ToString();
+                //        numProt = row["number_t"].ToString();
+                //        IDPart.AddRange(row["id_participants"].ToString().Split(";").Select(item => item.Trim('"')));
+                //        grid = JsonSerializer.Deserialize<Grid>(row["grid"].ToString());
+                //    }
+                //    else
+                //    {
+                //        MessageBox.Show("Ошибка базы данных");
+                //        return;
+                //    }
+                //}
+               // grid.FillItems(ParticipantX.GetParticipantsOnAccess(IDPart));
 
                 //GridForm tournament = new GridForm(IDGrid, name.Text, nameGrid, numProt, dateTime, mainJudge.Text, secret.Text, grid);
                 //tournament.Show();

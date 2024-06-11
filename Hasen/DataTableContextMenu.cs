@@ -1,16 +1,5 @@
-﻿using Hasen;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Diagnostics;
-using Microsoft.EntityFrameworkCore.Metadata.Internal;
-using NPOI.SS.Formula.Functions;
-using NPOI.XSSF.Streaming.Values;
-using System;
-using System.ComponentModel;
+﻿using System.ComponentModel;
 using System.Data;
-using System.Data.OleDb;
-using System.Globalization;
-using System.Windows.Forms;
-using static NPOI.HSSF.Util.HSSFColor;
 
 namespace Kaharman
 {

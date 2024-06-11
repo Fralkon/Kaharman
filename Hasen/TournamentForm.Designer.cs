@@ -145,6 +145,7 @@
             // 
             // dateTimePicker1
             // 
+            dateTimePicker1.Format = DateTimePickerFormat.Short;
             dateTimePicker1.Location = new Point(119, 16);
             dateTimePicker1.Name = "dateTimePicker1";
             dateTimePicker1.Size = new Size(203, 23);
@@ -152,6 +153,8 @@
             // 
             // dateTimePicker2
             // 
+            dateTimePicker2.Checked = false;
+            dateTimePicker2.Format = DateTimePickerFormat.Short;
             dateTimePicker2.Location = new Point(447, 16);
             dateTimePicker2.Name = "dateTimePicker2";
             dateTimePicker2.Size = new Size(200, 23);
@@ -396,21 +399,21 @@
             // создатьToolStripMenuItem2
             // 
             создатьToolStripMenuItem2.Name = "создатьToolStripMenuItem2";
-            создатьToolStripMenuItem2.Size = new Size(180, 22);
+            создатьToolStripMenuItem2.Size = new Size(126, 22);
             создатьToolStripMenuItem2.Text = "Создать";
             создатьToolStripMenuItem2.Click += создатьToolStripMenuItem1_Click;
             // 
             // добавитьToolStripMenuItem
             // 
             добавитьToolStripMenuItem.Name = "добавитьToolStripMenuItem";
-            добавитьToolStripMenuItem.Size = new Size(180, 22);
+            добавитьToolStripMenuItem.Size = new Size(126, 22);
             добавитьToolStripMenuItem.Text = "Добавить";
             добавитьToolStripMenuItem.Click += добавитьToolStripMenuItem1_Click;
             // 
             // удалитьToolStripMenuItem1
             // 
             удалитьToolStripMenuItem1.Name = "удалитьToolStripMenuItem1";
-            удалитьToolStripMenuItem1.Size = new Size(180, 22);
+            удалитьToolStripMenuItem1.Size = new Size(126, 22);
             удалитьToolStripMenuItem1.Text = "Удалить";
             удалитьToolStripMenuItem1.Click += удалитьToolStripMenuItem3_Click;
             // 

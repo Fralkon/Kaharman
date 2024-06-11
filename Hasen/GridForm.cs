@@ -24,11 +24,11 @@ namespace Kaharman
         bool oneLoad = false;
         public static bool SelectLable = false;
         TournamentGrid TournamentGrid { get; set; }
-        KaharmanDataContext dbContext;       
+        KaharmanDataContext dbContext;
         public GridForm(int IDTournament)
         {
             dbContext = new KaharmanDataContext();
-            TournamentGrid? grid = dbContext.TournamentGrid.Include(t => t.Participants).Include(t => t.Tournament).Include(t=>t.Places).Include(t => t.Matchs).ThenInclude(m=>m.Items).FirstOrDefault(g => g.Id == IDTournament);
+            TournamentGrid? grid = dbContext.TournamentGrid.Include(t => t.Participants).Include(t => t.Tournament).Include(t => t.Places).Include(t => t.Matchs).ThenInclude(m => m.Items).FirstOrDefault(g => g.Id == IDTournament);
             if (grid != null)
             {
                 foreach (var participant in grid.Participants)
@@ -87,35 +87,7 @@ namespace Kaharman
         }
         private void Panel1_Paint(object? sender, PaintEventArgs e)
         {
-            //Pen pen = new Pen(Color.Black);
-            //pen.DashStyle = System.Drawing.Drawing2D.DashStyle.Dash;
-            //foreach (GridItems[] Items in Grid.Items)
-            //{
-            //    foreach (GridItems item in Items)
-            //    {
-            //        if (!oneLoad)
-            //        {
-            //            panel1.Controls.Add(item.Label);
-            //            item.Label.Click += Item_Click;
-            //            item.Label.MouseDown += Label_MouseDown;
-            //            item.Label.MouseUp += Label_MouseUp;
-            //            item.Label.MouseMove += Label_MouseMove;
-            //            item.Label.DragOver += Label_DragOver;
-            //            item.Label.DragDrop += Label_DragDrop;
-            //        }
-            //        DrawLines(e.Graphics, item, pen);
-            //        if (item.Status == StatusGridItem.win)
-            //        {
-            //            DrawLines(e.Graphics, item, PenWonPosition);
-            //        }
-            //    }
-            //}
-            //if (!oneLoad)
-            //{
-            //    foreach (GridItems item in Grid.Places)
-            //        panel1.Controls.Add(item.Label);
-            //    oneLoad = true;
-            //}
+            TournamentGrid.DrawWinnerLine();
         }
         private void выходToolStripMenuItem_Click(object sender, EventArgs e)
         {
@@ -194,65 +166,65 @@ namespace Kaharman
             //foreach (var item in Grid.Places)
             //    item.InitColorItem();
         }
-        private void WonPosition(GridItems item)
-        {
-            //Grid.WinPosition(item);
-            //DrawLines(graphics, item, PenWonPosition);
-            //string StatusGrid = "";
-            //for (int i = Grid.Items.Length - 1; i > 0; i--)
-            //{
-            //    bool statusBool = true;
-            //    foreach (GridItems items in Grid.Items[i])
-            //    {
-            //        if (items.Status == StatusPos.close)
-            //        {
-            //            statusBool = false;
-            //            break;
-            //        }
-            //    }
-            //    if (statusBool)
-            //    {
-            //        int type = Grid.Items.Length - i - 1;
-            //        switch (type)
-            //        {
-            //            case 0:
-            //                StatusGrid = "Завершено";
-            //                break;
-            //            case 1:
-            //                StatusGrid = "Финал";
-            //                break;
-            //            case 2:
-            //                StatusGrid = "1/4";
-            //                break;
-            //            case 3:
-            //                StatusGrid = "1/8";
-            //                break;
-            //            case 4:
-            //                StatusGrid = "1/16";
-            //                break;
-            //            case 5:
-            //                StatusGrid = "1/32";
-            //                break;
-            //        }
-            //        break;
-            //    }
-            //}
-            //AccessSQL.SendSQL($"UPDATE TournamentGrid SET status = '{StatusGrid}' WHERE id = {ID}");
-        }
-        private void DrawLines(Graphics graphics, GridItems item1, Pen pen)
-        {
-            //if (Grid.Items[item1.Point.X].Length == 1)
-            //    return;
-            //int positionY = item1.Point.Y / 2;
-            //GridItems item2 = Grid.Items[item1.Point.X + 1][positionY];
-            //Point point1 = new Point(item1.Label.Right, item1.Label.Location.Y + item1.Label.Height / 2);
-            //Point point4 = new Point(item2.Label.Left, item2.Label.Location.Y + item2.Label.Height / 2);
-            //Point point2 = new Point(point1.X + 30, point1.Y);
-            //Point point3 = new Point(point2.X, point4.Y);
-            //graphics.DrawLine(pen, point1, point2);
-            //graphics.DrawLine(pen, point2, point3);
-            //graphics.DrawLine(pen, point3, point4);
-        }
+        //  private void WonPosition(GridItems item)
+        // {
+        //Grid.WinPosition(item);
+        //DrawLines(graphics, item, PenWonPosition);
+        //string StatusGrid = "";
+        //for (int i = Grid.Items.Length - 1; i > 0; i--)
+        //{
+        //    bool statusBool = true;
+        //    foreach (GridItems items in Grid.Items[i])
+        //    {
+        //        if (items.Status == StatusPos.close)
+        //        {
+        //            statusBool = false;
+        //            break;
+        //        }
+        //    }
+        //    if (statusBool)
+        //    {
+        //        int type = Grid.Items.Length - i - 1;
+        //        switch (type)
+        //        {
+        //            case 0:
+        //                StatusGrid = "Завершено";
+        //                break;
+        //            case 1:
+        //                StatusGrid = "Финал";
+        //                break;
+        //            case 2:
+        //                StatusGrid = "1/4";
+        //                break;
+        //            case 3:
+        //                StatusGrid = "1/8";
+        //                break;
+        //            case 4:
+        //                StatusGrid = "1/16";
+        //                break;
+        //            case 5:
+        //                StatusGrid = "1/32";
+        //                break;
+        //        }
+        //        break;
+        //    }
+        //}
+        //AccessSQL.SendSQL($"UPDATE TournamentGrid SET status = '{StatusGrid}' WHERE id = {ID}");
+        // }
+        // private void DrawLines(Graphics graphics, GridItems item1, Pen pen)
+        // {
+        //if (Grid.Items[item1.Point.X].Length == 1)
+        //    return;
+        //int positionY = item1.Point.Y / 2;
+        //GridItems item2 = Grid.Items[item1.Point.X + 1][positionY];
+        //Point point1 = new Point(item1.Label.Right, item1.Label.Location.Y + item1.Label.Height / 2);
+        //Point point4 = new Point(item2.Label.Left, item2.Label.Location.Y + item2.Label.Height / 2);
+        //Point point2 = new Point(point1.X + 30, point1.Y);
+        //Point point3 = new Point(point2.X, point4.Y);
+        //graphics.DrawLine(pen, point1, point2);
+        //graphics.DrawLine(pen, point2, point3);
+        //graphics.DrawLine(pen, point3, point4);
+        // }
         private void TournamentGrid_FormClosing(object sender, FormClosingEventArgs e)
         {
             SaveChange();
@@ -331,6 +303,10 @@ namespace Kaharman
         {
             dbContext.TournamentGrid.Update(TournamentGrid);
             dbContext.SaveChanges();
+        }
+
+        private void GridForm_Load(object sender, EventArgs e)
+        {
         }
     }
 }
