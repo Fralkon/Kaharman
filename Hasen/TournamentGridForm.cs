@@ -37,6 +37,7 @@ namespace Kaharman
             StatusForm = statusForm;
             this.Text = tournament.NameTournament;
             button1.Text = "Создать";
+            genderComboBox.Items.AddRange(new string[] { "Ж", "М" });
             TournamentGridForm_Resize(null, null);
             AllParticipantsDataGrid = new ParticipantDataGrid(allParticipant, FilterForm: true);
             AllParticipantsDataGrid.LoadData(new List<Participant>(tournament.Participants));
@@ -56,36 +57,41 @@ namespace Kaharman
             }
             this.Text = tournamentGrid.Tournament.NameTournament;
             button1.Text = "Создать";
+            genderComboBox.Items.AddRange(new string[] { "Ж", "М" });
             TournamentGridForm_Resize(null, null);
             AllParticipantsDataGrid = new ParticipantDataGrid(allParticipant);
             AllParticipantsDataGrid.LoadData(new List<Participant>(tournamentGrid.Tournament.Participants));
             ParticipantGridDataGrid = new ParticipantDataGrid(gridParticipant);
 
-            nameTextBox.Text = tournamentGrid.NameGrid;
             programmText.Text = tournamentGrid.Programm;
             numberProtocol.Text = tournamentGrid.Number.ToString();
 
-            string[] strings = tournamentGrid.AgeRange.ToString().Split('-');
-            if (strings.Length == 2)
+            string[] stringsAge = tournamentGrid.AgeRange.ToString().Split('-');
+            if (stringsAge.Length == 2)
             {
-                ageMinTextBox.Text = strings[0];
-                ageMaxTextBox.Text = strings[1];
+                ageMinTextBox.Text = stringsAge[0];
+                ageMaxTextBox.Text = stringsAge[1];
+            }
+
+            string[] stringsQual = tournamentGrid.Qualification.ToString().Split('-');
+            if (stringsQual.Length == 2)
+            {
+                qualMinComboBox.Text = stringsQual[0];
+                qualMaxComboBox.Text = stringsQual[1];
             }
             dateTimePicker1.Value = DateTime.Parse(tournamentGrid.DataStart.ToString());
-            genderTextBox.Text = tournamentGrid.Gender;
+            genderComboBox.Text = tournamentGrid.Gender;
             programmText.Text = tournamentGrid.Programm;
 
             if (statusForm == StatusFormTournamentGrid.Copy)
             {
                 TournamentGrid = new TournamentGrid();
-                TournamentGrid.NameGrid = tournamentGrid.NameGrid;
                 TournamentGrid.Programm = tournamentGrid.Programm;
                 TournamentGrid.Qualification = tournamentGrid.Qualification;
                 TournamentGrid.Number = tournamentGrid.Number;
                 TournamentGrid.AgeRange = tournamentGrid.AgeRange;
                 TournamentGrid.DataStart = tournamentGrid.DataStart;
                 TournamentGrid.Gender = tournamentGrid.Gender;
-                TournamentGrid.Programm = tournamentGrid.Programm;
 
                 foreach (Participant participant in TournamentGrid.Participants)
                     AllParticipantsDataGrid.DeleteParticipant(participant);
@@ -134,28 +140,28 @@ namespace Kaharman
                 MessageBox.Show("Не верно введена дата проведения турнирной сетки.");
                 return;
             }
-            if (nameTextBox.Text.Length == 0)
-            {
-                MessageBox.Show("Введите наименование турнира.");
-                return;
-            }
             if (programmText.Text.Length == 0)
             {
                 MessageBox.Show("Выберите программу.");
                 return;
             }
-            if (qualification.Text.Length == 0)
+            if (qualMinComboBox.Text.Length == 0)
+            {
+                MessageBox.Show("Выберите квалификацию.");
+                return;
+            }
+            if (qualMaxComboBox.Text.Length == 0)
             {
                 MessageBox.Show("Выберите квалификацию.");
                 return;
             }
 
-            TournamentGrid.NameGrid = nameTextBox.Text;
             TournamentGrid.Programm = programmText.Text;
             TournamentGrid.Number = nProtocol;
             TournamentGrid.AgeRange = ageMin + "-" + ageMax;
             TournamentGrid.DataStart = DateOnly.FromDateTime(dateTimePicker1.Value);
-            TournamentGrid.Gender = genderTextBox.Text;
+            TournamentGrid.Gender = genderComboBox.Text;
+            TournamentGrid.Qualification = qualMinComboBox.Text + "-" + qualMaxComboBox.Text;
 
             if (StatusForm == StatusFormTournamentGrid.Edit && notChange)
             {

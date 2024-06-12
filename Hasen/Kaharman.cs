@@ -1,9 +1,4 @@
 using Kaharman;
-using Microsoft.EntityFrameworkCore;
-using NPOI.SS.Formula.Functions;
-using NPOI.SS.UserModel;
-using System.ComponentModel;
-using System.Data;
 
 namespace Hasen
 {

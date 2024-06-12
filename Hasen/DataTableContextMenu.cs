@@ -384,7 +384,7 @@ namespace Kaharman
         {
             return bindingList.Where(data =>
                 listContextMenu[0].Filter(data.Number.ToString()) &&
-                listContextMenu[1].Filter(data.NameGrid) &&
+               //listContextMenu[1].Filter(data.NameGrid) &&
                 listContextMenu[2].Filter(data.Gender) &&
                 listContextMenu[3].Filter(data.Programm) &&
                 listContextMenu[4].Filter(data.AgeRange) &&

@@ -51,8 +51,6 @@ namespace Kaharman
         }
         private void SaveChangeTournament()
         {
-            if (Tournament.Id > 0)
-            {
                 if (name.Text.Length == 0)
                 {
                     MessageBox.Show("Введите наименование соревнования.");
@@ -74,12 +72,9 @@ namespace Kaharman
                 Tournament.NoteTournament = note.Text;
                 Tournament.Judge = mainJudge.Text;
                 Tournament.Secret = secret.Text;
-                //using (KaharmanDataContext dbContext = new KaharmanDataContext())
-                //{
-                //    dbContext.Tournament.Update(Tournament);
-                //    dbContext.SaveChanges();
-                //}
-            }
+                dbContext.Tournament.Update(Tournament);
+                dbContext.SaveChanges();
+            
         }
         private void UpDataGrid()
         {
@@ -286,7 +281,7 @@ namespace Kaharman
         {
             if (e.Button == MouseButtons.Left)
             {
-                ParticipantForm participants = new ParticipantForm(Tournament.Participants.First(p=>p.Id == (int)participantGrid.SelectedRows[0].Cells["ID"].Value));
+                ParticipantForm participants = new ParticipantForm(Tournament.Participants.First(p => p.Id == (int)participantGrid.SelectedRows[0].Cells["ID"].Value));
                 this.Hide();
                 if (participants.ShowDialog() == DialogResult.OK)
                 {
@@ -388,7 +383,7 @@ namespace Kaharman
             }
             foreach (DataGridViewRow gridRow in gridDataGridView.Rows)
             {
-                Grid grid = new Grid();
+                // Grid grid = new Grid();
                 if (gridDataGridView.RowCount == 0)
                 {
                     MessageBox.Show("Выделите строку.");
@@ -416,7 +411,7 @@ namespace Kaharman
                 //        return;
                 //    }
                 //}
-               // grid.FillItems(ParticipantX.GetParticipantsOnAccess(IDPart));
+                // grid.FillItems(ParticipantX.GetParticipantsOnAccess(IDPart));
 
                 //GridForm tournament = new GridForm(IDGrid, name.Text, nameGrid, numProt, dateTime, mainJudge.Text, secret.Text, grid);
                 //tournament.Show();

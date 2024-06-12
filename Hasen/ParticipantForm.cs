@@ -61,36 +61,36 @@ namespace Hasen
         }
         private void button1_Click(object sender, EventArgs e)
         {
-            if (ID == null)
-            {
-                if (float.TryParse(weigth.Text, out float weight))
-                {
-                    AccessSQL.SendSQL($"INSERT INTO Participants (name,gender,[date_of_birth],weight,qualification,city,trainer) VALUES ('{name.Text}','{gender.Text}','{dateOfBirth.Value.ToString("dd.MM.yyyy")}',{weight},'{qualification.Text}','{city.Text}','{trainer.Text}')");
-                    int id = AccessSQL.GetIDInsert();
-                    ID = id;
-                    DialogResult = DialogResult.OK;
-                    Participant = new ParticipantX(id, name.Text, gender.Text, dateOfBirth.Value, weight, qualification.Text, city.Text, trainer.Text);
-                    this.Close();
-                }
-                else
-                {
-                    MessageBox.Show("Неправильно введены данные.");
-                }
-            }
-            else
-            {
-                if (float.TryParse(weigth.Text, out float weight))
-                {
-                    AccessSQL.SendSQL($"UPDATE Participants SET name = '{name.Text}', gender = '{gender.Text}', [date_of_birth] = '{dateOfBirth.Value.ToString("dd.MM.yyyy")}', weight = {weight},qualification = '{qualification.Text}',city = '{city.Text}',trainer = '{trainer.Text}' WHERE id = {ID}");
-                    DialogResult = DialogResult.OK;
-                    Participant = new ParticipantX((int)ID, name.Text, gender.Text, dateOfBirth.Value, weight, qualification.Text, city.Text, trainer.Text);
-                    this.Close();
-                }
-                else
-                {
-                    MessageBox.Show("Неправильно введены данные.");
-                }
-            }
+            //if (ID == null)
+            //{
+            //    if (float.TryParse(weigth.Text, out float weight))
+            //    {
+            //        AccessSQL.SendSQL($"INSERT INTO Participants (name,gender,[date_of_birth],weight,qualification,city,trainer) VALUES ('{name.Text}','{gender.Text}','{dateOfBirth.Value.ToString("dd.MM.yyyy")}',{weight},'{qualification.Text}','{city.Text}','{trainer.Text}')");
+            //        int id = AccessSQL.GetIDInsert();
+            //        ID = id;
+            //        DialogResult = DialogResult.OK;
+            //        Participant = new ParticipantX(id, name.Text, gender.Text, dateOfBirth.Value, weight, qualification.Text, city.Text, trainer.Text);
+            //        this.Close();
+            //    }
+            //    else
+            //    {
+            //        MessageBox.Show("Неправильно введены данные.");
+            //    }
+            //}
+            //else
+            //{
+            //    if (float.TryParse(weigth.Text, out float weight))
+            //    {
+            //        //AccessSQL.SendSQL($"UPDATE Participants SET name = '{name.Text}', gender = '{gender.Text}', [date_of_birth] = '{dateOfBirth.Value.ToString("dd.MM.yyyy")}', weight = {weight},qualification = '{qualification.Text}',city = '{city.Text}',trainer = '{trainer.Text}' WHERE id = {ID}");
+            //        //DialogResult = DialogResult.OK;
+            //        //Participant = new ParticipantX((int)ID, name.Text, gender.Text, dateOfBirth.Value, weight, qualification.Text, city.Text, trainer.Text);
+            //        this.Close();
+            //    }
+            //    else
+            //    {
+            //        MessageBox.Show("Неправильно введены данные.");
+            //    }
+            //}
         }
         private void button2_Click(object sender, EventArgs e)
         {

@@ -137,13 +137,11 @@ namespace Kaharman
         public int Number { get; set; }
         [DisplayName("Дата проведения")]
         public DateOnly DataStart { get; set; }
-        [DisplayName("Наименование")]
-        public string NameGrid { get; set; }
         [DisplayName("Пол")]
         public string Gender { get; set; }
         [DisplayName("Программа")]
         public string Programm { get; set; }
-        [DisplayName("Возраст")]
+        [DisplayName("Возрастая категория")]
         public string AgeRange { get; set; }
         [DisplayName("Тех. квалификация")]
         public string Qualification { get; set; }
@@ -247,11 +245,18 @@ namespace Kaharman
         public void WinPart(Match match, Participant participantWin, Participant participantLose)
         {
             if (Math.Log(Type,2) == match.RoundNumber + 1) {
-                Places[(int)ItemPlaces.Winner].SetParticipant(participantWin, StatusPos.win);
-                Places[(int)ItemPlaces.OnePlace].SetParticipant(participantWin, StatusPos.win);
-                Places[(int)ItemPlaces.TwoPlace].SetParticipant(participantLose, StatusPos.win);
+                Places[(int)ItemPlaces.Winner].SetParticipant(participantWin, StatusPos.WIN);
+                Places[(int)ItemPlaces.OnePlace].SetParticipant(participantWin, StatusPos.WIN);
+                Places[(int)ItemPlaces.TwoPlace].SetParticipant(participantLose, StatusPos.WIN);
             }
             else {
+                if (Math.Log(Type, 2) == match.RoundNumber + 2)
+                {
+                    if(Places[(int)ItemPlaces.ThreePlace].Status != StatusPos.WIN)
+                        Places[(int)ItemPlaces.ThreePlace].SetParticipant(participantWin, StatusPos.WIN);
+                    else
+                        Places[(int)ItemPlaces.ThreePlace2].SetParticipant(participantWin, StatusPos.WIN);
+                }
                 Match nextMatch = Matchs.First(m=>m.MatchNumber == match.MatchNumber / 2 && m.RoundNumber == match.RoundNumber + 1);
                 nextMatch.SetParticipant(participantWin, (EPosMatch)(match.MatchNumber % 2));
                 DrawLine(match, nextMatch.Items[match.MatchNumber % 2], new Pen(Color.Black));
