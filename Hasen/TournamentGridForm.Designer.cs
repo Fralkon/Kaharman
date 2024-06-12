@@ -324,6 +324,7 @@
             qualMaxComboBox.Name = "qualMaxComboBox";
             qualMaxComboBox.Size = new Size(101, 23);
             qualMaxComboBox.TabIndex = 33;
+            qualMaxComboBox.SelectedIndexChanged += qualMaxComboBox_SelectedIndexChanged;
             // 
             // label7
             // 
@@ -343,6 +344,7 @@
             qualMinComboBox.Name = "qualMinComboBox";
             qualMinComboBox.Size = new Size(101, 23);
             qualMinComboBox.TabIndex = 31;
+            qualMinComboBox.SelectedIndexChanged += qualMinComboBox_SelectedIndexChanged;
             // 
             // genderComboBox
             // 
@@ -353,6 +355,7 @@
             genderComboBox.Name = "genderComboBox";
             genderComboBox.Size = new Size(101, 23);
             genderComboBox.TabIndex = 30;
+            genderComboBox.SelectedValueChanged += genderComboBox_SelectedValueChanged;
             // 
             // TournamentGridForm
             // 

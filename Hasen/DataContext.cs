@@ -6,6 +6,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Drawing;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
+using static Kaharman.TournamentGridForm;
 
 namespace Kaharman
 {
@@ -534,6 +535,50 @@ namespace Kaharman
             {
                 Status = StatusPos.CLOSE;
             }
+        }
+    }
+    public class Qualification : IComparable<Qualification>
+    {
+        public int Number { get; set; }
+        public EnumQualification EQualification { get; set; }
+        public string Text { get; set; }
+        public Qualification(string text)
+        {
+            Text = text;
+            if (text.IndexOf("GUP") != -1)
+                EQualification = EnumQualification.GUP;
+            else
+                EQualification = EnumQualification.DAN;
+            Number = int.Parse(text.Replace(EQualification.ToString(), ""));
+        }
+        public int CompareTo(Qualification? comparePart)
+        {
+            // A null value means that this object is greater.
+            if (comparePart == null)
+                return 1;
+            if (EQualification == comparePart.EQualification)
+            {
+                if (Number == comparePart.Number) return 0;
+                else if (Number > comparePart.Number) return 1;
+                else return -1;
+            }
+            else if (EQualification > comparePart.EQualification)
+                return 1;
+            else
+                return -1;
+        }
+        public override string ToString()
+        {
+            return Number + " " + EQualification.ToString();
+        }
+        public override bool Equals(object? obj)
+        {
+            if (obj is Qualification person) return Text == person.Text;
+            return false;
+        }
+        public override int GetHashCode()
+        {
+            return Text.GetHashCode();
         }
     }
 }

@@ -261,6 +261,9 @@ namespace Kaharman
     {
         int MinAgeFilter = 0;
         int MaxAgeFiter = 100;
+        string GenderFilter = "";
+        Qualification? MinQualification;
+        Qualification? MaxQualification;
         bool filterForm;
         public ParticipantDataGrid(DataGridView dataGridView, ContextMenuStrip? contextMenuStrip = null, bool FilterForm = false) : base(dataGridView, contextMenuStrip)
         {
@@ -289,10 +292,27 @@ namespace Kaharman
         private bool FilterParticipant(Participant participant)
         {
             if (MinAgeFilter != 0 || MaxAgeFiter != 100)
+            {
                 if (MinAgeFilter > participant.Age || MaxAgeFiter < participant.Age)
-                {
                     return false;
-                }
+            }
+            if (GenderFilter != "")
+            {
+                if (participant.Gender != GenderFilter)
+                    return false;
+            }
+            if (MinQualification != null)
+            {
+                Qualification qualification = new Qualification(participant.Qualification);
+                if (qualification.CompareTo(MinQualification) < 0)
+                    return false;
+            }
+            if (MaxQualification != null)
+            {
+                Qualification qualification = new Qualification(participant.Qualification);
+                if (qualification.CompareTo(MaxQualification) > 0)
+                    return false;
+            }
             return true;
         }
         protected override void InitTable()
@@ -350,14 +370,34 @@ namespace Kaharman
         {
             bindingList.Remove(participant);
         }
-        public void AddFilterMin(int age)
+        public void SetAgeMinFilter(int age)
         {
             MinAgeFilter = age;
             TournamentDataGrid_ItemClicked(null, null);
         }
-        public void AddFilterMax(int age)
+        public void SetAgeMaxFilter(int age)
         {
             MaxAgeFiter = age;
+            TournamentDataGrid_ItemClicked(null, null);
+        }
+        public void SetGenderFilter(string gender)
+        {
+            GenderFilter = gender;
+            TournamentDataGrid_ItemClicked(null, null);
+        }
+        public void SetMinQualification(string  minQualification)
+        {
+            if (minQualification != "")
+                MinQualification = new Qualification(minQualification);
+            else
+                MinQualification = null;
+            TournamentDataGrid_ItemClicked(null, null);
+        }
+        public void SetMaxQualification(string maxQualification)
+        {
+            if (maxQualification != "")
+                MaxQualification = new Qualification(maxQualification);
+            else MaxQualification = null;
             TournamentDataGrid_ItemClicked(null, null);
         }
     }

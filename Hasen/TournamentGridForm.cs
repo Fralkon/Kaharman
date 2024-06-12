@@ -6,11 +6,13 @@ using NPOI.SS.Formula.Functions;
 using NPOI.SS.UserModel;
 using NPOI.Util;
 using System.Data;
+using System.Diagnostics.Eventing.Reader;
 using System.Globalization;
 using System.Net.Sockets;
 using System.Text.Json;
 using System.Windows.Forms;
 using static System.Runtime.InteropServices.JavaScript.JSType;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 
 namespace Kaharman
 {
@@ -23,6 +25,11 @@ namespace Kaharman
     }
     public partial class TournamentGridForm : Form
     {
+        public enum EnumQualification
+        {
+            GUP,
+            DAN
+        }
         public string? IdGrid { get; set; }
         StatusFormTournamentGrid StatusForm;
         bool notChange = true;
@@ -38,6 +45,19 @@ namespace Kaharman
             this.Text = tournament.NameTournament;
             button1.Text = "Создать";
             genderComboBox.Items.AddRange(new string[] { "Ж", "М" });
+            List<Qualification> qualList = new List<Qualification>();
+            foreach (Participant participant in tournament.Participants)
+            {
+                Qualification q = new Qualification(participant.Qualification);
+                if (!qualList.Contains(q))
+                    qualList.Add(q);
+            }
+            qualList.Sort();
+            foreach (Qualification qualification in qualList)
+            {
+                qualMaxComboBox.Items.Add(qualification.ToString());
+                qualMinComboBox.Items.Add(qualification.ToString());
+            }
             TournamentGridForm_Resize(null, null);
             AllParticipantsDataGrid = new ParticipantDataGrid(allParticipant, FilterForm: true);
             AllParticipantsDataGrid.LoadData(new List<Participant>(tournament.Participants));
@@ -104,6 +124,16 @@ namespace Kaharman
                     AllParticipantsDataGrid.DeleteParticipant(participant);
                 ParticipantGridDataGrid.LoadData(new List<Participant>(TournamentGrid.Participants));
             }
+            List<string> qualList = new List<string>();
+            foreach (Participant participant in TournamentGrid.Participants)
+                if (!qualList.Contains(participant.Qualification))
+                    qualList.Add(participant.Qualification);
+            qualList.Sort(delegate (string x, string y)
+            {
+                return new Qualification(x).CompareTo(new Qualification(y));
+            });
+            qualMaxComboBox.Items.AddRange(qualList.ToArray());
+            qualMinComboBox.Items.AddRange(qualList.ToArray());
         }
         private void button1_Click(object sender, EventArgs e)
         {
@@ -296,17 +326,30 @@ namespace Kaharman
         private void ageMinTextBox_TextChanged(object sender, EventArgs e)
         {
             if (ageMinTextBox.Text.Length == 0)
-                AllParticipantsDataGrid.AddFilterMin(0);
+                AllParticipantsDataGrid.SetAgeMinFilter(0);
             else if (int.TryParse(ageMinTextBox.Text, out int age))
-                AllParticipantsDataGrid.AddFilterMin(age);
+                AllParticipantsDataGrid.SetAgeMinFilter(age);
         }
 
         private void ageMaxTextBox_TextChanged(object sender, EventArgs e)
         {
             if (ageMinTextBox.Text.Length == 0)
-                AllParticipantsDataGrid.AddFilterMin(100);
+                AllParticipantsDataGrid.SetAgeMinFilter(100);
             else if (int.TryParse(ageMaxTextBox.Text, out int age))
-                AllParticipantsDataGrid.AddFilterMax(age);
+                AllParticipantsDataGrid.SetAgeMaxFilter(age);
+        }
+        private void genderComboBox_SelectedValueChanged(object sender, EventArgs e)
+        {
+            AllParticipantsDataGrid.SetGenderFilter(genderComboBox.Text);
+        }
+        private void qualMinComboBox_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            AllParticipantsDataGrid.SetMinQualification(qualMinComboBox.Text);
+        }
+
+        private void qualMaxComboBox_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            AllParticipantsDataGrid.SetMaxQualification(qualMaxComboBox.Text);
         }
     }
 }
