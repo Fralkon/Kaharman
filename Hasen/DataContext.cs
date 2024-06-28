@@ -1,10 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Linq;
-using System.Drawing;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using static Kaharman.TournamentGridForm;
 
@@ -131,7 +127,7 @@ namespace Kaharman
         ThreePlace2,
         Winner
     }
-    public class TournamentGrid
+    public class TournamentGrid : IComparable<TournamentGrid>
     {
         public int Id { get; set; }
         [DisplayName("Протокол")]
@@ -141,9 +137,11 @@ namespace Kaharman
         [DisplayName("Пол")]
         public string Gender { get; set; }
         [DisplayName("Программа")]
-        public string Programm { get; set; }
+        public string Program { get; set; }
         [DisplayName("Возрастая категория")]
         public string AgeRange { get; set; }
+        [DisplayName("Весовая категория")]
+        public string Weight { get; set; }
         [DisplayName("Тех. квалификация")]
         public string Qualification { get; set; }
         [Browsable(false)]
@@ -164,6 +162,10 @@ namespace Kaharman
             Participants = new List<Participant>();
             Matchs = new List<Match>();
             Places = new List<ItemGrid>();
+        }
+        public override string ToString()
+        {
+            return "ПРОТОКОЛ №" + Number + "/ ПОЛ: " + Gender + "/ ПРОГРАММА: " + Program + "/ВОЗРАСТНАЯ КАТЕГОРИЯ: " + AgeRange + " ЛЕТ/ ТЕХНИЧЕСКАЯ КВАЛИФИКАЦИЯ: " + Qualification + "/ ВЕСОВАЯ КАТЕГОРИЯ: " + Weight;
         }
         public void CreateMatchs()
         {
@@ -245,18 +247,41 @@ namespace Kaharman
         }
         public void WinPart(Match match, Participant participantWin, Participant participantLose)
         {
-            if (Math.Log(Type,2) == match.RoundNumber + 1) {
+            int RoundCount = (int)Math.Log(Type, 2);
+            switch (RoundCount - match.RoundNumber - 1)
+            {
+                case 0:
+                    Status = "Завершено";
+                    break;
+                case 1:
+                    Status = "Финал";
+                    break;
+                case 2:
+                    Status = "1/4";
+                    break;
+                case 3:
+                    Status = "1/8";
+                    break;
+                case 4:
+                    Status = "1/16";
+                    break;
+                case 5:
+                    Status = "1/32";
+                    break;
+            }
+            if (RoundCount == match.RoundNumber + 1) {
                 Places[(int)ItemPlaces.Winner].SetParticipant(participantWin, StatusPos.WIN);
                 Places[(int)ItemPlaces.OnePlace].SetParticipant(participantWin, StatusPos.WIN);
                 Places[(int)ItemPlaces.TwoPlace].SetParticipant(participantLose, StatusPos.WIN);
+                DrawLine(match, Places[(int)ItemPlaces.Winner], new Pen(Color.Black));
             }
             else {
-                if (Math.Log(Type, 2) == match.RoundNumber + 2)
+                if (RoundCount == match.RoundNumber + 2)
                 {
                     if(Places[(int)ItemPlaces.ThreePlace].Status != StatusPos.WIN)
-                        Places[(int)ItemPlaces.ThreePlace].SetParticipant(participantWin, StatusPos.WIN);
+                        Places[(int)ItemPlaces.ThreePlace].SetParticipant(participantLose, StatusPos.WIN);
                     else
-                        Places[(int)ItemPlaces.ThreePlace2].SetParticipant(participantWin, StatusPos.WIN);
+                        Places[(int)ItemPlaces.ThreePlace2].SetParticipant(participantLose, StatusPos.WIN);
                 }
                 Match nextMatch = Matchs.First(m=>m.MatchNumber == match.MatchNumber / 2 && m.RoundNumber == match.RoundNumber + 1);
                 nextMatch.SetParticipant(participantWin, (EPosMatch)(match.MatchNumber % 2));
@@ -270,7 +295,7 @@ namespace Kaharman
                 item = match.Items[0];
             else
                 item = match.Items[1];
-            DrawLine(item,nextItem,pen);
+            DrawLine(item, nextItem, pen, graphics);
         }
         public void DrawLine(Match match, Pen pen)
         {
@@ -282,11 +307,25 @@ namespace Kaharman
             else
                 return;
             if (match.RoundNumber + 1 == Math.Log(Type, 2))
-                DrawLine(item, Places[(int)ItemPlaces.Winner], pen);
+                DrawLine(item, Places[(int)ItemPlaces.Winner], pen, graphics);
             else
-            DrawLine(item, GetNextItemGrid(match), pen);
+            DrawLine(item, GetNextItemGrid(match), pen, graphics);
         }
-        public void DrawLine(ItemGrid item, ItemGrid nextItem, Pen pen)
+        public void DrawLine(Match match, Pen pen, Graphics graphics)
+        {
+            ItemGrid item;
+            if (match.Items[0].Status == StatusPos.WIN)
+                item = match.Items[0];
+            else if (match.Items[1].Status == StatusPos.WIN)
+                item = match.Items[1];
+            else
+                return;
+            if (match.RoundNumber + 1 == Math.Log(Type, 2))
+                DrawLine(item, Places[(int)ItemPlaces.Winner], pen, graphics);
+            else
+                DrawLine(item, GetNextItemGrid(match), pen, graphics);
+        }
+        public void DrawLine(ItemGrid item, ItemGrid nextItem, Pen pen, Graphics graphics)
         {
             Point point1 = new Point(item.Label.Right, item.Label.Location.Y + item.Label.Height / 2);
             Point point4 = new Point(nextItem.Label.Left, nextItem.Label.Location.Y + nextItem.Label.Height / 2);
@@ -301,7 +340,7 @@ namespace Kaharman
             Match nextMatch = Matchs.First(m => m.MatchNumber == match.MatchNumber / 2 && m.RoundNumber == match.RoundNumber + 1);
             return nextMatch.Items[match.MatchNumber % 2];
         }
-        public void DrawWinnerLine()
+        public void DrawWinnerLine() 
         {
             foreach (Match match in Matchs)
             {
@@ -312,8 +351,51 @@ namespace Kaharman
         {
             foreach (Match match in Matchs)
             {
-                DrawLine(match, new Pen(Color.Black));
+                DrawLine(match, new Pen(Color.Black), graphics);
             }
+        }
+
+        public int CompareTo(TournamentGrid? other)
+        {
+            if (other == null)
+                return 1;
+            return other.Id.CompareTo(this.Id);
+        }
+
+        public void ResetGrid()
+        {
+            graphics.Clear(SystemColors.Control);
+            foreach (var item in Places)
+                item.Clear();
+            foreach (var match in Matchs)
+            {
+                if (match.RoundNumber > 1)
+                    foreach (var item in match.Items)
+                        item.Clear();
+                else if (match.RoundNumber == 0) {
+                    foreach (var item in match.Items)
+                        if (item.Status != StatusPos.CLOSE)
+                            item.ChangeStatus(StatusPos.INIT);
+                }
+                else if (match.RoundNumber == 1)
+                    foreach (var item in match.Items)
+                    {
+                        if (item.Status != StatusPos.CLOSE)
+                        {                            
+                            Match matchLast = Matchs.First(m=>m.RoundNumber == 0 && m.MatchNumber == (match.MatchNumber*2 + (int)item.PosMatch));                            
+                            if (matchLast.Items[0].Status != StatusPos.CLOSE)
+                                item.Clear();
+                            else
+                                item.ChangeStatus(StatusPos.INIT);
+                        }
+                    }
+            }            
+        }
+        public void ResetMatchs()
+        {
+            Matchs.Clear();
+            Places.Clear();
+            CreateMatchs();
         }
     }
     public class Match
@@ -351,22 +433,25 @@ namespace Kaharman
         }
         public void WinPos(EPosMatch posMatch)
         {
-            switch (posMatch)
+            if (Items[0].Status == StatusPos.INIT && Items[1].Status == StatusPos.INIT)
             {
-                case EPosMatch.UP:
-                    {
-                        Items[0].ChangeStatus(StatusPos.WIN);
-                        Items[1].ChangeStatus(StatusPos.LOSE);
-                        TournamentGrid.WinPart(this, Items[0].Participant, Items[1].Participant);
-                        return;
-                    }
-                case EPosMatch.DOWN:
-                    {
-                        Items[0].ChangeStatus(StatusPos.LOSE);
-                        Items[1].ChangeStatus(StatusPos.WIN);
-                        TournamentGrid.WinPart(this, Items[1].Participant, Items[0].Participant);
-                        return;
-                    }
+                switch (posMatch)
+                {
+                    case EPosMatch.UP:
+                        {
+                            Items[0].ChangeStatus(StatusPos.WIN);
+                            Items[1].ChangeStatus(StatusPos.LOSE);
+                            TournamentGrid.WinPart(this, Items[0].Participant, Items[1].Participant);
+                            return;
+                        }
+                    case EPosMatch.DOWN:
+                        {
+                            Items[0].ChangeStatus(StatusPos.LOSE);
+                            Items[1].ChangeStatus(StatusPos.WIN);
+                            TournamentGrid.WinPart(this, Items[1].Participant, Items[0].Participant);
+                            return;
+                        }
+                }
             }
         }
     }
@@ -432,8 +517,6 @@ namespace Kaharman
                 ItemGrid? itemGrid = label.Tag as ItemGrid;
                 if (itemGrid == null)
                     return;
-                if (itemGrid.Status != StatusPos.INIT)
-                    return;
                 if (itemGrid.Match == null)
                     return;
                 itemGrid.Match.WinPos(itemGrid.PosMatch);
@@ -476,17 +559,20 @@ namespace Kaharman
             var draggedItem = (ItemGrid)e.Data.GetData(typeof(ItemGrid));
             if (draggedItem == null)
                 return;
+            if (!draggedItem.IsSwap())
+                return;
             var pt = panel1.PointToClient(new Point(e.X, e.Y));
             var label = (Label)panel1.GetChildAtPoint(pt);
             ItemGrid? point = label.Tag as ItemGrid;
             if (point == null)
                 return;
+            if (!point.IsSwap())
+                return;
             Participant? p = point.Participant;
-            StatusPos s = point.Status;
             point.Clear();
-            point.SetParticipant(draggedItem.Participant,draggedItem.Status);
+            point.SetParticipant(draggedItem.Participant, StatusPos.INIT);
             draggedItem.Clear();
-            draggedItem.SetParticipant(p,s);
+            draggedItem.SetParticipant(p, StatusPos.INIT);
         }
         #endregion
         public void ChangeStatus(StatusPos statusGridItem)
@@ -535,6 +621,24 @@ namespace Kaharman
             {
                 Status = StatusPos.CLOSE;
             }
+        }
+        public bool IsSwap()
+        {
+            if (Status != StatusPos.INIT)
+                return false;
+            if (Match == null)
+                return false;
+            if (Match.RoundNumber > 1)
+                return false;
+            else if (Match.RoundNumber == 1)
+            {
+                Match matchLast = Match.TournamentGrid.Matchs.Find(m => m.RoundNumber == 0 && m.MatchNumber == (Match.MatchNumber * 2) + (int)PosMatch);
+                if (matchLast.Items[0].Status != StatusPos.CLOSE)
+                    return false;
+                if (matchLast.Items[1].Status != StatusPos.CLOSE)
+                    return false;
+            }
+            return true;
         }
     }
     public class Qualification : IComparable<Qualification>

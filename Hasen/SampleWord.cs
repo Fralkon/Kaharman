@@ -25,41 +25,34 @@ namespace Kaharman
             using (FileStream file = File.OpenRead(Environment.CurrentDirectory + "/ExempleProtocol.docx"))
                 doc = new XWPFDocument(file);
         }
-        public void CreateProtacolTournament(string Name, DateTime start, DateTime end, string Judge, string Secret)
+        public void CreateProtacolTournament(Tournament tournament)
         {
             CreateProtocol();
-            CreateName(Name);
-            CreateDate(start, end);
-            doc.FindAndReplaceText("<judge>", Judge);
-            doc.FindAndReplaceText("<secret>", Secret);
+            CreateName(tournament.NameTournament);
+            CreateDate(tournament.StartDate, tournament.EndDate);
+            doc.FindAndReplaceText("<judge>", tournament.Judge);
+            doc.FindAndReplaceText("<secret>", tournament.Secret);
         }
-        public void CreateProtacolGrid(string Name, DateTime start, string Judge, string Secret)
+        public void CreateProtacolGrid(TournamentGrid grid)
         {
             CreateProtocol();
-            CreateName(Name);
-            CreateDate(start);
-            doc.FindAndReplaceText("<judge>", Judge);
-            doc.FindAndReplaceText("<secret>", Secret);
+            CreateName(grid.ToString());
+            CreateDate(grid.DataStart);
+            doc.FindAndReplaceText("<judge>", grid.Tournament.Judge);
+            doc.FindAndReplaceText("<secret>", grid.Tournament.Secret);
         }
-        public void FillTable(string number_t,string name, DataTable data)
+        public void FillTable(TournamentGrid grid)
         {
-            int row = data.Rows.Count;
-            //if (row == 0)
-            //    return;
+            int row = grid.Participants.Count;
+            if (row == 0)
+                return;
             doc.CreateParagraph();
             XWPFParagraph paragraph = doc.CreateParagraph();
             XWPFRun run = paragraph.CreateRun();
             paragraph.Alignment = ParagraphAlignment.CENTER;
             run.FontSize = 12;
             run.FontFamily = "Times New Roman";
-            run.SetText($"Протокол № "+ number_t);
-
-            paragraph = doc.CreateParagraph();
-            run = paragraph.CreateRun();
-            paragraph.Alignment = ParagraphAlignment.CENTER;
-            run.FontSize = 12;
-            run.FontFamily = "Times New Roman";
-            run.SetText(name);
+            run.SetText(grid.ToString());
 
             int col = 7;
             XWPFTable table = doc.CreateTable(row + 1, col);
@@ -75,21 +68,21 @@ namespace Kaharman
             CreateTitleTable(RowTitle.GetCell(5), "Город");
             CreateTitleTable(RowTitle.GetCell(6), "Тренер");
 
-            for (int i = 0; i < data.Rows.Count; i++)
+            for (int i = 0; i < grid.Participants.Count; i++)
             {
                 int rowTableExel = i + 1;
                 try
                 {
                     FillCell(table.GetRow(rowTableExel).GetCell(0), (i + 1).ToString());
-                    FillCell(table.GetRow(rowTableExel).GetCell(1), data.Rows[i]["name"].ToString());
-                    FillCell(table.GetRow(rowTableExel).GetCell(2), data.Rows[i]["gender"].ToString());
-                    FillCell(table.GetRow(rowTableExel).GetCell(3), data.Rows[i]["weight"].ToString());
-                    FillCell(table.GetRow(rowTableExel).GetCell(4), DateTime.Parse(data.Rows[i]["date_of_birth"].ToString()).ToString("dd.MM.yyyy"));
-                    FillCell(table.GetRow(rowTableExel).GetCell(5), data.Rows[i]["city"].ToString());
-                    FillCell(table.GetRow(rowTableExel).GetCell(6), data.Rows[i]["trainer"].ToString());
+                    FillCell(table.GetRow(rowTableExel).GetCell(1), grid.Participants[i].FIO);
+                    FillCell(table.GetRow(rowTableExel).GetCell(2), grid.Participants[i].Gender);
+                    FillCell(table.GetRow(rowTableExel).GetCell(3), grid.Participants[i].Weight.ToString());
+                    FillCell(table.GetRow(rowTableExel).GetCell(4), grid.Participants[i].DateOfBirth.ToString("dd.MM.yyyy"));
+                    FillCell(table.GetRow(rowTableExel).GetCell(5), grid.Participants[i].City);
+                    FillCell(table.GetRow(rowTableExel).GetCell(6), grid.Participants[i].Trainer);
                 }
                 catch (Exception ex){
-                    MessageBox.Show(data.Rows[i].ItemArray.ToString());
+                    MessageBox.Show(ex.Message);
                 }
             }
         }
@@ -137,7 +130,7 @@ namespace Kaharman
             run.SetText(Name);
             paragraph.Alignment = ParagraphAlignment.CENTER;
         }
-        private void CreateDate(DateTime start, DateTime end)
+        private void CreateDate(DateOnly start, DateOnly end)
         {
             XWPFParagraph paragraph = doc.CreateParagraph();
             XWPFRun run = paragraph.CreateRun();
@@ -146,7 +139,7 @@ namespace Kaharman
             run.SetText($"Проведено с {start.ToString("dd MMMM yyyy")} по {end.ToString("dd MMMM yyyy")}");
             paragraph.Alignment = ParagraphAlignment.CENTER;
         }
-        private void CreateDate(DateTime start)
+        private void CreateDate(DateOnly start)
         {
             XWPFParagraph paragraph = doc.CreateParagraph();
             XWPFRun run = paragraph.CreateRun();

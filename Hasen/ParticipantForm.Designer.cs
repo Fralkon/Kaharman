@@ -37,7 +37,6 @@
             label5 = new Label();
             weigth = new TextBox();
             label6 = new Label();
-            qualification = new TextBox();
             label7 = new Label();
             city = new TextBox();
             label8 = new Label();
@@ -49,6 +48,7 @@
             действиеToolStripMenuItem = new ToolStripMenuItem();
             изменитьToolStripMenuItem = new ToolStripMenuItem();
             удаоитьToolStripMenuItem = new ToolStripMenuItem();
+            qualificationConboBox = new ComboBox();
             menuStrip1.SuspendLayout();
             SuspendLayout();
             // 
@@ -132,14 +132,6 @@
             label6.Size = new Size(88, 15);
             label6.TabIndex = 13;
             label6.Text = "Квалификация";
-            // 
-            // qualification
-            // 
-            qualification.AllowDrop = true;
-            qualification.Location = new Point(157, 178);
-            qualification.Name = "qualification";
-            qualification.Size = new Size(329, 23);
-            qualification.TabIndex = 12;
             // 
             // label7
             // 
@@ -226,12 +218,22 @@
             удаоитьToolStripMenuItem.Size = new Size(128, 22);
             удаоитьToolStripMenuItem.Text = "Удалить";
             // 
+            // qualificationConboBox
+            // 
+            qualificationConboBox.DropDownStyle = ComboBoxStyle.DropDownList;
+            qualificationConboBox.FormattingEnabled = true;
+            qualificationConboBox.Location = new Point(157, 178);
+            qualificationConboBox.Name = "qualificationConboBox";
+            qualificationConboBox.Size = new Size(329, 23);
+            qualificationConboBox.TabIndex = 21;
+            // 
             // ParticipantForm
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = SystemColors.Control;
             ClientSize = new Size(515, 330);
+            Controls.Add(qualificationConboBox);
             Controls.Add(dateOfBirth);
             Controls.Add(gender);
             Controls.Add(label8);
@@ -239,7 +241,6 @@
             Controls.Add(label7);
             Controls.Add(city);
             Controls.Add(label6);
-            Controls.Add(qualification);
             Controls.Add(label5);
             Controls.Add(weigth);
             Controls.Add(label3);
@@ -269,7 +270,6 @@
         private Label label5;
         private TextBox weigth;
         private Label label6;
-        private TextBox qualification;
         private Label label7;
         private TextBox city;
         private Label label8;
@@ -283,5 +283,6 @@
         private ToolStripMenuItem удаоитьToolStripMenuItem;
         private ComboBox comboBox1;
         private TextBox textBox1;
+        private ComboBox qualificationConboBox;
     }
 }

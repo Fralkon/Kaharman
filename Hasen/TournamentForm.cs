@@ -5,7 +5,6 @@ using System.Data;
 using System.Data.OleDb;
 using System.Diagnostics;
 using System.Globalization;
-using System.Text.Json;
 
 namespace Kaharman
 {
@@ -19,7 +18,9 @@ namespace Kaharman
         {
             InitializeComponent();
             Tournament = new Tournament();
-            InitializeTable();
+            ParticipantDataGrid = new ParticipantDataGrid(participantGrid, participantContextMenuStrip);
+            TournamentGridDataGrid = new TournamentGridDataGrid(gridDataGridView, gridContextMenuStrip);
+            ResizeForm();
         }
         public TournamentForm(string ID)
         {
@@ -29,7 +30,7 @@ namespace Kaharman
             if (t == null)
             {
                 MessageBox.Show("Ошибка базы данных.");
-                return;
+                Close();
             }
             Tournament = t;
             foreach (var p in Tournament.Participants)
@@ -40,41 +41,36 @@ namespace Kaharman
             note.Text = Tournament.NoteTournament;
             mainJudge.Text = Tournament.Judge;
             secret.Text = Tournament.Secret;
-            InitializeTable();
-            UpDataGrid();
-        }
-        private void InitializeTable()
-        {
-            ResizeForm();
             ParticipantDataGrid = new ParticipantDataGrid(participantGrid, participantContextMenuStrip);
             TournamentGridDataGrid = new TournamentGridDataGrid(gridDataGridView, gridContextMenuStrip);
+            ResizeForm();
+            UpDataGrid();
         }
         private void SaveChangeTournament()
         {
-                if (name.Text.Length == 0)
-                {
-                    MessageBox.Show("Введите наименование соревнования.");
-                    return;
-                }
-                if (dateTimePicker1.Value > dateTimePicker2.Value)
-                {
-                    MessageBox.Show("Дата начала должна быть меньше дате окончания соревнования.");
-                    return;
-                }
-                if (mainJudge.Text.Length == 0)
-                {
-                    MessageBox.Show("Введите главного судью.");
-                    return;
-                }
-                Tournament.NameTournament = name.Text;
-                Tournament.StartDate = DateOnly.FromDateTime(dateTimePicker1.Value);
-                Tournament.EndDate = DateOnly.FromDateTime(dateTimePicker2.Value);
-                Tournament.NoteTournament = note.Text;
-                Tournament.Judge = mainJudge.Text;
-                Tournament.Secret = secret.Text;
-                dbContext.Tournament.Update(Tournament);
-                dbContext.SaveChanges();
-            
+            if (name.Text.Length == 0)
+            {
+                MessageBox.Show("Введите наименование соревнования.");
+                return;
+            }
+            if (dateTimePicker1.Value > dateTimePicker2.Value)
+            {
+                MessageBox.Show("Дата начала должна быть меньше дате окончания соревнования.");
+                return;
+            }
+            if (mainJudge.Text.Length == 0)
+            {
+                MessageBox.Show("Введите главного судью.");
+                return;
+            }
+            Tournament.NameTournament = name.Text;
+            Tournament.StartDate = DateOnly.FromDateTime(dateTimePicker1.Value);
+            Tournament.EndDate = DateOnly.FromDateTime(dateTimePicker2.Value);
+            Tournament.NoteTournament = note.Text;
+            Tournament.Judge = mainJudge.Text;
+            Tournament.Secret = secret.Text;
+            dbContext.Tournament.Update(Tournament);
+            dbContext.SaveChanges();
         }
         private void UpDataGrid()
         {
@@ -242,10 +238,6 @@ namespace Kaharman
             ParticipantForm participants = new ParticipantForm();
             if (participants.ShowDialog() == DialogResult.OK)
             {
-                //using (DataTable data = AccessSQL.GetDataTableSQL($"SELECT * FROM Participants WHERE id = " + participants.ID))
-                //{
-                //    //       ParticipantsTable.FillTableOnAccess(data, this, progressBar1);
-                //}
                 SaveChangeTournament();
             }
         }
@@ -259,8 +251,8 @@ namespace Kaharman
         }
         private void очиститьToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            //if (MessageBox.Show("Вы действительно хотите очистить таблицу участников?", "Очистить данные?", MessageBoxButtons.OKCancel) == DialogResult.OK)
-            //    ParticipantsTable.Clear();
+            if (MessageBox.Show("Вы действительно хотите очистить таблицу участников?", "Очистить данные?", MessageBoxButtons.OKCancel) == DialogResult.OK)
+                participantGrid.Rows.Clear();
         }
         private void удалитьToolStripMenuItem3_Click(object sender, EventArgs e)
         {
@@ -308,16 +300,10 @@ namespace Kaharman
         {
             SampleWord word = new SampleWord();
             gridDataGridView.Sort(gridDataGridView.Columns[1], ListSortDirection.Ascending);
-            word.CreateProtacolTournament(name.Text, dateTimePicker1.Value, dateTimePicker2.Value, mainJudge.Text, secret.Text);
-
-            foreach (DataGridViewRow row in gridDataGridView.Rows)
-            {
-                //word.FillTable(row.Cells[1].Value.ToString(), row.Cells[2].Value.ToString(), AccessSQL.GetDataTableSQL($"SELECT * FROM Participants WHERE id IN ({string.Join(", ",
-                //        AccessSQL.GetDataTableSQL($"SELECT id_participants FROM TournamentGrid WHERE id = {row.Cells[0].Value}").
-                //        Rows[0]["id_participants"].ToString().
-                //        Split(';').
-                //        Select(s => s.Trim('\"')).ToArray())})"));
-            }
+            word.CreateProtacolTournament(Tournament);
+            Tournament.TournamentGrids.Sort();
+            foreach (TournamentGrid tournament in Tournament.TournamentGrids)
+                word.FillTable(tournament);
             SaveFileDialog saveFileDialog = new SaveFileDialog();
             saveFileDialog.Filter = "docx file (*.docx)|*.docx";
             if (saveFileDialog.ShowDialog() == DialogResult.OK)
@@ -344,9 +330,8 @@ namespace Kaharman
         }
         private void TournamentForm_Activated(object sender, EventArgs e)
         {
-            //UpDataGrid();
+            UpDataGrid();
         }
-
         private void сохранитьToolStripMenuItem_Click(object sender, EventArgs e)
         {
             if (name.Text.Length == 0)
@@ -381,43 +366,14 @@ namespace Kaharman
             {
                 return;
             }
-            foreach (DataGridViewRow gridRow in gridDataGridView.Rows)
+            Tournament.TournamentGrids.Sort();
+            foreach (TournamentGrid tournament in Tournament.TournamentGrids)
             {
-                // Grid grid = new Grid();
-                if (gridDataGridView.RowCount == 0)
-                {
-                    MessageBox.Show("Выделите строку.");
-                    return;
-                }
-                string IDGrid = gridRow.Cells["ID"].Value.ToString();
-                DateTime dateTime;
-                string nameGrid;
-                List<string> IDPart = new List<string>();
-                string numProt;
-                //using (DataTable data = AccessSQL.GetDataTableSQL($"SELECT * FROM TournamentGrid WHERE id = {IDGrid}"))
-                //{
-                //    if (data.Rows.Count == 1)
-                //    {
-                //        DataRow row = data.Rows[0];
-                //        dateTime = DateTime.Parse(row["date"].ToString());
-                //        nameGrid = row["name"].ToString();
-                //        numProt = row["number_t"].ToString();
-                //        IDPart.AddRange(row["id_participants"].ToString().Split(";").Select(item => item.Trim('"')));
-                //        grid = JsonSerializer.Deserialize<Grid>(row["grid"].ToString());
-                //    }
-                //    else
-                //    {
-                //        MessageBox.Show("Ошибка базы данных");
-                //        return;
-                //    }
-                //}
-                // grid.FillItems(ParticipantX.GetParticipantsOnAccess(IDPart));
-
-                //GridForm tournament = new GridForm(IDGrid, name.Text, nameGrid, numProt, dateTime, mainJudge.Text, secret.Text, grid);
-                //tournament.Show();
-                //tournament.Location = new Point(2000, 2000);
-                //tournament.SaveGrid(folderBrowserDialog.SelectedPath);
-                //tournament.Close();
+                GridForm tournamentForm = new GridForm(tournament.Id);
+                tournamentForm.Show();
+                tournamentForm.Location = new Point(2000, 2000);
+                tournamentForm.SaveGrid(folderBrowserDialog.SelectedPath);
+                tournamentForm.Close();
             }
         }
         private void копToolStripMenuItem_Click(object sender, EventArgs e)
@@ -436,12 +392,11 @@ namespace Kaharman
         {
             //ParticipantsTable.LoadPartOnIDs(IDParticipant, this, progressBar1);
         }
-
         private void изменитьToolStripMenuItem_Click(object sender, EventArgs e)
         {
             if (gridDataGridView.SelectedRows.Count == 1)
             {
-                TournamentGridForm tournamentGrid = new TournamentGridForm((int)gridDataGridView.SelectedRows[0].Cells[0].Value, StatusFormTournamentGrid.Create);
+                TournamentGridForm tournamentGrid = new TournamentGridForm((int)gridDataGridView.SelectedRows[0].Cells[0].Value, StatusFormTournamentGrid.Edit);
                 tournamentGrid.ShowDialog();
                 UpDataGrid();
             }

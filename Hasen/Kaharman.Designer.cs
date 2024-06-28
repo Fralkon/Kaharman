@@ -38,7 +38,6 @@
             историяТурнировToolStripMenuItem = new ToolStripMenuItem();
             участникиToolStripMenuItem = new ToolStripMenuItem();
             создатьToolStripMenuItem1 = new ToolStripMenuItem();
-            добавитьToolStripMenuItem = new ToolStripMenuItem();
             базаДанныхToolStripMenuItem = new ToolStripMenuItem();
             ParticipantView = new DataGridView();
             tournamentContextMenuStrip = new ContextMenuStrip(components);
@@ -101,7 +100,7 @@
             // 
             // участникиToolStripMenuItem
             // 
-            участникиToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { создатьToolStripMenuItem1, добавитьToolStripMenuItem, базаДанныхToolStripMenuItem });
+            участникиToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { создатьToolStripMenuItem1, базаДанныхToolStripMenuItem });
             участникиToolStripMenuItem.Name = "участникиToolStripMenuItem";
             участникиToolStripMenuItem.Size = new Size(77, 20);
             участникиToolStripMenuItem.Text = "Участники";
@@ -109,21 +108,14 @@
             // создатьToolStripMenuItem1
             // 
             создатьToolStripMenuItem1.Name = "создатьToolStripMenuItem1";
-            создатьToolStripMenuItem1.Size = new Size(142, 22);
+            создатьToolStripMenuItem1.Size = new Size(180, 22);
             создатьToolStripMenuItem1.Text = "Создать";
             создатьToolStripMenuItem1.Click += создатьToolStripMenuItem1_Click;
-            // 
-            // добавитьToolStripMenuItem
-            // 
-            добавитьToolStripMenuItem.Name = "добавитьToolStripMenuItem";
-            добавитьToolStripMenuItem.Size = new Size(142, 22);
-            добавитьToolStripMenuItem.Text = "Добавить";
-            добавитьToolStripMenuItem.Click += добавитьToolStripMenuItem_Click_1;
             // 
             // базаДанныхToolStripMenuItem
             // 
             базаДанныхToolStripMenuItem.Name = "базаДанныхToolStripMenuItem";
-            базаДанныхToolStripMenuItem.Size = new Size(142, 22);
+            базаДанныхToolStripMenuItem.Size = new Size(180, 22);
             базаДанныхToolStripMenuItem.Text = "База данных";
             базаДанныхToolStripMenuItem.Click += базаДанныхToolStripMenuItem_Click_1;
             // 
@@ -203,14 +195,14 @@
             // создатьToolStripMenuItem2
             // 
             создатьToolStripMenuItem2.Name = "создатьToolStripMenuItem2";
-            создатьToolStripMenuItem2.Size = new Size(180, 22);
+            создатьToolStripMenuItem2.Size = new Size(118, 22);
             создатьToolStripMenuItem2.Text = "Создать";
             создатьToolStripMenuItem2.Click += создатьToolStripMenuItem_Click;
             // 
             // удалитьToolStripMenuItem1
             // 
             удалитьToolStripMenuItem1.Name = "удалитьToolStripMenuItem1";
-            удалитьToolStripMenuItem1.Size = new Size(180, 22);
+            удалитьToolStripMenuItem1.Size = new Size(118, 22);
             удалитьToolStripMenuItem1.Text = "Удалить";
             удалитьToolStripMenuItem1.Click += удалитьToolStripMenuItem1_Click;
             // 
@@ -244,7 +236,6 @@
         private ToolStripMenuItem турнирыToolStripMenuItem;
         private ToolStripMenuItem участникиToolStripMenuItem;
         private DataGridView ParticipantView;
-        private ToolStripMenuItem добавитьToolStripMenuItem;
         private ToolStripMenuItem выходToolStripMenuItem;
         private ToolStripMenuItem историяТурнировToolStripMenuItem;
         private ToolStripMenuItem базаДанныхToolStripMenuItem;

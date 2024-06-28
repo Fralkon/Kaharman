@@ -400,6 +400,10 @@ namespace Kaharman
             else MaxQualification = null;
             TournamentDataGrid_ItemClicked(null, null);
         }
+        public void Filter()
+        {
+            TournamentDataGrid_ItemClicked(null, null);
+        }
     }
     public class TournamentGridDataGrid : TableContextMenu<TournamentGrid>
     {
@@ -426,7 +430,7 @@ namespace Kaharman
                 listContextMenu[0].Filter(data.Number.ToString()) &&
                //listContextMenu[1].Filter(data.NameGrid) &&
                 listContextMenu[2].Filter(data.Gender) &&
-                listContextMenu[3].Filter(data.Programm) &&
+                listContextMenu[3].Filter(data.Program) &&
                 listContextMenu[4].Filter(data.AgeRange) &&
                 listContextMenu[5].Filter(data.Qualification) &&
                 listContextMenu[6].Filter(data.Status)).ToList();
