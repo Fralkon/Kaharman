@@ -127,7 +127,7 @@ namespace Kaharman
         ThreePlace2,
         Winner
     }
-    public class TournamentGrid : IComparable<TournamentGrid>
+    public class TournamentGrid
     {
         public int Id { get; set; }
         [DisplayName("Протокол")]
@@ -354,14 +354,6 @@ namespace Kaharman
                 DrawLine(match, new Pen(Color.Black), graphics);
             }
         }
-
-        public int CompareTo(TournamentGrid? other)
-        {
-            if (other == null)
-                return 1;
-            return other.Id.CompareTo(this.Id);
-        }
-
         public void ResetGrid()
         {
             graphics.Clear(SystemColors.Control);

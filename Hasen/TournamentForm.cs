@@ -235,10 +235,12 @@ namespace Kaharman
         }
         private void создатьToolStripMenuItem1_Click(object sender, EventArgs e)
         {
-            ParticipantForm participants = new ParticipantForm();
-            if (participants.ShowDialog() == DialogResult.OK)
+            ParticipantForm participant = new ParticipantForm();
+            if (participant.ShowDialog() == DialogResult.OK)
             {
+                Tournament.Participants.Add(participant.Participant);
                 SaveChangeTournament();
+                UpDataGrid();
             }
         }
         private void добавитьToolStripMenuItem1_Click(object sender, EventArgs e)

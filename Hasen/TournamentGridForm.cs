@@ -121,7 +121,7 @@ namespace Kaharman
                 qualMaxComboBox.Items.Add(qualification.ToString());
                 qualMinComboBox.Items.Add(qualification.ToString());
             }
-            programComboBox.Items.AddRange(new string[] { "ТУЛЬ/ХЬЁНГ", "МАССОНИ", "POINT STOP", "КОМАНДНЫЕ МАССОНИ", "КОМАНДНЫЕ ТУЛЬ/ХЬЁНГ" });
+            programComboBox.Items.AddRange(new string[] { "ТУЛЬ/ХЬЁНГ", "МАССОГИ", "POINT STOP", "КОМАНДНЫЕ МАССОГИ", "КОМАНДНЫЕ ТУЛЬ/ХЬЁНГ" });
         }
         private void button1_Click(object sender, EventArgs e)
         {

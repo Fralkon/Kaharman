@@ -416,10 +416,9 @@ namespace Kaharman
         protected override void InitTable()
         {
             listContextMenu.Add(new ContextFilterValue(1));
-            listContextMenu.Add(new ContextFilterName(3));
-            listContextMenu.Add(new ContextFilterValue(4));
-            listContextMenu.Add(new ContextFilterValue(5));
-            listContextMenu.Add(new ContextFilterValue(6));
+            // listContextMenu.Add(new ContextFilterValue(4));
+            // listContextMenu.Add(new ContextFilterValue(5));
+            // listContextMenu.Add(new ContextFilterValue(6));
             listContextMenu.Add(new ContextFilterValue(7));
             listContextMenu.Add(new ContextFilterValue(8));
             base.InitTable();
@@ -428,12 +427,45 @@ namespace Kaharman
         {
             return bindingList.Where(data =>
                 listContextMenu[0].Filter(data.Number.ToString()) &&
-               //listContextMenu[1].Filter(data.NameGrid) &&
-                listContextMenu[2].Filter(data.Gender) &&
-                listContextMenu[3].Filter(data.Program) &&
-                listContextMenu[4].Filter(data.AgeRange) &&
-                listContextMenu[5].Filter(data.Qualification) &&
-                listContextMenu[6].Filter(data.Status)).ToList();
+                //listContextMenu[1].Filter(data.Gender) &&
+                //listContextMenu[2].Filter(data.Program) &&
+                //listContextMenu[3].Filter(data.AgeRange) &&
+                listContextMenu[1].Filter(data.Qualification) &&
+                listContextMenu[2].Filter(data.Status)).ToList();
+        }
+        public override void ColumnHeaderMouseClick(object? sender, DataGridViewCellMouseEventArgs e)
+        {
+            base.ColumnHeaderMouseClick(sender, e);
+            if (e.Button == MouseButtons.Left)
+            {
+                switch (e.ColumnIndex)
+                {
+                    case 1:
+                        GridView.DataSource = GetFilterList().OrderBy(t => t.Number).ToList();
+                        break;
+                    case 2:
+                        GridView.DataSource = GetFilterList().OrderBy(t => t.DataStart).ToList();
+                        break;
+                    case 3:
+                        GridView.DataSource = GetFilterList().OrderBy(t => t.Gender).ToList();
+                        break;
+                    case 4:
+                        GridView.DataSource = GetFilterList().OrderBy(t => t.Program).ToList();
+                        break;
+                    case 5:
+                        GridView.DataSource = GetFilterList().OrderBy(t => t.AgeRange).ToList();
+                        break;
+                    case 6:
+                        GridView.DataSource = GetFilterList().OrderBy(t => t.Weight).ToList();
+                        break;
+                    case 7:
+                        GridView.DataSource = GetFilterList().OrderBy(t => t.Qualification).ToList();
+                        break;
+                    case 8:
+                        GridView.DataSource = GetFilterList().OrderBy(t => t.Status).ToList();
+                        break;
+                }
+            }
         }
     }
 }

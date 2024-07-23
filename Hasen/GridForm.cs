@@ -45,7 +45,7 @@ namespace Kaharman
             switch (TournamentGrid.Type)
             {
                 case 4:
-                    panel1.Size = new Size(1300, 500);
+                    panel1.Size = new Size(1350, 500);
                     break;
                 case 8:
                     panel1.Size = new Size(1350, 500);
@@ -69,6 +69,7 @@ namespace Kaharman
             placesText[2].Text = "Третье место";
             placesText[3] = new Label();
             placesText[3].Text = "Третье место";
+            nameTournamet.Text = TournamentGrid.Tournament.NameTournament;
             labelJudge.Text = "Главный судья ___________________ " + TournamentGrid.Tournament.Judge;
             labelSecret.Text = "Секретарь ________________________ " + TournamentGrid.Tournament.Secret;
             TournamentGrid.InitLabelGrid(panel1, graphics);

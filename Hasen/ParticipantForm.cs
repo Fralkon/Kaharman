@@ -81,7 +81,7 @@ namespace Hasen
                 if (NewPart)
                     context.Participant.Add(Participant);
                 else
-                    context.Participant.Update(Participant);
+                    context.Participant.Attach(Participant);
                 context.SaveChanges();
             }
             DialogResult = DialogResult.OK;
